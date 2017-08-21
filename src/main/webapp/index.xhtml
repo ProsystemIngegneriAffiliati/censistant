@@ -1,0 +1,20 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="/WEB-INF/template.xhtml">
+    <ui:define name="content">
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <div class="card">
+                    <h1>#{msg.appName_tip}</h1>
+                    <p>Gli utenti predefiniti sono:
+                        <ul>
+                            <li>guest - password 'guest'</li>
+                            <li>demoAdmin - password 'demo'</li>
+                        </ul>
+                        In questo momento un admin può abilitare i nuovi utenti.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </ui:define>
+</ui:composition>

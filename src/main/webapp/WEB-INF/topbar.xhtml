@@ -1,0 +1,160 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:jsf="http://xmlns.jcp.org/jsf"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <style>
+        .linkInForm {
+            display: block;
+            position: relative;
+        }
+
+        .linkInForm .topbar-item-name {
+            display: none;
+        }
+
+        @media(max-width:1024px) {
+            .linkInForm {
+                font-size: 16px;
+                padding: 14px 16px;
+            }
+
+            .linkInForm {
+                color: #212121;
+            }
+
+            .linkInForm:hover {
+                background-color: #e8e8e8;
+            }
+
+            .linkInForm .topbar-item-name {
+                display: inline-block;
+                vertical-align: middle;
+            }
+
+            .linkInForm i {
+                display: inline-block;
+                font-size: 20px;
+                margin-right: 12px;
+                vertical-align: middle;
+            }
+        }
+    </style>
+
+
+
+    <div class="topbar clearfix">
+        <div class="topbar-left">            
+            <div class="logo"></div>
+        </div>
+
+        <div class="topbar-right">
+            <a id="menu-button" href="#">
+                <i></i>
+            </a>
+
+            <a id="topbar-menu-button" href="#">
+                <i class="material-icons">&#xE5D2;</i>
+            </a>
+            <ul class="topbar-items fadeInDown animated">
+                <ui:fragment rendered="#{authenticator.loggedUser == null}">
+                    <li>
+                        <h:form>
+                            <a class="linkInForm" jsf:outcome="/secured/welcome">
+                                <i class="topbar-icon material-icons">&#xE898;</i>
+                                <span class="topbar-item-name">#{msg.signIn}</span>
+                            </a>
+                        </h:form>
+                    </li>
+                    <li>
+                        <h:form>
+                            <a class="linkInForm" jsf:outcome="/createUser">
+                                <i class="topbar-icon material-icons">&#xE7FE;</i>
+                                <span class="topbar-item-name">#{msg.signUp}</span>
+                            </a>
+                        </h:form>
+                    </li>
+                </ui:fragment>
+                <ui:fragment rendered="#{authenticator.loggedUser != null}">
+                    <li class="profile-item">
+                        <a href="#">                           
+                            <div class="profile-image">
+                                <p:graphicImage value="/images/#{authenticator.loggedUser.imageFilename}" width="100%" />
+                            </div>
+                            <span class="topbar-item-name">#{authenticator.loggedUser.name}</span>
+                        </a>
+                        <ul class="ultima-menu animated">
+                            <li role="menuitem">
+                                <a jsf:outcome="/secured/manageUser/profile">
+                                    <i class="material-icons">&#xE7FD;</i>
+                                    <span>#{msg.manageUsers_profile}</span>
+                                </a>
+                            </li>
+                            <li role="menuitem">
+                                <a jsf:outcome="/secured/manageUser/changePassword">
+                                    <i class="material-icons">&#xE0DA;</i>
+                                    <span>#{msg.changePassword}</span>
+                                </a>
+                            </li>
+                            <li role="menuitem">
+                                <h:form>
+                                    <a jsf:action="#{authenticator.logout()}">
+                                        <i class="material-icons">&#xE8AC;</i>
+                                        <span>#{msg.logout}</span>
+                                    </a>
+                                </h:form>
+                            </li>
+                        </ul>
+                    </li>
+                </ui:fragment>
+                <ui:fragment rendered="#{authenticator.loggedUserAdmin}">
+                    <li>
+                        <h:form>
+                            <a class="linkInForm" jsf:outcome="/secured/manageUser/users">
+                                <i class="topbar-icon material-icons">&#xE7FB;</i>
+                                <span class="topbar-item-name">#{msg.manageUsers}</span>
+                            </a>
+                        </h:form>
+                    </li>
+                </ui:fragment>
+                <li>
+                    <a href="#">
+                        <i class="topbar-icon material-icons">&#xE425;</i>
+                        <span class="topbar-badge animated rubberBand">4</span>
+                        <span class="topbar-item-name">Notifications</span>
+                    </a>
+                    <ul class="ultima-menu animated">
+                        <li role="menuitem">
+                            <a href="#">
+                                <i class="material-icons">&#xE868;</i>
+                                <span>Pending tasks</span>
+                            </a>
+                        </li>
+                        <li role="menuitem">
+                            <a href="#">
+                                <i class="material-icons">&#xE878;</i>
+                                <span>Meeting today at 3pm</span>
+                            </a>
+                        </li>
+                        <li role="menuitem">
+                            <a href="#">
+                                <i class="material-icons">&#xE2C4;</i>
+                                <span>Download documents</span>
+                            </a>
+                        </li>
+                        <li role="menuitem">
+                            <a href="#">
+                                <i class="material-icons">&#xE539;</i>
+                                <span>Book flight</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+</ui:composition>

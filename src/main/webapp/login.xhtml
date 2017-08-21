@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
+        <title>#{msg.appName} - #{msg.signIn}</title>
+        <h:outputScript name="js/ripple.js" library="ultima-layout" />
+        <h:outputScript name="js/layout.js" library="ultima-layout" />
+    </h:head>
+
+    <h:body styleClass="login-body">
+        <div class="card login-panel ui-fluid">
+            <div class="ui-g">
+                <form name="loginForm" class="form-signin" method="POST" action="j_security_check">
+                    <div class="ui-g-12">
+                        <p:graphicImage name="images/logo.svg" library="ultima-layout" />
+                    </div>
+                    <div class="ui-g-12">
+                        <h:panelGroup styleClass="md-inputfield">
+                            <input
+                                id="username"
+                                name="j_username"
+                                type="text"
+                                required="true"
+                                autofocus="true"
+                                class="ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all" />
+                            <label>#{msg.login_username}</label>
+                        </h:panelGroup>
+                    </div>
+                    <div class="ui-g-12">
+                        <h:panelGroup styleClass="md-inputfield">
+                            <input
+                                id="password"
+                                name="j_password"
+                                type="password"
+                                required="true"
+                                class="ui-inputfield ui-password ui-widget ui-state-default ui-corner-all" />
+                            <label>#{msg.login_password}</label>
+                        </h:panelGroup>
+                    </div>
+                    <div class="ui-g-12">
+                        <input type="submit" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left" value="#{msg.login_login}" />
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="login-footer">#{msg.appName}</div>
+
+        <h:outputStylesheet name="css/ripple.css" library="ultima-layout" />
+        <h:outputStylesheet name="css/layout-grey.css" library="ultima-layout" />
+    </h:body>
+</html>

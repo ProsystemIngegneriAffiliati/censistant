@@ -1,0 +1,50 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:define name="content">
+        <f:metadata>
+            <f:viewParam name="id"
+                         value="#{userPresenter.id}"
+                         required="true"
+                         requiredMessage="Bad request, please use a link from within the system."/>
+            <f:viewAction action="#{userPresenter.readUserApp()}"/>
+        </f:metadata>
+
+        <h:form id="createUserForm">
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card card-w-title">
+                            <h1>#{msg.manageUsers_user}</h1>
+                            <p>#{msg.manageUsers_user_tip}</p>
+                            <p:panelGrid columns="2" columnClasses="ui-grid-col-2,ui-grid-col-10" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+                                <h:outputLabel for="username" value="#{msg.login_username}"/>
+                                <h:outputText id="username" value="#{userPresenter.userApp.userName}"/>
+                            </p:panelGrid>
+                            <p:pickList value="#{userPresenter.groups}" var="gr" itemLabel="#{gr.groupName}" itemValue="#{gr}"
+                                        converter="#{groupConverter}" responsive="true">
+                                <f:facet name="sourceCaption">#{msg.manageUsers_user_avaibleGroups}</f:facet>
+                                <f:facet name="targetCaption">#{msg.manageUsers_user_groups}</f:facet>
+                            </p:pickList>
+
+                            <div class="ui-g">
+                                <div class="ui-g-1 ui-md-2"></div>
+                                <div class="ui-g-4 ui-md-3">
+                                    <p:button value="#{msg.cancel}" outcome="/secured/manageUser/users" styleClass="secondary"/>
+                                </div>
+                                <div class="ui-g-2 ui-md-2"></div>
+                                <div class="ui-g-4 ui-md-3">
+                                    <p:commandButton value="#{msg.save}" action="#{userPresenter.saveUserApp()}" ajax="false"/>
+                                </div>
+                                <div class="ui-g-1 ui-md-2"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>

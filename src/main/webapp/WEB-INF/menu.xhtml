@@ -1,0 +1,25 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:pu="http://primefaces.org/ultima">
+
+    <h:form id="menuform"> 
+        <div class="layout-menu">
+            <div class="nano">
+                <div class="nano-content menu-scroll-content">
+                    <pu:menu widgetVar="me">
+                        <p:submenu id="magazzinoMenu" label="Generico" icon="&#xE1DB;">
+                            <p:menuitem id="articoliMenu" value="Uno" icon="&#xE8F1;" outcome="/error/401"/>
+                            <p:submenu id="magazzino_utils" label="#{msg.utils}" icon="&#xE149;">
+                                <p:menuitem id="unitaDiMisuraMenu" value="Due" icon="&#xE41C;" outcome="/error/500"/>
+                            </p:submenu>
+                        </p:submenu>
+                    </pu:menu>
+                </div>
+            </div>
+        </div>
+    </h:form>
+</ui:composition>

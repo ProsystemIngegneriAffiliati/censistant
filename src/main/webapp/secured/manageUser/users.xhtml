@@ -1,0 +1,44 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:define name="content">
+        <h:form id="userForm">
+            <div class="ui-g">
+                <div class="ui-g-12">
+                    <div class="card card-w-title">
+                        <h1>#{msg.manageUsers}</h1>
+                        <p>#{msg.manageUsers_tip}</p>
+
+                        <p:dataTable id="usersList"
+                                     var="userApp"
+                                     value="#{listUserPresenter.users}"
+                                     selectionMode="multiple"
+                                     selection="#{listUserPresenter.selectedUsers}"
+                                     rowKey="#{userApp.userName}">
+                            <f:facet name="header">
+                                <p:commandButton title="#{msg.delete}" icon="ui-icon-delete" actionListener="#{listUserPresenter.deleteUsers()}" update="@form">
+                                    <p:confirm header="#{msg.manageUsers_users_delete}" message="#{msg.manageUsers_users_delete_tip}" icon="ui-icon-alert"/>
+                                </p:commandButton>
+                            </f:facet>
+                            <p:column headerText="#{msg.login_username}">
+                                <h:outputText value="#{userApp.userName}"/>
+                            </p:column>
+                            <p:column headerText="#{msg.manageUsers_users_isActivated}">
+                                <p:selectBooleanCheckbox value="#{userApp.activated}" disabled="true"/>
+                            </p:column>
+                            <p:column headerText="#{msg.actions}" style="width:64px; text-align:center">
+                                <p:button title="#{msg.edit}" icon="ui-icon-edit" styleClass="AquaButton" outcome="/secured/manageUser/user"
+                                          rendered="#{!userApp.userName.equals(authenticator.loggedUser.userName)}">
+                                    <f:param name="id" value="#{userApp.userName}" />
+                                </p:button>
+                            </p:column>
+                        </p:dataTable>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>

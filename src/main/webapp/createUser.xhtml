@@ -1,0 +1,35 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+    <ui:define name="content">
+        <h:form id="createUserForm">
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card card-w-title">
+                            <h1>#{msg.signUp_createNewUser}</h1>
+                            <p>#{msg.signUp_createNewUser_tip}</p>
+                            <p:panelGrid columns="3" columnClasses="ui-grid-col-2,ui-grid-col-5,ui-grid-col-5" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+                                <p:outputLabel for="username" value="#{msg.login_username}"/>
+                                <p:inputText id="username" value="#{authenticator.userName}" required="true" pt:autofocus="true"/>
+                                <p:message for="username"/>
+
+                                <p:outputLabel for="newPassword1" value="#{msg.login_password}"/>
+                                <p:password id="newPassword1" value="#{authenticator.newPassword1}" required="true"/>
+                                <p:message for="newPassword1"/>
+
+                                <p:outputLabel for="newPassword2" value="#{msg.signUp_confirmPassword}"/>
+                                <p:password id="newPassword2" value="#{authenticator.newPassword2}" required="true"/>
+                                <p:message for="newPassword2"/>
+                            </p:panelGrid>
+                            <p:commandButton value="#{msg.signUp_createNewUser}" action="#{authenticator.createNewUser()}" ajax="false" style="width:auto"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>
