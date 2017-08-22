@@ -11,10 +11,10 @@
             <div class="nano">
                 <div class="nano-content menu-scroll-content">
                     <pu:menu widgetVar="me">
-                        <p:submenu id="magazzinoMenu" label="Generico" icon="&#xE1DB;">
-                            <p:menuitem id="articoliMenu" value="Uno" icon="&#xE8F1;" outcome="/error/401"/>
-                            <p:submenu id="magazzino_utils" label="#{msg.utils}" icon="&#xE149;">
-                                <p:menuitem id="unitaDiMisuraMenu" value="Due" icon="&#xE41C;" outcome="/error/500"/>
+                        <p:submenu id="customerMenu" label="#{msg.customerSupplier_customers}" icon="&#xE7FC;">
+                            <p:menuitem id="customersMenu" value="#{msg.customerSupplier_customers}" icon="&#xE8A3;" outcome="/secured/customerSupplier/customers"/>
+                            <p:submenu id="customersUtils" label="#{msg.utils}" icon="&#xE149;">
+                                <p:menuitem id="provenancesMenu" value="#{msg.customerSupplier_provenances}" icon="&#xE41C;" outcome="/secured/customerSupplier/provenances"/>
                             </p:submenu>
                         </p:submenu>
                     </pu:menu>

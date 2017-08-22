@@ -10,3 +10,16 @@ INSERT INTO users_groups_app(user_name, groups_group_name) VALUES('maina', 'admi
 INSERT INTO users_groups_app(user_name, groups_group_name) VALUES('guest', 'user')
 INSERT INTO users_groups_app(user_name, groups_group_name) VALUES('demoAdmin', 'user')
 INSERT INTO users_groups_app(user_name, groups_group_name) VALUES('demoAdmin', 'admin')
+
+INSERT INTO provenance(name, version) VALUES('Altro', 0)
+INSERT INTO provenance(name, version) VALUES('CISL', 0)
+INSERT INTO provenance(name, version) VALUES('Internet', 0)
+INSERT INTO provenance(name, version) VALUES('Nostro cliente diretto', 0)
+INSERT INTO provenance(name, version) VALUES('Nostro cliente indiretto', 0)
+INSERT INTO provenance(name, version) VALUES('Pagine gialle', 0)
+INSERT INTO provenance(name, version) VALUES('Sito CSA', 0)
+INSERT INTO provenance(name, version) VALUES('Sito pagine gialle', 0)
+INSERT INTO provenance(name, version) VALUES('Stampa', 0)
+INSERT INTO provenance(name, version) VALUES('Ufficio', 0)
+INSERT INTO provenance(name, version) VALUES('Volantino', 0)
+

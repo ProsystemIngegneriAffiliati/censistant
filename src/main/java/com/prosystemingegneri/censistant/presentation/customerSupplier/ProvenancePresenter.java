@@ -48,17 +48,14 @@ public class ProvenancePresenter implements Serializable{
             return null;
         }
         
-        return "/secured/customerSuppler/provenances?faces-redirect=true";
+        return "/secured/customerSupplier/provenances?faces-redirect=true";
     }
     
     public void detailProvenance() {
-        if (id != null) {
-            if (id == 0)
-                provenance = new Provenance();
-            else
-                provenance = service.readProvenance(id);
-            id = null;
-        }
+        if (id == 0)
+            provenance = new Provenance();
+        else
+            provenance = service.readProvenance(id);
     }
 
     public Provenance getProvenance() {

@@ -1,12 +1,60 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
-    <h:head>
-        <title>Facelet Title</title>
-    </h:head>
-    <h:body>
-        Hello from Facelets
-    </h:body>
-</html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:define name="content">
+        <h:form id="customersForm">
+            <div class="ui-g">
+                <div class="ui-g-12">
+                    <div class="card card-w-title">
+                        <h1>#{msg.customerSupplier_customers}</h1>
 
+                        <p:dataTable id="customersTable" var="riliev" value="#{customerSupplierListPresenter.lazyCustomerSuppliers}"
+                                     selectionMode="multiple" selection="#{customerSupplierListPresenter.selectedCustomerSuppliers}" rowKey="#{riliev.id}"
+                                     paginator="true" rows="10"
+                                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     rowsPerPageTemplate="10,25,50" lazy="true">
+                            <f:facet name="header">
+                                <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
+                                    #{msg.rilievo_rilievi_tip}
+                                    <p:outputPanel>
+                                        <p:outputPanel style="display: inline-block">
+                                            <p:commandButton title="#{msg.update}" icon="ui-icon-refresh" styleClass="AquaButton" update="rilieviForm" />
+                                            <p:button title="#{msg.new}" icon="ui-icon-create" styleClass="AquaButton" outcome="/secured/rilievo/rilievo">
+                                                <f:param name="id" value="0" />
+                                            </p:button>
+                                            <p:commandButton title="#{msg.delete}" icon="ui-icon-delete" actionListener="#{rilievoListPresenter.deleteRilievo()}" update="@form">
+                                                <p:confirm header="#{msg.rilievo_rilievi_delete}" message="#{msg.rilievo_rilievi_delete_tip}" icon="ui-icon-alert"/>
+                                            </p:commandButton>
+                                        </p:outputPanel>
+                                    </p:outputPanel>
+                                </p:panelGrid>
+                            </f:facet>
+                            <p:column headerText="#{msg.rilievo_classificazioneRilievo_nome}"  priority="4">
+                                <h:outputText value="#{riliev.classificazione.nome}"/>
+                            </p:column>
+                            <p:column headerText="#{msg.rilievo_origineRilievo_nome}"  priority="6">
+                                <h:outputText value="#{riliev.origine.nome}"/>
+                            </p:column>
+                            <p:column headerText="#{msg.rilievo_rilievo_creazione}" sortBy="#{riliev.creazione}"  priority="2">
+                                <h:outputText value="#{riliev.creazione}">
+                                    <f:convertDateTime pattern="dd/MM/YYYY" />
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="#{msg.rilievo_rilievo_oggetto}" sortBy="#{riliev.oggetto}" filterBy="#{riliev.oggetto}"  priority="0">
+                                <h:outputText value="#{riliev.oggettoCropped}"/>
+                            </p:column>
+                            <p:column headerText="#{msg.actions}" style="width:64px; text-align:center" priority="0" exportable="false">
+                                <p:button title="#{msg.edit}" icon="ui-icon-edit" styleClass="AquaButton" outcome="/secured/rilievo/rilievo">
+                                    <f:param name="id" value="#{riliev.id}" />
+                                </p:button>
+                            </p:column>
+                        </p:dataTable>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>

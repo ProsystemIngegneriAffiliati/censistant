@@ -60,12 +60,11 @@ public class CustomerSupplierPresenter implements Serializable{
     }
     
     public void detailCustomerSupplier() {
-        if (customerSupplier == null && id != null) {
+        if (customerSupplier == null) {
             if (id == 0)
                 customerSupplier = new CustomerSupplier();
             else
                 customerSupplier = service.readCustomerSupplier(id);
-            id = null;
         }
     }
     
