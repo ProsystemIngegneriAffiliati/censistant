@@ -40,7 +40,7 @@ public class Referee extends BaseEntity<Long>{
     private CustomerSupplier customerSupplier;
     
     @NotNull
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String name;
     
     private String phone;

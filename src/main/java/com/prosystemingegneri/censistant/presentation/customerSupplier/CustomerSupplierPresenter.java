@@ -47,6 +47,7 @@ public class CustomerSupplierPresenter implements Serializable{
     @PostConstruct
     public void init() {
         customerSupplier = (CustomerSupplier) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("customerSupplier");
+        isCustomerView = (Boolean) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("isCustomerView");
     }
     
     public String saveCustomerSupplier() {
@@ -67,7 +68,7 @@ public class CustomerSupplierPresenter implements Serializable{
     }
     
     public void detailCustomerSupplier() {
-        if (customerSupplier == null) {
+        if (customerSupplier == null && id != null) {
             if (id == 0) {
                 customerSupplier = new CustomerSupplier();
                 if (isCustomerView)

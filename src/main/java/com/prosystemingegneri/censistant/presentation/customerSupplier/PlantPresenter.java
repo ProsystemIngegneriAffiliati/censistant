@@ -49,12 +49,14 @@ public class PlantPresenter implements Serializable {
             customerSupplier.addPlant(plant);
         
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("customerSupplier", customerSupplier);
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("isCustomerView", isCustomerView);
         
         return chooseReturnString();
     }
     
     public String cancel() {
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("customerSupplier", customerSupplier);
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("isCustomerView", isCustomerView);
         
         return chooseReturnString();
     }
@@ -62,9 +64,9 @@ public class PlantPresenter implements Serializable {
     private String chooseReturnString() {
         String returnString;
         if (isCustomerView)
-            returnString = "/secured/customerSupplier/customers";
+            returnString = "/secured/customerSupplier/customer";
         else
-            returnString = "/secured/customerSupplier/suppliers";
+            returnString = "/secured/customerSupplier/supplier";
         
         return returnString + "?faces-redirect=true";
     }

@@ -1,12 +1,76 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
-    <h:head>
-        <title>Facelet Title</title>
-    </h:head>
-    <h:body>
-        Hello from Facelets
-    </h:body>
-</html>
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:o="http://omnifaces.org/ui"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+    <ui:composition template="/WEB-INF/template.xhtml">
+        <ui:define name="content">
+            <o:form id="plantForm">
+                <div class="ui-fluid">
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <div class="card card-w-title">
+                                <h1>#{msg.customerSupplier_plant}</h1>
+                                <p>#{msg.customerSupplier_plant_tip}</p>
+                                <p:panelGrid columns="9" columnClasses="ui-grid-col-1,ui-grid-col-2,ui-grid-col-1,ui-grid-col-1,ui-grid-col-3,ui-grid-col-1,ui-grid-col-1,ui-grid-col-1,ui-grid-col-1" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+                                    <h:outputLabel for="name" value="#{msg.customerSupplier_plant_name}"/>
+                                    <p:inputText id="name" value="#{plantPresenter.plant.name}"/>
+                                    <p:message for="name"/>
 
+                                    <h:outputLabel for="address" value="#{msg.customerSupplier_plant_address}"/>
+                                    <p:inputTextarea id="address" value="#{plantPresenter.plant.address}" rows="3"/>
+                                    <p:message for="address"/>
+
+                                    <h:outputLabel for="isHeadOffice" value="#{msg.customerSupplier_plant_isHeadOffice}"/>
+                                    <p:inputSwitch id="isHeadOffice" value="#{plantPresenter.plant.isHeadOffice}" />
+                                    <p:message for="isHeadOffice"/>
+                                </p:panelGrid>
+
+                                <p:panelGrid columns="9" columnClasses="ui-grid-col-1,ui-grid-col-2,ui-grid-col-1,ui-grid-col-1,ui-grid-col-2,ui-grid-col-1,ui-grid-col-1,ui-grid-col-2,ui-grid-col-1" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+                                    <h:outputLabel for="phone" value="#{msg.customerSupplier_plant_phone}"/>
+                                    <p:inputText id="phone" value="#{plantPresenter.plant.phone}"/>
+                                    <p:message for="phone"/>
+
+                                    <h:outputLabel for="fax" value="#{msg.customerSupplier_plant_fax}"/>
+                                    <p:inputText id="fax" value="#{plantPresenter.plant.fax}"/>
+                                    <p:message for="fax"/>
+
+                                    <h:outputLabel for="email" value="#{msg.customerSupplier_plant_email}"/>
+                                    <p:inputText id="email" value="#{plantPresenter.plant.email}" pt:type="email"/>
+                                    <p:message for="email"/>
+                                </p:panelGrid>
+
+                                <p:panelGrid columns="3" columnClasses="ui-grid-col-3,ui-grid-col-7,ui-grid-col-2" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+                                    <h:outputLabel for="notes" value="#{msg.customerSupplier_plant_notes}"/>
+                                    <p:inputTextarea id="notes" value="#{plantPresenter.plant.notes}" rows="3"/>
+                                    <p:message for="notes"/>
+                                </p:panelGrid>
+
+                                <div class="ui-g">
+                                    <div class="ui-g-1 ui-md-2"></div>
+                                    <div class="ui-g-4 ui-md-3">
+                                        <p:commandButton value="#{msg.cancel}"
+                                                         action="#{plantPresenter.cancel()}"
+                                                         styleClass="secondary"
+                                                         ajax="false">
+                                            <o:ignoreValidationFailed />
+                                        </p:commandButton>
+                                    </div>
+                                    <div class="ui-g-2 ui-md-2"></div>
+                                    <div class="ui-g-4 ui-md-3">
+                                        <p:commandButton value="#{msg.save}"
+                                                         action="#{plantPresenter.savePlant()}"
+                                                         ajax="false"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </o:form>
+        </ui:define>
+    </ui:composition>
+</html>

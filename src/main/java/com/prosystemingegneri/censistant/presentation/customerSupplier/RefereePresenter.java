@@ -49,12 +49,14 @@ public class RefereePresenter implements Serializable {
             customerSupplier.addReferee(referee);
         
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("customerSupplier", customerSupplier);
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("isCustomerView", isCustomerView);
         
         return chooseReturnString();
     }
     
     public String cancel() {
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("customerSupplier", customerSupplier);
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("isCustomerView", isCustomerView);
         
         return chooseReturnString();
     }
