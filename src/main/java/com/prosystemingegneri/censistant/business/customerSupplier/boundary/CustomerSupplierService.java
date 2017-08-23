@@ -17,6 +17,7 @@
 package com.prosystemingegneri.censistant.business.customerSupplier.boundary;
 
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
+import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier_;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -57,13 +58,21 @@ public class CustomerSupplierService implements Serializable{
         em.remove(readCustomerSupplier(id));
     }
 
-    public List<CustomerSupplier> listCustomerSuppliers(int first, int pageSize, Map<String, Object> filters, String sortField, Boolean isAscending) {
+    public List<CustomerSupplier> listCustomerSuppliers(int first, int pageSize, Map<String, Object> filters, String sortField, Boolean isAscending, Boolean isCustomer, Boolean isSupplier) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<CustomerSupplier> query = cb.createQuery(CustomerSupplier.class);
         Root<CustomerSupplier> root = query.from(CustomerSupplier.class);
         CriteriaQuery<CustomerSupplier> select = query.select(root).distinct(true);
         
         List<Predicate> conditions = new ArrayList<>();
+        
+        //is customer
+        if (isCustomer != null)
+            conditions.add(cb.equal(root.get(CustomerSupplier_.isCustomer), isCustomer));
+        
+        //is supplier
+        if (isSupplier != null)
+            conditions.add(cb.equal(root.get(CustomerSupplier_.isSupplier), isSupplier));
         
         if (filters != null) {
             for (Iterator<String> it = filters.keySet().iterator(); it.hasNext();) {
@@ -90,13 +99,21 @@ public class CustomerSupplierService implements Serializable{
         return typedQuery.getResultList();
     }
     
-    public Long getCustomerSuppliersCount(Map<String, Object> filters) {
+    public Long getCustomerSuppliersCount(Map<String, Object> filters, Boolean isCustomer, Boolean isSupplier) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Long> query = cb.createQuery(Long.class);
         Root<CustomerSupplier> root = query.from(CustomerSupplier.class);
         CriteriaQuery<Long> select = query.select(cb.count(root));
 
         List<Predicate> conditions = new ArrayList<>();
+        
+        //is customer
+        if (isCustomer != null)
+            conditions.add(cb.equal(root.get(CustomerSupplier_.isCustomer), isCustomer));
+        
+        //is supplier
+        if (isSupplier != null)
+            conditions.add(cb.equal(root.get(CustomerSupplier_.isSupplier), isSupplier));
         
         if (filters != null) {
             for (Iterator<String> it = filters.keySet().iterator(); it.hasNext();) {

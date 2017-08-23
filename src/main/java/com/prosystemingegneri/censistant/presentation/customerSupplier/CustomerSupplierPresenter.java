@@ -42,6 +42,7 @@ public class CustomerSupplierPresenter implements Serializable{
     
     private CustomerSupplier customerSupplier;
     private Long id;
+    private Boolean isCustomerView;
     
     @PostConstruct
     public void init() {
@@ -56,13 +57,24 @@ public class CustomerSupplierPresenter implements Serializable{
             return null;
         }
         
-        return "/secured/customerSupplier/customerSuppliers?faces-redirect=true";
+        String returnString;
+        if (isCustomerView)
+            returnString = "/secured/customerSupplier/customers";
+        else
+            returnString = "/secured/customerSupplier/suppliers";
+        
+        return returnString + "?faces-redirect=true";
     }
     
     public void detailCustomerSupplier() {
         if (customerSupplier == null) {
-            if (id == 0)
+            if (id == 0) {
                 customerSupplier = new CustomerSupplier();
+                if (isCustomerView)
+                    customerSupplier.setIsCustomer(Boolean.TRUE);
+                else
+                    customerSupplier.setIsSupplier(Boolean.TRUE);
+            }
             else
                 customerSupplier = service.readCustomerSupplier(id);
         }
@@ -72,6 +84,7 @@ public class CustomerSupplierPresenter implements Serializable{
         if (plant != null)
             FacesContext.getCurrentInstance().getExternalContext().getFlash().put("plant", plant);
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("customerSupplier", customerSupplier);
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("isCustomerView", isCustomerView);
         
         return "/secured/customerSupplier/plant?faces-redirect=true";
     }
@@ -85,6 +98,7 @@ public class CustomerSupplierPresenter implements Serializable{
         if (referee != null)
             FacesContext.getCurrentInstance().getExternalContext().getFlash().put("referee", referee);
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("customerSupplier", customerSupplier);
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("isCustomerView", isCustomerView);
         
         return "/secured/customerSupplier/referee?faces-redirect=true";
     }
@@ -108,6 +122,14 @@ public class CustomerSupplierPresenter implements Serializable{
 
     public void setCustomerSupplier(CustomerSupplier customerSupplier) {
         this.customerSupplier = customerSupplier;
+    }
+
+    public Boolean getIsCustomerView() {
+        return isCustomerView;
+    }
+
+    public void setIsCustomerView(Boolean isCustomerView) {
+        this.isCustomerView = isCustomerView;
     }
     
 }

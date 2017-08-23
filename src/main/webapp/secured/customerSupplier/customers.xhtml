@@ -11,44 +11,37 @@
                     <div class="card card-w-title">
                         <h1>#{msg.customerSupplier_customers}</h1>
 
-                        <p:dataTable id="customersTable" var="riliev" value="#{customerSupplierListPresenter.lazyCustomerSuppliers}"
-                                     selectionMode="multiple" selection="#{customerSupplierListPresenter.selectedCustomerSuppliers}" rowKey="#{riliev.id}"
+                        <p:dataTable id="customersTable" var="cust" value="#{customerSupplierListPresenter.lazyCustomers}"
+                                     selectionMode="multiple" selection="#{customerSupplierListPresenter.selectedCustomerSuppliers}" rowKey="#{cust.id}"
                                      paginator="true" rows="10"
                                      paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                      rowsPerPageTemplate="10,25,50" lazy="true">
                             <f:facet name="header">
                                 <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
-                                    #{msg.rilievo_rilievi_tip}
+                                    #{msg.customerSupplier_customers_tip}
                                     <p:outputPanel>
                                         <p:outputPanel style="display: inline-block">
-                                            <p:commandButton title="#{msg.update}" icon="ui-icon-refresh" styleClass="AquaButton" update="rilieviForm" />
-                                            <p:button title="#{msg.new}" icon="ui-icon-create" styleClass="AquaButton" outcome="/secured/rilievo/rilievo">
+                                            <p:button title="#{msg.new}" icon="ui-icon-create" styleClass="AquaButton" outcome="/secured/customerSupplier/customer">
                                                 <f:param name="id" value="0" />
+                                                <f:param name="isCustomerView" value="true" />
                                             </p:button>
-                                            <p:commandButton title="#{msg.delete}" icon="ui-icon-delete" actionListener="#{rilievoListPresenter.deleteRilievo()}" update="@form">
-                                                <p:confirm header="#{msg.rilievo_rilievi_delete}" message="#{msg.rilievo_rilievi_delete_tip}" icon="ui-icon-alert"/>
+                                            <p:commandButton title="#{msg.delete}" icon="ui-icon-delete" actionListener="#{customerSupplierListPresenter.deleteCustomerSupplier()}" update="@form">
+                                                <p:confirm header="#{msg.customerSupplier_customers_delete}" message="#{msg.customerSupplier_customers_delete_tip}" icon="ui-icon-alert"/>
                                             </p:commandButton>
                                         </p:outputPanel>
                                     </p:outputPanel>
                                 </p:panelGrid>
                             </f:facet>
-                            <p:column headerText="#{msg.rilievo_classificazioneRilievo_nome}"  priority="4">
-                                <h:outputText value="#{riliev.classificazione.nome}"/>
+                            <p:column headerText="#{msg.customerSupplier_customerSupplier_businessName}" sortBy="#{cust.businessName}" filterBy="#{cust.businessName}"  priority="2">
+                                <h:outputText value="#{cust.businessName}"/>
                             </p:column>
-                            <p:column headerText="#{msg.rilievo_origineRilievo_nome}"  priority="6">
-                                <h:outputText value="#{riliev.origine.nome}"/>
-                            </p:column>
-                            <p:column headerText="#{msg.rilievo_rilievo_creazione}" sortBy="#{riliev.creazione}"  priority="2">
-                                <h:outputText value="#{riliev.creazione}">
-                                    <f:convertDateTime pattern="dd/MM/YYYY" />
-                                </h:outputText>
-                            </p:column>
-                            <p:column headerText="#{msg.rilievo_rilievo_oggetto}" sortBy="#{riliev.oggetto}" filterBy="#{riliev.oggetto}"  priority="0">
-                                <h:outputText value="#{riliev.oggettoCropped}"/>
+                            <p:column headerText="#{msg.customerSupplier_customerSupplier_name}" sortBy="#{cust.name}" filterBy="#{cust.name}"  priority="0">
+                                <h:outputText value="#{cust.name}"/>
                             </p:column>
                             <p:column headerText="#{msg.actions}" style="width:64px; text-align:center" priority="0" exportable="false">
-                                <p:button title="#{msg.edit}" icon="ui-icon-edit" styleClass="AquaButton" outcome="/secured/rilievo/rilievo">
-                                    <f:param name="id" value="#{riliev.id}" />
+                                <p:button title="#{msg.edit}" icon="ui-icon-edit" styleClass="AquaButton" outcome="/secured/customerSupplier/customer">
+                                    <f:param name="id" value="#{cust.id}" />
+                                    <f:param name="isCustomerView" value="true" />
                                 </p:button>
                             </p:column>
                         </p:dataTable>

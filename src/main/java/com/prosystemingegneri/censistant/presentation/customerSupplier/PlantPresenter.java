@@ -33,10 +33,12 @@ import org.omnifaces.cdi.ViewScoped;
 public class PlantPresenter implements Serializable {
     private Plant plant;
     private CustomerSupplier customerSupplier;
+    private Boolean isCustomerView;
     
     @PostConstruct
     public void init() {
         customerSupplier = (CustomerSupplier) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("customerSupplier");
+        isCustomerView = (Boolean) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("isCustomerView");
         plant = (Plant) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("plant");
         if (plant == null)
             plant = new Plant();
@@ -48,13 +50,23 @@ public class PlantPresenter implements Serializable {
         
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("customerSupplier", customerSupplier);
         
-        return "/secured/customerSupplier/customerSupplier?faces-redirect=true";
+        return chooseReturnString();
     }
     
     public String cancel() {
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("customerSupplier", customerSupplier);
         
-        return "/secured/customerSupplier/customerSupplier?faces-redirect=true";        
+        return chooseReturnString();
+    }
+    
+    private String chooseReturnString() {
+        String returnString;
+        if (isCustomerView)
+            returnString = "/secured/customerSupplier/customers";
+        else
+            returnString = "/secured/customerSupplier/suppliers";
+        
+        return returnString + "?faces-redirect=true";
     }
 
     public Plant getPlant() {

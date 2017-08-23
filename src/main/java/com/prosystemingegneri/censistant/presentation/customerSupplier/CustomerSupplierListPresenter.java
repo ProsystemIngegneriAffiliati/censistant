@@ -39,12 +39,14 @@ public class CustomerSupplierListPresenter implements Serializable{
     @Inject
     CustomerSupplierService service;
     
-    private CustomerSupplierLazyDataModel lazyCustomerSuppliers;
+    private CustomerSupplierLazyDataModel lazyCustomers;
+    private CustomerSupplierLazyDataModel lazySuppliers;
     private List<CustomerSupplier> selectedCustomerSuppliers;
     
     @PostConstruct
     public void init() {
-        lazyCustomerSuppliers = new CustomerSupplierLazyDataModel(service);
+        lazyCustomers = new CustomerSupplierLazyDataModel(service, Boolean.TRUE, null);
+        lazySuppliers = new CustomerSupplierLazyDataModel(service, null, Boolean.TRUE);
     }
     
     public void deleteCustomerSupplier() {
@@ -61,12 +63,20 @@ public class CustomerSupplierListPresenter implements Serializable{
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Missing selection", "Select a row before deleting"));
     }
 
-    public CustomerSupplierLazyDataModel getLazyCustomerSuppliers() {
-        return lazyCustomerSuppliers;
+    public CustomerSupplierLazyDataModel getLazyCustomers() {
+        return lazyCustomers;
     }
 
-    public void setLazyCustomerSuppliers(CustomerSupplierLazyDataModel lazyCustomerSupplier) {
-        this.lazyCustomerSuppliers = lazyCustomerSupplier;
+    public void setLazyCustomers(CustomerSupplierLazyDataModel lazyCustomers) {
+        this.lazyCustomers = lazyCustomers;
+    }
+
+    public CustomerSupplierLazyDataModel getLazySuppliers() {
+        return lazySuppliers;
+    }
+
+    public void setLazySuppliers(CustomerSupplierLazyDataModel lazySuppliers) {
+        this.lazySuppliers = lazySuppliers;
     }
 
     public List<CustomerSupplier> getSelectedCustomerSuppliers() {

@@ -31,9 +31,13 @@ import static org.primefaces.model.SortOrder.DESCENDING;
  */
 public class CustomerSupplierLazyDataModel extends LazyDataModel<CustomerSupplier>{
     private final CustomerSupplierService service;
+    private final Boolean isCustomer;
+    private final Boolean isSupplier;
 
-    public CustomerSupplierLazyDataModel(CustomerSupplierService service) {
+    public CustomerSupplierLazyDataModel(CustomerSupplierService service, Boolean isCustomer, Boolean isSupplier) {
         this.service = service;
+        this.isCustomer = isCustomer;
+        this.isSupplier = isSupplier;
     }
 
     @Override
@@ -54,8 +58,8 @@ public class CustomerSupplierLazyDataModel extends LazyDataModel<CustomerSupplie
                 break;
             default:
         }
-        List<CustomerSupplier> result = service.listCustomerSuppliers(first, pageSize, filters, sortField, isAscending);
-        this.setRowCount(service.getCustomerSuppliersCount(filters).intValue());
+        List<CustomerSupplier> result = service.listCustomerSuppliers(first, pageSize, filters, sortField, isAscending, isCustomer, isSupplier);
+        this.setRowCount(service.getCustomerSuppliersCount(filters, isCustomer, isSupplier).intValue());
         
         return result;
     }

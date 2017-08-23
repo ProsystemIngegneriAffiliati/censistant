@@ -77,6 +77,8 @@ public class CustomerSupplier extends BaseEntity<Long>{
     public CustomerSupplier() {
         plants = new ArrayList<>();
         referees = new ArrayList<>();
+        isCustomer = Boolean.FALSE;
+        isSupplier = Boolean.FALSE;
     }
 
     public Boolean getIsCustomer() {

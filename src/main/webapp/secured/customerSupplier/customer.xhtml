@@ -1,12 +1,65 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
       xmlns:h="http://xmlns.jcp.org/jsf/html">
-    <h:head>
-        <title>Facelet Title</title>
-    </h:head>
-    <h:body>
-        Hello from Facelets
-    </h:body>
-</html>
+    <f:metadata>
+        <f:viewParam name="id"
+                     value="#{customerSupplierPresenter.id}"
+                     converter="javax.faces.Long"
+                     required="true"
+                     requiredMessage="Must provide an ID"/>
+        <f:viewParam name="isCustomerView"
+                     value="#{customerSupplierPresenter.isCustomerView}"
+                     converter="javax.faces.Boolean"
+                     required="true"
+                     requiredMessage="Must say that you are in a customer view"/>
+        <f:viewAction action="#{customerSupplierPresenter.detailCustomerSupplier()}"/>
+    </f:metadata>
+    <ui:composition template="/WEB-INF/template.xhtml">
+        <ui:define name="content">
+            <h:form id="customerForm">
+                <div class="ui-fluid">
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <div class="card card-w-title">
+                                <h1>#{msg.customerSupplier_customer}</h1>
+                                <p>#{msg.customerSupplier_customer_tip}</p>
+                                <p:panelGrid columns="9" columnClasses="ui-grid-col-1,ui-grid-col-2,ui-grid-col-1,ui-grid-col-1,ui-grid-col-2,ui-grid-col-1,ui-grid-col-1,ui-grid-col-2,ui-grid-col-1" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+                                    <h:outputLabel for="businessName" value="#{msg.customerSupplier_customerSupplier_businessName}"/>
+                                    <p:inputText id="businessName" value="#{customerSupplierPresenter.customerSupplier.businessName}"/>
+                                    <p:message for="businessName"/>
 
+                                    <h:outputLabel for="name" value="#{msg.customerSupplier_customerSupplier_name}"/>
+                                    <p:inputText id="name" value="#{customerSupplierPresenter.customerSupplier.name}"/>
+                                    <p:message for="name"/>
+
+                                    <h:outputLabel for="isSupplier" value="#{msg.customerSupplier_customerSupplier_isSupplier}"/>
+                                    <p:inputSwitch id="isSupplier" value="#{customerSupplierPresenter.customerSupplier.isSupplier}" />
+                                    <p:message for="isSupplier"/>
+                                </p:panelGrid>
+
+                                <div class="ui-g">
+                                    <div class="ui-g-1 ui-md-2"></div>
+                                    <div class="ui-g-4 ui-md-3">
+                                        <p:button value="#{msg.cancel}" outcome="/secured/customerSupplier/customers" styleClass="secondary"/>
+                                    </div>
+                                    <div class="ui-g-2 ui-md-2"></div>
+                                    <div class="ui-g-4 ui-md-3">
+                                        <p:commandButton value="#{msg.save}"
+                                                         action="#{customerSupplierPresenter.saveCustomerSupplier()}"
+                                                         ajax="false"/>
+                                    </div>
+                                    <div class="ui-g-1 ui-md-2"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>
