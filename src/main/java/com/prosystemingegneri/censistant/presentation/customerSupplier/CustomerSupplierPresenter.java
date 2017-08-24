@@ -23,11 +23,15 @@ import com.prosystemingegneri.censistant.business.customerSupplier.entity.Refere
 import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import javax.ejb.EJBException;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
+import javax.validation.groups.Default;
 import org.omnifaces.cdi.ViewScoped;
 
 /**
@@ -44,6 +48,9 @@ public class CustomerSupplierPresenter implements Serializable{
     private Long id;
     private Boolean isCustomerView;
     
+    @Resource
+    Validator validator;
+    
     @PostConstruct
     public void init() {
         customerSupplier = (CustomerSupplier) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("customerSupplier");
@@ -52,6 +59,14 @@ public class CustomerSupplierPresenter implements Serializable{
     
     public String saveCustomerSupplier() {
         try {
+            boolean isValidated = true;
+            for (ConstraintViolation<CustomerSupplier> constraintViolation : validator.validate(customerSupplier, Default.class)) {
+                isValidated = false;
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", constraintViolation.getMessage()));
+            }
+            if (!isValidated)
+                return null;            
+            
             service.saveCustomerSupplier(customerSupplier);
         } catch (EJBException e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", ExceptionUtility.unwrap(e.getCausedByException()).getLocalizedMessage()));

@@ -16,6 +16,8 @@
  */
 package com.prosystemingegneri.censistant.business.customerSupplier.entity;
 
+import com.prosystemingegneri.censistant.business.customerSupplier.controller.MandatoryHeadOffice;
+import com.prosystemingegneri.censistant.business.customerSupplier.controller.MandatoryProvenanceForCustomer;
 import com.prosystemingegneri.censistant.business.entity.BaseEntity;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +37,8 @@ import javax.validation.constraints.NotNull;
  * @author Davide Mainardi <ingmainardi@live.com>
  */
 @Entity
+@MandatoryHeadOffice
+@MandatoryProvenanceForCustomer
 public class CustomerSupplier extends BaseEntity<Long>{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
