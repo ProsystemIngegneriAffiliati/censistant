@@ -86,4 +86,12 @@ public class CustomerSupplierListPresenter implements Serializable{
     public void setSelectedCustomerSuppliers(List<CustomerSupplier> selectedCustomerSupplier) {
         this.selectedCustomerSuppliers = selectedCustomerSupplier;
     }
+    
+    public String getCustomerAddess() {
+        return lazyCustomers.getAddess();
+    }
+
+    public void setCustomerAddess(String addess) {
+        lazyCustomers.setAddess(addess);
+    }
 }

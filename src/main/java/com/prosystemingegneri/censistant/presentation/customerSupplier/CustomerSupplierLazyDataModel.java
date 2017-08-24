@@ -33,6 +33,8 @@ public class CustomerSupplierLazyDataModel extends LazyDataModel<CustomerSupplie
     private final CustomerSupplierService service;
     private final Boolean isCustomer;
     private final Boolean isSupplier;
+    
+    private String addess;
 
     public CustomerSupplierLazyDataModel(CustomerSupplierService service, Boolean isCustomer, Boolean isSupplier) {
         this.service = service;
@@ -58,8 +60,8 @@ public class CustomerSupplierLazyDataModel extends LazyDataModel<CustomerSupplie
                 break;
             default:
         }
-        List<CustomerSupplier> result = service.listCustomerSuppliers(first, pageSize, filters, sortField, isAscending, isCustomer, isSupplier);
-        this.setRowCount(service.getCustomerSuppliersCount(filters, isCustomer, isSupplier).intValue());
+        List<CustomerSupplier> result = service.listCustomerSuppliers(first, pageSize, filters, sortField, isAscending, isCustomer, isSupplier, addess);
+        this.setRowCount(service.getCustomerSuppliersCount(filters, isCustomer, isSupplier, addess).intValue());
         
         return result;
     }
@@ -71,6 +73,14 @@ public class CustomerSupplierLazyDataModel extends LazyDataModel<CustomerSupplie
         } catch (NumberFormatException e) {
             return null;
         }
+    }
+
+    public String getAddess() {
+        return addess;
+    }
+
+    public void setAddess(String addess) {
+        this.addess = addess;
     }
     
 }

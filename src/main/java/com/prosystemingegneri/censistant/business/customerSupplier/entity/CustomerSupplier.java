@@ -172,6 +172,14 @@ public class CustomerSupplier extends BaseEntity<Long>{
         return plants;
     }
     
+    public Plant getHeadOffice() {
+        for (Plant plant : plants)
+            if (plant.getIsHeadOffice())
+                return plant;
+        
+        return null;
+    }
+    
     public void addReferee(Referee referee) {
         if (!referees.contains(referee)) {
             referees.add(referee);

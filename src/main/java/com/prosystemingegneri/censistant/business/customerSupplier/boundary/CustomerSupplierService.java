@@ -18,6 +18,8 @@ package com.prosystemingegneri.censistant.business.customerSupplier.boundary;
 
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier_;
+import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
+import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant_;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -29,6 +31,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.ListJoin;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -58,7 +61,7 @@ public class CustomerSupplierService implements Serializable{
         em.remove(readCustomerSupplier(id));
     }
 
-    public List<CustomerSupplier> listCustomerSuppliers(int first, int pageSize, Map<String, Object> filters, String sortField, Boolean isAscending, Boolean isCustomer, Boolean isSupplier) {
+    public List<CustomerSupplier> listCustomerSuppliers(int first, int pageSize, Map<String, Object> filters, String sortField, Boolean isAscending, Boolean isCustomer, Boolean isSupplier, String address) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<CustomerSupplier> query = cb.createQuery(CustomerSupplier.class);
         Root<CustomerSupplier> root = query.from(CustomerSupplier.class);
@@ -73,6 +76,12 @@ public class CustomerSupplierService implements Serializable{
         //is supplier
         if (isSupplier != null)
             conditions.add(cb.equal(root.get(CustomerSupplier_.isSupplier), isSupplier));
+        
+        //plant's address
+        if (address != null && !address.isEmpty()) {
+            ListJoin<CustomerSupplier, Plant> plants = root.join(CustomerSupplier_.plants);
+            conditions.add(cb.like(cb.lower(plants.get(Plant_.address)), "%" + String.valueOf(address).toLowerCase() + "%"));
+    	}
         
         if (filters != null) {
             for (Iterator<String> it = filters.keySet().iterator(); it.hasNext();) {
@@ -99,7 +108,7 @@ public class CustomerSupplierService implements Serializable{
         return typedQuery.getResultList();
     }
     
-    public Long getCustomerSuppliersCount(Map<String, Object> filters, Boolean isCustomer, Boolean isSupplier) {
+    public Long getCustomerSuppliersCount(Map<String, Object> filters, Boolean isCustomer, Boolean isSupplier, String address) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Long> query = cb.createQuery(Long.class);
         Root<CustomerSupplier> root = query.from(CustomerSupplier.class);
@@ -114,6 +123,12 @@ public class CustomerSupplierService implements Serializable{
         //is supplier
         if (isSupplier != null)
             conditions.add(cb.equal(root.get(CustomerSupplier_.isSupplier), isSupplier));
+        
+        //plant's address
+        if (address != null && !address.isEmpty()) {
+            ListJoin<CustomerSupplier, Plant> plants = root.join(CustomerSupplier_.plants);
+            conditions.add(cb.like(cb.lower(plants.get(Plant_.address)), "%" + String.valueOf(address).toLowerCase() + "%"));
+    	}
         
         if (filters != null) {
             for (Iterator<String> it = filters.keySet().iterator(); it.hasNext();) {
