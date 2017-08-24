@@ -86,7 +86,7 @@
                                     </p:dataTable>
                                     
                                     <p:dataTable id="refereesTable"
-                                                 var="refereee"
+                                                 var="referee"
                                                  value="#{customerSupplierPresenter.customerSupplier.referees}">
                                         <f:facet name="header">
                                             <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
@@ -95,13 +95,13 @@
                                             </p:panelGrid>
                                         </f:facet>
                                         <p:column headerText="#{msg.customerSupplier_referee_name}" priority="0">
-                                            <h:outputText value="#{refereee.name}" />
+                                            <h:outputText value="#{referee.name}" />
                                         </p:column>
                                         <p:column headerText="#{msg.customerSupplier_referee_email}" priority="2">
-                                            <h:outputText value="#{refereee.email}" />
+                                            <h:outputText value="#{referee.email}" />
                                         </p:column>
                                         <p:column headerText="#{msg.customerSupplier_referee_notes}" priority="5">
-                                            <h:outputText value="#{refereee.notes}" />
+                                            <h:outputText value="#{referee.notes}" />
                                         </p:column>
                                         <p:column headerText="#{msg.actions}" style="width:72px; text-align:center" priority="0">
                                             <p:splitButton value="" icon="ui-icon-edit" action="#{customerSupplierPresenter.detailReferee(referee)}" ajax="false">
