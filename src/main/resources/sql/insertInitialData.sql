@@ -23,7 +23,7 @@ INSERT INTO provenance(name, version) VALUES('Stampa', 0)
 INSERT INTO provenance(name, version) VALUES('Ufficio', 0)
 INSERT INTO provenance(name, version) VALUES('Volantino', 0)
 
-INSERT INTO customersupplier(businessname, name, iscustomer, issupplier, taxcode, vatregistrationnumber, notes, version) VALUES('Prosystem Ingegneri Affiliati di Gilli Enrico & C.', 'Prosystem', true, false, '10805010013', '10805010013', 'Cliente o fornitore di prova', 0)
+INSERT INTO customersupplier(businessname, name, iscustomer, issupplier, taxcode, vatregistrationnumber, notes, provenance_id, version) VALUES('Prosystem Ingegneri Affiliati di Gilli Enrico & C.', 'Prosystem', true, false, '10805010013', '10805010013', 'Cliente o fornitore di prova', 4, 0)
 INSERT INTO plant(customersupplier_id, isheadoffice, name, address, phone, fax, email, version) VALUES(1, true, 'Sede Prosystem', 'Via Nazionale, 24 10064 Pinerolo (TO)', '0121 202147', '0121 305343', 'info@prosystemingegneri.com', 0)
 INSERT INTO referee(customersupplier_id, name, phone, mobile, email, notes, version) VALUES(1, 'Gilli Enrico', null, '3291234567', 'gilli@prosystemingegneri.com', 'Titolare', 0)
 INSERT INTO referee(customersupplier_id, name, phone, mobile, email, notes, version) VALUES(1, 'Mainardi Davide', null, '3461234567', 'mainardi@prosystemingegneri.com', null, 0)

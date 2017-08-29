@@ -1,6 +1,6 @@
 #!/bin/sh
 
-readonly IP_ADDRESS=192.168.2.107
+readonly IP_ADDRESS=192.168.2.105
 
 mkdir $HOME/censistant
 mkdir $HOME/censistant/images

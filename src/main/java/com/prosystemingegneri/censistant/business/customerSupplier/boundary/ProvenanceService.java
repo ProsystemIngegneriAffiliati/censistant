@@ -57,11 +57,21 @@ public class ProvenanceService implements Serializable{
         em.remove(readProvenance(id));
     }
     
-    public List<Provenance> listProvenances() {
+    public List<Provenance> listProvenances(String name) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Provenance> query = cb.createQuery(Provenance.class);
         Root<Provenance> root = query.from(Provenance.class);
         CriteriaQuery<Provenance> select = query.select(root).distinct(true);
+        
+        List<Predicate> conditions = new ArrayList<>();
+        
+        //name
+        if (name != null && !name.isEmpty())
+            conditions.add(cb.like(cb.lower(root.get(Provenance_.name)), "%" + String.valueOf(name).toLowerCase() + "%"));
+        
+        if (!conditions.isEmpty()) {
+            query.where(conditions.toArray(new Predicate[conditions.size()]));
+        }
         
         query.orderBy(cb.asc(root.get(Provenance_.name)));
 

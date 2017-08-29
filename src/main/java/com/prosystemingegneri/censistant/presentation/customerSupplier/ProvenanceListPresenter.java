@@ -44,7 +44,7 @@ public class ProvenanceListPresenter implements Serializable{
     
     @PostConstruct
     public void init() {
-        provenances = service.listProvenances();
+        provenances = service.listProvenances(null);
     }
     
     public void deleteProvenances() {
@@ -56,18 +56,18 @@ public class ProvenanceListPresenter implements Serializable{
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", ExceptionUtility.unwrap(e.getCausedByException()).getLocalizedMessage()));
                 }
             }
-            provenances = service.listProvenances();
+            provenances = service.listProvenances(null);
         }
         else
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Missing selection", "Select a row before deleting"));
     }
+    
+    public List<Provenance> completeProvenances(String name) {
+        return service.listProvenances(name);
+    }
 
     public List<Provenance> getProvenances() {
         return provenances;
-    }
-
-    public void setProvenances(List<Provenance> provenances) {
-        this.provenances = provenances;
     }
 
     public List<Provenance> getSelectedProvenances() {
