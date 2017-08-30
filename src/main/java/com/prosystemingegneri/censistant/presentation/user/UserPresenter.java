@@ -16,11 +16,18 @@
  */
 package com.prosystemingegneri.censistant.presentation.user;
 
+import com.prosystemingegneri.censistant.business.siteSurvey.boundary.WorkerService;
+import com.prosystemingegneri.censistant.business.siteSurvey.entity.Worker;
 import com.prosystemingegneri.censistant.business.user.boundary.UserService;
 import com.prosystemingegneri.censistant.business.user.entity.GroupApp;
 import com.prosystemingegneri.censistant.business.user.entity.UserApp;
+import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
 import java.io.Serializable;
 import java.util.List;
+import javax.annotation.PostConstruct;
+import javax.ejb.EJBException;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.omnifaces.cdi.ViewScoped;
@@ -41,6 +48,16 @@ public class UserPresenter implements Serializable {
     
     private DualListModel<GroupApp> groups = new DualListModel<>();
     
+    private boolean workerCreation;
+    private Worker worker;
+    @Inject
+    WorkerService workerService;
+    
+    @PostConstruct
+    private void init() {
+        worker = new Worker();
+    }
+    
     public void readUserApp() {
         if (id != null && !id.isEmpty())
             user = userService.readUserApp(id);
@@ -50,6 +67,16 @@ public class UserPresenter implements Serializable {
         user.getGroups().clear();
         user.getGroups().addAll(groups.getTarget());
         user = userService.saveUserApp(user);
+        
+        if (workerCreation && workerService.findWorker(null, false, user) == null) {
+            worker.setUserApp(user);
+            try {
+                workerService.saveWorker(worker);
+            } catch (EJBException e) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", ExceptionUtility.unwrap(e.getCausedByException()).getLocalizedMessage()));
+                return null;
+            }
+        }
         
         return "/secured/manageUser/users?faces-redirect=true";
     }
@@ -93,6 +120,22 @@ public class UserPresenter implements Serializable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public Worker getWorker() {
+        return worker;
+    }
+
+    public void setWorker(Worker worker) {
+        this.worker = worker;
+    }
+
+    public boolean isWorkerCreation() {
+        return workerCreation;
+    }
+
+    public void setWorkerCreation(boolean workerCreation) {
+        this.workerCreation = workerCreation;
     }
     
 }

@@ -14,12 +14,19 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.prosystemingegneri.censistant.business.siteSurvey.boundary;
+package com.prosystemingegneri.censistant.business.siteSurvey.entity;
+
+import com.prosystemingegneri.censistant.business.user.entity.UserApp;
+import javax.persistence.metamodel.SingularAttribute;
+import javax.persistence.metamodel.StaticMetamodel;
 
 /**
  *
  * @author Davide Mainardi <ingmainardi@live.com>
  */
-public class SiteSurveyReportService {
-    
+@StaticMetamodel(Worker.class)
+public class Worker_ {
+    public static volatile SingularAttribute<Worker, String> initials;
+    public static volatile SingularAttribute<Worker, String> name;
+    public static volatile SingularAttribute<Worker, UserApp> userApp;
 }

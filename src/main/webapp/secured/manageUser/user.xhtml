@@ -20,10 +20,33 @@
                         <div class="card card-w-title">
                             <h1>#{msg.manageUsers_user}</h1>
                             <p>#{msg.manageUsers_user_tip}</p>
-                            <p:panelGrid columns="2" columnClasses="ui-grid-col-2,ui-grid-col-10" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+                            <p:panelGrid columns="5" columnClasses="ui-grid-col-2,ui-grid-col-3,ui-grid-col-2,ui-grid-col-2,ui-grid-col-1" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
                                 <h:outputLabel for="username" value="#{msg.login_username}"/>
                                 <h:outputText id="username" value="#{userPresenter.userApp.userName}"/>
+                                
+                                <h:outputLabel for="isWorkerCreation" value="#{msg.manageUsers_user_workerCreation}" title="#{msg.manageUsers_user_workerCreation_tip}"/>
+                                <p:inputSwitch id="isWorkerCreation" value="#{userPresenter.workerCreation}">
+                                    <p:ajax update="workerCreation" />
+                                </p:inputSwitch>
+                                <p:message for="isWorkerCreation"/>
                             </p:panelGrid>
+                            
+                            <h:panelGroup id="workerCreation">
+                                <p:panelGrid rendered="#{userPresenter.workerCreation}" columns="3" columnClasses="ui-grid-col-2,ui-grid-col-5,ui-grid-col-5" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+                                    <h:outputLabel for="name" value="#{msg.siteSurvey_worker_name}"/>
+                                    <p:inputText id="name" value="#{userPresenter.worker.name}"/>
+                                    <p:message for="name"/>
+                                    
+                                    <h:outputLabel for="initials" value="#{msg.siteSurvey_worker_initials}"/>
+                                    <p:inputText id="initials" value="#{userPresenter.worker.initials}"/>
+                                    <p:message for="initials"/>
+
+                                    <h:outputLabel for="email" value="#{msg.siteSurvey_worker_email}"/>
+                                    <p:inputText id="email" value="#{userPresenter.worker.email}" type="email"/>
+                                    <p:message for="email"/>
+                                </p:panelGrid>
+                            </h:panelGroup>
+                            
                             <p:pickList value="#{userPresenter.groups}" var="gr" itemLabel="#{gr.groupName}" itemValue="#{gr}"
                                         converter="#{groupConverter}" responsive="true">
                                 <f:facet name="sourceCaption">#{msg.manageUsers_user_avaibleGroups}</f:facet>

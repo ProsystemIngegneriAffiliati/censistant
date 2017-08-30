@@ -36,12 +36,21 @@ public class Worker extends BaseEntity<Long>{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    
+    @NotNull
+    @Column(nullable = false)
+    private String name;
+    
     @NotNull
     @Column(nullable = false)    
+    private String initials;
+
+    @NotNull
+    @Column(nullable = false)
     private String email;
     
-    @OneToOne
+    @NotNull
+    @OneToOne(optional = false)
     private UserApp userApp;
     
     @Version
@@ -64,6 +73,22 @@ public class Worker extends BaseEntity<Long>{
 
     public void setUserApp(UserApp userApp) {
         this.userApp = userApp;
+    }
+
+    public String getInitials() {
+        return initials;
+    }
+
+    public void setInitials(String initials) {
+        this.initials = initials;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override

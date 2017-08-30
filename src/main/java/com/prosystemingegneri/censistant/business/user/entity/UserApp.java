@@ -50,10 +50,6 @@ public class UserApp implements Serializable{
             inverseJoinColumns = @JoinColumn(name = "groups_group_name"))
     private List<GroupApp> groups;  //joinColumns è necessario perché la colonna deve avere lo stesso nome nella tabella degli utenti ed in quella di scambio
     
-    @NotNull
-    @Column(nullable = false)
-    private String name;
-    
     private String imageFilename;
     
     @Version
@@ -69,8 +65,6 @@ public class UserApp implements Serializable{
 
     public void setUserName(String userName) {
         this.userName = userName;
-        if (name == null || name.isEmpty())
-            name = this.userName;
     }
 
     public String getPassword() {
@@ -103,14 +97,6 @@ public class UserApp implements Serializable{
      */
     public boolean isActivated() {
         return !this.groups.isEmpty();
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getImageFilename() {

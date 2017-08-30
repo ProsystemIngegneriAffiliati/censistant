@@ -1,0 +1,53 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:define name="content">
+        <h:form id="workersForm">
+            <div class="ui-g">
+                <div class="ui-g-12">
+                    <div class="card card-w-title">
+                        <h1>#{msg.siteSurvey_workers}</h1>
+
+                        <p:dataTable id="workersTable"
+                                     var="work"
+                                     value="#{workerListPresenter.workers}"
+                                     selectionMode="multiple"
+                                     selection="#{workerListPresenter.selectedWorkers}"
+                                     rowKey="#{work.id}">
+                            <f:facet name="header">
+                                <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
+                                    #{msg.siteSurvey_workers_tip}
+                                    <p:outputPanel>
+                                        <p:button title="#{msg.new}" icon="ui-icon-create" styleClass="AquaButton" outcome="/secured/siteSurvey/worker">
+                                            <f:param name="id" value="0" />
+                                        </p:button>
+                                        <p:commandButton title="#{msg.delete}" icon="ui-icon-delete" actionListener="#{workerListPresenter.deleteWorkers()}" update="@form">
+                                            <p:confirm header="#{msg.siteSurvey_workers_delete}" message="#{msg.siteSurvey_workers_delete_tip}" icon="ui-icon-alert"/>
+                                        </p:commandButton>
+                                    </p:outputPanel>
+                                </p:panelGrid>
+                            </f:facet>
+                            <p:column headerText="#{msg.siteSurvey_worker_name}">
+                                <h:outputText value="#{work.name}"/>
+                            </p:column>
+                            <p:column headerText="#{msg.siteSurvey_worker_initials}">
+                                <h:outputText value="#{work.initials}"/>
+                            </p:column>
+                            <p:column headerText="#{msg.siteSurvey_worker_email}">
+                                <h:outputText value="#{work.email}"/>
+                            </p:column>                            
+                            <p:column headerText="#{msg.actions}" style="width:64px; text-align:center">
+                                <p:button title="#{msg.edit}" icon="ui-icon-edit" styleClass="AquaButton" outcome="/secured/siteSurvey/worker">
+                                    <f:param name="id" value="#{work.id}" />
+                                </p:button>
+                            </p:column>
+                        </p:dataTable>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>
