@@ -46,6 +46,10 @@ public class CustomerSupplier extends BaseEntity<Long>{
     
     @Column(nullable = false)
     @NotNull
+    private Boolean isPotentialCustomer;
+    
+    @Column(nullable = false)
+    @NotNull
     private Boolean isCustomer;
     
     @Column(nullable = false)
@@ -83,6 +87,7 @@ public class CustomerSupplier extends BaseEntity<Long>{
         referees = new ArrayList<>();
         isCustomer = Boolean.FALSE;
         isSupplier = Boolean.FALSE;
+        isPotentialCustomer = Boolean.FALSE;
     }
 
     public Boolean getIsCustomer() {
@@ -196,6 +201,14 @@ public class CustomerSupplier extends BaseEntity<Long>{
 
     public List<Referee> getReferees() {
         return referees;
+    }
+
+    public Boolean getIsPotentialCustomer() {
+        return isPotentialCustomer;
+    }
+
+    public void setIsPotentialCustomer(Boolean isPotentialCustomer) {
+        this.isPotentialCustomer = isPotentialCustomer;
     }
     
 }

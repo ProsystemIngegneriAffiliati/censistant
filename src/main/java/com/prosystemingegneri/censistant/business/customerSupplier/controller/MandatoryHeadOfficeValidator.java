@@ -38,6 +38,6 @@ public class MandatoryHeadOfficeValidator implements ConstraintValidator<Mandato
             if (plant.getIsHeadOffice())
                 headOffices++;
         
-        return headOffices.equals(1);
+        return customerSupplier.getIsPotentialCustomer() || headOffices.equals(1);
     }
 }

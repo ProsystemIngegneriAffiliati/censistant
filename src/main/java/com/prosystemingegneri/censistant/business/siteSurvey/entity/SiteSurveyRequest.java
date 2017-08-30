@@ -14,19 +14,17 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.prosystemingegneri.censistant.business.siteSurveyReport.entity;
+package com.prosystemingegneri.censistant.business.siteSurvey.entity;
 
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
-import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
 import com.prosystemingegneri.censistant.business.entity.BaseEntity;
-import com.prosystemingegneri.censistant.business.user.entity.Worker;
 import java.util.Date;
 import javax.persistence.Column;
-import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
@@ -37,8 +35,7 @@ import javax.validation.constraints.NotNull;
  *
  * @author Davide Mainardi <ingmainardi@live.com>
  */
-@Entity
-public class SiteSurveyReport extends BaseEntity<Long>{
+public class SiteSurveyRequest extends BaseEntity<Long>{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -53,35 +50,29 @@ public class SiteSurveyReport extends BaseEntity<Long>{
     @Temporal(TemporalType.DATE)
     private Date creation;
     
-    @Temporal(TemporalType.DATE)
-    private Date expected;
-    
-    @Temporal(TemporalType.DATE)
-    private Date actual;
-    
     @NotNull
-    @Column(nullable = false)
-    private Boolean isInfo;
+    @ManyToOne(optional = false)
+    private CustomerSupplier customer;
     
     @NotNull
     @ManyToOne(optional = false)
     private SystemType systemType;
     
     @NotNull
-    @ManyToOne(optional = false)
-    private Plant plant;
+    @Column(nullable = false)
+    private Boolean isInfo;
     
-    @NotNull
-    @ManyToOne(optional = false)
-    private Worker seller;
+    @OneToOne(mappedBy = "request")
+    private SiteSurveyReport report;
     
     private String notes;
     
     @Version
     private int version;
 
-    public SiteSurveyReport() {
+    public SiteSurveyRequest() {
         creation = new Date();
+        isInfo = Boolean.FALSE; 
     }
 
     public Integer getNumber() {
@@ -100,28 +91,12 @@ public class SiteSurveyReport extends BaseEntity<Long>{
         this.creation = creation;
     }
 
-    public Date getExpected() {
-        return expected;
+    public CustomerSupplier getCustomer() {
+        return customer;
     }
 
-    public void setExpected(Date expected) {
-        this.expected = expected;
-    }
-
-    public Date getActual() {
-        return actual;
-    }
-
-    public void setActual(Date actual) {
-        this.actual = actual;
-    }
-
-    public Boolean getIsInfo() {
-        return isInfo;
-    }
-
-    public void setIsInfo(Boolean isInfo) {
-        this.isInfo = isInfo;
+    public void setCustomer(CustomerSupplier customer) {
+        this.customer = customer;
     }
 
     public SystemType getSystemType() {
@@ -132,20 +107,25 @@ public class SiteSurveyReport extends BaseEntity<Long>{
         this.systemType = systemType;
     }
 
-    public Plant getPlant() {
-        return plant;
+    public Boolean getIsInfo() {
+        return isInfo;
     }
 
-    public void setPlant(Plant plant) {
-        this.plant = plant;
+    public void setIsInfo(Boolean isInfo) {
+        this.isInfo = isInfo;
     }
 
-    public Worker getSeller() {
-        return seller;
+    public SiteSurveyReport getReport() {
+        return report;
     }
 
-    public void setSeller(Worker seller) {
-        this.seller = seller;
+    public void setReport(SiteSurveyReport report) {
+        this.report = report;
+    }
+
+    @Override
+    public Long getId() {
+        return id;
     }
 
     public String getNotes() {
@@ -154,11 +134,6 @@ public class SiteSurveyReport extends BaseEntity<Long>{
 
     public void setNotes(String notes) {
         this.notes = notes;
-    }
-
-    @Override
-    public Long getId() {
-        return id;
     }
     
 }
