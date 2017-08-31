@@ -30,6 +30,14 @@ INSERT INTO referee(customersupplier_id, name, phone, mobile, email, notes, vers
 INSERT INTO referee(customersupplier_id, name, phone, mobile, email, notes, version) VALUES(1, 'Carioti Ilaria', null, '3931234567', 'carioti@prosystemingegneri.com', 'In maternità fino a gennaio 2018', 0)
 INSERT INTO referee(customersupplier_id, name, phone, mobile, email, notes, version) VALUES(1, 'Elena', '0121202147', null, 'info@prosystemingegneri.com', 'Segretaria part-time al mattino', 0)
 
+INSERT INTO customersupplier(businessname, name, ispotentialcustomer, iscustomer, issupplier, provenance_id, version) VALUES('Ferrero cioccolatini SpA', 'Ferrero', true, true, false, 4, 0)
+INSERT INTO customersupplier(businessname, name, ispotentialcustomer, iscustomer, issupplier, provenance_id, version) VALUES('Santavicca Costruzioni', 'Santavicca', true, true, false, 3, 0)
+INSERT INTO customersupplier(businessname, name, ispotentialcustomer, iscustomer, issupplier, provenance_id, version) VALUES('Mario Rossi', 'Mario Rossi', true, true, false, 2, 0)
+
+INSERT INTO customersupplier(businessname, name, ispotentialcustomer, iscustomer, issupplier, provenance_id, version) VALUES('FCA Motors', 'FIAT', false, true, true, 6, 0)
+INSERT INTO plant(customersupplier_id, isheadoffice, name, address, phone, fax, email, version) VALUES(5, true, 'Sede', 'Corso Agnelli, 1 10100 Torino (TO)', '011 456789', '011 567890', 'info@fca.com', 0)
+INSERT INTO referee(customersupplier_id, name, phone, mobile, email, version) VALUES(5, 'Marchionne', null, '3391234567', 'marchionne@fca.com', 0)
+
 INSERT INTO worker(userapp_user_name, name, initials, email, version) VALUES('maina', 'Mainardi Davide', 'MD', 'mainardi@prosystemingegneri.com', 0)
 
 INSERT INTO systemtype(name, version) VALUES('Anti - Intrusione', 0)
@@ -40,3 +48,12 @@ INSERT INTO systemtype(name, version) VALUES('Altro', 0)
 INSERT INTO systemtype(name, version) VALUES('We.R', 0)
 INSERT INTO systemtype(name, version) VALUES('Fornitura materiale antintrusione', 0)
 INSERT INTO systemtype(name, version) VALUES('Fornitura materiale TVCC', 0)
+
+INSERT INTO sitesurveyrequest(number, creation, customer_id, systemType_id, isinfo) VALUES('14', '2016-12-30', 1, 1, true)
+INSERT INTO sitesurveyrequest(number, creation, customer_id, systemType_id, isinfo) VALUES('13', '2016-12-28', 4, 1, false)
+INSERT INTO sitesurveyrequest(number, creation, customer_id, systemType_id, isinfo) VALUES('1', '2017-01-08', 5, 3, true)
+INSERT INTO sitesurveyrequest(number, creation, customer_id, systemType_id, isinfo) VALUES('2', '2017-01-10', 4, 2, true)
+INSERT INTO sitesurveyrequest(number, creation, customer_id, systemType_id, isinfo) VALUES('3', '2017-02-01', 1, 3, false)
+INSERT INTO sitesurveyrequest(number, creation, customer_id, systemType_id, isinfo) VALUES('11', '2016-06-08', 5, 3, false)
+INSERT INTO sitesurveyrequest(number, creation, customer_id, systemType_id, isinfo) VALUES('12', '2016-07-10', 4, 5, true)
+INSERT INTO sitesurveyrequest(number, creation, customer_id, systemType_id, isinfo) VALUES('10', '2016-05-01', 1, 4, false)

@@ -14,9 +14,10 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.prosystemingegneri.censistant.business.customerSupplier.entity;
+package com.prosystemingegneri.censistant.business.siteSurvey.entity;
 
-import javax.persistence.metamodel.ListAttribute;
+import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
+import java.util.Date;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
@@ -24,10 +25,12 @@ import javax.persistence.metamodel.StaticMetamodel;
  *
  * @author Davide Mainardi <ingmainardi@live.com>
  */
-@StaticMetamodel(CustomerSupplier.class)
-public class CustomerSupplier_ {
-    public static volatile SingularAttribute<CustomerSupplier, Boolean> isCustomer;
-    public static volatile SingularAttribute<CustomerSupplier, Boolean> isSupplier;
-    public static volatile SingularAttribute<CustomerSupplier, String> name;
-    public static volatile ListAttribute<CustomerSupplier, Plant> plants;
+@StaticMetamodel(SiteSurveyRequest.class)
+public class SiteSurveyRequest_ {
+    public static volatile SingularAttribute<SiteSurveyRequest, Integer> number;
+    public static volatile SingularAttribute<SiteSurveyRequest, Date> creation;
+    public static volatile SingularAttribute<SiteSurveyRequest, CustomerSupplier> customer;
+    public static volatile SingularAttribute<SiteSurveyRequest, SystemType> systemType;
+    public static volatile SingularAttribute<SiteSurveyRequest, Boolean> isInfo;
+    public static volatile SingularAttribute<SiteSurveyRequest, String> notes;
 }

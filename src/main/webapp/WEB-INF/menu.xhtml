@@ -17,6 +17,9 @@
                                 <p:menuitem id="provenancesMenu" value="#{msg.customerSupplier_provenances}" icon="&#xE41C;" outcome="/secured/customerSupplier/provenances"/>
                             </p:submenu>
                         </p:submenu>
+                        <p:submenu id="siteSurveyMenu" label="#{msg.siteSurvey}" icon="&#xE7F1;">
+                            <p:menuitem id="siteSurveyRequestsMenu" value="#{msg.siteSurvey_siteSurveyRequests}" icon="&#xE61D;" outcome="/secured/siteSurvey/siteSurveyRequests"/>
+                        </p:submenu>
                         <p:submenu id="utilsMenu" label="#{msg.utils}" icon="&#xE0AF;">
                             <p:menuitem id="workersMenu" value="#{msg.siteSurvey_workers}" icon="&#xE7FC;" outcome="/secured/siteSurvey/workers"/>
                             <p:menuitem id="systemTypesMenu" value="#{msg.siteSurvey_systemTypes}" icon="&#xE2BC;" outcome="/secured/siteSurvey/systemTypes"/>

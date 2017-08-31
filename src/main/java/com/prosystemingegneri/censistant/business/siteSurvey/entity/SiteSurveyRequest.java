@@ -77,6 +77,11 @@ public class SiteSurveyRequest extends BaseEntity<Long>{
         isInfo = Boolean.FALSE; 
     }
 
+    public SiteSurveyRequest(Integer number) {
+        this();
+        this.number = number;
+    }
+
     public Integer getNumber() {
         return number;
     }
