@@ -1,12 +1,96 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
-    <h:head>
-        <title>Facelet Title</title>
-    </h:head>
-    <h:body>
-        Hello from Facelets
-    </h:body>
-</html>
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:oou="http://omnifaces.org/ui">
+    <f:metadata>
+        <f:viewParam name="id"
+                     value="#{siteSurveyRequestPresenter.id}"
+                     converter="javax.faces.Long"
+                     required="true"
+                     requiredMessage="Must provide an ID"/>
+        <f:viewAction action="#{siteSurveyRequestPresenter.detailSiteSurveyRequest()}"/>
+    </f:metadata>
+    <ui:composition template="/WEB-INF/template.xhtml">
+        <ui:define name="content">
+            <h:form id="siteSurveyRequestForm">
+                <div class="ui-fluid">
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <div class="card card-w-title">
+                                <h1>#{msg.siteSurvey_siteSurveyRequest}</h1>
+                                <p>#{msg.siteSurvey_siteSurveyRequest_tip}</p>
+                                <p:panelGrid columns="9" columnClasses="ui-grid-col-2,ui-grid-col-1,ui-grid-col-1,ui-grid-col-1,ui-grid-col-3,ui-grid-col-1,ui-grid-col-1,ui-grid-col-1,ui-grid-col-1" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+                                    <h:outputLabel for="number" value="#{msg.siteSurvey_siteSurveyRequest_number}"/>
+                                    <p:inputNumber id="number" value="#{siteSurveyRequestPresenter.siteSurveyRequest.number}" decimalPlaces="0"/>
+                                    <p:message for="number"/>
 
+                                    <h:outputLabel for="creation" value="#{msg.siteSurvey_siteSurveyRequest_creation}"/>
+                                    <p:calendar id="creation" value="#{siteSurveyRequestPresenter.siteSurveyRequest.creation}"/>
+                                    <p:message for="creation"/>
+                                    
+                                    <h:outputLabel for="isInfo" value="#{msg.siteSurvey_siteSurveyRequest_isInfo}"/>
+                                    <p:inputSwitch id="isInfo" value="#{siteSurveyRequestPresenter.siteSurveyRequest.isInfo}" />
+                                    <p:message for="isInfo"/>
+                                </p:panelGrid>
+
+                                <p:panelGrid columns="6" columnClasses="ui-grid-col-2,ui-grid-col-3,ui-grid-col-1,ui-grid-col-2,ui-grid-col-3,ui-grid-col-1" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+                                    <h:outputLabel for="customer" value="#{msg.customerSupplier_customer}"/>
+                                    <p:autoComplete id="customer"
+                                                    dropdown="true"
+                                                    value="#{siteSurveyRequestPresenter.siteSurveyRequest.customer}"
+                                                    completeMethod="#{customerSupplierListPresenter.completeCustomer}"
+                                                    converter="omnifaces.SelectItemsConverter"
+                                                    var="cust"
+                                                    itemLabel="#{cust.name}"
+                                                    itemValue="#{cust}"
+                                                    forceSelection="true">
+                                        <oou:converter converterId="omnifaces.ListConverter" list="#{customerSupplierListPresenter.completeCustomer(cust.name)}"/>
+                                    </p:autoComplete>
+                                    <p:message for="customer"/>
+                                    
+                                    <h:outputLabel for="systemType" value="#{msg.siteSurvey_systemType_name}"/>
+                                    <p:autoComplete id="systemType"
+                                                    dropdown="true"
+                                                    value="#{siteSurveyRequestPresenter.siteSurveyRequest.systemType}"
+                                                    completeMethod="#{systemTypeListPresenter.completeSystemTypes}"
+                                                    converter="omnifaces.SelectItemsConverter"
+                                                    var="syst"
+                                                    itemLabel="#{syst.name}"
+                                                    itemValue="#{syst}"
+                                                    forceSelection="true">
+                                        <oou:converter converterId="omnifaces.ListConverter" list="#{systemTypeListPresenter.completeSystemTypes(syst.name)}"/>
+                                    </p:autoComplete>
+                                    <p:message for="systemType"/>
+                                </p:panelGrid>
+                                
+                                <p:panelGrid columns="3" columnClasses="ui-grid-col-2,ui-grid-col-9,ui-grid-col-1" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+                                    <h:outputLabel for="notes" value="#{msg.siteSurvey_siteSurveyRequest_notes}"/>
+                                    <p:inputTextarea id="notes" value="#{siteSurveyRequestPresenter.siteSurveyRequest.notes}" rows="3"/>
+                                    <p:message for="notes"/>
+                                </p:panelGrid>
+
+                                <div class="ui-g">
+                                    <div class="ui-g-1 ui-md-2"></div>
+                                    <div class="ui-g-4 ui-md-3">
+                                        <p:button value="#{msg.cancel}" outcome="/secured/siteSurvey/siteSurveyRequests" styleClass="secondary"/>
+                                    </div>
+                                    <div class="ui-g-2 ui-md-2"></div>
+                                    <div class="ui-g-4 ui-md-3">
+                                        <p:commandButton value="#{msg.save}"
+                                                         action="#{siteSurveyRequestPresenter.saveSiteSurveyRequest()}"
+                                                         ajax="false"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

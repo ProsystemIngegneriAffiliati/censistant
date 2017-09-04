@@ -79,7 +79,7 @@ public class SiteSurveyRequestLazyDataModel extends LazyDataModel<SiteSurveyRequ
                     if (filterProperty.equalsIgnoreCase("systemType"))
                         systemType = String.valueOf(filters.get(filterProperty));
                     if (filterProperty.equalsIgnoreCase("isInfo"))
-                        isInfo = Boolean.valueOf(String.valueOf(filters.get(filterProperty)));
+                        isInfo = (Boolean) filters.get(filterProperty);
                 }
             }
         }
