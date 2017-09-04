@@ -19,6 +19,7 @@ package com.prosystemingegneri.censistant.presentation.siteSurvey;
 import com.prosystemingegneri.censistant.business.siteSurvey.boundary.SiteSurveyRequestService;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyRequest;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import org.primefaces.model.LazyDataModel;
@@ -47,6 +48,10 @@ public class SiteSurveyRequestLazyDataModel extends LazyDataModel<SiteSurveyRequ
     @Override
     public List<SiteSurveyRequest> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
         Boolean isAscending = null;
+        String customer = null;
+        String systemType = null;
+        Boolean isInfo = null;
+        Integer number = null;
         
         switch (sortOrder) {
             case ASCENDING:
@@ -57,8 +62,30 @@ public class SiteSurveyRequestLazyDataModel extends LazyDataModel<SiteSurveyRequ
                 break;
             default:
         }
-        List<SiteSurveyRequest> result = service.listSiteSurveyRequests(first, pageSize, filters, sortField, isAscending, start, end);
-        this.setRowCount(service.getSiteSurveyRequestsCount(filters, start, end).intValue());
+        
+        if (filters != null && !filters.isEmpty()) {
+            for (Iterator<String> it = filters.keySet().iterator(); it.hasNext();) {
+                String filterProperty = it.next();
+
+                if (!filterProperty.isEmpty()) {
+                    if (filterProperty.equalsIgnoreCase("number")) {
+                        try {
+                            number = Integer.valueOf(String.valueOf(filters.get(filterProperty)));
+                        } catch (NumberFormatException e) {
+                        }
+                    }
+                    if (filterProperty.equalsIgnoreCase("customer"))
+                        customer = String.valueOf(filters.get(filterProperty));
+                    if (filterProperty.equalsIgnoreCase("systemType"))
+                        systemType = String.valueOf(filters.get(filterProperty));
+                    if (filterProperty.equalsIgnoreCase("isInfo"))
+                        isInfo = Boolean.valueOf(String.valueOf(filters.get(filterProperty)));
+                }
+            }
+        }
+        
+        List<SiteSurveyRequest> result = service.listSiteSurveyRequests(first, pageSize, sortField, isAscending, number, start, end, customer, systemType, isInfo);
+        this.setRowCount(service.getSiteSurveyRequestsCount(number, start, end, customer, systemType, isInfo).intValue());
         
         return result;
     }

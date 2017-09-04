@@ -10,7 +10,7 @@
                 <div class="ui-g-12">
                     <div class="card card-w-title">
                         <h1>#{msg.siteSurvey_siteSurveyRequests}</h1>
-                        <p:dataTable id="siteSurveyRequestsTable" var="req" value="#{siteSurveyRequestListPresenter.lazySiteSurveyRequests}"
+                        <p:dataTable id="siteSurveyRequestsTable" widgetVar="siteSurveyRequestsTable" var="req" value="#{siteSurveyRequestListPresenter.lazySiteSurveyRequests}"
                                      selectionMode="multiple" selection="#{siteSurveyRequestListPresenter.selectedSiteSurveyRequests}" rowKey="#{req.id}"
                                      paginator="true" rows="10"
                                      paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -30,7 +30,7 @@
                                     </p:outputPanel>
                                 </p:panelGrid>
                             </f:facet>
-                            <p:column headerText="#{msg.siteSurvey_siteSurveyRequest_number}" sortBy="#{req.number}" filterBy="#{req.number}" priority="2">
+                            <p:column headerText="#{msg.siteSurvey_siteSurveyRequest_number}" field="number" priority="2">
                                 <h:outputText value="#{req.number}"/>
                             </p:column>
                             <p:column headerText="#{msg.siteSurvey_siteSurveyRequest_creation}" sortBy="#{req.creation}" priority="2">
@@ -44,13 +44,15 @@
                             <p:column headerText="#{msg.siteSurvey_systemType}" field="systemType" priority="2">
                                 <h:outputText value="#{req.systemType.name}"/>
                             </p:column>
-                            <p:column headerText="#{msg.siteSurvey_siteSurveyRequest_isInfo}" filterBy="#{req.isInfo}" priority="2">
-                                <f:facet id="filter" name="filter">
-                                    <p:selectOneButton>
+                            <p:column headerText="#{msg.siteSurvey_siteSurveyRequest_isInfo}"
+                                      field="isInfo"
+                                      priority="2">
+                                <f:facet name="filter">
+                                    <p:selectOneButton onchange="PF('siteSurveyRequestsTable').filter()">
                                         <f:converter converterId="javax.faces.Boolean" />
-                                        <f:selectItem itemLabel="All" itemValue="" />
-                                        <f:selectItem itemLabel="Sold" itemValue="true" />
-                                        <f:selectItem itemLabel="Sale" itemValue="false" />
+                                        <f:selectItem itemLabel="#{msg.all}" itemValue="" />
+                                        <f:selectItem itemLabel="#{msg.siteSurvey_siteSurveyRequests_onlyInfo}" itemValue="true" />
+                                        <f:selectItem itemLabel="#{msg.siteSurvey_siteSurveyRequests_onlyNoInfo}" itemValue="false" />
                                     </p:selectOneButton>
                                 </f:facet>
                                 <h:outputText value="#{req.isInfo ? 'X' : ''}"/>

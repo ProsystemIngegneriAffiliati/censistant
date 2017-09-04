@@ -42,7 +42,6 @@ public class SiteSurveyRequestListPresenter implements Serializable{
     
     private SiteSurveyRequestLazyDataModel lazySiteSurveyRequests;
     private List<SiteSurveyRequest> selectedSiteSurveyRequests;
-    private List<SiteSurveyRequest> filteredSiteSurveyRequests;
     
     @PostConstruct
     public void init() {
@@ -94,13 +93,5 @@ public class SiteSurveyRequestListPresenter implements Serializable{
     public void setEnd(Date end) {
         this.lazySiteSurveyRequests.setEnd(end);
     }
-
-    /*public List<SiteSurveyRequest> getFilteredSiteSurveyRequests() {
-        return filteredSiteSurveyRequests;
-    }
-
-    public void setFilteredSiteSurveyRequests(List<SiteSurveyRequest> filteredSiteSurveyRequests) {
-        this.filteredSiteSurveyRequests = filteredSiteSurveyRequests;
-    }*/
     
 }
