@@ -26,8 +26,10 @@ import javax.persistence.metamodel.StaticMetamodel;
  */
 @StaticMetamodel(CustomerSupplier.class)
 public class CustomerSupplier_ {
+    public static volatile SingularAttribute<CustomerSupplier, Boolean> isPotentialCustomer;
     public static volatile SingularAttribute<CustomerSupplier, Boolean> isCustomer;
     public static volatile SingularAttribute<CustomerSupplier, Boolean> isSupplier;
+    public static volatile SingularAttribute<CustomerSupplier, String> businessName;
     public static volatile SingularAttribute<CustomerSupplier, String> name;
     public static volatile ListAttribute<CustomerSupplier, Plant> plants;
 }

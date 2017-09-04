@@ -30,15 +30,15 @@
                                     </p:outputPanel>
                                 </p:panelGrid>
                             </f:facet>
-                            <p:column headerText="#{msg.siteSurvey_siteSurveyRequest_number}" field="number" priority="2">
+                            <p:column headerText="#{msg.siteSurvey_siteSurveyRequest_number}" field="number" priority="5">
                                 <h:outputText value="#{req.number}"/>
                             </p:column>
-                            <p:column headerText="#{msg.siteSurvey_siteSurveyRequest_creation}" sortBy="#{req.creation}" priority="2">
+                            <p:column headerText="#{msg.siteSurvey_siteSurveyRequest_creation}" sortBy="#{req.creation}" priority="4">
                                 <h:outputText value="#{req.creation}">
                                     <f:convertDateTime pattern="dd/MM/YYYY" />
                                 </h:outputText>
                             </p:column>
-                            <p:column headerText="#{msg.customerSupplier_customer}" field="customer" priority="2">
+                            <p:column headerText="#{msg.customerSupplier_customer}" field="customer" priority="0">
                                 <h:outputText value="#{req.customer.name}"/>
                             </p:column>
                             <p:column headerText="#{msg.siteSurvey_systemType}" field="systemType" priority="2">
@@ -46,7 +46,7 @@
                             </p:column>
                             <p:column headerText="#{msg.siteSurvey_siteSurveyRequest_isInfo}"
                                       field="isInfo"
-                                      priority="2">
+                                      priority="4">
                                 <f:facet name="filter">
                                     <p:selectOneButton onchange="PF('siteSurveyRequestsTable').filter()">
                                         <f:converter converterId="javax.faces.Boolean" />

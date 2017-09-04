@@ -24,7 +24,7 @@
                             <div class="card card-w-title">
                                 <h1>#{msg.customerSupplier_customer}</h1>
                                 <p>#{msg.customerSupplier_customer_tip}</p>
-                                <p:panelGrid columns="9" columnClasses="ui-grid-col-1,ui-grid-col-2,ui-grid-col-1,ui-grid-col-1,ui-grid-col-2,ui-grid-col-1,ui-grid-col-1,ui-grid-col-2,ui-grid-col-1" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+                                <p:panelGrid columns="10" columnClasses="ui-grid-col-1,ui-grid-col-2,ui-grid-col-1,ui-grid-col-1,ui-grid-col-2,ui-grid-col-1,ui-grid-col-1,ui-grid-col-1,ui-grid-col-1,ui-grid-col-1" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
                                     <h:outputLabel for="businessName" value="#{msg.customerSupplier_customerSupplier_businessName}"/>
                                     <p:inputText id="businessName" value="#{customerSupplierPresenter.customerSupplier.businessName}"/>
                                     <p:message for="businessName"/>
@@ -33,10 +33,14 @@
                                     <p:inputText id="name" value="#{customerSupplierPresenter.customerSupplier.name}"/>
                                     <p:message for="name"/>
 
-                                    <h:outputLabel for="isSupplier" value="#{msg.customerSupplier_customerSupplier_isSupplier}"/>
-                                    <p:inputSwitch id="isSupplier" value="#{customerSupplierPresenter.customerSupplier.isSupplier}" />
-                                    <p:message for="isSupplier"/>
+                                    <h:outputLabel for="isPotentialCustomer" value="#{msg.customerSupplier_customerSupplier_isPotentialCustomer}" />
+                                    <p:inputSwitch id="isPotentialCustomer" label="Maina" value="#{customerSupplierPresenter.customerSupplier.isPotentialCustomer}" />
 
+                                    <h:outputLabel for="isSupplier" value="#{msg.customerSupplier_customerSupplier_isSupplier}" />
+                                    <p:inputSwitch id="isSupplier" value="#{customerSupplierPresenter.customerSupplier.isSupplier}" />
+                                </p:panelGrid>
+
+                                <p:panelGrid columns="9" columnClasses="ui-grid-col-1,ui-grid-col-2,ui-grid-col-1,ui-grid-col-1,ui-grid-col-2,ui-grid-col-1,ui-grid-col-1,ui-grid-col-2,ui-grid-col-1" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
                                     <h:outputLabel for="vatRegistrationNumber" value="#{msg.customerSupplier_customerSupplier_vatRegistrationNumber}"/>
                                     <p:inputText id="vatRegistrationNumber" value="#{customerSupplierPresenter.customerSupplier.vatRegistrationNumber}"/>
                                     <p:message for="vatRegistrationNumber"/>
@@ -76,7 +80,7 @@
                                         <p:column headerText="#{msg.customerSupplier_plant_name}" sortBy="#{plant.name}" filterBy="#{plant.name}" priority="0">
                                             <h:outputText value="#{plant.name}" />
                                         </p:column>
-                                        <p:column headerText="#{msg.customerSupplier_plant_address}" sortBy="#{plant.address}" filterBy="#{plant.address}" priority="2">
+                                        <p:column headerText="#{msg.customerSupplier_plant_address}" sortBy="#{plant.address}" filterBy="#{plant.address}" priority="4">
                                             <h:outputText value="#{plant.address}" />
                                         </p:column>
                                         <p:column headerText="#{msg.actions}" style="width:72px; text-align:center" priority="0">
@@ -100,7 +104,7 @@
                                         <p:column headerText="#{msg.customerSupplier_referee_name}" sortBy="#{referee.name}" filterBy="#{referee.name}" priority="0">
                                             <h:outputText value="#{referee.name}" />
                                         </p:column>
-                                        <p:column headerText="#{msg.customerSupplier_referee_email}" sortBy="#{referee.email}" filterBy="#{referee.email}" priority="2">
+                                        <p:column headerText="#{msg.customerSupplier_referee_email}" sortBy="#{referee.email}" filterBy="#{referee.email}" priority="4">
                                             <h:outputText value="#{referee.email}" />
                                         </p:column>
                                         <p:column headerText="#{msg.customerSupplier_referee_notes}" sortBy="#{referee.notes}" filterBy="#{referee.notes}" priority="5">

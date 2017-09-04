@@ -10,16 +10,7 @@
                 <div class="ui-g-12">
                     <div class="card card-w-title">
                         <h1>#{msg.customerSupplier_customers}</h1>
-                        
-                        <p:panelGrid columns="2" columnClasses="ui-grid-col-2,ui-grid-col-10" layout="grid" styleClass="ui-panelgrid-blank" style="border:0px none; background-color:transparent;">
-                            <h:outputLabel for="address" value="#{msg.filter} #{msg.customerSupplier_plant_address_tip}" />
-                            <p:inputText id="address" value="#{customerSupplierListPresenter.customerAddess}" style="width: 100%;">
-                                    <p:ajax event="keyup"
-                                        update="customersTable"/>
-                            </p:inputText>
-                        </p:panelGrid>
-
-                        <p:dataTable id="customersTable" var="cust" value="#{customerSupplierListPresenter.lazyCustomers}"
+                        <p:dataTable id="customersTable" widgetVar="customersTable" var="cust" value="#{customerSupplierListPresenter.lazyCustomers}"
                                      selectionMode="multiple" selection="#{customerSupplierListPresenter.selectedCustomerSuppliers}" rowKey="#{cust.id}"
                                      paginator="true" rows="10"
                                      paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -40,14 +31,27 @@
                                     </p:outputPanel>
                                 </p:panelGrid>
                             </f:facet>
-                            <p:column headerText="#{msg.customerSupplier_customerSupplier_businessName}" sortBy="#{cust.businessName}" filterBy="#{cust.businessName}" priority="2">
+                            <p:column headerText="#{msg.customerSupplier_customerSupplier_businessName}" field="businessName" priority="2">
                                 <h:outputText value="#{cust.businessName}"/>
                             </p:column>
-                            <p:column headerText="#{msg.customerSupplier_customerSupplier_name}" sortBy="#{cust.name}" filterBy="#{cust.name}" priority="0">
+                            <p:column headerText="#{msg.customerSupplier_customerSupplier_name}" field="name" priority="0">
                                 <h:outputText value="#{cust.name}"/>
                             </p:column>
-                            <p:column headerText="#{msg.customerSupplier_plant_address}" priority="2">
+                            <p:column headerText="#{msg.customerSupplier_plant_address}" field="address" sortable="false" priority="3">
                                 <h:outputText value="#{cust.headOffice.address}"/>
+                            </p:column>
+                            <p:column headerText="#{msg.customerSupplier_customerSupplier_isPotentialCustomer}"
+                                      field="isPotentialCustomer"
+                                      priority="4">
+                                <f:facet name="filter">
+                                    <p:selectOneButton onchange="PF('customersTable').filter()">
+                                        <f:converter converterId="javax.faces.Boolean" />
+                                        <f:selectItem itemLabel="#{msg.all}" itemValue="" />
+                                        <f:selectItem itemLabel="#{msg.customerSupplier_customers_onlyPotentialCustomer}" itemValue="true" />
+                                        <f:selectItem itemLabel="#{msg.customerSupplier_customers_onlyNoPotentialCustomer}" itemValue="false" />
+                                    </p:selectOneButton>
+                                </f:facet>
+                                <h:outputText value="#{cust.isPotentialCustomer ? 'X' : ''}"/>
                             </p:column>
                             <p:column headerText="#{msg.actions}" style="width:64px; text-align:center" priority="0" exportable="false">
                                 <p:button title="#{msg.edit}" icon="ui-icon-edit" styleClass="AquaButton" outcome="/secured/customerSupplier/customer">

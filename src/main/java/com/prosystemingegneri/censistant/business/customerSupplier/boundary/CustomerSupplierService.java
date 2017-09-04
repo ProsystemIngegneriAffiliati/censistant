@@ -61,13 +61,17 @@ public class CustomerSupplierService implements Serializable{
         em.remove(readCustomerSupplier(id));
     }
 
-    public List<CustomerSupplier> listCustomerSuppliers(int first, int pageSize, Map<String, Object> filters, String sortField, Boolean isAscending, Boolean isCustomer, Boolean isSupplier, String address) {
+    public List<CustomerSupplier> listCustomerSuppliers(int first, int pageSize, String sortField, Boolean isAscending, Boolean isPotentialCustomer, Boolean isCustomer, Boolean isSupplier, String businessName, String name, String address) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<CustomerSupplier> query = cb.createQuery(CustomerSupplier.class);
         Root<CustomerSupplier> root = query.from(CustomerSupplier.class);
         CriteriaQuery<CustomerSupplier> select = query.select(root).distinct(true);
         
         List<Predicate> conditions = new ArrayList<>();
+
+        //is potential customer
+        if (isPotentialCustomer != null)
+            conditions.add(cb.equal(root.get(CustomerSupplier_.isPotentialCustomer), isPotentialCustomer));
         
         //is customer
         if (isCustomer != null)
@@ -77,18 +81,19 @@ public class CustomerSupplierService implements Serializable{
         if (isSupplier != null)
             conditions.add(cb.equal(root.get(CustomerSupplier_.isSupplier), isSupplier));
         
+        //business name
+        if (businessName != null && !businessName.isEmpty())
+            conditions.add(cb.like(cb.lower(root.get(CustomerSupplier_.businessName)), "%" + String.valueOf(businessName).toLowerCase() + "%"));
+        
+        //name
+        if (name != null && !name.isEmpty())
+            conditions.add(cb.like(cb.lower(root.get(CustomerSupplier_.name)), "%" + String.valueOf(name).toLowerCase() + "%"));
+        
         //plant's address
         if (address != null && !address.isEmpty()) {
             ListJoin<CustomerSupplier, Plant> plants = root.join(CustomerSupplier_.plants);
             conditions.add(cb.like(cb.lower(plants.get(Plant_.address)), "%" + String.valueOf(address).toLowerCase() + "%"));
     	}
-        
-        if (filters != null && !filters.isEmpty()) {
-            for (Iterator<String> it = filters.keySet().iterator(); it.hasNext();) {
-                String filterProperty = it.next();
-                conditions.add(cb.like(cb.lower(root.get(filterProperty)), "%" + String.valueOf(filters.get(filterProperty)).toLowerCase() + "%"));
-            }
-        }
 
         if (!conditions.isEmpty()) {
             query.where(conditions.toArray(new Predicate[conditions.size()]));
@@ -108,13 +113,17 @@ public class CustomerSupplierService implements Serializable{
         return typedQuery.getResultList();
     }
     
-    public Long getCustomerSuppliersCount(Map<String, Object> filters, Boolean isCustomer, Boolean isSupplier, String address) {
+    public Long getCustomerSuppliersCount(Boolean isPotentialCustomer, Boolean isCustomer, Boolean isSupplier, String businessName, String name, String address) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Long> query = cb.createQuery(Long.class);
         Root<CustomerSupplier> root = query.from(CustomerSupplier.class);
         CriteriaQuery<Long> select = query.select(cb.count(root));
 
         List<Predicate> conditions = new ArrayList<>();
+        
+        //is potential customer
+        if (isPotentialCustomer != null)
+            conditions.add(cb.equal(root.get(CustomerSupplier_.isPotentialCustomer), isPotentialCustomer));
         
         //is customer
         if (isCustomer != null)
@@ -123,19 +132,20 @@ public class CustomerSupplierService implements Serializable{
         //is supplier
         if (isSupplier != null)
             conditions.add(cb.equal(root.get(CustomerSupplier_.isSupplier), isSupplier));
+
+        //business name
+        if (businessName != null && !businessName.isEmpty())
+            conditions.add(cb.like(cb.lower(root.get(CustomerSupplier_.businessName)), "%" + String.valueOf(businessName).toLowerCase() + "%"));
+        
+        //name
+        if (name != null && !name.isEmpty())
+            conditions.add(cb.like(cb.lower(root.get(CustomerSupplier_.name)), "%" + String.valueOf(name).toLowerCase() + "%"));
         
         //plant's address
         if (address != null && !address.isEmpty()) {
             ListJoin<CustomerSupplier, Plant> plants = root.join(CustomerSupplier_.plants);
             conditions.add(cb.like(cb.lower(plants.get(Plant_.address)), "%" + String.valueOf(address).toLowerCase() + "%"));
     	}
-        
-        if (filters != null && !filters.isEmpty()) {
-            for (Iterator<String> it = filters.keySet().iterator(); it.hasNext();) {
-                String filterProperty = it.next();
-                conditions.add(cb.like(cb.lower(root.get(filterProperty)), "%" + String.valueOf(filters.get(filterProperty)).toLowerCase() + "%"));
-            }
-        }
 
         if (!conditions.isEmpty()) {
             query.where(conditions.toArray(new Predicate[conditions.size()]));

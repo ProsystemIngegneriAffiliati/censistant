@@ -20,9 +20,7 @@ import com.prosystemingegneri.censistant.business.customerSupplier.boundary.Cust
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
 import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJBException;
 import javax.faces.application.FacesMessage;
@@ -66,11 +64,7 @@ public class CustomerSupplierListPresenter implements Serializable{
     }
     
     public List<CustomerSupplier> completeCustomer(String value) {
-        Integer maxValues = 10;
-        String key = "name";
-        Map<String, Object> filter = new HashMap<>();
-        filter.put("name", value);
-        return service.listCustomerSuppliers(0, maxValues, filter, key, Boolean.TRUE, Boolean.TRUE, null, null);
+        return service.listCustomerSuppliers(0, 10, "name", Boolean.TRUE, null, Boolean.TRUE, null, null, value, null);
     }
 
     public CustomerSupplierLazyDataModel getLazyCustomers() {
@@ -95,13 +89,5 @@ public class CustomerSupplierListPresenter implements Serializable{
 
     public void setSelectedCustomerSuppliers(List<CustomerSupplier> selectedCustomerSupplier) {
         this.selectedCustomerSuppliers = selectedCustomerSupplier;
-    }
-    
-    public String getCustomerAddess() {
-        return lazyCustomers.getAddess();
-    }
-
-    public void setCustomerAddess(String addess) {
-        lazyCustomers.setAddess(addess);
     }
 }

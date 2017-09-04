@@ -18,6 +18,7 @@ package com.prosystemingegneri.censistant.presentation.customerSupplier;
 
 import com.prosystemingegneri.censistant.business.customerSupplier.boundary.CustomerSupplierService;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import org.primefaces.model.LazyDataModel;
@@ -33,8 +34,6 @@ public class CustomerSupplierLazyDataModel extends LazyDataModel<CustomerSupplie
     private final CustomerSupplierService service;
     private final Boolean isCustomer;
     private final Boolean isSupplier;
-    
-    private String addess;
 
     public CustomerSupplierLazyDataModel(CustomerSupplierService service, Boolean isCustomer, Boolean isSupplier) {
         this.service = service;
@@ -50,6 +49,10 @@ public class CustomerSupplierLazyDataModel extends LazyDataModel<CustomerSupplie
     @Override
     public List<CustomerSupplier> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
         Boolean isAscending = null;
+        Boolean isPotentialCustomer = null;
+        String businessName = null;
+        String name = null;
+        String address = null;
         
         switch (sortOrder) {
             case ASCENDING:
@@ -60,8 +63,26 @@ public class CustomerSupplierLazyDataModel extends LazyDataModel<CustomerSupplie
                 break;
             default:
         }
-        List<CustomerSupplier> result = service.listCustomerSuppliers(first, pageSize, filters, sortField, isAscending, isCustomer, isSupplier, addess);
-        this.setRowCount(service.getCustomerSuppliersCount(filters, isCustomer, isSupplier, addess).intValue());
+        
+        if (filters != null && !filters.isEmpty()) {
+            for (Iterator<String> it = filters.keySet().iterator(); it.hasNext();) {
+                String filterProperty = it.next();
+
+                if (!filterProperty.isEmpty()) {
+                    if (filterProperty.equalsIgnoreCase("isPotentialCustomer"))
+                        isPotentialCustomer = (Boolean) filters.get(filterProperty);
+                    if (filterProperty.equalsIgnoreCase("businessName"))
+                        businessName = String.valueOf(filters.get(filterProperty));
+                    if (filterProperty.equalsIgnoreCase("name"))
+                        name = String.valueOf(filters.get(filterProperty));
+                    if (filterProperty.equalsIgnoreCase("address"))
+                        address = String.valueOf(filters.get(filterProperty));
+                }
+            }
+        }
+        
+        List<CustomerSupplier> result = service.listCustomerSuppliers(first, pageSize, sortField, isAscending, isPotentialCustomer, isCustomer, isSupplier, businessName, name, address);
+        this.setRowCount(service.getCustomerSuppliersCount(isPotentialCustomer, isCustomer, isSupplier, businessName, name, address).intValue());
         
         return result;
     }
@@ -73,14 +94,6 @@ public class CustomerSupplierLazyDataModel extends LazyDataModel<CustomerSupplie
         } catch (NumberFormatException e) {
             return null;
         }
-    }
-
-    public String getAddess() {
-        return addess;
-    }
-
-    public void setAddess(String addess) {
-        this.addess = addess;
     }
     
 }
