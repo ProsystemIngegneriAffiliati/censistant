@@ -30,7 +30,7 @@
                                     </p:outputPanel>
                                 </p:panelGrid>
                             </f:facet>
-                            <p:column headerText="#{msg.siteSurvey_systemType_name}" sortBy="#{sys.name}" filterBy="#{sys.name}">
+                            <p:column headerText="#{msg.siteSurvey_systemType_name}" sortBy="#{sys.name}" filterBy="#{sys.name}" filterMatchMode="contains">
                                 <h:outputText value="#{sys.name}"/>
                             </p:column>                       
                             <p:column headerText="#{msg.actions}" style="width:64px; text-align:center">

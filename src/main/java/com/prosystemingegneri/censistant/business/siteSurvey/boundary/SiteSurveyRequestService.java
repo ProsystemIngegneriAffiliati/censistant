@@ -21,6 +21,7 @@ import com.prosystemingegneri.censistant.business.customerSupplier.entity.Custom
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyRequest;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyRequest_;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SystemType;
+import com.prosystemingegneri.censistant.business.siteSurvey.entity.SystemType_;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -101,7 +102,7 @@ public class SiteSurveyRequestService implements Serializable{
         em.remove(readSiteSurveyRequest(id));
     }
 
-    public List<SiteSurveyRequest> listSiteSurveyRequests(int first, int pageSize, Map<String, Object> filters, String sortField, Boolean isAscending, Date start, Date end, SystemType systemType) {
+    public List<SiteSurveyRequest> listSiteSurveyRequests(int first, int pageSize, Map<String, Object> filters, String sortField, Boolean isAscending, Date start, Date end) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<SiteSurveyRequest> query = cb.createQuery(SiteSurveyRequest.class);
         Root<SiteSurveyRequest> root = query.from(SiteSurveyRequest.class);
@@ -113,17 +114,25 @@ public class SiteSurveyRequestService implements Serializable{
         if (start != null && end != null)
             conditions.add(cb.between(root.<Date>get(SiteSurveyRequest_.creation), start, end));
         
-        //system type
-        if (systemType != null)
-            conditions.add(cb.equal(root.get(SiteSurveyRequest_.systemType), systemType));
-        
-        if (filters != null) {
+        if (filters != null && !filters.isEmpty()) {
             for (Iterator<String> it = filters.keySet().iterator(); it.hasNext();) {
                 String filterProperty = it.next();
-                if (filterProperty.equalsIgnoreCase("customer")) {
+
+                if (filterProperty.equalsIgnoreCase("customer") || filterProperty.equalsIgnoreCase("systemType") || filterProperty.equalsIgnoreCase("isInfo")) {
                     if (!filterProperty.isEmpty()) {
-                        Join<SiteSurveyRequest, CustomerSupplier> customerRoot = root.join(SiteSurveyRequest_.customer);
-                        conditions.add(cb.like(cb.lower(customerRoot.get(CustomerSupplier_.name)), "%" + String.valueOf(filters.get(filterProperty)).toLowerCase() + "%"));
+                        if (filterProperty.equalsIgnoreCase("customer")) {
+                            Join<SiteSurveyRequest, CustomerSupplier> customerRoot = root.join(SiteSurveyRequest_.customer);
+                            conditions.add(cb.like(cb.lower(customerRoot.get(CustomerSupplier_.name)), "%" + String.valueOf(filters.get(filterProperty)).toLowerCase() + "%"));
+                        }
+                        if (filterProperty.equalsIgnoreCase("systemType")) {
+                            Join<SiteSurveyRequest, SystemType> systemTypeRoot = root.join(SiteSurveyRequest_.systemType);
+                            conditions.add(cb.like(cb.lower(systemTypeRoot.get(SystemType_.name)), "%" + String.valueOf(filters.get(filterProperty)).toLowerCase() + "%"));
+                        }
+                        if (filterProperty.equalsIgnoreCase("isInfo")) {
+                            Boolean isInfo = Boolean.valueOf(String.valueOf(filters.get(filterProperty)));
+                            if (isInfo != null)
+                                conditions.add(cb.equal(root.get(SiteSurveyRequest_.isInfo), isInfo));
+                        }
                     }
                 }
                 else
@@ -136,10 +145,28 @@ public class SiteSurveyRequestService implements Serializable{
         }
         
         if (isAscending != null && sortField != null && !sortField.isEmpty()) {
-            if (isAscending)
-                query.orderBy(cb.asc(root.get(sortField)));
-            else
-                query.orderBy(cb.desc(root.get(sortField)));
+            if (sortField.equalsIgnoreCase("customer") || sortField.equalsIgnoreCase("systemType")) {
+                if (sortField.equalsIgnoreCase("customer")) {
+                    Join<SiteSurveyRequest, CustomerSupplier> customerRoot = root.join(SiteSurveyRequest_.customer);
+                    if (isAscending)
+                        query.orderBy(cb.asc(customerRoot.get(CustomerSupplier_.name)));
+                    else
+                        query.orderBy(cb.desc(customerRoot.get(CustomerSupplier_.name)));
+                }
+                if (sortField.equalsIgnoreCase("systemType")) {
+                    Join<SiteSurveyRequest, SystemType> systemTypeRoot = root.join(SiteSurveyRequest_.systemType);
+                    if (isAscending)
+                        query.orderBy(cb.asc(systemTypeRoot.get(SystemType_.name)));
+                    else
+                        query.orderBy(cb.desc(systemTypeRoot.get(SystemType_.name)));
+                }
+            }
+            else {
+                if (isAscending)
+                    query.orderBy(cb.asc(root.get(sortField)));
+                else
+                    query.orderBy(cb.desc(root.get(sortField)));
+            }
         }
         
         TypedQuery<SiteSurveyRequest> typedQuery = em.createQuery(select);
@@ -149,7 +176,7 @@ public class SiteSurveyRequestService implements Serializable{
         return typedQuery.getResultList();
     }
     
-    public Long getSiteSurveyRequestsCount(Map<String, Object> filters, Date start, Date end, SystemType systemType) {
+    public Long getSiteSurveyRequestsCount(Map<String, Object> filters, Date start, Date end) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Long> query = cb.createQuery(Long.class);
         Root<SiteSurveyRequest> root = query.from(SiteSurveyRequest.class);
@@ -161,17 +188,24 @@ public class SiteSurveyRequestService implements Serializable{
         if (start != null && end != null)
             conditions.add(cb.between(root.<Date>get(SiteSurveyRequest_.creation), start, end));
         
-        //system type
-        if (systemType != null)
-            conditions.add(cb.equal(root.get(SiteSurveyRequest_.systemType), systemType));
-        
-        if (filters != null) {
+        if (filters != null && !filters.isEmpty()) {
             for (Iterator<String> it = filters.keySet().iterator(); it.hasNext();) {
                 String filterProperty = it.next();
-                if (filterProperty.equalsIgnoreCase("customer")) {
+                if (filterProperty.equalsIgnoreCase("customer") || filterProperty.equalsIgnoreCase("systemType") || filterProperty.equalsIgnoreCase("isInfo")) {
                     if (!filterProperty.isEmpty()) {
-                        Join<SiteSurveyRequest, CustomerSupplier> customerRoot = root.join(SiteSurveyRequest_.customer);
-                        conditions.add(cb.like(cb.lower(customerRoot.get(CustomerSupplier_.name)), "%" + String.valueOf(filters.get(filterProperty)).toLowerCase() + "%"));
+                        if (filterProperty.equalsIgnoreCase("customer")) {
+                            Join<SiteSurveyRequest, CustomerSupplier> customerRoot = root.join(SiteSurveyRequest_.customer);
+                            conditions.add(cb.like(cb.lower(customerRoot.get(CustomerSupplier_.name)), "%" + String.valueOf(filters.get(filterProperty)).toLowerCase() + "%"));
+                        }
+                        if (filterProperty.equalsIgnoreCase("systemType")) {
+                            Join<SiteSurveyRequest, SystemType> systemTypeRoot = root.join(SiteSurveyRequest_.systemType);
+                            conditions.add(cb.like(cb.lower(systemTypeRoot.get(SystemType_.name)), "%" + String.valueOf(filters.get(filterProperty)).toLowerCase() + "%"));
+                        }
+                        if (filterProperty.equalsIgnoreCase("isInfo")) {
+                            Boolean isInfo = Boolean.valueOf(String.valueOf(filters.get(filterProperty)));
+                            if (isInfo != null)
+                                conditions.add(cb.equal(root.get(SiteSurveyRequest_.isInfo), isInfo));
+                        }
                     }
                 }
                 else

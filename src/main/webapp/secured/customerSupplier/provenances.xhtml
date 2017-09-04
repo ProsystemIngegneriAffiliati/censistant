@@ -30,7 +30,7 @@
                                     </p:outputPanel>
                                 </p:panelGrid>
                             </f:facet>
-                            <p:column headerText="#{msg.customerSupplier_provenance_name}">
+                            <p:column headerText="#{msg.customerSupplier_provenance_name}" sortBy="#{prov.name}" filterBy="#{prov.name}" filterMatchMode="contains">
                                 <h:outputText value="#{prov.name}"/>
                             </p:column>
                             <p:column headerText="#{msg.actions}" style="width:64px; text-align:center">

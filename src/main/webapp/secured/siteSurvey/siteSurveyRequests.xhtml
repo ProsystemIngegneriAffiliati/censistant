@@ -38,13 +38,21 @@
                                     <f:convertDateTime pattern="dd/MM/YYYY" />
                                 </h:outputText>
                             </p:column>
-                            <p:column headerText="#{msg.customerSupplier_customer}" field="customer" filterBy="#{req.customer}" priority="2">
+                            <p:column headerText="#{msg.customerSupplier_customer}" field="customer" priority="2">
                                 <h:outputText value="#{req.customer.name}"/>
                             </p:column>
-                            <p:column headerText="#{msg.siteSurvey_systemType}" priority="2">
+                            <p:column headerText="#{msg.siteSurvey_systemType}" field="systemType" priority="2">
                                 <h:outputText value="#{req.systemType.name}"/>
                             </p:column>
-                            <p:column headerText="#{msg.siteSurvey_siteSurveyRequest_isInfo}" priority="2">
+                            <p:column headerText="#{msg.siteSurvey_siteSurveyRequest_isInfo}" filterBy="#{req.isInfo}" priority="2">
+                                <f:facet id="filter" name="filter">
+                                    <p:selectOneButton>
+                                        <f:converter converterId="javax.faces.Boolean" />
+                                        <f:selectItem itemLabel="All" itemValue="" />
+                                        <f:selectItem itemLabel="Sold" itemValue="true" />
+                                        <f:selectItem itemLabel="Sale" itemValue="false" />
+                                    </p:selectOneButton>
+                                </f:facet>
                                 <h:outputText value="#{req.isInfo ? 'X' : ''}"/>
                             </p:column>
                             <p:column headerText="#{msg.siteSurvey_siteSurveyRequest_notes}" priority="5">

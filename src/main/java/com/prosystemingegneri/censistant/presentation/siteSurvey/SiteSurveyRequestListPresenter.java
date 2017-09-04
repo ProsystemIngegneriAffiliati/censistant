@@ -16,10 +16,8 @@
  */
 package com.prosystemingegneri.censistant.presentation.siteSurvey;
 
-import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
 import com.prosystemingegneri.censistant.business.siteSurvey.boundary.SiteSurveyRequestService;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyRequest;
-import com.prosystemingegneri.censistant.business.siteSurvey.entity.SystemType;
 import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
 import java.io.Serializable;
 import java.util.Date;
@@ -44,6 +42,7 @@ public class SiteSurveyRequestListPresenter implements Serializable{
     
     private SiteSurveyRequestLazyDataModel lazySiteSurveyRequests;
     private List<SiteSurveyRequest> selectedSiteSurveyRequests;
+    private List<SiteSurveyRequest> filteredSiteSurveyRequests;
     
     @PostConstruct
     public void init() {
@@ -96,11 +95,12 @@ public class SiteSurveyRequestListPresenter implements Serializable{
         this.lazySiteSurveyRequests.setEnd(end);
     }
 
-    public SystemType getSystemType() {
-        return lazySiteSurveyRequests.getSystemType();
+    /*public List<SiteSurveyRequest> getFilteredSiteSurveyRequests() {
+        return filteredSiteSurveyRequests;
     }
 
-    public void setSystemType(SystemType systemType) {
-        this.lazySiteSurveyRequests.setSystemType(systemType);
-    }
+    public void setFilteredSiteSurveyRequests(List<SiteSurveyRequest> filteredSiteSurveyRequests) {
+        this.filteredSiteSurveyRequests = filteredSiteSurveyRequests;
+    }*/
+    
 }

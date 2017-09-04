@@ -18,7 +18,6 @@ package com.prosystemingegneri.censistant.presentation.siteSurvey;
 
 import com.prosystemingegneri.censistant.business.siteSurvey.boundary.SiteSurveyRequestService;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyRequest;
-import com.prosystemingegneri.censistant.business.siteSurvey.entity.SystemType;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +34,6 @@ public class SiteSurveyRequestLazyDataModel extends LazyDataModel<SiteSurveyRequ
     private final SiteSurveyRequestService service;
     private Date start;
     private Date end;
-    private SystemType systemType;
 
     public SiteSurveyRequestLazyDataModel(SiteSurveyRequestService service) {
         this.service = service;
@@ -59,8 +57,8 @@ public class SiteSurveyRequestLazyDataModel extends LazyDataModel<SiteSurveyRequ
                 break;
             default:
         }
-        List<SiteSurveyRequest> result = service.listSiteSurveyRequests(first, pageSize, filters, sortField, isAscending, start, end, systemType);
-        this.setRowCount(service.getSiteSurveyRequestsCount(filters, start, end, systemType).intValue());
+        List<SiteSurveyRequest> result = service.listSiteSurveyRequests(first, pageSize, filters, sortField, isAscending, start, end);
+        this.setRowCount(service.getSiteSurveyRequestsCount(filters, start, end).intValue());
         
         return result;
     }
@@ -88,14 +86,6 @@ public class SiteSurveyRequestLazyDataModel extends LazyDataModel<SiteSurveyRequ
 
     public void setEnd(Date end) {
         this.end = end;
-    }
-
-    public SystemType getSystemType() {
-        return systemType;
-    }
-
-    public void setSystemType(SystemType systemType) {
-        this.systemType = systemType;
     }
     
 }

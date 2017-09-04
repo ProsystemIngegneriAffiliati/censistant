@@ -30,13 +30,13 @@
                                     </p:outputPanel>
                                 </p:panelGrid>
                             </f:facet>
-                            <p:column headerText="#{msg.siteSurvey_worker_name}" sortBy="#{work.name}" filterBy="#{work.name}">
+                            <p:column headerText="#{msg.siteSurvey_worker_name}" sortBy="#{work.name}" filterBy="#{work.name}" filterMatchMode="contains">
                                 <h:outputText value="#{work.name}"/>
                             </p:column>
                             <p:column headerText="#{msg.siteSurvey_worker_initials}" sortBy="#{work.initials}" filterBy="#{work.initials}">
                                 <h:outputText value="#{work.initials}"/>
                             </p:column>
-                            <p:column headerText="#{msg.siteSurvey_worker_email}" sortBy="#{work.email}" filterBy="#{work.email}">
+                            <p:column headerText="#{msg.siteSurvey_worker_email}" sortBy="#{work.email}" filterBy="#{work.email}" filterMatchMode="contains">
                                 <h:outputText value="#{work.email}"/>
                             </p:column>                            
                             <p:column headerText="#{msg.actions}" style="width:64px; text-align:center">

@@ -83,7 +83,7 @@ public class CustomerSupplierService implements Serializable{
             conditions.add(cb.like(cb.lower(plants.get(Plant_.address)), "%" + String.valueOf(address).toLowerCase() + "%"));
     	}
         
-        if (filters != null) {
+        if (filters != null && !filters.isEmpty()) {
             for (Iterator<String> it = filters.keySet().iterator(); it.hasNext();) {
                 String filterProperty = it.next();
                 conditions.add(cb.like(cb.lower(root.get(filterProperty)), "%" + String.valueOf(filters.get(filterProperty)).toLowerCase() + "%"));
@@ -130,7 +130,7 @@ public class CustomerSupplierService implements Serializable{
             conditions.add(cb.like(cb.lower(plants.get(Plant_.address)), "%" + String.valueOf(address).toLowerCase() + "%"));
     	}
         
-        if (filters != null) {
+        if (filters != null && !filters.isEmpty()) {
             for (Iterator<String> it = filters.keySet().iterator(); it.hasNext();) {
                 String filterProperty = it.next();
                 conditions.add(cb.like(cb.lower(root.get(filterProperty)), "%" + String.valueOf(filters.get(filterProperty)).toLowerCase() + "%"));
