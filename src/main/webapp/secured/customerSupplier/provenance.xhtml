@@ -22,10 +22,12 @@
                             <div class="card card-w-title">
                                 <h1>#{msg.customerSupplier_provenance}</h1>
                                 <p>#{msg.customerSupplier_provenance_tip}</p>
-                                <p:panelGrid columns="3" columnClasses="ui-grid-col-2,ui-grid-col-8,ui-grid-col-2" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
-                                    <h:outputLabel for="name" value="#{msg.customerSupplier_provenance_name}"/>
-                                    <p:inputText id="name" value="#{provenancePresenter.provenance.name}"/>
-                                    <p:message for="name"/>
+                                <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="name" value="#{provenancePresenter.provenance.name}"/>
+                                        <p:outputLabel for="name" value="#{msg.customerSupplier_provenance_name}"/>
+                                        <p:message for="name"/>
+                                    </h:panelGroup>
                                 </p:panelGrid>
 
                                 <div class="ui-g">

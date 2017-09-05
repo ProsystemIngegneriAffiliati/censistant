@@ -24,47 +24,61 @@
                             <div class="card card-w-title">
                                 <h1>#{msg.customerSupplier_customer}</h1>
                                 <p>#{msg.customerSupplier_customer_tip}</p>
-                                <p:panelGrid columns="10" columnClasses="ui-grid-col-1,ui-grid-col-2,ui-grid-col-1,ui-grid-col-1,ui-grid-col-2,ui-grid-col-1,ui-grid-col-1,ui-grid-col-1,ui-grid-col-1,ui-grid-col-1" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
-                                    <h:outputLabel for="businessName" value="#{msg.customerSupplier_customerSupplier_businessName}"/>
-                                    <p:inputText id="businessName" value="#{customerSupplierPresenter.customerSupplier.businessName}"/>
-                                    <p:message for="businessName"/>
+                                <p:panelGrid columns="4" columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-2,ui-grid-col-2" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="businessName" value="#{customerSupplierPresenter.customerSupplier.businessName}"/>
+                                        <p:outputLabel for="businessName" value="#{msg.customerSupplier_customerSupplier_businessName}"/>
+                                        <p:message for="businessName"/>
+                                    </h:panelGroup>
 
-                                    <h:outputLabel for="name" value="#{msg.customerSupplier_customerSupplier_name}"/>
-                                    <p:inputText id="name" value="#{customerSupplierPresenter.customerSupplier.name}"/>
-                                    <p:message for="name"/>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="name" value="#{customerSupplierPresenter.customerSupplier.name}"/>
+                                        <p:outputLabel for="name" value="#{msg.customerSupplier_customerSupplier_name}"/>
+                                        <p:message for="name"/>
+                                    </h:panelGroup>
 
-                                    <h:outputLabel for="isPotentialCustomer" value="#{msg.customerSupplier_customerSupplier_isPotentialCustomer}" />
-                                    <p:inputSwitch id="isPotentialCustomer" label="Maina" value="#{customerSupplierPresenter.customerSupplier.isPotentialCustomer}" />
+                                    <h:panelGroup>
+                                        <p:outputLabel for="isPotentialCustomer" value="#{msg.customerSupplier_customerSupplier_isPotentialCustomer}" />
+                                        <p:inputSwitch id="isPotentialCustomer" label="Maina" value="#{customerSupplierPresenter.customerSupplier.isPotentialCustomer}" />
+                                    </h:panelGroup>
 
-                                    <h:outputLabel for="isSupplier" value="#{msg.customerSupplier_customerSupplier_isSupplier}" />
-                                    <p:inputSwitch id="isSupplier" value="#{customerSupplierPresenter.customerSupplier.isSupplier}" />
+                                    <h:panelGroup>
+                                        <p:outputLabel for="isSupplier" value="#{msg.customerSupplier_customerSupplier_isSupplier}" />
+                                        <p:inputSwitch id="isSupplier" value="#{customerSupplierPresenter.customerSupplier.isSupplier}" />
+                                    </h:panelGroup>
                                 </p:panelGrid>
 
-                                <p:panelGrid columns="9" columnClasses="ui-grid-col-1,ui-grid-col-2,ui-grid-col-1,ui-grid-col-1,ui-grid-col-2,ui-grid-col-1,ui-grid-col-1,ui-grid-col-2,ui-grid-col-1" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
-                                    <h:outputLabel for="vatRegistrationNumber" value="#{msg.customerSupplier_customerSupplier_vatRegistrationNumber}"/>
-                                    <p:inputText id="vatRegistrationNumber" value="#{customerSupplierPresenter.customerSupplier.vatRegistrationNumber}"/>
-                                    <p:message for="vatRegistrationNumber"/>
+                                <p:panelGrid columns="3" columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="vatRegistrationNumber" value="#{customerSupplierPresenter.customerSupplier.vatRegistrationNumber}"/>
+                                        <p:outputLabel for="vatRegistrationNumber" value="#{msg.customerSupplier_customerSupplier_vatRegistrationNumber}"/>
+                                        <p:message for="vatRegistrationNumber"/>
+                                    </h:panelGroup>
 
-                                    <h:outputLabel for="taxCode" value="#{msg.customerSupplier_customerSupplier_taxCode}"/>
-                                    <p:inputText id="taxCode" value="#{customerSupplierPresenter.customerSupplier.taxCode}"/>
-                                    <p:message for="taxCode"/>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="taxCode" value="#{customerSupplierPresenter.customerSupplier.taxCode}"/>
+                                        <p:outputLabel for="taxCode" value="#{msg.customerSupplier_customerSupplier_taxCode}"/>
+                                        <p:message for="taxCode"/>
+                                    </h:panelGroup>
 
-                                    <h:outputLabel for="provenance" value="#{msg.customerSupplier_provenance}"/>
-                                    <p:autoComplete id="provenance"
-                                                    dropdown="true"
-                                                    value="#{customerSupplierPresenter.customerSupplier.provenance}"
-                                                    completeMethod="#{provenanceListPresenter.completeProvenances}"
-                                                    converter="omnifaces.SelectItemsConverter"
-                                                    var="prov"
-                                                    itemLabel="#{prov.name}"
-                                                    itemValue="#{prov}"
-                                                    forceSelection="true">
-                                        <oou:converter converterId="omnifaces.ListConverter" list="#{provenanceListPresenter.completeProvenances(prov.name)}"/>
-                                    </p:autoComplete>
-                                    <p:message for="provenance"/>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:autoComplete id="provenance"
+                                                        dropdown="true"
+                                                        value="#{customerSupplierPresenter.customerSupplier.provenance}"
+                                                        completeMethod="#{provenanceListPresenter.completeProvenances}"
+                                                        converter="omnifaces.SelectItemsConverter"
+                                                        var="prov"
+                                                        itemLabel="#{prov.name}"
+                                                        itemValue="#{prov}"
+                                                        forceSelection="true">
+                                            <oou:converter converterId="omnifaces.ListConverter" list="#{provenanceListPresenter.completeProvenances(prov.name)}"/>
+                                        </p:autoComplete>
+                                        <p:outputLabel for="provenance" value="#{msg.customerSupplier_provenance}"/>
+                                        <p:message for="provenance"/>
+                                    </h:panelGroup>
                                 </p:panelGrid>
 
-                                <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+                                <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                     <p:dataTable id="plantsTable"
                                                  var="plant"
                                                  value="#{customerSupplierPresenter.customerSupplier.plants}">
@@ -120,10 +134,12 @@
                                     </p:dataTable>
                                 </p:panelGrid>
 
-                                <p:panelGrid columns="3" columnClasses="ui-grid-col-3,ui-grid-col-7,ui-grid-col-2" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
-                                    <h:outputLabel for="notes" value="#{msg.customerSupplier_customerSupplier_notes}"/>
-                                    <p:inputTextarea id="notes" value="#{customerSupplierPresenter.customerSupplier.notes}" rows="3"/>
-                                    <p:message for="notes"/>
+                                <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputTextarea id="notes" value="#{customerSupplierPresenter.customerSupplier.notes}" rows="3"/>
+                                        <p:outputLabel for="notes" value="#{msg.customerSupplier_customerSupplier_notes}"/>
+                                        <p:message for="notes"/>
+                                    </h:panelGroup>
                                 </p:panelGrid>
 
                                 <div class="ui-g">

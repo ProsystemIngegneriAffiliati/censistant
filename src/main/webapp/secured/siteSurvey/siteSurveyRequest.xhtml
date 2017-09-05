@@ -23,54 +23,64 @@
                             <div class="card card-w-title">
                                 <h1>#{msg.siteSurvey_siteSurveyRequest}</h1>
                                 <p>#{msg.siteSurvey_siteSurveyRequest_tip}</p>
-                                <p:panelGrid columns="9" columnClasses="ui-grid-col-2,ui-grid-col-1,ui-grid-col-1,ui-grid-col-1,ui-grid-col-3,ui-grid-col-1,ui-grid-col-1,ui-grid-col-1,ui-grid-col-1" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
-                                    <h:outputLabel for="number" value="#{msg.siteSurvey_siteSurveyRequest_number}"/>
-                                    <p:inputNumber id="number" value="#{siteSurveyRequestPresenter.siteSurveyRequest.number}" decimalPlaces="0"/>
-                                    <p:message for="number"/>
+                                <p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-3,ui-grid-col-4,ui-grid-col-3" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputNumber id="number" value="#{siteSurveyRequestPresenter.siteSurveyRequest.number}" decimalPlaces="0"/>
+                                        <p:outputLabel for="number" value="#{msg.siteSurvey_siteSurveyRequest_number}"/>
+                                        <p:message for="number"/>
+                                    </h:panelGroup>
 
-                                    <h:outputLabel for="creation" value="#{msg.siteSurvey_siteSurveyRequest_creation}"/>
-                                    <p:calendar id="creation" value="#{siteSurveyRequestPresenter.siteSurveyRequest.creation}"/>
-                                    <p:message for="creation"/>
-                                    
-                                    <h:outputLabel for="isInfo" value="#{msg.siteSurvey_siteSurveyRequest_isInfo}"/>
-                                    <p:inputSwitch id="isInfo" value="#{siteSurveyRequestPresenter.siteSurveyRequest.isInfo}" />
-                                    <p:message for="isInfo"/>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:calendar id="creation" value="#{siteSurveyRequestPresenter.siteSurveyRequest.creation}"/>
+                                        <p:outputLabel for="creation" value="#{msg.siteSurvey_siteSurveyRequest_creation}"/>
+                                        <p:message for="creation"/>
+                                    </h:panelGroup>
+
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:autoComplete id="customer"
+                                                        dropdown="true"
+                                                        value="#{siteSurveyRequestPresenter.siteSurveyRequest.customer}"
+                                                        completeMethod="#{customerSupplierListPresenter.completeCustomer}"
+                                                        converter="omnifaces.SelectItemsConverter"
+                                                        var="cust"
+                                                        itemLabel="#{cust.name}"
+                                                        itemValue="#{cust}"
+                                                        forceSelection="true">
+                                            <oou:converter converterId="omnifaces.ListConverter" list="#{customerSupplierListPresenter.completeCustomer(cust.name)}"/>
+                                        </p:autoComplete>
+                                        <p:outputLabel for="customer" value="#{msg.customerSupplier_customer}"/>
+                                        <p:message for="customer"/>
+                                    </h:panelGroup>
+
+                                    <h:panelGroup>
+                                        <p:outputLabel for="isInfo" value="#{msg.siteSurvey_siteSurveyRequest_isInfo}"/>
+                                        <p:inputSwitch id="isInfo" value="#{siteSurveyRequestPresenter.siteSurveyRequest.isInfo}" />
+                                        <p:message for="isInfo"/>
+                                    </h:panelGroup>
                                 </p:panelGrid>
 
-                                <p:panelGrid columns="6" columnClasses="ui-grid-col-2,ui-grid-col-3,ui-grid-col-1,ui-grid-col-2,ui-grid-col-3,ui-grid-col-1" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
-                                    <h:outputLabel for="customer" value="#{msg.customerSupplier_customer}"/>
-                                    <p:autoComplete id="customer"
-                                                    dropdown="true"
-                                                    value="#{siteSurveyRequestPresenter.siteSurveyRequest.customer}"
-                                                    completeMethod="#{customerSupplierListPresenter.completeCustomer}"
-                                                    converter="omnifaces.SelectItemsConverter"
-                                                    var="cust"
-                                                    itemLabel="#{cust.name}"
-                                                    itemValue="#{cust}"
-                                                    forceSelection="true">
-                                        <oou:converter converterId="omnifaces.ListConverter" list="#{customerSupplierListPresenter.completeCustomer(cust.name)}"/>
-                                    </p:autoComplete>
-                                    <p:message for="customer"/>
-                                    
-                                    <h:outputLabel for="systemType" value="#{msg.siteSurvey_systemType_name}"/>
-                                    <p:autoComplete id="systemType"
-                                                    dropdown="true"
-                                                    value="#{siteSurveyRequestPresenter.siteSurveyRequest.systemType}"
-                                                    completeMethod="#{systemTypeListPresenter.completeSystemTypes}"
-                                                    converter="omnifaces.SelectItemsConverter"
-                                                    var="syst"
-                                                    itemLabel="#{syst.name}"
-                                                    itemValue="#{syst}"
-                                                    forceSelection="true">
-                                        <oou:converter converterId="omnifaces.ListConverter" list="#{systemTypeListPresenter.completeSystemTypes(syst.name)}"/>
-                                    </p:autoComplete>
-                                    <p:message for="systemType"/>
-                                </p:panelGrid>
-                                
-                                <p:panelGrid columns="3" columnClasses="ui-grid-col-2,ui-grid-col-9,ui-grid-col-1" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
-                                    <h:outputLabel for="notes" value="#{msg.siteSurvey_siteSurveyRequest_notes}"/>
-                                    <p:inputTextarea id="notes" value="#{siteSurveyRequestPresenter.siteSurveyRequest.notes}" rows="3"/>
-                                    <p:message for="notes"/>
+                                <p:panelGrid columns="2" columnClasses="ui-grid-col-5,ui-grid-col-7" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:autoComplete id="systemType"
+                                                        dropdown="true"
+                                                        value="#{siteSurveyRequestPresenter.siteSurveyRequest.systemType}"
+                                                        completeMethod="#{systemTypeListPresenter.completeSystemTypes}"
+                                                        converter="omnifaces.SelectItemsConverter"
+                                                        var="syst"
+                                                        itemLabel="#{syst.name}"
+                                                        itemValue="#{syst}"
+                                                        forceSelection="true">
+                                            <oou:converter converterId="omnifaces.ListConverter" list="#{systemTypeListPresenter.completeSystemTypes(syst.name)}"/>
+                                        </p:autoComplete>
+                                        <p:outputLabel for="systemType" value="#{msg.siteSurvey_systemType_name}"/>
+                                        <p:message for="systemType"/>
+                                    </h:panelGroup>
+
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputTextarea id="notes" value="#{siteSurveyRequestPresenter.siteSurveyRequest.notes}" rows="3"/>
+                                        <p:outputLabel for="notes" value="#{msg.siteSurvey_siteSurveyRequest_notes}"/>
+                                        <p:message for="notes"/>
+                                    </h:panelGroup>
                                 </p:panelGrid>
 
                                 <div class="ui-g">

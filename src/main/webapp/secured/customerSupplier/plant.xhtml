@@ -4,8 +4,7 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:o="http://omnifaces.org/ui"
-      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+      xmlns:o="http://omnifaces.org/ui">
     <ui:composition template="/WEB-INF/template.xhtml">
         <ui:define name="content">
             <o:form id="plantForm">
@@ -15,38 +14,52 @@
                             <div class="card card-w-title">
                                 <h1>#{msg.customerSupplier_plant}</h1>
                                 <p>#{msg.customerSupplier_plant_tip}</p>
-                                <p:panelGrid columns="9" columnClasses="ui-grid-col-1,ui-grid-col-2,ui-grid-col-1,ui-grid-col-1,ui-grid-col-3,ui-grid-col-1,ui-grid-col-1,ui-grid-col-1,ui-grid-col-1" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
-                                    <h:outputLabel for="name" value="#{msg.customerSupplier_plant_name}"/>
-                                    <p:inputText id="name" value="#{plantPresenter.plant.name}"/>
-                                    <p:message for="name"/>
+                                <p:panelGrid columns="3" columnClasses="ui-grid-col-4,ui-grid-col-5,ui-grid-col-3" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="name" value="#{plantPresenter.plant.name}"/>
+                                        <p:outputLabel for="name" value="#{msg.customerSupplier_plant_name}"/>
+                                        <p:message for="name"/>
+                                    </h:panelGroup>
 
-                                    <h:outputLabel for="address" value="#{msg.customerSupplier_plant_address}"/>
-                                    <p:inputTextarea id="address" value="#{plantPresenter.plant.address}" rows="3"/>
-                                    <p:message for="address"/>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputTextarea id="address" value="#{plantPresenter.plant.address}" rows="3"/>
+                                        <p:outputLabel for="address" value="#{msg.customerSupplier_plant_address}"/>
+                                        <p:message for="address"/>
+                                    </h:panelGroup>
 
-                                    <h:outputLabel for="isHeadOffice" value="#{msg.customerSupplier_plant_isHeadOffice}"/>
-                                    <p:inputSwitch id="isHeadOffice" value="#{plantPresenter.plant.isHeadOffice}" />
-                                    <p:message for="isHeadOffice"/>
+                                    <h:panelGroup>
+                                        <p:outputLabel for="isHeadOffice" value="#{msg.customerSupplier_plant_isHeadOffice}"/>
+                                        <p:inputSwitch id="isHeadOffice" value="#{plantPresenter.plant.isHeadOffice}" />
+                                        <p:message for="isHeadOffice"/>
+                                    </h:panelGroup>
                                 </p:panelGrid>
 
-                                <p:panelGrid columns="9" columnClasses="ui-grid-col-1,ui-grid-col-2,ui-grid-col-1,ui-grid-col-1,ui-grid-col-2,ui-grid-col-1,ui-grid-col-1,ui-grid-col-2,ui-grid-col-1" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
-                                    <h:outputLabel for="phone" value="#{msg.customerSupplier_plant_phone}"/>
-                                    <p:inputText id="phone" value="#{plantPresenter.plant.phone}"/>
-                                    <p:message for="phone"/>
+                                <p:panelGrid columns="3" columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="phone" value="#{plantPresenter.plant.phone}"/>
+                                        <p:outputLabel for="phone" value="#{msg.customerSupplier_plant_phone}"/>
+                                        <p:message for="phone"/>
+                                    </h:panelGroup>
 
-                                    <h:outputLabel for="fax" value="#{msg.customerSupplier_plant_fax}"/>
-                                    <p:inputText id="fax" value="#{plantPresenter.plant.fax}"/>
-                                    <p:message for="fax"/>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="fax" value="#{plantPresenter.plant.fax}"/>
+                                        <p:outputLabel for="fax" value="#{msg.customerSupplier_plant_fax}"/>
+                                        <p:message for="fax"/>
+                                    </h:panelGroup>
 
-                                    <h:outputLabel for="email" value="#{msg.customerSupplier_plant_email}"/>
-                                    <p:inputText id="email" value="#{plantPresenter.plant.email}" type="email"/>
-                                    <p:message for="email"/>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="email" value="#{plantPresenter.plant.email}" type="email"/>
+                                        <p:outputLabel for="email" value="#{msg.customerSupplier_plant_email}"/>
+                                        <p:message for="email"/>
+                                    </h:panelGroup>
                                 </p:panelGrid>
 
-                                <p:panelGrid columns="3" columnClasses="ui-grid-col-2,ui-grid-col-8,ui-grid-col-2" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
-                                    <h:outputLabel for="notes" value="#{msg.customerSupplier_plant_notes}"/>
-                                    <p:inputTextarea id="notes" value="#{plantPresenter.plant.notes}" rows="3"/>
-                                    <p:message for="notes"/>
+                                <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputTextarea id="notes" value="#{plantPresenter.plant.notes}" rows="3"/>
+                                        <p:outputLabel for="notes" value="#{msg.customerSupplier_plant_notes}"/>
+                                        <p:message for="notes"/>
+                                    </h:panelGroup>
                                 </p:panelGrid>
 
                                 <div class="ui-g">

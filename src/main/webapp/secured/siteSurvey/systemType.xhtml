@@ -22,10 +22,12 @@
                             <div class="card card-w-title">
                                 <h1>#{msg.siteSurvey_systemType}</h1>
                                 <p>#{msg.siteSurvey_systemType_tip}</p>
-                                <p:panelGrid columns="3" columnClasses="ui-grid-col-3,ui-grid-col-5,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
-                                    <h:outputLabel for="name" value="#{msg.siteSurvey_systemType_name}"/>
-                                    <p:inputText id="name" value="#{systemTypePresenter.systemType.name}"/>
-                                    <p:message for="name"/>
+                                <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="name" value="#{systemTypePresenter.systemType.name}"/>
+                                        <p:outputLabel for="name" value="#{msg.siteSurvey_systemType_name}"/>
+                                        <p:message for="name"/>
+                                    </h:panelGroup>
                                 </p:panelGrid>
 
                                 <div class="ui-g">
