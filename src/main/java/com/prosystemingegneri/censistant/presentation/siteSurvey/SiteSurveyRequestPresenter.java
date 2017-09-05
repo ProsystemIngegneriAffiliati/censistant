@@ -16,10 +16,12 @@
  */
 package com.prosystemingegneri.censistant.presentation.siteSurvey;
 
+import com.prosystemingegneri.censistant.business.customerSupplier.boundary.CustomerSupplierService;
 import com.prosystemingegneri.censistant.business.siteSurvey.boundary.SiteSurveyRequestService;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyRequest;
 import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
 import java.io.Serializable;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJBException;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -36,9 +38,21 @@ import org.omnifaces.cdi.ViewScoped;
 public class SiteSurveyRequestPresenter implements Serializable{
     @Inject
     SiteSurveyRequestService service;
+    @Inject
+    CustomerSupplierService customerSupplierService;
     
     private SiteSurveyRequest siteSurveyRequest;
     private Long id;
+    
+    @PostConstruct
+    public void init() {
+        siteSurveyRequest = (SiteSurveyRequest) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("siteSurveyRequest");
+        if (siteSurveyRequest != null) {
+            Long idCustomer = (Long) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("idCustomer");
+            if (idCustomer != null && idCustomer > 0)
+                siteSurveyRequest.setCustomer(customerSupplierService.readCustomerSupplier(idCustomer));
+        }
+    }
     
     public String saveSiteSurveyRequest() {
         try {
@@ -52,10 +66,21 @@ public class SiteSurveyRequestPresenter implements Serializable{
     }
     
     public void detailSiteSurveyRequest() {
-        if (id == 0)
-            siteSurveyRequest = service.createNewSiteSurveyRequest();
-        else
-            siteSurveyRequest = service.readSiteSurveyRequest(id);
+        if (siteSurveyRequest == null && id != null) {
+            if (id == 0)
+                siteSurveyRequest = service.createNewSiteSurveyRequest();
+            else
+                siteSurveyRequest = service.readSiteSurveyRequest(id);
+        }
+    }
+    
+    public String createPotentialCustomer() {
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("siteSurveyRequest", siteSurveyRequest);
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("customerSupplier", customerSupplierService.createPotentialCustomer());
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("isCustomerView", Boolean.TRUE);
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("returnPage", "siteSurvey/siteSurveyRequest");
+        
+        return "/secured/customerSupplier/customer?faces-redirect=true";
     }
 
     public SiteSurveyRequest getSiteSurveyRequest() {

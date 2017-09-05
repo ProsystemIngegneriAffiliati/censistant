@@ -9,14 +9,12 @@
     <f:metadata>
         <f:viewParam name="id"
                      value="#{siteSurveyRequestPresenter.id}"
-                     converter="javax.faces.Long"
-                     required="true"
-                     requiredMessage="Must provide an ID"/>
+                     converter="javax.faces.Long"/>
         <f:viewAction action="#{siteSurveyRequestPresenter.detailSiteSurveyRequest()}"/>
     </f:metadata>
     <ui:composition template="/WEB-INF/template.xhtml">
         <ui:define name="content">
-            <h:form id="siteSurveyRequestForm">
+            <oou:form id="siteSurveyRequestForm">
                 <div class="ui-fluid">
                     <div class="ui-g">
                         <div class="ui-g-12">
@@ -37,6 +35,13 @@
                                     </h:panelGroup>
 
                                     <h:panelGroup styleClass="md-inputfield">
+                                        <p:commandButton rendered="#{siteSurveyRequestPresenter.siteSurveyRequest.customer == null}"
+                                                         action="#{siteSurveyRequestPresenter.createPotentialCustomer()}"
+                                                         title="#{msg.new} #{msg.customerSupplier_customer}"
+                                                         icon="ui-icon-create"
+                                                         ajax="false">
+                                            <oou:ignoreValidationFailed />
+                                        </p:commandButton>
                                         <p:autoComplete id="customer"
                                                         dropdown="true"
                                                         value="#{siteSurveyRequestPresenter.siteSurveyRequest.customer}"
@@ -99,7 +104,7 @@
                         </div>
                     </div>
                 </div>
-            </h:form>
+            </oou:form>
         </ui:define>
     </ui:composition>
 

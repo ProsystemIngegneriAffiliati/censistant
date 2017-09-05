@@ -13,11 +13,12 @@
         <f:viewParam name="isCustomerView"
                      value="#{customerSupplierPresenter.isCustomerView}"
                      converter="javax.faces.Boolean"/>
+        <f:viewParam name="returnPage" value="#{customerSupplierPresenter.returnPage}" />
         <f:viewAction action="#{customerSupplierPresenter.detailCustomerSupplier()}"/>
     </f:metadata>
     <ui:composition template="/WEB-INF/template.xhtml">
         <ui:define name="content">
-            <h:form id="customerForm">
+            <oou:form id="customerForm">
                 <div class="ui-fluid">
                     <div class="ui-g">
                         <div class="ui-g-12">
@@ -145,7 +146,12 @@
                                 <div class="ui-g">
                                     <div class="ui-g-1 ui-md-2"></div>
                                     <div class="ui-g-4 ui-md-3">
-                                        <p:button value="#{msg.cancel}" outcome="/secured/customerSupplier/customers" styleClass="secondary"/>
+                                        <p:commandButton value="#{msg.cancel}"
+                                                         action="#{customerSupplierPresenter.cancel()}"
+                                                         styleClass="secondary"
+                                                         ajax="false">
+                                            <oou:ignoreValidationFailed />
+                                        </p:commandButton>
                                     </div>
                                     <div class="ui-g-2 ui-md-2"></div>
                                     <div class="ui-g-4 ui-md-3">
@@ -158,7 +164,7 @@
                         </div>
                     </div>
                 </div>
-            </h:form>
+            </oou:form>
         </ui:define>
     </ui:composition>
 

@@ -34,11 +34,13 @@ public class PlantPresenter implements Serializable {
     private Plant plant;
     private CustomerSupplier customerSupplier;
     private Boolean isCustomerView;
+    private String returnInitialPage;
     
     @PostConstruct
     public void init() {
         customerSupplier = (CustomerSupplier) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("customerSupplier");
         isCustomerView = (Boolean) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("isCustomerView");
+        returnInitialPage = (String) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("returnPage");
         plant = (Plant) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("plant");
         if (plant == null)
             plant = new Plant();
@@ -48,15 +50,13 @@ public class PlantPresenter implements Serializable {
         if (plant.getCustomerSupplier() == null)
             customerSupplier.addPlant(plant);
         
-        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("customerSupplier", customerSupplier);
-        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("isCustomerView", isCustomerView);
+        putExternalContext();
         
         return chooseReturnString();
     }
     
     public String cancel() {
-        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("customerSupplier", customerSupplier);
-        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("isCustomerView", isCustomerView);
+        putExternalContext();
         
         return chooseReturnString();
     }
@@ -69,6 +69,12 @@ public class PlantPresenter implements Serializable {
             returnString = "/secured/customerSupplier/supplier";
         
         return returnString + "?faces-redirect=true";
+    }
+    
+    private void putExternalContext() {
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("customerSupplier", customerSupplier);
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("isCustomerView", isCustomerView);
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("returnPage", returnInitialPage);
     }
 
     public Plant getPlant() {

@@ -20,6 +20,7 @@ import com.prosystemingegneri.censistant.business.customerSupplier.boundary.Cust
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Referee;
+import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyRequest;
 import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
@@ -47,6 +48,9 @@ public class CustomerSupplierPresenter implements Serializable{
     private CustomerSupplier customerSupplier;
     private Long id;
     private Boolean isCustomerView;
+    private String returnPage;
+    
+    private SiteSurveyRequest siteSurveyRequest;
     
     @Resource
     Validator validator;
@@ -55,6 +59,9 @@ public class CustomerSupplierPresenter implements Serializable{
     public void init() {
         customerSupplier = (CustomerSupplier) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("customerSupplier");
         isCustomerView = (Boolean) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("isCustomerView");
+        returnPage = (String) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("returnPage");
+        
+        siteSurveyRequest = (SiteSurveyRequest) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("siteSurveyRequest");
     }
     
     public String saveCustomerSupplier() {
@@ -67,29 +74,25 @@ public class CustomerSupplierPresenter implements Serializable{
             if (!isValidated)
                 return null;            
             
-            service.saveCustomerSupplier(customerSupplier);
+            customerSupplier = service.saveCustomerSupplier(customerSupplier);
         } catch (EJBException e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", ExceptionUtility.unwrap(e.getCausedByException()).getLocalizedMessage()));
             return null;
         }
         
-        String returnString;
-        if (isCustomerView)
-            returnString = "/secured/customerSupplier/customers";
-        else
-            returnString = "/secured/customerSupplier/suppliers";
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("siteSurveyRequest", siteSurveyRequest);
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("idCustomer", customerSupplier.getId());
         
-        return returnString + "?faces-redirect=true";
+        return "/secured/" + returnPage + "?faces-redirect=true";
     }
     
     public void detailCustomerSupplier() {
         if (customerSupplier == null && id != null) {
             if (id == 0) {
-                customerSupplier = new CustomerSupplier();
                 if (isCustomerView)
-                    customerSupplier.setIsCustomer(Boolean.TRUE);
+                    customerSupplier = service.createCustomer();
                 else
-                    customerSupplier.setIsSupplier(Boolean.TRUE);
+                    customerSupplier = service.createSupplier();
             }
             else
                 customerSupplier = service.readCustomerSupplier(id);
@@ -99,8 +102,7 @@ public class CustomerSupplierPresenter implements Serializable{
     public String detailPlant(Plant plant) {
         if (plant != null)
             FacesContext.getCurrentInstance().getExternalContext().getFlash().put("plant", plant);
-        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("customerSupplier", customerSupplier);
-        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("isCustomerView", isCustomerView);
+        putExternalContext();
         
         return "/secured/customerSupplier/plant?faces-redirect=true";
     }
@@ -113,10 +115,21 @@ public class CustomerSupplierPresenter implements Serializable{
     public String detailReferee(Referee referee) {
         if (referee != null)
             FacesContext.getCurrentInstance().getExternalContext().getFlash().put("referee", referee);
-        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("customerSupplier", customerSupplier);
-        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("isCustomerView", isCustomerView);
+        putExternalContext();
         
         return "/secured/customerSupplier/referee?faces-redirect=true";
+    }
+    
+    public String cancel() {
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("siteSurveyRequest", siteSurveyRequest);
+        
+        return "/secured/" + returnPage + "?faces-redirect=true";
+    }
+    
+    private void putExternalContext() {
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("customerSupplier", customerSupplier);
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("isCustomerView", isCustomerView);
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("returnPage", returnPage);
     }
     
     public void deleteReferee(Referee referee) {
@@ -146,6 +159,14 @@ public class CustomerSupplierPresenter implements Serializable{
 
     public void setIsCustomerView(Boolean isCustomerView) {
         this.isCustomerView = isCustomerView;
+    }
+
+    public String getReturnPage() {
+        return returnPage;
+    }
+
+    public void setReturnPage(String returnPage) {
+        this.returnPage = returnPage;
     }
     
 }

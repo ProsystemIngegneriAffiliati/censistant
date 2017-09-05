@@ -90,6 +90,13 @@ public class CustomerSupplier extends BaseEntity<Long>{
         isPotentialCustomer = Boolean.FALSE;
     }
 
+    public CustomerSupplier(Boolean isPotentialCustomer, Boolean isCustomer, Boolean isSupplier) {
+        this();
+        this.isPotentialCustomer = isPotentialCustomer;
+        this.isCustomer = isCustomer;
+        this.isSupplier = isSupplier;
+    }
+
     public Boolean getIsCustomer() {
         return isCustomer;
     }

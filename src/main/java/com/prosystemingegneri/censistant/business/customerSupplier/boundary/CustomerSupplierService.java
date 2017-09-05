@@ -44,13 +44,25 @@ public class CustomerSupplierService implements Serializable{
     @PersistenceContext
     EntityManager em;
     
+    public CustomerSupplier createCustomer() {
+        return new CustomerSupplier(Boolean.FALSE, Boolean.TRUE, Boolean.FALSE);
+    }
+    
+    public CustomerSupplier createPotentialCustomer() {
+        return new CustomerSupplier(Boolean.TRUE, Boolean.TRUE, Boolean.FALSE);
+    }
+    
+    public CustomerSupplier createSupplier() {
+        return new CustomerSupplier(Boolean.FALSE, Boolean.FALSE, Boolean.TRUE);
+    }
+    
     public CustomerSupplier saveCustomerSupplier(CustomerSupplier customerSupplier) {        
         if (customerSupplier.getId() == null)
             em.persist(customerSupplier);
         else
             return em.merge(customerSupplier);
         
-        return null;
+        return customerSupplier;
     }
     
     public CustomerSupplier readCustomerSupplier(Long id) {

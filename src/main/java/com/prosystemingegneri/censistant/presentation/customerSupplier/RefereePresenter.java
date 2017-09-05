@@ -34,11 +34,13 @@ public class RefereePresenter implements Serializable {
     private Referee referee;
     private CustomerSupplier customerSupplier;
     private Boolean isCustomerView;
+    private String returnInitialPage;
     
     @PostConstruct
     public void init() {
         customerSupplier = (CustomerSupplier) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("customerSupplier");
         isCustomerView = (Boolean) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("isCustomerView");
+        returnInitialPage = (String) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("returnPage");
         referee = (Referee) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("referee");
         if (referee == null)
             referee = new Referee();
@@ -48,15 +50,13 @@ public class RefereePresenter implements Serializable {
         if (referee.getCustomerSupplier() == null)
             customerSupplier.addReferee(referee);
         
-        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("customerSupplier", customerSupplier);
-        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("isCustomerView", isCustomerView);
+        putExternalContext();
         
         return chooseReturnString();
     }
     
     public String cancel() {
-        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("customerSupplier", customerSupplier);
-        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("isCustomerView", isCustomerView);
+        putExternalContext();
         
         return chooseReturnString();
     }
@@ -69,6 +69,12 @@ public class RefereePresenter implements Serializable {
             returnString = "/secured/customerSupplier/supplier";
         
         return returnString + "?faces-redirect=true";
+    }
+    
+    private void putExternalContext() {
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("customerSupplier", customerSupplier);
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("isCustomerView", isCustomerView);
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("returnPage", returnInitialPage);
     }
 
     public Referee getReferee() {
