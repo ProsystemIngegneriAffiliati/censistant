@@ -63,7 +63,7 @@ public class SiteSurveyRequestListPresenter implements Serializable{
     }
     
     public List<SiteSurveyRequest> completeRequests(String name) {
-        return service.listSiteSurveyRequests(0, 10, "creation", Boolean.FALSE, null, null, null, name, null, null, null);
+        return service.listSiteSurveyRequests(0, 10, "creation", Boolean.FALSE, null, null, null, name, null, null, Boolean.FALSE);
     }
 
     public SiteSurveyRequestLazyDataModel getLazySiteSurveyRequests() {

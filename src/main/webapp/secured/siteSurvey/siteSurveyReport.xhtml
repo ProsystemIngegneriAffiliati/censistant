@@ -24,7 +24,7 @@
                                 <p>#{msg.siteSurvey_siteSurveyReport_tip}</p>
 
                                 <p:panel header="#{msg.siteSurvey_siteSurveyRequest}" style="margin-bottom: 25px">
-                                    <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                    <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group" rendered="#{siteSurveyReportPresenter.siteSurveyReport.request.id == null}">
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:autoComplete id="request"
                                                             dropdown="true"
@@ -34,15 +34,17 @@
                                                             var="req"
                                                             itemLabel="#{of:formatDate(req.creation, 'dd/MM/yyyy')} - #{req.customer.name} - #{req.systemType.name}"
                                                             itemValue="#{req}"
-                                                            forceSelection="true">
+                                                            forceSelection="true"
+                                                            >
                                                 <oou:converter converterId="omnifaces.ListConverter" list="#{siteSurveyRequestListPresenter.completeRequests('')}"/>
+                                                <p:ajax event="itemSelect" listener="#{siteSurveyReportPresenter.onSiteSurveyRequestSelect}" update="requestData" />
                                             </p:autoComplete>
                                             <p:outputLabel for="request" value="#{msg.siteSurvey_siteSurveyRequests}"/>
                                             <p:message for="request"/>
                                         </h:panelGroup>
                                     </p:panelGrid>
 
-                                    <p:panelGrid columns="3" columnClasses="ui-grid-col-3,ui-grid-col-4,ui-grid-col-5" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                    <p:panelGrid id="requestData" columns="3" columnClasses="ui-grid-col-3,ui-grid-col-4,ui-grid-col-5" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:calendar id="requestCreation" value="#{siteSurveyReportPresenter.siteSurveyReport.request.creation}"/>
                                             <p:outputLabel for="requestCreation" value="#{msg.siteSurvey_siteSurveyRequest_creation}"/>

@@ -27,6 +27,7 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.omnifaces.cdi.ViewScoped;
+import org.primefaces.event.SelectEvent;
 
 /**
  *
@@ -59,6 +60,10 @@ public class SiteSurveyReportPresenter implements Serializable{
             siteSurveyReport = service.createNewSiteSurveyReport();
         else
             siteSurveyReport = service.readSiteSurveyReport(id);
+    }
+    
+    public void onSiteSurveyRequestSelect(SelectEvent event) {
+        siteSurveyReport.addRequest((SiteSurveyRequest) event.getObject());
     }
 
     public SiteSurveyReport getSiteSurveyReport() {

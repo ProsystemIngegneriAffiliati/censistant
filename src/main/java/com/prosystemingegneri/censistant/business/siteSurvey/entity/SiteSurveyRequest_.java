@@ -27,11 +27,11 @@ import javax.persistence.metamodel.StaticMetamodel;
  */
 @StaticMetamodel(SiteSurveyRequest.class)
 public class SiteSurveyRequest_ {
+    public static volatile SingularAttribute<SiteSurveyRequest, Long> id;
     public static volatile SingularAttribute<SiteSurveyRequest, Integer> number;
     public static volatile SingularAttribute<SiteSurveyRequest, Date> creation;
     public static volatile SingularAttribute<SiteSurveyRequest, CustomerSupplier> customer;
     public static volatile SingularAttribute<SiteSurveyRequest, SystemType> systemType;
     public static volatile SingularAttribute<SiteSurveyRequest, Boolean> isInfo;
     public static volatile SingularAttribute<SiteSurveyRequest, String> notes;
-    public static volatile SingularAttribute<SiteSurveyRequest, SiteSurveyReport> report;
 }

@@ -18,6 +18,8 @@ package com.prosystemingegneri.censistant.business.siteSurvey.boundary;
 
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier_;
+import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport;
+import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport_;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyRequest;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyRequest_;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SystemType;
@@ -36,8 +38,10 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Subquery;
 
 /**
  *
@@ -134,15 +138,20 @@ public class SiteSurveyRequestService implements Serializable{
         
         //is associated with site survey report
         if (isReportPresent != null) {
+            Path<Object> path = root.get(SiteSurveyRequest_.id.getName()); // field to map with sub-query
+            
+            Subquery<SiteSurveyReport> subquery = query.subquery(SiteSurveyReport.class);
+            Root<SiteSurveyReport> subRoot = subquery.from(SiteSurveyReport.class);
+            subquery.select(subRoot.get(SiteSurveyReport_.request.getName()).get(SiteSurveyRequest_.id.getName())); // field to map with main-query
+            
             if (isReportPresent)
-                conditions.add(cb.isNotNull(root.get(SiteSurveyRequest_.report)));
+                conditions.add(cb.in(path).value(subquery));
             else
-                conditions.add(cb.isNull(root.get(SiteSurveyRequest_.report)));
+                conditions.add(cb.not(cb.in(path).value(subquery)));
         }
 
-        if (!conditions.isEmpty()) {
+        if (!conditions.isEmpty())
             query.where(conditions.toArray(new Predicate[conditions.size()]));
-        }
         
         if (isAscending != null && sortField != null && !sortField.isEmpty()) {
             if (sortField.equalsIgnoreCase("customer") || sortField.equalsIgnoreCase("systemType")) {
@@ -212,14 +221,20 @@ public class SiteSurveyRequestService implements Serializable{
         
         //is associated with site survey report
         if (isReportPresent != null) {
+            Path<Object> path = root.get(SiteSurveyRequest_.id.getName()); // field to map with sub-query
+            
+            Subquery<SiteSurveyReport> subquery = query.subquery(SiteSurveyReport.class);
+            Root<SiteSurveyReport> subRoot = subquery.from(SiteSurveyReport.class);
+            subquery.select(subRoot.get(SiteSurveyReport_.request.getName()).get(SiteSurveyRequest_.id.getName())); // field to map with main-query
+            
             if (isReportPresent)
-                conditions.add(cb.isNotNull(root.get(SiteSurveyRequest_.report)));
+                conditions.add(cb.in(path).value(subquery));
             else
-                conditions.add(cb.isNull(root.get(SiteSurveyRequest_.report)));
+                conditions.add(cb.not(cb.in(path).value(subquery)));
         }
-        if (!conditions.isEmpty()) {
+        
+        if (!conditions.isEmpty())
             query.where(conditions.toArray(new Predicate[conditions.size()]));
-        }
 
         return em.createQuery(select).getSingleResult();
     }
