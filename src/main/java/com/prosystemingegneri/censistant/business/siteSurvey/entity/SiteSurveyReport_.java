@@ -16,7 +16,7 @@
  */
 package com.prosystemingegneri.censistant.business.siteSurvey.entity;
 
-import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
+import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
 import java.util.Date;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
@@ -25,13 +25,12 @@ import javax.persistence.metamodel.StaticMetamodel;
  *
  * @author Davide Mainardi <ingmainardi@live.com>
  */
-@StaticMetamodel(SiteSurveyRequest.class)
-public class SiteSurveyRequest_ {
-    public static volatile SingularAttribute<SiteSurveyRequest, Integer> number;
-    public static volatile SingularAttribute<SiteSurveyRequest, Date> creation;
-    public static volatile SingularAttribute<SiteSurveyRequest, CustomerSupplier> customer;
-    public static volatile SingularAttribute<SiteSurveyRequest, SystemType> systemType;
-    public static volatile SingularAttribute<SiteSurveyRequest, Boolean> isInfo;
-    public static volatile SingularAttribute<SiteSurveyRequest, String> notes;
-    public static volatile SingularAttribute<SiteSurveyRequest, SiteSurveyReport> report;
+@StaticMetamodel(SiteSurveyReport.class)
+public class SiteSurveyReport_ {
+    public static volatile SingularAttribute<SiteSurveyReport, Integer> number;
+    public static volatile SingularAttribute<SiteSurveyReport, Date> expected;
+    public static volatile SingularAttribute<SiteSurveyReport, Date> actual;
+    public static volatile SingularAttribute<SiteSurveyReport, SiteSurveyRequest> request;
+    public static volatile SingularAttribute<SiteSurveyReport, Plant> plant;
+    public static volatile SingularAttribute<SiteSurveyReport, Worker> seller;
 }

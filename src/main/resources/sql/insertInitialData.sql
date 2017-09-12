@@ -57,3 +57,6 @@ INSERT INTO sitesurveyrequest(number, creation, customer_id, systemType_id, isin
 INSERT INTO sitesurveyrequest(number, creation, customer_id, systemType_id, isinfo, version) VALUES('11', '2016-06-08', 5, 3, false, 0)
 INSERT INTO sitesurveyrequest(number, creation, customer_id, systemType_id, isinfo, version) VALUES('12', '2016-07-10', 4, 5, true, 0)
 INSERT INTO sitesurveyrequest(number, creation, customer_id, systemType_id, isinfo, version) VALUES('10', '2016-05-01', 1, 4, false, 0)
+
+INSERT INTO sitesurveyreport(number, expected, actual, plant_id, seller_id, request_id, version) VALUES('1', '2017-01-10', '2017-01-10', 2, 1, 3, 0)
+INSERT INTO sitesurveyreport(number, expected, actual, plant_id, seller_id, request_id, version) VALUES('245', '2016-12-15', null, 1, 1, 1, 0)

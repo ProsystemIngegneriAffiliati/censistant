@@ -1,11 +1,12 @@
 #!/bin/sh
 
-readonly IP_ADDRESS=192.168.2.105
+readonly IP_ADDRESS=192.168.2.115
+readonly POSTGRESQL_JDBC_DRIVER=postgresql-42.1.4.jar
 
 mkdir $HOME/censistant
 mkdir $HOME/censistant/images
 mkdir $HOME/censistant/documents
-wget -P ../glassfish/domains/domain1/lib/ext/ https://jdbc.postgresql.org/download/postgresql-42.1.4.jar
+wget -P ../glassfish/domains/domain1/lib/ext/ https://jdbc.postgresql.org/download/$POSTGRESQL_JDBC_DRIVER
 ./asadmin start-domain
 ./asadmin create-jdbc-connection-pool \
 --datasourceclassname=org.postgresql.ds.PGSimpleDataSource \

@@ -16,8 +16,8 @@
  */
 package com.prosystemingegneri.censistant.presentation.siteSurvey;
 
-import com.prosystemingegneri.censistant.business.siteSurvey.boundary.SiteSurveyRequestService;
-import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyRequest;
+import com.prosystemingegneri.censistant.business.siteSurvey.boundary.SiteSurveyReportService;
+import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport;
 import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
 import java.io.Serializable;
 import java.util.Date;
@@ -36,23 +36,23 @@ import org.omnifaces.cdi.ViewScoped;
  */
 @Named
 @ViewScoped
-public class SiteSurveyRequestListPresenter implements Serializable{
+public class SiteSurveyReportListPresenter implements Serializable{
     @Inject
-    SiteSurveyRequestService service;
+    SiteSurveyReportService service;
     
-    private SiteSurveyRequestLazyDataModel lazySiteSurveyRequests;
-    private List<SiteSurveyRequest> selectedSiteSurveyRequests;
+    private SiteSurveyReportLazyDataModel lazySiteSurveyReports;
+    private List<SiteSurveyReport> selectedSiteSurveyReports;
     
     @PostConstruct
     public void init() {
-        lazySiteSurveyRequests = new SiteSurveyRequestLazyDataModel(service);
+        lazySiteSurveyReports = new SiteSurveyReportLazyDataModel(service);
     }
     
-    public void deleteSiteSurveyRequest() {
-        if (selectedSiteSurveyRequests != null && !selectedSiteSurveyRequests.isEmpty()) {
-            for (SiteSurveyRequest siteSurveyRequestTemp : selectedSiteSurveyRequests) {
+    public void deleteSiteSurveyReport() {
+        if (selectedSiteSurveyReports != null && !selectedSiteSurveyReports.isEmpty()) {
+            for (SiteSurveyReport siteSurveyReportTemp : selectedSiteSurveyReports) {
                 try {
-                    service.deleteSiteSurveyRequest(siteSurveyRequestTemp.getId());
+                    service.deleteSiteSurveyReport(siteSurveyReportTemp.getId());
                 } catch (EJBException e) {
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", ExceptionUtility.unwrap(e.getCausedByException()).getLocalizedMessage()));
                 }
@@ -61,41 +61,37 @@ public class SiteSurveyRequestListPresenter implements Serializable{
         else
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Missing selection", "Select a row before deleting"));
     }
-    
-    public List<SiteSurveyRequest> completeRequests(String name) {
-        return service.listSiteSurveyRequests(0, 10, "creation", Boolean.FALSE, null, null, null, name, null, null, null);
+
+    public SiteSurveyReportLazyDataModel getLazySiteSurveyReports() {
+        return lazySiteSurveyReports;
     }
 
-    public SiteSurveyRequestLazyDataModel getLazySiteSurveyRequests() {
-        return lazySiteSurveyRequests;
+    public void setLazySiteSurveyReports(SiteSurveyReportLazyDataModel lazySiteSurveyReports) {
+        this.lazySiteSurveyReports = lazySiteSurveyReports;
     }
 
-    public void setLazySiteSurveyRequests(SiteSurveyRequestLazyDataModel lazySiteSurveyRequests) {
-        this.lazySiteSurveyRequests = lazySiteSurveyRequests;
+    public List<SiteSurveyReport> getSelectedSiteSurveyReports() {
+        return selectedSiteSurveyReports;
     }
 
-    public List<SiteSurveyRequest> getSelectedSiteSurveyRequests() {
-        return selectedSiteSurveyRequests;
-    }
-
-    public void setSelectedSiteSurveyRequests(List<SiteSurveyRequest> selectedSiteSurveyRequest) {
-        this.selectedSiteSurveyRequests = selectedSiteSurveyRequest;
+    public void setSelectedSiteSurveyReports(List<SiteSurveyReport> selectedSiteSurveyReport) {
+        this.selectedSiteSurveyReports = selectedSiteSurveyReport;
     }
     
     public Date getStart() {
-        return lazySiteSurveyRequests.getStart();
+        return lazySiteSurveyReports.getStart();
     }
 
     public void setStart(Date start) {
-        this.lazySiteSurveyRequests.setStart(start);
+        this.lazySiteSurveyReports.setStart(start);
     }
 
     public Date getEnd() {
-        return lazySiteSurveyRequests.getEnd();
+        return lazySiteSurveyReports.getEnd();
     }
 
     public void setEnd(Date end) {
-        this.lazySiteSurveyRequests.setEnd(end);
+        this.lazySiteSurveyReports.setEnd(end);
     }
     
 }

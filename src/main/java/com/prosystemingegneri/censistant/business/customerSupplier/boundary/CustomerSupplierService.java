@@ -22,9 +22,7 @@ import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant_;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -164,5 +162,38 @@ public class CustomerSupplierService implements Serializable{
         }
 
         return em.createQuery(select).getSingleResult();
+    }
+    
+    public List<Plant> listPlants(int first, int pageSize, String sortField, Boolean isAscending, CustomerSupplier customerSupplier, String address) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Plant> query = cb.createQuery(Plant.class);
+        Root<Plant> root = query.from(Plant.class);
+        CriteriaQuery<Plant> select = query.select(root).distinct(true);
+        
+        List<Predicate> conditions = new ArrayList<>();
+
+        //Customer or supplier
+        if (customerSupplier != null)
+            conditions.add(cb.equal(root.get(Plant_.customerSupplier), customerSupplier));
+        
+        //Address
+        if (address != null)
+            conditions.add(cb.like(cb.lower(root.get(Plant_.address)), "%" + String.valueOf(address).toLowerCase() + "%"));
+
+        if (!conditions.isEmpty())
+            query.where(conditions.toArray(new Predicate[conditions.size()]));
+        
+        if (isAscending != null && sortField != null && !sortField.isEmpty()) {
+            if (isAscending)
+                query.orderBy(cb.asc(root.get(sortField)));
+            else
+                query.orderBy(cb.desc(root.get(sortField)));
+        }
+        
+        TypedQuery<Plant> typedQuery = em.createQuery(select);
+        typedQuery.setMaxResults(pageSize);
+        typedQuery.setFirstResult(first);
+
+        return typedQuery.getResultList();
     }
 }

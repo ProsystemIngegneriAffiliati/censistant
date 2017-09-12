@@ -64,6 +64,10 @@ public class Plant extends BaseEntity<Long>{
 
     public Plant() {
     }
+    
+    public String getNameAddress() {
+        return name + System.lineSeparator() + address;
+    }
 
     public Boolean getIsHeadOffice() {
         return isHeadOffice;

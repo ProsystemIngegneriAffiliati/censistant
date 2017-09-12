@@ -16,8 +16,8 @@
  */
 package com.prosystemingegneri.censistant.presentation.siteSurvey;
 
-import com.prosystemingegneri.censistant.business.siteSurvey.boundary.SiteSurveyRequestService;
-import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyRequest;
+import com.prosystemingegneri.censistant.business.siteSurvey.boundary.SiteSurveyReportService;
+import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -31,27 +31,28 @@ import static org.primefaces.model.SortOrder.DESCENDING;
  *
  * @author Davide Mainardi <ingmainardi@live.com>
  */
-public class SiteSurveyRequestLazyDataModel extends LazyDataModel<SiteSurveyRequest>{
-    private final SiteSurveyRequestService service;
+public class SiteSurveyReportLazyDataModel extends LazyDataModel<SiteSurveyReport>{
+    private final SiteSurveyReportService service;
     private Date start;
     private Date end;
 
-    public SiteSurveyRequestLazyDataModel(SiteSurveyRequestService service) {
+    public SiteSurveyReportLazyDataModel(SiteSurveyReportService service) {
         this.service = service;
     }
-
+    
     @Override
-    public Object getRowKey(SiteSurveyRequest object) {
+    public Object getRowKey(SiteSurveyReport object) {
         return object.getId();
     }
-
+    
     @Override
-    public List<SiteSurveyRequest> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
+    public List<SiteSurveyReport> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
         Boolean isAscending = null;
         String customer = null;
         String systemType = null;
-        Boolean isInfo = null;
+        String seller = null;
         Integer number = null;
+        String plant = null;
         
         switch (sortOrder) {
             case ASCENDING:
@@ -78,22 +79,24 @@ public class SiteSurveyRequestLazyDataModel extends LazyDataModel<SiteSurveyRequ
                         customer = String.valueOf(filters.get(filterProperty));
                     if (filterProperty.equalsIgnoreCase("systemType"))
                         systemType = String.valueOf(filters.get(filterProperty));
-                    if (filterProperty.equalsIgnoreCase("isInfo"))
-                        isInfo = (Boolean) filters.get(filterProperty);
+                    if (filterProperty.equalsIgnoreCase("seller"))
+                        seller = String.valueOf(filters.get(filterProperty));
+                    if (filterProperty.equalsIgnoreCase("plant"))
+                        plant = String.valueOf(filters.get(filterProperty));
                 }
             }
         }
         
-        List<SiteSurveyRequest> result = service.listSiteSurveyRequests(first, pageSize, sortField, isAscending, number, start, end, customer, systemType, isInfo, null);
-        this.setRowCount(service.getSiteSurveyRequestsCount(number, start, end, customer, systemType, isInfo, null).intValue());
+        List<SiteSurveyReport> result = service.listSiteSurveyReports(first, pageSize, sortField, isAscending, number, start, end, customer, systemType, seller, plant);
+        this.setRowCount(service.getSiteSurveyReportsCount(number, start, end, customer, systemType, seller, plant).intValue());
         
         return result;
     }
 
     @Override
-    public SiteSurveyRequest getRowData(String rowKey) {
+    public SiteSurveyReport getRowData(String rowKey) {
         try {
-            return service.readSiteSurveyRequest(Long.parseLong(rowKey));
+            return service.readSiteSurveyReport(Long.parseLong(rowKey));
         } catch (NumberFormatException e) {
             return null;
         }

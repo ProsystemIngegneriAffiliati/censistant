@@ -100,7 +100,7 @@ public class SiteSurveyRequestService implements Serializable{
         em.remove(readSiteSurveyRequest(id));
     }
 
-    public List<SiteSurveyRequest> listSiteSurveyRequests(int first, int pageSize, String sortField, Boolean isAscending, Integer number, Date start, Date end, String customer, String systemType, Boolean isInfo) {
+    public List<SiteSurveyRequest> listSiteSurveyRequests(int first, int pageSize, String sortField, Boolean isAscending, Integer number, Date start, Date end, String customer, String systemType, Boolean isInfo, Boolean isReportPresent) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<SiteSurveyRequest> query = cb.createQuery(SiteSurveyRequest.class);
         Root<SiteSurveyRequest> root = query.from(SiteSurveyRequest.class);
@@ -131,6 +131,14 @@ public class SiteSurveyRequestService implements Serializable{
         //is information
         if (isInfo != null)
             conditions.add(cb.equal(root.get(SiteSurveyRequest_.isInfo), isInfo));
+        
+        //is associated with site survey report
+        if (isReportPresent != null) {
+            if (isReportPresent)
+                conditions.add(cb.isNotNull(root.get(SiteSurveyRequest_.report)));
+            else
+                conditions.add(cb.isNull(root.get(SiteSurveyRequest_.report)));
+        }
 
         if (!conditions.isEmpty()) {
             query.where(conditions.toArray(new Predicate[conditions.size()]));
@@ -170,7 +178,7 @@ public class SiteSurveyRequestService implements Serializable{
         return typedQuery.getResultList();
     }
     
-    public Long getSiteSurveyRequestsCount(Integer number, Date start, Date end, String customer, String systemType, Boolean isInfo) {
+    public Long getSiteSurveyRequestsCount(Integer number, Date start, Date end, String customer, String systemType, Boolean isInfo, Boolean isReportPresent) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Long> query = cb.createQuery(Long.class);
         Root<SiteSurveyRequest> root = query.from(SiteSurveyRequest.class);
@@ -201,7 +209,14 @@ public class SiteSurveyRequestService implements Serializable{
         //is information
         if (isInfo != null)
             conditions.add(cb.equal(root.get(SiteSurveyRequest_.isInfo), isInfo));
-
+        
+        //is associated with site survey report
+        if (isReportPresent != null) {
+            if (isReportPresent)
+                conditions.add(cb.isNotNull(root.get(SiteSurveyRequest_.report)));
+            else
+                conditions.add(cb.isNull(root.get(SiteSurveyRequest_.report)));
+        }
         if (!conditions.isEmpty()) {
             query.where(conditions.toArray(new Predicate[conditions.size()]));
         }

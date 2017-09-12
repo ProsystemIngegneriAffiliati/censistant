@@ -55,10 +55,8 @@ public class SiteSurveyReport extends BaseEntity<Long>{
     @Temporal(TemporalType.DATE)
     private Date actual;
     
-    @ManyToOne
-    private SystemType systemType;
-    
-    @OneToOne
+    @NotNull
+    @OneToOne(optional = false)
     private SiteSurveyRequest request;
     
     @NotNull
@@ -75,6 +73,11 @@ public class SiteSurveyReport extends BaseEntity<Long>{
     private int version;
 
     public SiteSurveyReport() {
+    }
+
+    public SiteSurveyReport(Integer number) {
+        this();
+        this.number = number;
     }
 
     public Integer getNumber() {
@@ -99,14 +102,6 @@ public class SiteSurveyReport extends BaseEntity<Long>{
 
     public void setActual(Date actual) {
         this.actual = actual;
-    }
-
-    public SystemType getSystemType() {
-        return systemType;
-    }
-
-    public void setSystemType(SystemType systemType) {
-        this.systemType = systemType;
     }
 
     public Plant getPlant() {
@@ -143,17 +138,8 @@ public class SiteSurveyReport extends BaseEntity<Long>{
     }
 
     public void addRequest(SiteSurveyRequest request) {
-        if (this.request == null) {
-            request.setReport(this);
-            this.request = request;
-        }
-    }
-    
-    public void removeRequest(SiteSurveyRequest request) {
-        if (this.request != null) {
-            request.setReport(null);
-            this.request = null;
-        }
+        request.setReport(this);
+        this.request = request;
     }
     
 }
