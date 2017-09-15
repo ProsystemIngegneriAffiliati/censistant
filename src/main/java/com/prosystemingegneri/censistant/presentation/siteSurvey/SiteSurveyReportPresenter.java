@@ -16,11 +16,14 @@
  */
 package com.prosystemingegneri.censistant.presentation.siteSurvey;
 
+import com.prosystemingegneri.censistant.business.customerSupplier.boundary.CustomerSupplierService;
+import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
 import com.prosystemingegneri.censistant.business.siteSurvey.boundary.SiteSurveyReportService;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyRequest;
 import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
 import java.io.Serializable;
+import java.util.List;
 import javax.ejb.EJBException;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -38,6 +41,8 @@ import org.primefaces.event.SelectEvent;
 public class SiteSurveyReportPresenter implements Serializable{
     @Inject
     SiteSurveyReportService service;
+    @Inject
+    CustomerSupplierService customerSupplierService;
     
     private SiteSurveyReport siteSurveyReport;
     private Long id;
@@ -60,6 +65,10 @@ public class SiteSurveyReportPresenter implements Serializable{
             siteSurveyReport = service.createNewSiteSurveyReport();
         else
             siteSurveyReport = service.readSiteSurveyReport(id);
+    }
+    
+    public List<Plant> completePlant(String value) {
+        return customerSupplierService.listPlants(0, 10, "address", Boolean.TRUE, siteSurveyReport.getRequest().getCustomer(), value);
     }
     
     public void onSiteSurveyRequestSelect(SelectEvent event) {
