@@ -10,12 +10,14 @@ rm -r $HOME/censistant/
 ./asadmin delete-jdbc-connection-pool postgres_censistant_pool
 rm ../glassfish/domains/domain1/lib/ext/postgresql-42.1.4.jar
 ./asadmin stop-domain
+dropdb censistant
 
 cd /payara41/bin/
 mkdir $HOME/censistant
 mkdir $HOME/censistant/images
 mkdir $HOME/censistant/documents
 wget -P ../glassfish/domains/domain1/lib/ext/ https://jdbc.postgresql.org/download/postgresql-42.1.4.jar
+createdb --owner=censistant --encoding=UTF8 censistant
 ./asadmin start-domain
 ./asadmin create-jdbc-connection-pool \
 --datasourceclassname=org.postgresql.ds.PGSimpleDataSource \
