@@ -18,6 +18,8 @@ package com.prosystemingegneri.censistant.presentation.customerSupplier;
 
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
+import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport;
+import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyRequest;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
@@ -36,11 +38,18 @@ public class PlantPresenter implements Serializable {
     private Boolean isCustomerView;
     private String returnInitialPage;
     
+    private SiteSurveyRequest siteSurveyRequest;
+    private SiteSurveyReport siteSurveyReport;
+    
     @PostConstruct
     public void init() {
         customerSupplier = (CustomerSupplier) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("customerSupplier");
         isCustomerView = (Boolean) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("isCustomerView");
         returnInitialPage = (String) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("returnPage");
+        
+        siteSurveyRequest = (SiteSurveyRequest) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("siteSurveyRequest");
+        siteSurveyReport = (SiteSurveyReport) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("siteSurveyReport");
+        
         plant = (Plant) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("plant");
         if (plant == null)
             plant = new Plant();
@@ -75,6 +84,8 @@ public class PlantPresenter implements Serializable {
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("customerSupplier", customerSupplier);
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("isCustomerView", isCustomerView);
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("returnPage", returnInitialPage);
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("siteSurveyRequest", siteSurveyRequest);
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("siteSurveyReport", siteSurveyReport);
     }
 
     public Plant getPlant() {

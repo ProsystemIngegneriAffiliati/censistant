@@ -18,6 +18,8 @@ package com.prosystemingegneri.censistant.presentation.customerSupplier;
 
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Referee;
+import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport;
+import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyRequest;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
@@ -36,11 +38,18 @@ public class RefereePresenter implements Serializable {
     private Boolean isCustomerView;
     private String returnInitialPage;
     
+    private SiteSurveyRequest siteSurveyRequest;
+    private SiteSurveyReport siteSurveyReport;
+    
     @PostConstruct
     public void init() {
         customerSupplier = (CustomerSupplier) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("customerSupplier");
         isCustomerView = (Boolean) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("isCustomerView");
         returnInitialPage = (String) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("returnPage");
+        
+        siteSurveyRequest = (SiteSurveyRequest) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("siteSurveyRequest");
+        siteSurveyReport = (SiteSurveyReport) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("siteSurveyReport");
+        
         referee = (Referee) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("referee");
         if (referee == null)
             referee = new Referee();
@@ -75,6 +84,8 @@ public class RefereePresenter implements Serializable {
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("customerSupplier", customerSupplier);
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("isCustomerView", isCustomerView);
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("returnPage", returnInitialPage);
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("siteSurveyRequest", siteSurveyRequest);
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("siteSurveyReport", siteSurveyReport);
     }
 
     public Referee getReferee() {

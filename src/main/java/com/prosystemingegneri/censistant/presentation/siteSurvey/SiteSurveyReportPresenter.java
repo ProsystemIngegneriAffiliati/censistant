@@ -17,6 +17,7 @@
 package com.prosystemingegneri.censistant.presentation.siteSurvey;
 
 import com.prosystemingegneri.censistant.business.customerSupplier.boundary.CustomerSupplierService;
+import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
 import com.prosystemingegneri.censistant.business.siteSurvey.boundary.SiteSurveyReportService;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport;
@@ -24,6 +25,7 @@ import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyRe
 import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
 import java.io.Serializable;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJBException;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -49,6 +51,26 @@ public class SiteSurveyReportPresenter implements Serializable{
     
     private SiteSurveyRequest selectedRequest;
     
+    @PostConstruct
+    public void init() {
+        siteSurveyReport = (SiteSurveyReport) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("siteSurveyReport");
+        if (siteSurveyReport != null) {
+            Long idCustomer = (Long) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("idCustomer");
+            if (idCustomer != null && idCustomer > 0) {
+                CustomerSupplier customer = customerSupplierService.readCustomerSupplier(idCustomer);
+                siteSurveyReport.getRequest().setCustomer(customer);
+                if (!customer.getPlants().isEmpty()) {
+                    Plant mostRecentPlant = customer.getPlants().get(0);
+                    for (Plant plant : customer.getPlants())
+                        if (plant.getId() != null && plant.getId() > mostRecentPlant.getId())
+                            mostRecentPlant = plant;
+                    
+                    siteSurveyReport.setPlant(mostRecentPlant);
+                }
+            }
+        }
+    }
+    
     public String saveSiteSurveyReport() {
         try {
             service.saveSiteSurveyReport(siteSurveyReport);
@@ -61,10 +83,29 @@ public class SiteSurveyReportPresenter implements Serializable{
     }
     
     public void detailSiteSurveyReport() {
-        if (id == 0)
-            siteSurveyReport = service.createNewSiteSurveyReport();
-        else
-            siteSurveyReport = service.readSiteSurveyReport(id);
+        if (siteSurveyReport == null && id != null) {
+            if (id == 0)
+                siteSurveyReport = service.createNewSiteSurveyReport();
+            else
+                siteSurveyReport = service.readSiteSurveyReport(id);
+        }
+    }
+    
+    public String createPotentialCustomer() {
+        return prepareToOpenCustomer(customerSupplierService.createPotentialCustomer());
+    }
+    
+    public String openCustomer() {
+        return prepareToOpenCustomer(siteSurveyReport.getRequest().getCustomer());
+    }
+    
+    private String prepareToOpenCustomer(CustomerSupplier customer) {
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("siteSurveyReport", siteSurveyReport);
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("customerSupplier", customer);
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("isCustomerView", Boolean.TRUE);
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("returnPage", "siteSurvey/siteSurveyReport");
+        
+        return "/secured/customerSupplier/customer?faces-redirect=true";
     }
     
     public List<Plant> completePlant(String value) {

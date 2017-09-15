@@ -120,6 +120,7 @@
                                         <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                             <h:panelGroup styleClass="md-inputfield">
                                                 <p:commandButton rendered="#{siteSurveyReportPresenter.siteSurveyReport.plant == null}"
+                                                                 action="#{siteSurveyReportPresenter.openCustomer()}"
                                                                  title="#{msg.new} #{msg.siteSurvey_siteSurveyReport_constructionSite}"
                                                                  icon="ui-icon-create"
                                                                  ajax="false">
