@@ -16,10 +16,69 @@
  */
 package com.prosystemingegneri.censistant.business.production.entity;
 
+import com.prosystemingegneri.censistant.business.entity.BaseEntity;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.Version;
+import javax.validation.constraints.NotNull;
+
 /**
  *
  * @author Davide Mainardi <ingmainardi@live.com>
  */
-public class Item {
+@Entity
+public class Item extends BaseEntity<Long>{
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    @NotNull
+    @Column(nullable = false, unique = true)
+    private String description;
+    
+    @NotNull
+    @ManyToOne(optional = false)
+    private UnitMeasure unitMeasure;
+    
+    private String notes;
+    
+    @Version
+    private int version;
+
+    public Item() {
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public UnitMeasure getUnitMeasure() {
+        return unitMeasure;
+    }
+
+    public void setUnitMeasure(UnitMeasure unitMeasure) {
+        this.unitMeasure = unitMeasure;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    @Override
+    public Long getId() {
+        return id;
+    }
     
 }

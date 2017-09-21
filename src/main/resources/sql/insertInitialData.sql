@@ -70,3 +70,7 @@ INSERT INTO unitmeasure(name, symbol, version) VALUES('Chilogrammi', 'kg', 0)
 INSERT INTO unitmeasure(name, symbol, version) VALUES('Litri', 'l', 0)
 INSERT INTO unitmeasure(name, symbol, version) VALUES('Metri quadri', 'm²', 0)
 INSERT INTO unitmeasure(name, symbol, version) VALUES('Metri cubi', 'm³', 0)
+
+INSERT INTO item(description, unitmeasure_id, version) VALUES('Sensore da interni', 2, 0)
+INSERT INTO item(description, unitmeasure_id, version) VALUES('Sensore da esterni', 2, 0)
+INSERT INTO item(description, unitmeasure_id, version) VALUES('Cavo video', 1, 0)
