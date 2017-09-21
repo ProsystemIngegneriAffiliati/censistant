@@ -27,7 +27,7 @@ sh '${PAYARA_BIN}'/asadmin stop-domain'
 echo 'Password per database server'
 ssh root@${PAYARA_IP_ADDRESS} -p ${DB_EXTERNAL_SSH_PORT} '\
 dropdb '${DB_NAME}'; \
-createdb --owner='${DB_NAME}' --encoding=UTF8 '${DB_USER_NAME}''
+createdb --owner='${DB_USER_NAME}' --encoding=UTF8 '${DB_NAME}''
 
 echo 'Password per application server'
 scp -P ${PAYARA_EXTERNAL_SSH_PORT} ~/NetBeansProjects/${APP_NAME}/target/${APP_NAME}.war root@${PAYARA_IP_ADDRESS}:/root/
