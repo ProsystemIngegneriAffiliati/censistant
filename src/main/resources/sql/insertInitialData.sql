@@ -60,3 +60,13 @@ INSERT INTO sitesurveyrequest(number, creation, customer_id, systemType_id, isin
 
 INSERT INTO sitesurveyreport(number, expected, actual, plant_id, seller_id, request_id, version) VALUES('1', '2017-01-10', '2017-01-10', 2, 1, 3, 0)
 INSERT INTO sitesurveyreport(number, expected, actual, plant_id, seller_id, request_id, version) VALUES('245', '2016-12-15', null, 1, 1, 1, 0)
+
+INSERT INTO unitmeasure(name, symbol, version) VALUES('Metri', 'm', 0)
+INSERT INTO unitmeasure(name, symbol, version) VALUES('Pezzi', 'pz.', 0)
+INSERT INTO unitmeasure(name, symbol, version) VALUES('Numero', 'nr.', 0)
+INSERT INTO unitmeasure(name, symbol, version) VALUES('Scatola', 'scatola', 0)
+INSERT INTO unitmeasure(name, symbol, version) VALUES('Matassa', 'matassa', 0)
+INSERT INTO unitmeasure(name, symbol, version) VALUES('Chilogrammi', 'kg', 0)
+INSERT INTO unitmeasure(name, symbol, version) VALUES('Litri', 'l', 0)
+INSERT INTO unitmeasure(name, symbol, version) VALUES('Metri quadri', 'm²', 0)
+INSERT INTO unitmeasure(name, symbol, version) VALUES('Metri cubi', 'm³', 0)
