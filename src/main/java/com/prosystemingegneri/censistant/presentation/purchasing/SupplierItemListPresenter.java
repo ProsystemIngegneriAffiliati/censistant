@@ -14,10 +14,10 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.prosystemingegneri.censistant.presentation.production;
+package com.prosystemingegneri.censistant.presentation.purchasing;
 
-import com.prosystemingegneri.censistant.business.production.boundary.ItemService;
-import com.prosystemingegneri.censistant.business.production.entity.Item;
+import com.prosystemingegneri.censistant.business.purchasing.boundary.SupplierItemService;
+import com.prosystemingegneri.censistant.business.purchasing.entity.SupplierItem;
 import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
 import java.io.Serializable;
 import java.util.List;
@@ -35,23 +35,23 @@ import org.omnifaces.cdi.ViewScoped;
  */
 @Named
 @ViewScoped
-public class ItemListPresenter implements Serializable{
+public class SupplierItemListPresenter implements Serializable{
     @Inject
-    ItemService service;
+    SupplierItemService service;
     
-    private ItemLazyDataModel lazyItems;
-    private List<Item> selectedItems;
+    private SupplierItemLazyDataModel lazySupplierItems;
+    private List<SupplierItem> selectedSupplierItems;
     
     @PostConstruct
     public void init() {
-        lazyItems = new ItemLazyDataModel(service);
+        lazySupplierItems = new SupplierItemLazyDataModel(service);
     }
     
-    public void deleteItem() {
-        if (selectedItems != null && !selectedItems.isEmpty()) {
-            for (Item siteSurveyReportTemp : selectedItems) {
+    public void deleteSupplierItem() {
+        if (selectedSupplierItems != null && !selectedSupplierItems.isEmpty()) {
+            for (SupplierItem siteSurveyReportTemp : selectedSupplierItems) {
                 try {
-                    service.deleteItem(siteSurveyReportTemp.getId());
+                    service.deleteSupplierItem(siteSurveyReportTemp.getId());
                 } catch (EJBException e) {
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", ExceptionUtility.unwrap(e.getCausedByException()).getLocalizedMessage()));
                 }
@@ -60,24 +60,20 @@ public class ItemListPresenter implements Serializable{
         else
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Missing selection", "Select a row before deleting"));
     }
-    
-    public List<Item> completeUnitMeasures(String description) {
-        return service.listItems(0, 10, null, null, description);
+
+    public SupplierItemLazyDataModel getLazySupplierItems() {
+        return lazySupplierItems;
     }
 
-    public ItemLazyDataModel getLazyItems() {
-        return lazyItems;
+    public void setLazySupplierItems(SupplierItemLazyDataModel lazySupplierItems) {
+        this.lazySupplierItems = lazySupplierItems;
     }
 
-    public void setLazyItems(ItemLazyDataModel lazyItems) {
-        this.lazyItems = lazyItems;
+    public List<SupplierItem> getSelectedSupplierItems() {
+        return selectedSupplierItems;
     }
 
-    public List<Item> getSelectedItems() {
-        return selectedItems;
-    }
-
-    public void setSelectedItems(List<Item> selectedItem) {
-        this.selectedItems = selectedItem;
+    public void setSelectedSupplierItems(List<SupplierItem> selectedSupplierItem) {
+        this.selectedSupplierItems = selectedSupplierItem;
     }
 }

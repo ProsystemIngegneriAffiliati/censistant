@@ -67,6 +67,10 @@ public class CustomerSupplierListPresenter implements Serializable{
     public List<CustomerSupplier> completeCustomer(String value) {
         return service.listCustomerSuppliers(0, 10, "name", Boolean.TRUE, null, Boolean.TRUE, null, null, value, null);
     }
+    
+    public List<CustomerSupplier> completeSupplier(String value) {
+        return service.listCustomerSuppliers(0, 10, "name", Boolean.TRUE, null, null, Boolean.TRUE, null, value, null);
+    }
 
     public CustomerSupplierLazyDataModel getLazyCustomers() {
         return lazyCustomers;
