@@ -112,9 +112,9 @@ public class SupplierItem extends BaseEntity<Long>{
         }
     }
     
-    public void removeBoxedItem(BoxedItem item, Box box) {
+    public void removeBoxedItem(BoxedItem item) {
         if (boxedItems.contains(item)) {
-            box.removeBoxedItem(item);
+            item.getBox().removeBoxedItem(item);
             
             boxedItems.remove(item);
             item.setItem(null);

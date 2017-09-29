@@ -16,16 +16,12 @@
  */
 package com.prosystemingegneri.censistant.presentation.purchasing;
 
-import com.prosystemingegneri.censistant.business.purchasing.boundary.SupplierItemService;
+import com.prosystemingegneri.censistant.business.purchasing.entity.Box;
 import com.prosystemingegneri.censistant.business.purchasing.entity.BoxedItem;
 import com.prosystemingegneri.censistant.business.purchasing.entity.SupplierItem;
-import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
-import javax.ejb.EJBException;
-import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.inject.Inject;
 import javax.inject.Named;
 import org.omnifaces.cdi.ViewScoped;
 
@@ -35,51 +31,41 @@ import org.omnifaces.cdi.ViewScoped;
  */
 @Named
 @ViewScoped
-public class SupplierItemPresenter implements Serializable{
-    @Inject
-    SupplierItemService service;
-    
+public class BoxedItemPresenter implements Serializable {
+    private BoxedItem boxedItem;
     private SupplierItem supplierItem;
-    private Long id;
     
     @PostConstruct
     public void init() {
         supplierItem = (SupplierItem) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("supplierItem");
+        boxedItem = (BoxedItem) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("boxedItem");
+        if (boxedItem == null)
+            boxedItem = new BoxedItem();
     }
     
-    public String saveSupplierItem() {
-        try {
-            service.saveSupplierItem(supplierItem);
-        } catch (EJBException e) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", ExceptionUtility.unwrap(e.getCausedByException()).getLocalizedMessage()));
-            return null;
-        }
+    public String saveBoxedItem() {
+        if (boxedItem.getItem() == null)
+            supplierItem.addBoxedItem(boxedItem, boxedItem.getBox());
         
-        return "/secured/purchasing/supplierItems?faces-redirect=true";
-    }
-    
-    public void detailSupplierItem() {
-        if (supplierItem == null && id != null) {
-            if (id == 0)
-                supplierItem = new SupplierItem();
-            else
-                supplierItem = service.readSupplierItem(id);
-        }
-    }
-    
-    public String detailBoxedItem(BoxedItem boxedItem) {
-        if (boxedItem != null)
-            FacesContext.getCurrentInstance().getExternalContext().getFlash().put("boxedItem", boxedItem);
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("supplierItem", supplierItem);
         
-        return "/secured/purchasing/boxedItem?faces-redirect=true";
+        return "/secured/purchasing/supplierItem?faces-redirect=true";
     }
     
-    public void deleteBoxedItem(BoxedItem boxedItem) {
-        if (boxedItem != null)
-            supplierItem.removeBoxedItem(boxedItem);
+    public String cancel() {
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("supplierItem", supplierItem);
+        
+        return "/secured/purchasing/supplierItem?faces-redirect=true";
     }
-    
+
+    public BoxedItem getBoxedItem() {
+        return boxedItem;
+    }
+
+    public void setBoxedItem(BoxedItem boxedItem) {
+        this.boxedItem = boxedItem;
+    }
+
     public SupplierItem getSupplierItem() {
         return supplierItem;
     }
@@ -87,12 +73,5 @@ public class SupplierItemPresenter implements Serializable{
     public void setSupplierItem(SupplierItem supplierItem) {
         this.supplierItem = supplierItem;
     }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    
 }

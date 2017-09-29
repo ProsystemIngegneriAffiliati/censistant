@@ -9,13 +9,12 @@
     <f:metadata>
         <f:viewParam name="id"
                      value="#{supplierItemPresenter.id}"
-                     converter="javax.faces.Long"
-                     required="true"
-                     requiredMessage="Must provide an ID"/>
+                     converter="javax.faces.Long" />
         <f:viewAction action="#{supplierItemPresenter.detailSupplierItem()}"/>
     </f:metadata>
     <ui:composition template="/WEB-INF/template.xhtml">
         <ui:define name="content">
+            <oou:importConstants type="com.prosystemingegneri.censistant.business.purchasing.entity.BoxedItem"/>
             <h:form id="supplierItemForm">
                 <div class="ui-fluid">
                     <div class="ui-g">
@@ -62,6 +61,45 @@
                                 </p:panelGrid>
 
                                 <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                    <p:dataTable id="boxedItemsTable"
+                                                 var="boxedItem"
+                                                 value="#{supplierItemPresenter.supplierItem.boxedItems}">
+                                        <f:facet name="header">
+                                            <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
+                                                #{msg.purchasing_boxedItems}
+                                                <p:commandButton title="#{msg.new}" icon="ui-icon-create" action="#{supplierItemPresenter.detailBoxedItem(null)}" ajax="false" />
+                                            </p:panelGrid>
+                                        </f:facet>
+                                        <p:column headerText="#{msg.purchasing_box_name}" sortBy="#{boxedItem.box.name}" filterBy="#{boxedItem.box.name}" filterMatchMode="contains" priority="0">
+                                            <h:outputText value="#{boxedItem.box.name}" />
+                                        </p:column>
+                                        <p:column headerText="#{msg.purchasing_box_quantity}" sortBy="#{boxedItem.box.quantity}" priority="4">
+                                            <h:outputText value="#{boxedItem.box.quantity}">
+                                                <f:convertNumber integerOnly="true" />
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column headerText="#{msg.production_unitMeasure_symbol}" sortBy="#{boxedItem.box.unitMeasure.symbol}" priority="5">
+                                            <h:outputText value="#{boxedItem.box.unitMeasure.symbol}" />
+                                        </p:column>
+                                        <p:column headerText="#{msg.purchasing_boxedItem_cost}" sortBy="#{boxedItem.cost}" priority="3">
+                                            <h:outputText value="#{boxedItem.cost}">
+                                                <f:convertNumber currencySymbol="€" minFractionDigits="#{BoxedItem.PRECISION_COST}" type="currency" />
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column headerText="#{msg.purchasing_boxedItem_cost_total}" sortBy="#{boxedItem.totalCost}" priority="2">
+                                            <h:outputText value="#{boxedItem.totalCost}">
+                                                <f:convertNumber currencySymbol="€" minFractionDigits="#{BoxedItem.PRECISION_COST}" type="currency" />
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column headerText="#{msg.actions}" style="width:72px; text-align:center" priority="0">
+                                            <p:splitButton value="" icon="ui-icon-edit" action="#{supplierItemPresenter.detailBoxedItem(boxedItem)}" ajax="false">
+                                                <p:menuitem  value="#{msg.delete}" icon="ui-icon-delete" actionListener="#{supplierItemPresenter.deleteBoxedItem(boxedItem)}" update="@form">
+                                                    <p:confirm header="#{msg.purchasing_boxedItems_delete}" message="#{msg.purchasing_boxedItems_delete_tip}" icon="ui-icon-alert"/>
+                                                </p:menuitem>
+                                            </p:splitButton>
+                                        </p:column>
+                                    </p:dataTable>
+
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputTextarea id="notes" value="#{supplierItemPresenter.supplierItem.notes}"/>
                                         <p:outputLabel for="notes" value="#{msg.purchasing_supplierItem_notes}"/>

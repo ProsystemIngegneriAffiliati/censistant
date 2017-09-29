@@ -60,6 +60,10 @@ public class BoxListPresenter implements Serializable{
         else
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Missing selection", "Select a row before deleting"));
     }
+    
+    public List<Box> completeBoxes(String value) {
+        return service.listBoxes(0, 10, null, null, value);
+    }
 
     public BoxLazyDataModel getLazyBoxes() {
         return lazyBoxes;

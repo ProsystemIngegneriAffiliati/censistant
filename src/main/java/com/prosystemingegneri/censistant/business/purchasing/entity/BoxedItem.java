@@ -42,11 +42,11 @@ public class BoxedItem extends BaseEntity<Long>{
     @Transient
     public static final int SCALE_COST = 4;
     @Transient
-    public static final int PRECISION_COST = SCALE_COST + 2;
+    public static final int PRECISION_COST = 2;
 
     @NotNull
     @DecimalMin("0")
-    @Column(nullable = false, scale = SCALE_COST, precision = PRECISION_COST)
+    @Column(nullable = false, scale = SCALE_COST, precision = SCALE_COST + PRECISION_COST)
     private BigDecimal cost;
     
     @NotNull
@@ -68,6 +68,13 @@ public class BoxedItem extends BaseEntity<Long>{
 
     public BigDecimal getCost() {
         return cost;
+    }
+    
+    public BigDecimal getTotalCost() {
+        if (box != null)
+            return cost.multiply(BigDecimal.valueOf(box.getQuantity()));
+        
+        return BigDecimal.ZERO;
     }
 
     public void setCost(BigDecimal cost) {
