@@ -14,28 +14,38 @@
                             <div class="card card-w-title">
                                 <h1>#{msg.customerSupplier_referee}</h1>
                                 <p>#{msg.customerSupplier_referee_tip}</p>
-                                <p:panelGrid columns="6" columnClasses="ui-grid-col-2,ui-grid-col-3,ui-grid-col-1,ui-grid-col-2,ui-grid-col-3,ui-grid-col-1" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
-                                    <h:outputLabel for="name" value="#{msg.customerSupplier_referee_name}"/>
-                                    <p:inputText id="name" value="#{refereePresenter.referee.name}"/>
-                                    <p:message for="name"/>
+                                <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="name" value="#{refereePresenter.referee.name}"/>
+                                        <p:outputLabel for="name" value="#{msg.customerSupplier_referee_name}"/>
+                                        <p:message for="name"/>
+                                    </h:panelGroup>
 
-                                    <h:outputLabel for="phone" value="#{msg.customerSupplier_referee_phone}"/>
-                                    <p:inputText id="phone" value="#{refereePresenter.referee.phone}"/>
-                                    <p:message for="phone"/>
-                                    
-                                    <h:outputLabel for="mobile" value="#{msg.customerSupplier_referee_mobile}"/>
-                                    <p:inputText id="mobile" value="#{refereePresenter.referee.mobile}"/>
-                                    <p:message for="mobile"/>
-                                    
-                                    <h:outputLabel for="email" value="#{msg.customerSupplier_referee_email}"/>
-                                    <p:inputText id="email" value="#{refereePresenter.referee.email}" type="email"/>
-                                    <p:message for="email"/>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="phone" value="#{refereePresenter.referee.phone}"/>
+                                        <p:outputLabel for="phone" value="#{msg.customerSupplier_referee_phone}"/>
+                                        <p:message for="phone"/>
+                                    </h:panelGroup>
+
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="mobile" value="#{refereePresenter.referee.mobile}"/>
+                                        <p:outputLabel for="mobile" value="#{msg.customerSupplier_referee_mobile}"/>
+                                        <p:message for="mobile"/>
+                                    </h:panelGroup>
+
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="email" value="#{refereePresenter.referee.email}" type="email"/>
+                                        <p:outputLabel for="email" value="#{msg.customerSupplier_referee_email}"/>
+                                        <p:message for="email"/>
+                                    </h:panelGroup>
                                 </p:panelGrid>
 
-                                <p:panelGrid columns="3" columnClasses="ui-grid-col-2,ui-grid-col-8,ui-grid-col-2" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
-                                    <h:outputLabel for="notes" value="#{msg.customerSupplier_referee_notes}"/>
-                                    <p:inputTextarea id="notes" value="#{refereePresenter.referee.notes}" rows="3"/>
-                                    <p:message for="notes"/>
+                                <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:outputLabel for="notes" value="#{msg.customerSupplier_referee_notes}"/>
+                                        <p:inputTextarea id="notes" value="#{refereePresenter.referee.notes}" rows="3"/>
+                                        <p:message for="notes"/>
+                                    </h:panelGroup>
                                 </p:panelGrid>
 
                                 <div class="ui-g">

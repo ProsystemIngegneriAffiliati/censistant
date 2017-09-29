@@ -38,6 +38,11 @@ INSERT INTO customersupplier(businessname, name, ispotentialcustomer, iscustomer
 INSERT INTO plant(customersupplier_id, isheadoffice, name, address, phone, fax, email, version) VALUES(5, true, 'Sede', 'Corso Agnelli, 1 10100 Torino (TO)', '011 456789', '011 567890', 'info@fca.com', 0)
 INSERT INTO referee(customersupplier_id, name, phone, mobile, email, version) VALUES(5, 'Marchionne', null, '3391234567', 'marchionne@fca.com', 0)
 
+INSERT INTO customersupplier(businessname, name, ispotentialcustomer, iscustomer, issupplier, version) VALUES('Apple Inc', 'Apple', false, false, true, 0)
+INSERT INTO plant(customersupplier_id, isheadoffice, name, address, phone, fax, email, version) VALUES(6, true, 'Sede', 'Cupertino (USA)', '011 123456', '011 654321', 'info@apple.com', 0)
+INSERT INTO referee(customersupplier_id, name, phone, mobile, email, version) VALUES(6, 'Steve Jobs', null, '3381234567', 'jobs@apple.com', 0)
+INSERT INTO referee(customersupplier_id, name, phone, mobile, email, version) VALUES(6, 'Tim Cook', null, '3371234567', 'cook@apple.com', 0)
+
 INSERT INTO worker(userapp_user_name, name, initials, email, version) VALUES('maina', 'Mainardi Davide', 'MD', 'mainardi@prosystemingegneri.com', 0)
 
 INSERT INTO systemtype(name, version) VALUES('Anti - Intrusione', 0)

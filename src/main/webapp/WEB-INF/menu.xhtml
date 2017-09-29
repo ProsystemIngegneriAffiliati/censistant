@@ -24,6 +24,9 @@
                         <p:submenu id="productionMenu" label="#{msg.production}" icon="&#xE7EE;">
                             <p:menuitem id="itemsMenu" value="#{msg.production_items}" icon="&#xE3EC;" outcome="/secured/production/items"/>
                         </p:submenu>
+                        <p:submenu id="supplierMenu" label="#{msg.customerSupplier_suppliers}" icon="&#xE7FB;">
+                            <p:menuitem id="suppliersMenu" value="#{msg.customerSupplier_suppliers}" icon="&#xE8A3;" outcome="/secured/customerSupplier/suppliers"/>
+                        </p:submenu>
                         <p:submenu id="utilsMenu" label="#{msg.utils}" icon="&#xE896;">
                             <p:menuitem id="workersMenu" value="#{msg.siteSurvey_workers}" icon="&#xE7FC;" outcome="/secured/siteSurvey/workers"/>
                             <p:menuitem id="systemTypesMenu" value="#{msg.siteSurvey_systemTypes}" icon="&#xE2BC;" outcome="/secured/siteSurvey/systemTypes"/>
