@@ -16,20 +16,17 @@
  */
 package com.prosystemingegneri.censistant.business.purchasing.entity;
 
-import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
 import com.prosystemingegneri.censistant.business.entity.BaseEntity;
-import com.prosystemingegneri.censistant.business.production.entity.Item;
-import java.util.ArrayList;
-import java.util.List;
-import javax.persistence.CascadeType;
+import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 import javax.persistence.Version;
+import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -37,57 +34,60 @@ import javax.validation.constraints.NotNull;
  * @author Davide Mainardi <ingmainardi@live.com>
  */
 @Entity
-public class SupplierItem extends BaseEntity<Long>{
+public class BoxedItem extends BaseEntity<Long>{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
+    @Transient
+    public static final int SCALE_COST = 4;
+    @Transient
+    public static final int PRECISION_COST = SCALE_COST + 2;
+
     @NotNull
-    @Column(nullable = false)
-    private String code;
+    @DecimalMin("0")
+    @Column(nullable = false, scale = SCALE_COST, precision = PRECISION_COST)
+    private BigDecimal cost;
     
     @NotNull
     @ManyToOne(optional = false)
-    private CustomerSupplier supplier;
+    private SupplierItem item;
     
     @NotNull
     @ManyToOne(optional = false)
-    private Item item;
-    
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "item", orphanRemoval = true)
-    private List<BoxedItem> boxedItems;
+    private Box box;
     
     private String notes;
     
     @Version
     private int version;
 
-    public SupplierItem() {
-        boxedItems = new ArrayList<>();
+    public BoxedItem() {
+        cost = BigDecimal.ZERO;
     }
 
-    public String getCode() {
-        return code;
+    public BigDecimal getCost() {
+        return cost;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setCost(BigDecimal cost) {
+        this.cost = cost;
     }
 
-    public CustomerSupplier getSupplier() {
-        return supplier;
-    }
-
-    public void setSupplier(CustomerSupplier supplier) {
-        this.supplier = supplier;
-    }
-
-    public Item getItem() {
+    public SupplierItem getItem() {
         return item;
     }
 
-    public void setItem(Item item) {
+    public void setItem(SupplierItem item) {
         this.item = item;
+    }
+
+    public Box getBox() {
+        return box;
+    }
+
+    public void setBox(Box box) {
+        this.box = box;
     }
 
     public String getNotes() {
@@ -101,28 +101,6 @@ public class SupplierItem extends BaseEntity<Long>{
     @Override
     public Long getId() {
         return id;
-    }
-    
-    public void addBoxedItem(BoxedItem item, Box box) {
-        if (!boxedItems.contains(item)) {
-            box.addBoxedItem(item);
-            
-            boxedItems.add(item);
-            item.setItem(this);
-        }
-    }
-    
-    public void removeBoxedItem(BoxedItem item, Box box) {
-        if (boxedItems.contains(item)) {
-            box.removeBoxedItem(item);
-            
-            boxedItems.remove(item);
-            item.setItem(null);
-        }
-    }
-
-    public List<BoxedItem> getBoxedItems() {
-        return boxedItems;
     }
     
 }
