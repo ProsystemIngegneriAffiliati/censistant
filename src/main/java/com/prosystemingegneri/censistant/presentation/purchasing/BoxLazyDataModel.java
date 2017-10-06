@@ -45,7 +45,7 @@ public class BoxLazyDataModel extends LazyDataModel<Box>{
     @Override
     public List<Box> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
         Boolean isAscending = null;
-        String name = null;
+        String unitMeasureName = null;
         
         switch (sortOrder) {
             case ASCENDING:
@@ -62,14 +62,14 @@ public class BoxLazyDataModel extends LazyDataModel<Box>{
                 String filterProperty = it.next();
 
                 if (!filterProperty.isEmpty()) {
-                    if (filterProperty.equalsIgnoreCase("name"))
-                        name = String.valueOf(filters.get(filterProperty));
+                    if (filterProperty.equalsIgnoreCase("unitMeasureName"))
+                        unitMeasureName = String.valueOf(filters.get(filterProperty));
                 }
             }
         }
         
-        List<Box> result = service.listBoxes(first, pageSize, sortField, isAscending, name);
-        this.setRowCount(service.getBoxesCount(name).intValue());
+        List<Box> result = service.listBoxes(first, pageSize, sortField, isAscending, unitMeasureName);
+        this.setRowCount(service.getBoxesCount(unitMeasureName).intValue());
         
         return result;
     }

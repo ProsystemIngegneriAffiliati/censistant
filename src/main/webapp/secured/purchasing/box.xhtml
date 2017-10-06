@@ -23,13 +23,7 @@
                             <div class="card card-w-title">
                                 <h1>#{msg.purchasing_box}</h1>
                                 <p>#{msg.purchasing_box_tip}</p>
-                                <p:panelGrid columns="3" columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group">
-                                    <h:panelGroup styleClass="md-inputfield">
-                                        <p:inputText id="name" value="#{boxPresenter.box.name}"/>
-                                        <p:outputLabel for="name" value="#{msg.purchasing_box_name}"/>
-                                        <p:message for="name"/>
-                                    </h:panelGroup>
-                                    
+                                <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputNumber id="quantity" decimalPlaces="0" minValue="1" value="#{boxPresenter.box.quantity}"/>
                                         <p:outputLabel for="quantity" value="#{msg.purchasing_box_quantity_tip}"/>

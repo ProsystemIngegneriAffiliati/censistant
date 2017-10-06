@@ -40,13 +40,13 @@ public class BoxedItem extends BaseEntity<Long>{
     private Long id;
     
     @Transient
-    public static final int SCALE_COST = 4;
+    public static final int SCALE_COST = 2; //If zero or positive, the scale is the number of digits to the right of the decimal point.
     @Transient
-    public static final int PRECISION_COST = 2;
+    public static final int PRECISION_COST = 8;
 
     @NotNull
     @DecimalMin("0")
-    @Column(nullable = false, scale = SCALE_COST, precision = SCALE_COST + PRECISION_COST)
+    @Column(nullable = false, scale = SCALE_COST, precision = PRECISION_COST)
     private BigDecimal cost;
     
     @NotNull

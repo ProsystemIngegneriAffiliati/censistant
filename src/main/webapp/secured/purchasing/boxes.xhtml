@@ -30,15 +30,12 @@
                                     </p:outputPanel>
                                 </p:panelGrid>
                             </f:facet>
-                            <p:column headerText="#{msg.purchasing_box_name}" field="name" priority="0">
-                                <h:outputText value="#{box.name}"/>
-                            </p:column>
-                            <p:column headerText="#{msg.purchasing_box_quantity}" priority="4">
+                            <p:column headerText="#{msg.purchasing_box_quantity}" priority="3">
                                 <h:outputText value="#{box.quantity}">
                                     <f:convertNumber integerOnly="true" />
                                 </h:outputText>
                             </p:column>
-                            <p:column headerText="#{msg.production_unitMeasure_name}" field="unitMeasure" filterable="false" priority="4">
+                            <p:column headerText="#{msg.production_unitMeasure_name}" field="unitMeasureName" priority="0">
                                 <h:outputText value="#{box.unitMeasure.name}"/>
                             </p:column>
                             <p:column headerText="#{msg.actions}" style="width:64px; text-align:center" priority="0" exportable="false">

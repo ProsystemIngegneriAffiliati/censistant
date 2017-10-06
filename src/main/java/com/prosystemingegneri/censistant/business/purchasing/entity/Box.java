@@ -40,10 +40,6 @@ public class Box extends BaseEntity<Long>{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-    @NotNull
-    @Column(nullable = false)
-    private String name;
 
     @NotNull
     @Min(1)
@@ -63,14 +59,6 @@ public class Box extends BaseEntity<Long>{
     public Box() {
         quantity = 1;
         boxedItems = new ArrayList<>();
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public Integer getQuantity() {

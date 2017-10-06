@@ -70,8 +70,8 @@
                                                 <p:commandButton title="#{msg.new}" icon="ui-icon-create" action="#{supplierItemPresenter.detailBoxedItem(null)}" ajax="false" />
                                             </p:panelGrid>
                                         </f:facet>
-                                        <p:column headerText="#{msg.purchasing_box_name}" sortBy="#{boxedItem.box.name}" filterBy="#{boxedItem.box.name}" filterMatchMode="contains" priority="0">
-                                            <h:outputText value="#{boxedItem.box.name}" />
+                                        <p:column headerText="#{msg.purchasing_box_name}" sortBy="#{boxedItem.box.unitMeasure.name}" filterBy="#{boxedItem.box.unitMeasure.name}" filterMatchMode="contains" priority="0">
+                                            <h:outputText value="#{boxedItem.box.unitMeasure.name}" />
                                         </p:column>
                                         <p:column headerText="#{msg.purchasing_box_quantity}" sortBy="#{boxedItem.box.quantity}" priority="4">
                                             <h:outputText value="#{boxedItem.box.quantity}">
@@ -79,16 +79,16 @@
                                             </h:outputText>
                                         </p:column>
                                         <p:column headerText="#{msg.production_unitMeasure_symbol}" sortBy="#{boxedItem.box.unitMeasure.symbol}" priority="5">
-                                            <h:outputText value="#{boxedItem.box.unitMeasure.symbol}" />
+                                            <h:outputText value="#{boxedItem.item.item.unitMeasure.name}" />
                                         </p:column>
                                         <p:column headerText="#{msg.purchasing_boxedItem_cost}" sortBy="#{boxedItem.cost}" priority="3">
                                             <h:outputText value="#{boxedItem.cost}">
-                                                <f:convertNumber currencySymbol="€" minFractionDigits="#{BoxedItem.PRECISION_COST}" type="currency" />
+                                                <f:convertNumber currencySymbol="€" minFractionDigits="#{BoxedItem.SCALE_COST}" type="currency" />
                                             </h:outputText>
                                         </p:column>
                                         <p:column headerText="#{msg.purchasing_boxedItem_cost_total}" sortBy="#{boxedItem.totalCost}" priority="2">
                                             <h:outputText value="#{boxedItem.totalCost}">
-                                                <f:convertNumber currencySymbol="€" minFractionDigits="#{BoxedItem.PRECISION_COST}" type="currency" />
+                                                <f:convertNumber currencySymbol="€" minFractionDigits="#{BoxedItem.SCALE_COST}" type="currency" />
                                             </h:outputText>
                                         </p:column>
                                         <p:column headerText="#{msg.actions}" style="width:72px; text-align:center" priority="0">

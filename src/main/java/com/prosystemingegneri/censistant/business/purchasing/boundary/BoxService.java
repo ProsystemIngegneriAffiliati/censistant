@@ -16,6 +16,7 @@
  */
 package com.prosystemingegneri.censistant.business.purchasing.boundary;
 
+import com.prosystemingegneri.censistant.business.production.entity.UnitMeasure;
 import com.prosystemingegneri.censistant.business.production.entity.UnitMeasure_;
 import com.prosystemingegneri.censistant.business.purchasing.entity.Box;
 import com.prosystemingegneri.censistant.business.purchasing.entity.Box_;
@@ -28,6 +29,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
@@ -59,7 +61,7 @@ public class BoxService implements Serializable{
         em.remove(readBox(id));
     }
 
-    public List<Box> listBoxes(int first, int pageSize, String sortField, Boolean isAscending, String name) {
+    public List<Box> listBoxes(int first, int pageSize, String sortField, Boolean isAscending, String unitMeasureName) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Box> query = cb.createQuery(Box.class);
         Root<Box> root = query.from(Box.class);
@@ -67,20 +69,19 @@ public class BoxService implements Serializable{
         
         List<Predicate> conditions = new ArrayList<>();
 
-        //name
-        if (name != null && !name.isEmpty())
-            conditions.add(cb.like(cb.lower(root.get(Box_.name)), "%" + name.toLowerCase() + "%"));
+        //name of unit of measure
+        if (unitMeasureName != null && !unitMeasureName.isEmpty()) {
+            Join<Box, UnitMeasure> unitMeasureRoot = root.join(Box_.unitMeasure);
+            conditions.add(cb.like(cb.lower(unitMeasureRoot.get(UnitMeasure_.name)), "%" + unitMeasureName.toLowerCase() + "%"));
+        }
 
         if (!conditions.isEmpty())
             query.where(conditions.toArray(new Predicate[conditions.size()]));
         
-        Order order = cb.asc(root.get(Box_.name));
+        Order order = cb.asc(root.get(Box_.unitMeasure).get(UnitMeasure_.name));
         if (isAscending != null && sortField != null && !sortField.isEmpty()) {
             Path<?> path;
             switch (sortField) {
-                case "name":
-                    path = root.get(Box_.name);
-                    break;
                 case "unitMeasure":
                     path = root.get(Box_.unitMeasure).get(UnitMeasure_.name);
                     break;
@@ -101,7 +102,7 @@ public class BoxService implements Serializable{
         return typedQuery.getResultList();
     }
     
-    public Long getBoxesCount(String name) {
+    public Long getBoxesCount(String unitMeasureName) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Long> query = cb.createQuery(Long.class);
         Root<Box> root = query.from(Box.class);
@@ -109,9 +110,11 @@ public class BoxService implements Serializable{
 
         List<Predicate> conditions = new ArrayList<>();
 
-        //name
-        if (name != null && !name.isEmpty())
-            conditions.add(cb.like(cb.lower(root.get(Box_.name)), "%" + name.toLowerCase() + "%"));
+        //name of unit of measure
+        if (unitMeasureName != null && !unitMeasureName.isEmpty()) {
+            Join<Box, UnitMeasure> unitMeasureRoot = root.join(Box_.unitMeasure);
+            conditions.add(cb.like(cb.lower(unitMeasureRoot.get(UnitMeasure_.name)), "%" + unitMeasureName.toLowerCase() + "%"));
+        }
 
         if (!conditions.isEmpty())
             query.where(conditions.toArray(new Predicate[conditions.size()]));

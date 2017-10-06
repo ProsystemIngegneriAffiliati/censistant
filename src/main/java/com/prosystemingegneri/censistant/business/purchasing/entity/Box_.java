@@ -26,6 +26,5 @@ import javax.persistence.metamodel.StaticMetamodel;
  */
 @StaticMetamodel(Box.class)
 public class Box_ {
-    public static volatile SingularAttribute<Box, String> name;
     public static volatile SingularAttribute<Box, UnitMeasure> unitMeasure;
 }
