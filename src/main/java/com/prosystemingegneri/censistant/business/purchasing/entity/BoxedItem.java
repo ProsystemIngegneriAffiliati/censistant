@@ -49,11 +49,9 @@ public class BoxedItem extends BaseEntity<Long>{
     @Column(nullable = false, scale = SCALE_COST, precision = PRECISION_COST)
     private BigDecimal cost;
     
-    @NotNull
     @ManyToOne(optional = false)
     private SupplierItem item;
     
-    @NotNull
     @ManyToOne(optional = false)
     private Box box;
     
