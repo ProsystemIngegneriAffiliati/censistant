@@ -33,12 +33,12 @@
                                         <p:autoComplete id="item"
                                                         dropdown="true"
                                                         value="#{supplierItemPresenter.supplierItem.item}"
-                                                        completeMethod="#{itemListPresenter.completeUnitMeasures}"
+                                                        completeMethod="#{itemListPresenter.completeItems}"
                                                         var="item"
                                                         itemLabel="#{item.description}"
                                                         itemValue="#{item}"
                                                         forceSelection="true">
-                                            <oou:converter converterId="omnifaces.ListConverter" list="#{itemListPresenter.completeUnitMeasures(item.description)}"/>
+                                            <oou:converter converterId="omnifaces.ListConverter" list="#{itemListPresenter.completeItems(item.description)}"/>
                                         </p:autoComplete>
                                         <p:outputLabel for="item" value="#{msg.production_item}"/>
                                         <p:message for="item"/>

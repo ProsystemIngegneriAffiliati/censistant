@@ -61,7 +61,7 @@ public class ItemListPresenter implements Serializable{
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Missing selection", "Select a row before deleting"));
     }
     
-    public List<Item> completeUnitMeasures(String description) {
+    public List<Item> completeItems(String description) {
         return service.listItems(0, 10, null, null, description);
     }
 
