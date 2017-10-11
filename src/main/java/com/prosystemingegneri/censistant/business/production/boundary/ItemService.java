@@ -95,8 +95,10 @@ public class ItemService implements Serializable{
         query.orderBy(order);
         
         TypedQuery<Item> typedQuery = em.createQuery(select);
-        typedQuery.setMaxResults(pageSize);
-        typedQuery.setFirstResult(first);
+        if (pageSize > 0) {
+            typedQuery.setMaxResults(pageSize);
+            typedQuery.setFirstResult(first);   
+        }
 
         return typedQuery.getResultList();
     }

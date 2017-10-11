@@ -34,7 +34,7 @@
                                                         itemLabel="#{box.unitMeasure.name} #{box.quantity} #{boxedItemPresenter.boxedItem.item.item.unitMeasure.symbol}"
                                                         itemValue="#{box}"
                                                         forceSelection="true">
-                                            <oou:converter converterId="omnifaces.ListConverter" list="#{boxListPresenter.completeBoxes(box.unitMeasure.name)}"/>
+                                            <oou:converter converterId="omnifaces.ListConverter" list="#{boxListPresenter.boxes}"/>
                                         </p:autoComplete>
                                         <p:outputLabel for="box" value="#{msg.purchasing_box_name}"/>
                                         <p:message for="box"/>

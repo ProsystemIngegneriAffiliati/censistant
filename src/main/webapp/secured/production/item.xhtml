@@ -39,7 +39,7 @@
                                                         itemLabel="#{um.name}"
                                                         itemValue="#{um}"
                                                         forceSelection="true">
-                                            <oou:converter converterId="omnifaces.ListConverter" list="#{unitMeasureListPresenter.completeUnitMeasures(um.name)}"/>
+                                            <oou:converter converterId="omnifaces.ListConverter" list="#{unitMeasureListPresenter.unitMeasures}"/>
                                         </p:autoComplete>
                                         <p:outputLabel for="unitMeasure" value="#{msg.production_unitMeasure}"/>
                                         <p:message for="unitMeasure"/>

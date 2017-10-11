@@ -51,6 +51,8 @@ public class SiteSurveyReportPresenter implements Serializable{
     
     private SiteSurveyRequest selectedRequest;
     
+    private List<Plant> plants;
+    
     @PostConstruct
     public void init() {
         siteSurveyReport = (SiteSurveyReport) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("siteSurveyReport");
@@ -110,6 +112,16 @@ public class SiteSurveyReportPresenter implements Serializable{
     
     public List<Plant> completePlant(String value) {
         return customerSupplierService.listPlants(0, 10, "address", Boolean.TRUE, siteSurveyReport.getRequest().getCustomer(), value);
+    }
+
+    public List<Plant> getPlants() {
+        if (plants == null || plants.isEmpty())
+            plants = customerSupplierService.listPlants(0, 0, "address", Boolean.TRUE, siteSurveyReport.getRequest().getCustomer(), null);
+        return plants;
+    }
+
+    public void setPlants(List<Plant> plants) {
+        this.plants = plants;
     }
     
     public void onSiteSurveyRequestSelect(SelectEvent event) {

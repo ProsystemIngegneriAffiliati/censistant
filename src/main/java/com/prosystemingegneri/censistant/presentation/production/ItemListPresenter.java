@@ -42,6 +42,8 @@ public class ItemListPresenter implements Serializable{
     private ItemLazyDataModel lazyItems;
     private List<Item> selectedItems;
     
+    private List<Item> items;
+    
     @PostConstruct
     public void init() {
         lazyItems = new ItemLazyDataModel(service);
@@ -63,6 +65,14 @@ public class ItemListPresenter implements Serializable{
     
     public List<Item> completeItems(String description) {
         return service.listItems(0, 10, null, null, description);
+    }
+    
+    //Useful only for 'omnifaces.ListConverter' used in 'p:autoComplete'
+    public List<Item> getItems() {
+        if (items == null || items.isEmpty())
+            items = service.listItems(0, 0, null, null, null);
+        
+        return items;
     }
 
     public ItemLazyDataModel getLazyItems() {

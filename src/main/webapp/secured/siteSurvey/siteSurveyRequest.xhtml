@@ -50,7 +50,7 @@
                                                         itemLabel="#{cust.name}"
                                                         itemValue="#{cust}"
                                                         forceSelection="true">
-                                            <oou:converter converterId="omnifaces.ListConverter" list="#{customerSupplierListPresenter.completeCustomer(cust.name)}"/>
+                                            <oou:converter converterId="omnifaces.ListConverter" list="#{customerSupplierListPresenter.customers}"/>
                                         </p:autoComplete>
                                         <p:outputLabel for="customer" value="#{msg.customerSupplier_customer}"/>
                                         <p:message for="customer"/>
@@ -73,7 +73,7 @@
                                                         itemLabel="#{syst.name}"
                                                         itemValue="#{syst}"
                                                         forceSelection="true">
-                                            <oou:converter converterId="omnifaces.ListConverter" list="#{systemTypeListPresenter.completeSystemTypes(syst.name)}"/>
+                                            <oou:converter converterId="omnifaces.ListConverter" list="#{systemTypeListPresenter.systemTypes}"/>
                                         </p:autoComplete>
                                         <p:outputLabel for="systemType" value="#{msg.siteSurvey_systemType_name}"/>
                                         <p:message for="systemType"/>

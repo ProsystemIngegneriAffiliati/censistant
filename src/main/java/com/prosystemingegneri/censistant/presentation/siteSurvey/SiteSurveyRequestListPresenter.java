@@ -43,6 +43,8 @@ public class SiteSurveyRequestListPresenter implements Serializable{
     private SiteSurveyRequestLazyDataModel lazySiteSurveyRequests;
     private List<SiteSurveyRequest> selectedSiteSurveyRequests;
     
+    private List<SiteSurveyRequest> requests;
+    
     @PostConstruct
     public void init() {
         lazySiteSurveyRequests = new SiteSurveyRequestLazyDataModel(service);
@@ -64,6 +66,16 @@ public class SiteSurveyRequestListPresenter implements Serializable{
     
     public List<SiteSurveyRequest> completeRequests(String name) {
         return service.listSiteSurveyRequests(0, 10, "creation", Boolean.FALSE, null, null, null, name, null, null, Boolean.FALSE);
+    }
+
+    public List<SiteSurveyRequest> getRequests() {
+        if (requests == null || requests.isEmpty())
+            requests = service.listSiteSurveyRequests(0, 0, "creation", Boolean.FALSE, null, null, null, null, null, null, Boolean.FALSE);
+        return requests;
+    }
+
+    public void setRequests(List<SiteSurveyRequest> requests) {
+        this.requests = requests;
     }
 
     public SiteSurveyRequestLazyDataModel getLazySiteSurveyRequests() {

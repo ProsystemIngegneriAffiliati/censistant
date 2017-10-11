@@ -71,7 +71,7 @@
                                                         itemLabel="#{prov.name}"
                                                         itemValue="#{prov}"
                                                         forceSelection="true">
-                                            <oou:converter converterId="omnifaces.ListConverter" list="#{provenanceListPresenter.completeProvenances(prov.name)}"/>
+                                            <oou:converter converterId="omnifaces.ListConverter" list="#{provenanceListPresenter.provenances}"/>
                                         </p:autoComplete>
                                         <p:outputLabel for="provenance" value="#{msg.customerSupplier_provenance}"/>
                                         <p:message for="provenance"/>

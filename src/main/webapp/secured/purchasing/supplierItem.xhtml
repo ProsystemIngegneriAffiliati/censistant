@@ -38,7 +38,7 @@
                                                         itemLabel="#{item.description}"
                                                         itemValue="#{item}"
                                                         forceSelection="true">
-                                            <oou:converter converterId="omnifaces.ListConverter" list="#{itemListPresenter.completeItems(item.description)}"/>
+                                            <oou:converter converterId="omnifaces.ListConverter" list="#{itemListPresenter.items}"/>
                                         </p:autoComplete>
                                         <p:outputLabel for="item" value="#{msg.production_item}"/>
                                         <p:message for="item"/>
@@ -53,7 +53,7 @@
                                                         itemLabel="#{supplier.name}"
                                                         itemValue="#{supplier}"
                                                         forceSelection="true">
-                                            <oou:converter converterId="omnifaces.ListConverter" list="#{customerSupplierListPresenter.completeSupplier(supplier.name)}"/>
+                                            <oou:converter converterId="omnifaces.ListConverter" list="#{customerSupplierListPresenter.suppliers}"/>
                                         </p:autoComplete>
                                         <p:outputLabel for="supplier" value="#{msg.customerSupplier_supplier}"/>
                                         <p:message for="supplier"/>

@@ -42,6 +42,8 @@ public class BoxListPresenter implements Serializable{
     private BoxLazyDataModel lazyBoxes;
     private List<Box> selectedBoxes;
     
+    private List<Box> boxes;
+    
     @PostConstruct
     public void init() {
         lazyBoxes = new BoxLazyDataModel(service);
@@ -63,6 +65,12 @@ public class BoxListPresenter implements Serializable{
     
     public List<Box> completeBoxes(String value) {
         return service.listBoxes(0, 10, null, null, value);
+    }
+
+    public List<Box> getBoxes() {
+        if (boxes == null || boxes.isEmpty())
+            boxes = service.listBoxes(0, 0, null, null, null);
+        return boxes;
     }
 
     public BoxLazyDataModel getLazyBoxes() {

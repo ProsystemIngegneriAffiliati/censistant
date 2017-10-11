@@ -35,7 +35,7 @@
                                                             itemValue="#{req}"
                                                             forceSelection="true"
                                                             >
-                                                <oou:converter converterId="omnifaces.ListConverter" list="#{siteSurveyRequestListPresenter.completeRequests('')}"/>
+                                                <oou:converter converterId="omnifaces.ListConverter" list="#{siteSurveyRequestListPresenter.requests}"/>
                                                 <p:ajax event="itemSelect" listener="#{siteSurveyReportPresenter.onSiteSurveyRequestSelect}" update="requestData siteSurveyReportPanel" />
                                             </p:autoComplete>
                                             <p:outputLabel for="request" value="#{msg.siteSurvey_siteSurveyRequests}"/>
@@ -69,7 +69,7 @@
                                                             itemValue="#{cust}"
                                                             forceSelection="true"
                                                             disabled="#{siteSurveyReportPresenter.siteSurveyReport.request.id != null}">
-                                                <oou:converter converterId="omnifaces.ListConverter" list="#{customerSupplierListPresenter.completeCustomer(cust.name)}"/>
+                                                <oou:converter converterId="omnifaces.ListConverter" list="#{customerSupplierListPresenter.customers}"/>
                                                 <p:ajax event="itemSelect" update="siteSurveyReportPanel" />
                                             </p:autoComplete>
                                             <p:outputLabel for="requestCustomer" value="#{msg.customerSupplier_customer}"/>
@@ -86,7 +86,7 @@
                                                             itemValue="#{syst}"
                                                             forceSelection="true"
                                                             disabled="#{siteSurveyReportPresenter.siteSurveyReport.request.id != null}">
-                                                <oou:converter converterId="omnifaces.ListConverter" list="#{systemTypeListPresenter.completeSystemTypes(syst.name)}"/>
+                                                <oou:converter converterId="omnifaces.ListConverter" list="#{systemTypeListPresenter.systemTypes}"/>
                                                 <p:ajax event="itemSelect" update="siteSurveyReportPanel" />
                                             </p:autoComplete>
                                             <p:outputLabel for="requestSystemType" value="#{msg.siteSurvey_systemType_name}"/>
@@ -134,7 +134,7 @@
                                                                 itemLabel="#{plant.address}"
                                                                 itemValue="#{plant}"
                                                                 forceSelection="true">
-                                                    <oou:converter converterId="omnifaces.ListConverter" list="#{siteSurveyReportPresenter.completePlant(plant.address)}"/>
+                                                    <oou:converter converterId="omnifaces.ListConverter" list="#{siteSurveyReportPresenter.plants}"/>
                                                 </p:autoComplete>
                                                 <p:outputLabel for="plant" value="#{msg.siteSurvey_siteSurveyReport_constructionSite}"/>
                                                 <p:message for="plant"/>
@@ -149,7 +149,7 @@
                                                                 itemLabel="#{worker.name}"
                                                                 itemValue="#{worker}"
                                                                 forceSelection="true">
-                                                    <oou:converter converterId="omnifaces.ListConverter" list="#{workerListPresenter.completeWorkers(worker.name)}"/>
+                                                    <oou:converter converterId="omnifaces.ListConverter" list="#{workerListPresenter.workers}"/>
                                                 </p:autoComplete>
                                                 <p:outputLabel for="seller" value="#{msg.siteSurvey_siteSurveyReport_seller}"/>
                                                 <p:message for="seller"/>

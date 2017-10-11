@@ -44,6 +44,9 @@ public class CustomerSupplierListPresenter implements Serializable{
     private CustomerSupplierLazyDataModel lazySuppliers;
     private List<CustomerSupplier> selectedCustomerSuppliers;
     
+    private List<CustomerSupplier> customers;
+    private List<CustomerSupplier> suppliers;
+    
     @PostConstruct
     public void init() {
         lazyCustomers = new CustomerSupplierLazyDataModel(service, Boolean.TRUE, null);
@@ -67,9 +70,21 @@ public class CustomerSupplierListPresenter implements Serializable{
     public List<CustomerSupplier> completeCustomer(String value) {
         return service.listCustomerSuppliers(0, 10, "name", Boolean.TRUE, null, Boolean.TRUE, null, null, value, null);
     }
+
+    public List<CustomerSupplier> getCustomers() {
+        if (customers == null || customers.isEmpty())
+            customers = service.listCustomerSuppliers(0, 0, "name", Boolean.TRUE, null, Boolean.TRUE, null, null, null, null);
+        return customers;
+    }
     
     public List<CustomerSupplier> completeSupplier(String value) {
         return service.listCustomerSuppliers(0, 10, "name", Boolean.TRUE, null, null, Boolean.TRUE, null, value, null);
+    }
+    
+    public List<CustomerSupplier> getSuppliers() {
+        if (suppliers == null || suppliers.isEmpty())
+            suppliers = service.listCustomerSuppliers(0, 0, "name", Boolean.TRUE, null, null, Boolean.TRUE, null, null, null);
+        return suppliers;
     }
 
     public CustomerSupplierLazyDataModel getLazyCustomers() {
