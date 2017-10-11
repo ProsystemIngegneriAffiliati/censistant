@@ -20,6 +20,12 @@ import com.prosystemingegneri.censistant.business.customerSupplier.entity.Custom
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier_;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant_;
+import com.prosystemingegneri.censistant.business.production.entity.Item;
+import com.prosystemingegneri.censistant.business.production.entity.Item_;
+import com.prosystemingegneri.censistant.business.purchasing.entity.BoxedItem;
+import com.prosystemingegneri.censistant.business.purchasing.entity.BoxedItem_;
+import com.prosystemingegneri.censistant.business.purchasing.entity.SupplierItem;
+import com.prosystemingegneri.censistant.business.purchasing.entity.SupplierItem_;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +35,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
 import javax.persistence.criteria.ListJoin;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
@@ -193,6 +200,43 @@ public class CustomerSupplierService implements Serializable{
         }
         
         TypedQuery<Plant> typedQuery = em.createQuery(select);
+        if (pageSize <= 0) {
+            typedQuery.setMaxResults(pageSize);
+            typedQuery.setFirstResult(first);
+        }
+
+        return typedQuery.getResultList();
+    }
+    
+    public List<BoxedItem> listSupplierBoxedItems(int first, int pageSize, CustomerSupplier supplier, String filter) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<BoxedItem> query = cb.createQuery(BoxedItem.class);
+        Root<BoxedItem> root = query.from(BoxedItem.class);
+        CriteriaQuery<BoxedItem> select = query.select(root).distinct(true);
+        
+        List<Predicate> conditions = new ArrayList<>();
+
+        //Supplier
+        if (supplier != null) {
+            Join<BoxedItem, SupplierItem> supplierItemRoot = root.join(BoxedItem_.item);
+            conditions.add(cb.equal(supplierItemRoot.get(SupplierItem_.supplier), supplier));
+        }
+        
+        //Filter for supplierItem's code or item's description
+        if (filter != null && !filter.isEmpty()) {
+            Join<BoxedItem, SupplierItem> supplierItemRoot = root.join(BoxedItem_.item);
+            Join<SupplierItem, Item> itemRoot = supplierItemRoot.join(SupplierItem_.item);
+            conditions.add(cb.or(
+                    cb.like(cb.lower(supplierItemRoot.get(SupplierItem_.code)), "%" + String.valueOf(filter).toLowerCase() + "%"), 
+                    cb.like(cb.lower(itemRoot.get(Item_.description)), "%" + String.valueOf(filter).toLowerCase() + "%")));
+        }
+
+        if (!conditions.isEmpty())
+            query.where(conditions.toArray(new Predicate[conditions.size()]));
+        
+        query.orderBy(cb.asc(root.get(BoxedItem_.item).get(SupplierItem_.item).get(Item_.description)));
+        
+        TypedQuery<BoxedItem> typedQuery = em.createQuery(select);
         if (pageSize <= 0) {
             typedQuery.setMaxResults(pageSize);
             typedQuery.setFirstResult(first);

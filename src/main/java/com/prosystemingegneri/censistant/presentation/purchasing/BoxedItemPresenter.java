@@ -16,7 +16,6 @@
  */
 package com.prosystemingegneri.censistant.presentation.purchasing;
 
-import com.prosystemingegneri.censistant.business.purchasing.entity.Box;
 import com.prosystemingegneri.censistant.business.purchasing.entity.BoxedItem;
 import com.prosystemingegneri.censistant.business.purchasing.entity.SupplierItem;
 import java.io.Serializable;

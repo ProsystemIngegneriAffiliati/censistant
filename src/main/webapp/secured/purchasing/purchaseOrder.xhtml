@@ -1,0 +1,130 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:oou="http://omnifaces.org/ui">
+    <f:metadata>
+        <f:viewParam name="id"
+                     value="#{purchaseOrderPresenter.id}"
+                     converter="javax.faces.Long" />
+        <f:viewAction action="#{purchaseOrderPresenter.detailPurchaseOrder()}"/>
+    </f:metadata>
+    <ui:composition template="/WEB-INF/template.xhtml">
+        <ui:define name="content">
+            <oou:importConstants type="com.prosystemingegneri.censistant.business.purchasing.entity.PurchaseOrderRow"/>
+            <h:form id="purchaseOrderForm">
+                <div class="ui-fluid">
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <div class="card card-w-title">
+                                <h1>#{msg.purchasing_purchaseOrder}</h1>
+                                <p>#{msg.purchasing_purchaseOrder_tip}</p>
+                                <p:panelGrid columns="3" columnClasses="ui-grid-col-2,ui-grid-col-3,ui-grid-col-7" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputNumber id="number" value="#{purchaseOrderPresenter.purchaseOrder.number}" decimalPlaces="0" />
+                                        <p:outputLabel for="number" value="#{msg.purchasing_purchaseOrder_number}" />
+                                        <p:message for="number"/>
+                                    </h:panelGroup>
+
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:calendar id="creation" value="#{purchaseOrderPresenter.purchaseOrder.creation}"/>
+                                        <p:outputLabel for="creation" value="#{msg.purchasing_purchaseOrder_creation}"/>
+                                        <p:message for="creation"/>
+                                    </h:panelGroup>
+
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:autoComplete id="supplier"
+                                                        dropdown="true"
+                                                        value="#{purchaseOrderPresenter.purchaseOrder.supplier}"
+                                                        completeMethod="#{customerSupplierListPresenter.completeSupplier}"
+                                                        var="supplier"
+                                                        itemLabel="#{supplier.name}"
+                                                        itemValue="#{supplier}"
+                                                        forceSelection="true">
+                                            <oou:converter converterId="omnifaces.ListConverter" list="#{customerSupplierListPresenter.suppliers}"/>
+                                        </p:autoComplete>
+                                        <p:outputLabel for="supplier" value="#{msg.customerSupplier_supplier}"/>
+                                        <p:message for="supplier"/>
+                                    </h:panelGroup>
+                                </p:panelGrid>
+
+                                <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                    <p:dataTable id="purchaseOrderRowsTable"
+                                                 var="purchaseOrderRow"
+                                                 value="#{purchaseOrderPresenter.purchaseOrder.rows}">
+                                        <f:facet name="header">
+                                            <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
+                                                #{msg.purchasing_purchaseOrderRows}
+                                                <p:commandButton title="#{msg.new}" icon="ui-icon-create" action="#{purchaseOrderPresenter.detailRow(null)}" ajax="false" />
+                                            </p:panelGrid>
+                                        </f:facet>
+                                        <f:facet name="footer">
+                                            #{msg.purchasing_purchaseOrder_cost_total}:
+                                            <h:outputText value="#{purchaseOrderPresenter.purchaseOrder.totalCost}">
+                                                <f:convertNumber currencySymbol="€" minFractionDigits="#{PurchaseOrderRow.SCALE_COST}" type="currency" />
+                                            </h:outputText>
+                                        </f:facet>
+                                        <p:column headerText="#{msg.purchasing_supplierItem_code}" sortBy="#{purchaseOrderRow.boxedItem.item.code}" filterBy="#{purchaseOrderRow.boxedItem.item.code}" filterMatchMode="contains" priority="0">
+                                            <h:outputText value="#{purchaseOrderRow.boxedItem.item.code}" />
+                                        </p:column>
+                                        <p:column headerText="#{msg.production_item_description}" sortBy="#{purchaseOrderRow.boxedItem.item.item.description}" filterBy="#{purchaseOrderRow.boxedItem.item.item.description}" filterMatchMode="contains" priority="2">
+                                            <h:outputText value="#{purchaseOrderRow.boxedItem.item.item.description}" />
+                                        </p:column>
+                                        <p:column headerText="#{msg.purchasing_purchaseOrderRow_quantity}" sortBy="#{purchaseOrderRow.quantity}" priority="4">
+                                            <h:outputText value="#{purchaseOrderRow.quantity}">
+                                                <f:convertNumber integerOnly="true" />
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column headerText="#{msg.production_unitMeasure_symbol}" sortBy="#{purchaseOrderRow.box.unitMeasure.symbol}" priority="5">
+                                            <h:outputText value="#{purchaseOrderRow.boxedItem.box.unitMeasure.name} #{purchaseOrderRow.boxedItem.box.quantity} #{purchaseOrderRow.boxedItem.item.item.unitMeasure.symbol}" />
+                                        </p:column>
+                                        <p:column headerText="#{msg.purchasing_purchaseOrderRow_cost}" sortBy="#{purchaseOrderRow.cost}" priority="4">
+                                            <h:outputText value="#{purchaseOrderRow.cost}">
+                                                <f:convertNumber currencySymbol="€" minFractionDigits="#{PurchaseOrderRow.SCALE_COST}" type="currency" />
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column headerText="#{msg.purchasing_purchaseOrderRow_cost_total}" sortBy="#{purchaseOrderRow.totalCost}" priority="2">
+                                            <h:outputText value="#{purchaseOrderRow.totalCost}">
+                                                <f:convertNumber currencySymbol="€" minFractionDigits="#{PurchaseOrderRow.SCALE_COST}" type="currency" />
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column headerText="#{msg.actions}" style="width:72px; text-align:center" priority="0">
+                                            <p:splitButton value="" icon="ui-icon-edit" action="#{purchaseOrderPresenter.detailRow(purchaseOrderRow)}" ajax="false">
+                                                <p:menuitem  value="#{msg.delete}" icon="ui-icon-delete" actionListener="#{purchaseOrderPresenter.deleteRow(purchaseOrderRow)}" update="@form">
+                                                    <p:confirm header="#{msg.purchasing_purchaseOrderRows_remove}" message="#{msg.purchasing_purchaseOrderRows_remove_tip}" icon="ui-icon-alert"/>
+                                                </p:menuitem>
+                                            </p:splitButton>
+                                        </p:column>
+                                    </p:dataTable>
+
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputTextarea id="notes" value="#{purchaseOrderPresenter.purchaseOrder.notes}"/>
+                                        <p:outputLabel for="notes" value="#{msg.purchasing_purchaseOrder_notes}"/>
+                                        <p:message for="notes"/>
+                                    </h:panelGroup>
+                                </p:panelGrid>
+
+                                <div class="ui-g">
+                                    <div class="ui-g-1 ui-md-2"></div>
+                                    <div class="ui-g-4 ui-md-3">
+                                        <p:button value="#{msg.cancel}" outcome="/secured/purchasing/purchaseOrders" styleClass="secondary"/>
+                                    </div>
+                                    <div class="ui-g-2 ui-md-2"></div>
+                                    <div class="ui-g-4 ui-md-3">
+                                        <p:commandButton value="#{msg.save}"
+                                                         action="#{purchaseOrderPresenter.savePurchaseOrder()}"
+                                                         ajax="false"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

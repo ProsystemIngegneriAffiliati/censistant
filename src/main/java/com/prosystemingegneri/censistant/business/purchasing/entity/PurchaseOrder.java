@@ -18,6 +18,7 @@ package com.prosystemingegneri.censistant.business.purchasing.entity;
 
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
 import com.prosystemingegneri.censistant.business.entity.BaseEntity;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -68,6 +69,7 @@ public class PurchaseOrder extends BaseEntity<Long>{
     private int version;
 
     public PurchaseOrder() {
+        creation = new Date();
         rows = new ArrayList<>();
     }
 
@@ -129,6 +131,15 @@ public class PurchaseOrder extends BaseEntity<Long>{
 
     public List<PurchaseOrderRow> getRows() {
         return rows;
+    }
+    
+    public BigDecimal getTotalCost() {
+        BigDecimal result = BigDecimal.ZERO;
+        
+        for (PurchaseOrderRow row : rows)
+            result = result.add(row.getTotalCost());
+        
+        return result;
     }
     
 }

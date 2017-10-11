@@ -1,0 +1,62 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:oou="http://omnifaces.org/ui">
+    <ui:define name="content">
+        <oou:importConstants type="com.prosystemingegneri.censistant.business.purchasing.entity.PurchaseOrderRow"/>
+        <h:form id="purchaseOrdersForm">
+            <div class="ui-g">
+                <div class="ui-g-12">
+                    <div class="card card-w-title">
+                        <h1>#{msg.purchasing_purchaseOrders}</h1>
+                        <p:dataTable id="purchaseOrdersTable" widgetVar="purchaseOrdersTable" var="purchaseOrder" value="#{purchaseOrderListPresenter.lazyPurchaseOrders}"
+                                     selectionMode="multiple" selection="#{purchaseOrderListPresenter.selectedPurchaseOrders}" rowKey="#{purchaseOrder.id}"
+                                     paginator="true" rows="10"
+                                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     rowsPerPageTemplate="10,25,50" lazy="true">
+                            <f:facet name="header">
+                                <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
+                                    #{msg.purchasing_purchaseOrders_tip}
+                                    <p:outputPanel>
+                                        <p:outputPanel style="display: inline-block">
+                                            <p:button title="#{msg.new}" icon="ui-icon-create" styleClass="AquaButton" outcome="/secured/purchasing/purchaseOrder">
+                                                <f:param name="id" value="0" />
+                                            </p:button>
+                                            <p:commandButton title="#{msg.delete}" icon="ui-icon-delete" actionListener="#{purchaseOrderListPresenter.deletePurchaseOrder()}" update="@form">
+                                                <p:confirm header="#{msg.purchasing_purchaseOrders_delete}" message="#{msg.purchasing_purchaseOrders_delete_tip}" icon="ui-icon-alert"/>
+                                            </p:commandButton>
+                                        </p:outputPanel>
+                                    </p:outputPanel>
+                                </p:panelGrid>
+                            </f:facet>
+                            <p:column headerText="#{msg.purchasing_purchaseOrder_creation}" field="creation" filterable="false" priority="2">
+                                <h:outputText value="#{purchaseOrder.creation}">
+                                    <f:convertDateTime pattern="dd/MM/YYYY" />
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="#{msg.purchasing_purchaseOrder_number}" field="number" priority="0">
+                                <h:outputText value="#{purchaseOrder.number}"/>
+                            </p:column>
+                            <p:column headerText="#{msg.customerSupplier_supplier}" field="supplier" priority="4">
+                                <h:outputText value="#{purchaseOrder.supplier.name}"/>
+                            </p:column>
+                            <p:column headerText="#{msg.purchasing_purchaseOrder_cost_total}" priority="2">
+                                <h:outputText value="#{purchaseOrder.totalCost}">
+                                    <f:convertNumber currencySymbol="€" minFractionDigits="#{PurchaseOrderRow.SCALE_COST}" type="currency" />
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="#{msg.actions}" style="width:64px; text-align:center" priority="0" exportable="false">
+                                <p:button title="#{msg.edit}" icon="ui-icon-edit" styleClass="AquaButton" outcome="/secured/purchasing/purchaseOrder">
+                                    <f:param name="id" value="#{purchaseOrder.id}" />
+                                </p:button>
+                            </p:column>
+                        </p:dataTable>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>
