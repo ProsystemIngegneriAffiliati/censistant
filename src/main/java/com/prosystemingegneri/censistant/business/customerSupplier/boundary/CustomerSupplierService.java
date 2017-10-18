@@ -26,6 +26,7 @@ import com.prosystemingegneri.censistant.business.purchasing.entity.BoxedItem;
 import com.prosystemingegneri.censistant.business.purchasing.entity.BoxedItem_;
 import com.prosystemingegneri.censistant.business.purchasing.entity.SupplierItem;
 import com.prosystemingegneri.censistant.business.purchasing.entity.SupplierItem_;
+import com.prosystemingegneri.censistant.business.warehouse.entity.SupplierLocation;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,16 +59,28 @@ public class CustomerSupplierService implements Serializable{
     }
     
     public CustomerSupplier createSupplier() {
-        return new CustomerSupplier(Boolean.FALSE, Boolean.FALSE, Boolean.TRUE);
+        CustomerSupplier supplier = new CustomerSupplier(Boolean.FALSE, Boolean.FALSE, Boolean.TRUE);
+        supplier.setLocation(new SupplierLocation());
+        
+        return supplier;
     }
     
-    public CustomerSupplier saveCustomerSupplier(CustomerSupplier customerSupplier) {        
+    public CustomerSupplier saveCustomerSupplier(CustomerSupplier customerSupplier) {
+        checkSupplierLocation(customerSupplier);
         if (customerSupplier.getId() == null)
             em.persist(customerSupplier);
         else
             return em.merge(customerSupplier);
         
         return customerSupplier;
+    }
+    
+    private void checkSupplierLocation(CustomerSupplier customerSupplier) {
+        if (customerSupplier.getIsSupplier() && customerSupplier.getLocation() == null)
+            customerSupplier.setLocation(new SupplierLocation());
+
+        if (!customerSupplier.getIsSupplier() && customerSupplier.getLocation() != null)
+            customerSupplier.removeLocation();
     }
     
     public CustomerSupplier readCustomerSupplier(Long id) {

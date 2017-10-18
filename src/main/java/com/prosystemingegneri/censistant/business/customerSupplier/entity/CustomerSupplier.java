@@ -19,16 +19,21 @@ package com.prosystemingegneri.censistant.business.customerSupplier.entity;
 import com.prosystemingegneri.censistant.business.customerSupplier.controller.MandatoryHeadOffice;
 import com.prosystemingegneri.censistant.business.customerSupplier.controller.MandatoryProvenanceForCustomer;
 import com.prosystemingegneri.censistant.business.entity.BaseEntity;
+import com.prosystemingegneri.censistant.business.warehouse.entity.SupplierLocation;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
@@ -78,6 +83,9 @@ public class CustomerSupplier extends BaseEntity<Long>{
     private Provenance provenance;
     
     private String notes;
+    
+    @OneToOne(mappedBy = "supplier", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private SupplierLocation location;
     
     @Version
     private int version;
@@ -216,6 +224,20 @@ public class CustomerSupplier extends BaseEntity<Long>{
 
     public void setIsPotentialCustomer(Boolean isPotentialCustomer) {
         this.isPotentialCustomer = isPotentialCustomer;
+    }
+
+    public SupplierLocation getLocation() {
+        return location;
+    }
+
+    public void setLocation(SupplierLocation location) {
+        this.location = location;
+        location.setSupplier(this);
+    }
+    
+    public void removeLocation() {
+        this.location.setSupplier(null);
+        this.location = null;
     }
     
 }
