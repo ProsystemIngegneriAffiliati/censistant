@@ -106,7 +106,7 @@ public class PurchaseOrderRow extends BaseEntity<Long>{
     public void setBoxedItem(BoxedItem boxedItem) {
         this.boxedItem = boxedItem;
         if (this.boxedItem != null)
-            this.cost = this.boxedItem.getCost();
+            this.cost = this.boxedItem.getTotalCost();
     }
 
     public String getNotes() {
