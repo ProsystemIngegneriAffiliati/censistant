@@ -1,0 +1,50 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:define name="content">
+        <h:form id="warehousesForm">
+            <div class="ui-g">
+                <div class="ui-g-12">
+                    <div class="card card-w-title">
+                        <h1>#{msg.warehouse_warehouses}</h1>
+
+                        <p:dataTable id="warehousesTable"
+                                     var="wh"
+                                     value="#{warehouseListPresenter.warehouses}"
+                                     selectionMode="multiple"
+                                     selection="#{warehouseListPresenter.selectedWarehouses}"
+                                     rowKey="#{wh.id}">
+                            <f:facet name="header">
+                                <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
+                                    #{msg.warehouse_warehouses_tip}
+                                    <p:outputPanel>
+                                        <p:button title="#{msg.new}" icon="ui-icon-create" styleClass="AquaButton" outcome="/secured/warehouse/warehouse">
+                                            <f:param name="id" value="0" />
+                                        </p:button>
+                                        <p:commandButton title="#{msg.delete}" icon="ui-icon-delete" actionListener="#{warehouseListPresenter.deleteWarehouses()}" update="warehousesTable">
+                                            <p:confirm header="#{msg.warehouse_warehouses_delete}" message="#{msg.warehouse_warehouses_delete_tip}" icon="ui-icon-alert"/>
+                                        </p:commandButton>
+                                    </p:outputPanel>
+                                </p:panelGrid>
+                            </f:facet>
+                            <p:column headerText="#{msg.warehouse_warehouse_name}" sortBy="#{wh.name}" filterBy="#{wh.name}" filterMatchMode="contains">
+                                <h:outputText value="#{wh.name}"/>
+                            </p:column>
+                            <p:column headerText="#{msg.warehouse_warehouse_description}" sortBy="#{wh.description}" filterBy="#{wh.description}" filterMatchMode="contains">
+                                <h:outputText value="#{wh.description}"/>
+                            </p:column>
+                            <p:column headerText="#{msg.actions}" style="width:64px; text-align:center">
+                                <p:button title="#{msg.edit}" icon="ui-icon-edit" styleClass="AquaButton" outcome="/secured/warehouse/warehouse">
+                                    <f:param name="id" value="#{wh.id}" />
+                                </p:button>
+                            </p:column>
+                        </p:dataTable>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>

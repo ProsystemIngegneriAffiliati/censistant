@@ -16,10 +16,140 @@
  */
 package com.prosystemingegneri.censistant.business.warehouse.entity;
 
+import com.prosystemingegneri.censistant.business.entity.BaseEntity;
+import com.prosystemingegneri.censistant.business.production.entity.UnitMeasure;
+import com.prosystemingegneri.censistant.business.purchasing.entity.PurchaseOrderRow;
+import com.prosystemingegneri.censistant.business.siteSurvey.entity.Worker;
+import java.util.Date;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.persistence.Version;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
 /**
  *
  * @author Davide Mainardi <ingmainardi@live.com>
  */
-public class HandledItem {
+@Entity
+public class HandledItem extends BaseEntity<Long>{
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    @NotNull
+    @Column(nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date handlingTimestamp;
+    
+    @NotNull
+    @ManyToOne(optional = false)
+    private Worker worker;
+    
+    @Min(1)
+    @NotNull
+    @Column(nullable = false)
+    private Integer quantity;
+    
+    @NotNull
+    @ManyToOne(optional = false)
+    private UnitMeasure unitMeasure;
+    
+    @NotNull
+    @ManyToOne(optional = false)
+    private PurchaseOrderRow purchaseOrderRow;
+    
+    @NotNull
+    @ManyToOne(optional = false)
+    private Location fromLocation;
+    
+    @NotNull
+    @ManyToOne(optional = false)
+    private Location toLocation;
+    
+    private String notes;
+    
+    @Version
+    private int version;
+
+    public HandledItem() {
+        handlingTimestamp = new Date();
+        quantity = 1;
+    }
+
+    public Date getHandlingTimestamp() {
+        return handlingTimestamp;
+    }
+
+    public void setHandlingTimestamp(Date handlingTimestamp) {
+        this.handlingTimestamp = handlingTimestamp;
+    }
+
+    public Worker getWorker() {
+        return worker;
+    }
+
+    public void setWorker(Worker worker) {
+        this.worker = worker;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
+    public UnitMeasure getUnitMeasure() {
+        return unitMeasure;
+    }
+
+    public void setUnitMeasure(UnitMeasure unitMeasure) {
+        this.unitMeasure = unitMeasure;
+    }
+
+    public PurchaseOrderRow getPurchaseOrderRow() {
+        return purchaseOrderRow;
+    }
+
+    public void setPurchaseOrderRow(PurchaseOrderRow purchaseOrderRow) {
+        this.purchaseOrderRow = purchaseOrderRow;
+    }
+
+    public Location getFromLocation() {
+        return fromLocation;
+    }
+
+    public void setFromLocation(Location fromLocation) {
+        this.fromLocation = fromLocation;
+    }
+
+    public Location getToLocation() {
+        return toLocation;
+    }
+
+    public void setToLocation(Location toLocation) {
+        this.toLocation = toLocation;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    @Override
+    public Long getId() {
+        return id;
+    }
     
 }

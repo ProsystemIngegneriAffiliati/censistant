@@ -32,6 +32,11 @@
                                 <p:menuitem id="boxesMenu" value="#{msg.purchasing_boxes}" icon="&#xE8F8;" outcome="/secured/purchasing/boxes"/>
                             </p:submenu>
                         </p:submenu>
+                        <p:submenu id="warehouseMenu" label="#{msg.warehouse}" icon="&#xE8D1;">
+                            <p:submenu id="warehouseUtils" label="#{msg.utils}" icon="&#xE149;">
+                                <p:menuitem id="warehousesMenu" value="#{msg.warehouse_warehouses}" icon="&#xE8F8;" outcome="/secured/warehouse/warehouses"/>
+                            </p:submenu>
+                        </p:submenu>
                         <p:submenu id="utilsMenu" label="#{msg.utils}" icon="&#xE896;">
                             <p:menuitem id="workersMenu" value="#{msg.siteSurvey_workers}" icon="&#xE7FC;" outcome="/secured/siteSurvey/workers"/>
                             <p:menuitem id="systemTypesMenu" value="#{msg.siteSurvey_systemTypes}" icon="&#xE2BC;" outcome="/secured/siteSurvey/systemTypes"/>

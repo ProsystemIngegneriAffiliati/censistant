@@ -16,10 +16,57 @@
  */
 package com.prosystemingegneri.censistant.business.warehouse.entity;
 
+import com.prosystemingegneri.censistant.business.entity.BaseEntity;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.OneToMany;
+import javax.persistence.Version;
+
 /**
  *
  * @author Davide Mainardi <ingmainardi@live.com>
  */
-public class Location {
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(discriminatorType = DiscriminatorType.INTEGER, columnDefinition = "smallint")
+public class Location extends BaseEntity<Long>{
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    @OneToMany(mappedBy = "toLocation")
+    private final List<HandledItem> inHandledItem;  //received items
+    
+    @OneToMany(mappedBy = "fromLocation")
+    private final List<HandledItem> outHandledItem; //picked items
+    
+    @Version
+    private int version;
+
+    public Location() {
+        inHandledItem = new ArrayList<>();
+        outHandledItem = new ArrayList<>();
+    }
+
+    @Override
+    public Long getId() {
+        return id;
+    }
+
+    public List<HandledItem> getInHandledItem() {
+        return inHandledItem;
+    }
+
+    public List<HandledItem> getOutHandledItem() {
+        return outHandledItem;
+    }
     
 }

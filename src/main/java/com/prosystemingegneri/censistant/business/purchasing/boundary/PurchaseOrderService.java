@@ -167,8 +167,10 @@ public class PurchaseOrderService implements Serializable{
         query.orderBy(order);
         
         TypedQuery<PurchaseOrder> typedQuery = em.createQuery(select);
-        typedQuery.setMaxResults(pageSize);
-        typedQuery.setFirstResult(first);
+        if (pageSize > 0) {
+            typedQuery.setMaxResults(pageSize);
+            typedQuery.setFirstResult(first);
+        }
 
         return typedQuery.getResultList();
     }

@@ -181,7 +181,7 @@ public class SiteSurveyRequestService implements Serializable{
             query.orderBy(cb.desc(root.get(SiteSurveyRequest_.creation)));
         
         TypedQuery<SiteSurveyRequest> typedQuery = em.createQuery(select);
-        if (pageSize <= 0) {
+        if (pageSize > 0) {
             typedQuery.setMaxResults(pageSize);
             typedQuery.setFirstResult(first);
         }

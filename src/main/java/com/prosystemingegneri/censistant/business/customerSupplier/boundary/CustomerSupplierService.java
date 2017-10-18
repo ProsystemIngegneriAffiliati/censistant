@@ -124,7 +124,7 @@ public class CustomerSupplierService implements Serializable{
         }
         
         TypedQuery<CustomerSupplier> typedQuery = em.createQuery(select);
-        if (pageSize <= 0) {
+        if (pageSize > 0) {
             typedQuery.setMaxResults(pageSize);
             typedQuery.setFirstResult(first);   
         }
@@ -200,7 +200,7 @@ public class CustomerSupplierService implements Serializable{
         }
         
         TypedQuery<Plant> typedQuery = em.createQuery(select);
-        if (pageSize <= 0) {
+        if (pageSize > 0) {
             typedQuery.setMaxResults(pageSize);
             typedQuery.setFirstResult(first);
         }
@@ -237,7 +237,7 @@ public class CustomerSupplierService implements Serializable{
         query.orderBy(cb.asc(root.get(BoxedItem_.item).get(SupplierItem_.item).get(Item_.description)));
         
         TypedQuery<BoxedItem> typedQuery = em.createQuery(select);
-        if (pageSize <= 0) {
+        if (pageSize > 0) {
             typedQuery.setMaxResults(pageSize);
             typedQuery.setFirstResult(first);
         }
