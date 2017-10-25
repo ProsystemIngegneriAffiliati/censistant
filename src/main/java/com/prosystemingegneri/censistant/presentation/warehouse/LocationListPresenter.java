@@ -44,14 +44,14 @@ public class LocationListPresenter implements Serializable{
         lazyLocations = new LocationLazyDataModel(service);
     }
     
-    public List<Location> completeLocations(String description) {
-        return service.listLocations(0, 10, null, null);
+    public List<Location> completeLocations(String name) {
+        return service.listLocations(0, 10, null, null, name);
     }
     
     //Useful only for 'omnifaces.ListConverter' used in 'p:autoComplete'
     public List<Location> getLocations() {
         if (locations == null || locations.isEmpty())
-            locations = service.listLocations(0, 0, null, null);
+            locations = service.listLocations(0, 0, null, null, null);
         
         return locations;
     }

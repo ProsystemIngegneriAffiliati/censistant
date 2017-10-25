@@ -68,8 +68,8 @@ public class LocationLazyDataModel extends LazyDataModel<Location>{
             }
         }
         
-        List<Location> result = service.listLocations(first, pageSize, sortField, isAscending);
-        this.setRowCount(service.getLocationsCount().intValue());
+        List<Location> result = service.listLocations(first, pageSize, sortField, isAscending, name);
+        this.setRowCount(service.getLocationsCount(name).intValue());
         
         return result;
     }
