@@ -21,6 +21,7 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -30,7 +31,8 @@ import javax.persistence.OneToOne;
 @DiscriminatorValue(value = "2")
 public class SupplierLocation extends Location {
     
-    @OneToOne(fetch = FetchType.LAZY)
+    @NotNull
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
     private CustomerSupplier supplier;
 
     public SupplierLocation() {
@@ -43,5 +45,9 @@ public class SupplierLocation extends Location {
     public void setSupplier(CustomerSupplier supplier) {
         this.supplier = supplier;
     }
-    
+
+    @Override
+    public String getName() {
+        return this.supplier.getName();
+    }
 }

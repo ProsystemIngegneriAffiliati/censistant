@@ -37,7 +37,7 @@ import javax.persistence.Version;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(discriminatorType = DiscriminatorType.INTEGER, columnDefinition = "smallint")
-public class Location extends BaseEntity<Long>{
+public abstract class Location extends BaseEntity<Long>{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -47,6 +47,8 @@ public class Location extends BaseEntity<Long>{
     
     @OneToMany(mappedBy = "fromLocation")
     private final List<HandledItem> outHandledItem; //picked items
+    
+    abstract String getName();
     
     @Version
     private int version;

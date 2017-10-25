@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:oou="http://omnifaces.org/ui"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition template="/WEB-INF/template.xhtml">
+        <ui:define name="content">
+            <h:form id="itemMovementForm">
+                <div class="ui-fluid">
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <div class="card card-w-title">
+                                <h1>#{msg.warehouse_itemMovement}</h1>
+                                <p>#{msg.warehouse_itemMovement_tip}</p>
+
+                                <h:panelGroup styleClass="md-inputfield">
+                                    <p:autoComplete id="locations"
+                                                    dropdown="true"
+                                                    completeMethod="#{locationListPresenter.completeLocations}"
+                                                    var="loc"
+                                                    itemLabel="#{loc.name}"
+                                                    itemValue="#{loc}"
+                                                    forceSelection="true">
+                                        <oou:converter converterId="omnifaces.ListConverter" list="#{locationListPresenter.locations}"/>
+                                    </p:autoComplete>
+                                    <p:outputLabel for="locations" value="Luoghi"/>
+                                    <p:message for="locations"/>
+                                </h:panelGroup>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

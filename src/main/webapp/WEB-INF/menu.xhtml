@@ -33,6 +33,7 @@
                             </p:submenu>
                         </p:submenu>
                         <p:submenu id="warehouseMenu" label="#{msg.warehouse}" icon="&#xE8D1;">
+                            <p:menuitem id="itemMovementsMenu" value="#{msg.warehouse_itemMovement}" icon="&#xE8F8;" outcome="/secured/warehouse/itemMovement"/>
                             <p:submenu id="warehouseUtils" label="#{msg.utils}" icon="&#xE149;">
                                 <p:menuitem id="warehousesMenu" value="#{msg.warehouse_warehouses}" icon="&#xE8F8;" outcome="/secured/warehouse/warehouses"/>
                             </p:submenu>
