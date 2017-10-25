@@ -43,6 +43,8 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Order;
+import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -122,87 +124,43 @@ public class SiteSurveyReportService implements Serializable{
         Root<SiteSurveyReport> root = query.from(SiteSurveyReport.class);
         CriteriaQuery<SiteSurveyReport> select = query.select(root).distinct(true);
         
-        List<Predicate> conditions = new ArrayList<>();
-        
-        //number
-        if (number != null)
-            conditions.add(cb.equal(root.get(SiteSurveyReport_.number), number));
-        
-        //creation
-        if (start != null && end != null)
-            conditions.add(cb.between(root.<Date>get(SiteSurveyReport_.expected), start, end));
-        
-        //customer
-        if (customer != null && !customer.isEmpty()) {
-            Join<SiteSurveyReport, SiteSurveyRequest> requestRoot = root.join(SiteSurveyReport_.request);
-            Join<SiteSurveyRequest, CustomerSupplier> customerRoot = requestRoot.join(SiteSurveyRequest_.customer);
-            conditions.add(cb.like(cb.lower(customerRoot.get(CustomerSupplier_.name)), "%" + customer.toLowerCase() + "%"));
-        }
-        
-        //system type
-        if (systemType != null && !systemType.isEmpty()) {
-            Join<SiteSurveyReport, SiteSurveyRequest> requestRoot = root.join(SiteSurveyReport_.request);
-            Join<SiteSurveyRequest, SystemType> systemTypeRoot = requestRoot.join(SiteSurveyRequest_.systemType);
-            conditions.add(cb.like(cb.lower(systemTypeRoot.get(SystemType_.name)), "%" + systemType.toLowerCase() + "%"));
-        }
-        
-        //seller
-        if (seller != null && !seller.isEmpty()) {
-            Join<SiteSurveyReport, Worker> workerRoot = root.join(SiteSurveyReport_.seller);
-            conditions.add(cb.like(cb.lower(workerRoot.get(Worker_.name)), "%" + seller.toLowerCase() + "%"));
-        }
-        
-        //plant's address
-        if (plant != null && !plant.isEmpty()) {
-            Join<SiteSurveyReport, Plant> plantRoot = root.join(SiteSurveyReport_.plant);
-            conditions.add(cb.like(cb.lower(plantRoot.get(Plant_.address)), "%" + String.valueOf(plant).toLowerCase() + "%"));
-        }
+        List<Predicate> conditions = calculateConditions(cb, root, number, start, end, customer, systemType, seller, plant);
 
         if (!conditions.isEmpty())
             query.where(conditions.toArray(new Predicate[conditions.size()]));
         
+        Order order = cb.desc(root.get(SiteSurveyReport_.expected));
         if (isAscending != null && sortField != null && !sortField.isEmpty()) {
-            if (sortField.equalsIgnoreCase("customer") || sortField.equalsIgnoreCase("systemType") || sortField.equalsIgnoreCase("worker") || sortField.equalsIgnoreCase("plant")) {
-                if (sortField.equalsIgnoreCase("customer")) {
-                    Join<SiteSurveyReport, SiteSurveyRequest> requestRoot = root.join(SiteSurveyReport_.request);
+            Path<?> path;
+            Join<SiteSurveyReport, SiteSurveyRequest> requestRoot;
+            switch (sortField) {
+                case "customer":
+                    requestRoot = root.join(SiteSurveyReport_.request);
                     Join<SiteSurveyRequest, CustomerSupplier> customerRoot = requestRoot.join(SiteSurveyRequest_.customer);
-                    if (isAscending)
-                        query.orderBy(cb.asc(customerRoot.get(CustomerSupplier_.name)));
-                    else
-                        query.orderBy(cb.desc(customerRoot.get(CustomerSupplier_.name)));
-                }
-                if (sortField.equalsIgnoreCase("systemType")) {
-                    Join<SiteSurveyReport, SiteSurveyRequest> requestRoot = root.join(SiteSurveyReport_.request);
+                    path = customerRoot.get(CustomerSupplier_.name);
+                    break;
+                case "systemType":
+                    requestRoot = root.join(SiteSurveyReport_.request);
                     Join<SiteSurveyRequest, SystemType> systemTypeRoot = requestRoot.join(SiteSurveyRequest_.systemType);
-                    if (isAscending)
-                        query.orderBy(cb.asc(systemTypeRoot.get(SystemType_.name)));
-                    else
-                        query.orderBy(cb.desc(systemTypeRoot.get(SystemType_.name)));
-                }
-                if (sortField.equalsIgnoreCase("seller")) {
+                    path = systemTypeRoot.get(SystemType_.name);
+                    break;
+                case "seller":
                     Join<SiteSurveyReport, Worker> workerRoot = root.join(SiteSurveyReport_.seller);
-                    if (isAscending)
-                        query.orderBy(cb.asc(workerRoot.get(Worker_.name)));
-                    else
-                        query.orderBy(cb.desc(workerRoot.get(Worker_.name)));
-                }
-                if (sortField.equalsIgnoreCase("plant")) {
+                    path = workerRoot.get(Worker_.name);
+                    break;
+                case "plant":
                     Join<SiteSurveyReport, Plant> plantRoot = root.join(SiteSurveyReport_.plant);
-                    if (isAscending)
-                        query.orderBy(cb.asc(plantRoot.get(Plant_.address)));
-                    else
-                        query.orderBy(cb.desc(plantRoot.get(Plant_.address)));
-                }
+                    path = plantRoot.get(Plant_.address);
+                    break;
+                default:
+                    path = root.get(sortField);
             }
-            else {
-                if (isAscending)
-                    query.orderBy(cb.asc(root.get(sortField)));
-                else
-                    query.orderBy(cb.desc(root.get(sortField)));
-            }
+            if (isAscending)
+                order = cb.asc(path);
+            else
+                order = cb.desc(path);
         }
-        else
-            query.orderBy(cb.desc(root.get(SiteSurveyReport_.expected)));
+        query.orderBy(order);
         
         TypedQuery<SiteSurveyReport> typedQuery = em.createQuery(select);
         if (pageSize > 0) {
@@ -219,8 +177,17 @@ public class SiteSurveyReportService implements Serializable{
         Root<SiteSurveyReport> root = query.from(SiteSurveyReport.class);
         CriteriaQuery<Long> select = query.select(cb.count(root));
 
+        List<Predicate> conditions = calculateConditions(cb, root, number, start, end, customer, systemType, seller, plant);
+
+        if (!conditions.isEmpty())
+            query.where(conditions.toArray(new Predicate[conditions.size()]));
+
+        return em.createQuery(select).getSingleResult();
+    }
+    
+    private List<Predicate> calculateConditions(CriteriaBuilder cb, Root<SiteSurveyReport> root, Integer number, Date start, Date end, String customer, String systemType, String seller, String plant) {
         List<Predicate> conditions = new ArrayList<>();
-        
+
         //number
         if (number != null)
             conditions.add(cb.equal(root.get(SiteSurveyReport_.number), number));
@@ -254,10 +221,7 @@ public class SiteSurveyReportService implements Serializable{
             Join<SiteSurveyReport, Plant> plantRoot = root.join(SiteSurveyReport_.plant);
             conditions.add(cb.like(cb.lower(plantRoot.get(Plant_.address)), "%" + String.valueOf(plant).toLowerCase() + "%"));
         }
-
-        if (!conditions.isEmpty())
-            query.where(conditions.toArray(new Predicate[conditions.size()]));
-
-        return em.createQuery(select).getSingleResult();
+        
+        return conditions;
     }
 }

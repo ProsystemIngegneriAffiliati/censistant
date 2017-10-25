@@ -112,33 +112,7 @@ public class PurchaseOrderService implements Serializable{
         Root<PurchaseOrder> root = query.from(PurchaseOrder.class);
         CriteriaQuery<PurchaseOrder> select = query.select(root).distinct(true);
         
-        List<Predicate> conditions = new ArrayList<>();
-
-        //number
-        if (number != null)
-            conditions.add(cb.equal(root.get(PurchaseOrder_.number), number));
-        
-        //supplier's name
-        if (supplier != null && !supplier.isEmpty()) {
-            Join<PurchaseOrder, CustomerSupplier> supplierRoot = root.join(PurchaseOrder_.supplier);
-            conditions.add(cb.like(cb.lower(supplierRoot.get(CustomerSupplier_.name)), "%" + supplier.toLowerCase() + "%"));
-        }
-        
-        /*
-        //item's description
-        if (item != null && !item.isEmpty()) {
-            ListJoin<PurchaseOrder, PurchaseOrderRow> rowsRoot = root.join(PurchaseOrder_.rows);
-            Join<PurchaseOrderRow, BoxedItem> boxedItemRoot = rowsRoot.join(PurchaseOrderRow_.boxedItem);
-            Join<BoxedItem, SupplierItem> supplierItemRoot = boxedItemRoot.join(BoxedItem_.item);
-            Join<SupplierItem, Item> itemRoot = supplierItemRoot.join(SupplierItem_.item);
-            conditions.add(cb.like(cb.lower(itemRoot.get(Item_.description)), "%" + item.toLowerCase() + "%"));
-        }*/
-        
-        //item's description
-        if (item != null && !item.isEmpty()) {
-            Join<SupplierItem, Item> itemRoot = root.join(PurchaseOrder_.rows).join(PurchaseOrderRow_.boxedItem).join(BoxedItem_.item).join(SupplierItem_.item);
-            conditions.add(cb.like(cb.lower(itemRoot.get(Item_.description)), "%" + item.toLowerCase() + "%"));
-        }
+        List<Predicate> conditions = calculateConditions(cb, root, number, supplier, item);
 
         if (!conditions.isEmpty())
             query.where(conditions.toArray(new Predicate[conditions.size()]));
@@ -181,6 +155,15 @@ public class PurchaseOrderService implements Serializable{
         Root<PurchaseOrder> root = query.from(PurchaseOrder.class);
         CriteriaQuery<Long> select = query.select(cb.count(root));
 
+        List<Predicate> conditions = calculateConditions(cb, root, number, supplier, item);
+
+        if (!conditions.isEmpty())
+            query.where(conditions.toArray(new Predicate[conditions.size()]));
+
+        return em.createQuery(select).getSingleResult();
+    }
+    
+    private List<Predicate> calculateConditions(CriteriaBuilder cb, Root<PurchaseOrder> root, Integer number, String supplier, String item) {
         List<Predicate> conditions = new ArrayList<>();
 
         //number
@@ -201,10 +184,7 @@ public class PurchaseOrderService implements Serializable{
                     .join(SupplierItem_.item);
             conditions.add(cb.like(cb.lower(itemRoot.get(Item_.description)), "%" + item.toLowerCase() + "%"));
         }
-
-        if (!conditions.isEmpty())
-            query.where(conditions.toArray(new Predicate[conditions.size()]));
-
-        return em.createQuery(select).getSingleResult();
+        
+        return conditions;
     }
 }

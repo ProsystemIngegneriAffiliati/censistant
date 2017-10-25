@@ -67,13 +67,7 @@ public class BoxService implements Serializable{
         Root<Box> root = query.from(Box.class);
         CriteriaQuery<Box> select = query.select(root).distinct(true);
         
-        List<Predicate> conditions = new ArrayList<>();
-
-        //name of unit of measure
-        if (unitMeasureName != null && !unitMeasureName.isEmpty()) {
-            Join<Box, UnitMeasure> unitMeasureRoot = root.join(Box_.unitMeasure);
-            conditions.add(cb.like(cb.lower(unitMeasureRoot.get(UnitMeasure_.name)), "%" + unitMeasureName.toLowerCase() + "%"));
-        }
+        List<Predicate> conditions = calculateConditions(cb, root, unitMeasureName);
 
         if (!conditions.isEmpty())
             query.where(conditions.toArray(new Predicate[conditions.size()]));
@@ -110,6 +104,15 @@ public class BoxService implements Serializable{
         Root<Box> root = query.from(Box.class);
         CriteriaQuery<Long> select = query.select(cb.count(root));
 
+        List<Predicate> conditions = calculateConditions(cb, root, unitMeasureName);
+
+        if (!conditions.isEmpty())
+            query.where(conditions.toArray(new Predicate[conditions.size()]));
+
+        return em.createQuery(select).getSingleResult();
+    }
+    
+    private List<Predicate> calculateConditions(CriteriaBuilder cb, Root<Box> root, String unitMeasureName) {
         List<Predicate> conditions = new ArrayList<>();
 
         //name of unit of measure
@@ -117,10 +120,7 @@ public class BoxService implements Serializable{
             Join<Box, UnitMeasure> unitMeasureRoot = root.join(Box_.unitMeasure);
             conditions.add(cb.like(cb.lower(unitMeasureRoot.get(UnitMeasure_.name)), "%" + unitMeasureName.toLowerCase() + "%"));
         }
-
-        if (!conditions.isEmpty())
-            query.where(conditions.toArray(new Predicate[conditions.size()]));
-
-        return em.createQuery(select).getSingleResult();
+        
+        return conditions;
     }
 }

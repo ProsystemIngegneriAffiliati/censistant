@@ -56,18 +56,7 @@ public class LocationService implements Serializable {
         Root<Location> root = query.from(Location.class);
         CriteriaQuery<Location> select = query.select(root).distinct(true);
         
-        List<Predicate> conditions = new ArrayList<>();
-
-        //name
-        if (name != null && !name.isEmpty()) {
-            Root<Warehouse> warehouseRoot = cb.treat(root, Warehouse.class);
-            Root<SupplierLocation> supplierLocationRoot = cb.treat(root, SupplierLocation.class);
-            Join<SupplierLocation, CustomerSupplier> supplierRoot = supplierLocationRoot.join(SupplierLocation_.supplier, JoinType.LEFT);
-            
-            conditions.add(cb.or(
-                    cb.like(cb.lower(warehouseRoot.get(Warehouse_.name)), "%" + name.toLowerCase() + "%"),
-                    cb.like(cb.lower(supplierRoot.get(CustomerSupplier_.name)), "%" + name.toLowerCase() + "%")));
-        }
+        List<Predicate> conditions = calculateConditions(cb, root, name);
 
         if (!conditions.isEmpty())
             query.where(conditions.toArray(new Predicate[conditions.size()]));
@@ -105,15 +94,28 @@ public class LocationService implements Serializable {
         Root<Location> root = query.from(Location.class);
         CriteriaQuery<Long> select = query.select(cb.count(root));
 
-        List<Predicate> conditions = new ArrayList<>();
-
-        //name
-        if (name != null && !name.isEmpty())
-            conditions.add(cb.like(cb.lower(root.get("name")), "%" + name.toLowerCase() + "%"));
+        List<Predicate> conditions = calculateConditions(cb, root, name);
 
         if (!conditions.isEmpty())
             query.where(conditions.toArray(new Predicate[conditions.size()]));
 
         return em.createQuery(select).getSingleResult();
+    }
+    
+    private List<Predicate> calculateConditions(CriteriaBuilder cb, Root<Location> root, String name) {
+        List<Predicate> conditions = new ArrayList<>();
+
+        //name
+        if (name != null && !name.isEmpty()) {
+            Root<Warehouse> warehouseRoot = cb.treat(root, Warehouse.class);
+            Root<SupplierLocation> supplierLocationRoot = cb.treat(root, SupplierLocation.class);
+            Join<SupplierLocation, CustomerSupplier> supplierRoot = supplierLocationRoot.join(SupplierLocation_.supplier, JoinType.LEFT);
+            
+            conditions.add(cb.or(
+                    cb.like(cb.lower(warehouseRoot.get(Warehouse_.name)), "%" + name.toLowerCase() + "%"),
+                    cb.like(cb.lower(supplierRoot.get(CustomerSupplier_.name)), "%" + name.toLowerCase() + "%")));
+        }
+        
+        return conditions;
     }
 }

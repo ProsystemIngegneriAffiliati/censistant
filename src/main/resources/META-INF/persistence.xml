@@ -7,8 +7,8 @@
             <property name="javax.persistence.sql-load-script-source" value="sql/insertInitialData.sql"/>
             
             <!--Uncomment/comment for enabling/disabling sql logging-->
-            <property name="eclipselink.logging.level.sql" value="FINE"/>
-            <property name="eclipselink.logging.parameters" value="true"/>
+            <!--<property name="eclipselink.logging.level.sql" value="FINE"/>
+            <property name="eclipselink.logging.parameters" value="true"/>-->
         </properties>
     </persistence-unit>
 </persistence>

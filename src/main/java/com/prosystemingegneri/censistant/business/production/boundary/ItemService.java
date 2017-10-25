@@ -65,11 +65,7 @@ public class ItemService implements Serializable{
         Root<Item> root = query.from(Item.class);
         CriteriaQuery<Item> select = query.select(root).distinct(true);
         
-        List<Predicate> conditions = new ArrayList<>();
-
-        //description
-        if (description != null && !description.isEmpty())
-            conditions.add(cb.like(cb.lower(root.get(Item_.description)), "%" + description.toLowerCase() + "%"));
+        List<Predicate> conditions = calculateConditions(cb, root, description);
 
         if (!conditions.isEmpty())
             query.where(conditions.toArray(new Predicate[conditions.size()]));
@@ -109,15 +105,21 @@ public class ItemService implements Serializable{
         Root<Item> root = query.from(Item.class);
         CriteriaQuery<Long> select = query.select(cb.count(root));
 
-        List<Predicate> conditions = new ArrayList<>();
-
-        //description
-        if (description != null && !description.isEmpty())
-            conditions.add(cb.like(cb.lower(root.get(Item_.description)), "%" + description.toLowerCase() + "%"));
+        List<Predicate> conditions = calculateConditions(cb, root, description);
 
         if (!conditions.isEmpty())
             query.where(conditions.toArray(new Predicate[conditions.size()]));
 
         return em.createQuery(select).getSingleResult();
+    }
+    
+    private List<Predicate> calculateConditions(CriteriaBuilder cb, Root<Item> root, String description) {
+        List<Predicate> conditions = new ArrayList<>();
+
+        //description
+        if (description != null && !description.isEmpty())
+            conditions.add(cb.like(cb.lower(root.get(Item_.description)), "%" + description.toLowerCase() + "%"));
+        
+        return conditions;
     }
 }

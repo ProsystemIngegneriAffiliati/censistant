@@ -38,6 +38,7 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
@@ -110,8 +111,59 @@ public class SiteSurveyRequestService implements Serializable{
         Root<SiteSurveyRequest> root = query.from(SiteSurveyRequest.class);
         CriteriaQuery<SiteSurveyRequest> select = query.select(root).distinct(true);
         
-        List<Predicate> conditions = new ArrayList<>();
+        List<Predicate> conditions = calculateConditions(cb, query.subquery(SiteSurveyReport.class), root, number, start, end, customer, systemType, isInfo, isReportPresent);
+
+        if (!conditions.isEmpty())
+            query.where(conditions.toArray(new Predicate[conditions.size()]));
         
+        Order order = cb.desc(root.get(SiteSurveyRequest_.creation));
+        if (isAscending != null && sortField != null && !sortField.isEmpty()) {
+            Path<?> path;
+            switch (sortField) {
+                case "customer":
+                    Join<SiteSurveyRequest, CustomerSupplier> customerRoot = root.join(SiteSurveyRequest_.customer);
+                    path = customerRoot.get(CustomerSupplier_.name);
+                    break;
+                case "systemType":
+                    Join<SiteSurveyRequest, SystemType> systemTypeRoot = root.join(SiteSurveyRequest_.systemType);
+                    path = systemTypeRoot.get(SystemType_.name);
+                    break;
+                default:
+                    path = root.get(sortField);
+            }
+            if (isAscending)
+                order = cb.asc(path);
+            else
+                order = cb.desc(path);
+        }
+        query.orderBy(order);
+        
+        TypedQuery<SiteSurveyRequest> typedQuery = em.createQuery(select);
+        if (pageSize > 0) {
+            typedQuery.setMaxResults(pageSize);
+            typedQuery.setFirstResult(first);
+        }
+
+        return typedQuery.getResultList();
+    }
+    
+    public Long getSiteSurveyRequestsCount(Integer number, Date start, Date end, String customer, String systemType, Boolean isInfo, Boolean isReportPresent) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Long> query = cb.createQuery(Long.class);
+        Root<SiteSurveyRequest> root = query.from(SiteSurveyRequest.class);
+        CriteriaQuery<Long> select = query.select(cb.count(root));
+
+        List<Predicate> conditions = calculateConditions(cb, query.subquery(SiteSurveyReport.class), root, number, start, end, customer, systemType, isInfo, isReportPresent);
+        
+        if (!conditions.isEmpty())
+            query.where(conditions.toArray(new Predicate[conditions.size()]));
+
+        return em.createQuery(select).getSingleResult();
+    }
+    
+    private List<Predicate> calculateConditions(CriteriaBuilder cb, Subquery<SiteSurveyReport> subquery, Root<SiteSurveyRequest> root, Integer number, Date start, Date end, String customer, String systemType, Boolean isInfo, Boolean isReportPresent) {
+        List<Predicate> conditions = new ArrayList<>();
+
         //number
         if (number != null)
             conditions.add(cb.equal(root.get(SiteSurveyRequest_.number), number));
@@ -140,92 +192,6 @@ public class SiteSurveyRequestService implements Serializable{
         if (isReportPresent != null) {
             Path<Object> path = root.get(SiteSurveyRequest_.id.getName()); // field to map with sub-query
             
-            Subquery<SiteSurveyReport> subquery = query.subquery(SiteSurveyReport.class);
-            Root<SiteSurveyReport> subRoot = subquery.from(SiteSurveyReport.class);
-            subquery.select(subRoot.get(SiteSurveyReport_.request.getName()).get(SiteSurveyRequest_.id.getName())); // field to map with main-query
-            
-            if (isReportPresent)
-                conditions.add(cb.in(path).value(subquery));
-            else
-                conditions.add(cb.not(cb.in(path).value(subquery)));
-        }
-
-        if (!conditions.isEmpty())
-            query.where(conditions.toArray(new Predicate[conditions.size()]));
-        
-        if (isAscending != null && sortField != null && !sortField.isEmpty()) {
-            if (sortField.equalsIgnoreCase("customer") || sortField.equalsIgnoreCase("systemType")) {
-                if (sortField.equalsIgnoreCase("customer")) {
-                    Join<SiteSurveyRequest, CustomerSupplier> customerRoot = root.join(SiteSurveyRequest_.customer);
-                    if (isAscending)
-                        query.orderBy(cb.asc(customerRoot.get(CustomerSupplier_.name)));
-                    else
-                        query.orderBy(cb.desc(customerRoot.get(CustomerSupplier_.name)));
-                }
-                if (sortField.equalsIgnoreCase("systemType")) {
-                    Join<SiteSurveyRequest, SystemType> systemTypeRoot = root.join(SiteSurveyRequest_.systemType);
-                    if (isAscending)
-                        query.orderBy(cb.asc(systemTypeRoot.get(SystemType_.name)));
-                    else
-                        query.orderBy(cb.desc(systemTypeRoot.get(SystemType_.name)));
-                }
-            }
-            else {
-                if (isAscending)
-                    query.orderBy(cb.asc(root.get(sortField)));
-                else
-                    query.orderBy(cb.desc(root.get(sortField)));
-            }
-        }
-        else
-            query.orderBy(cb.desc(root.get(SiteSurveyRequest_.creation)));
-        
-        TypedQuery<SiteSurveyRequest> typedQuery = em.createQuery(select);
-        if (pageSize > 0) {
-            typedQuery.setMaxResults(pageSize);
-            typedQuery.setFirstResult(first);
-        }
-
-        return typedQuery.getResultList();
-    }
-    
-    public Long getSiteSurveyRequestsCount(Integer number, Date start, Date end, String customer, String systemType, Boolean isInfo, Boolean isReportPresent) {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Long> query = cb.createQuery(Long.class);
-        Root<SiteSurveyRequest> root = query.from(SiteSurveyRequest.class);
-        CriteriaQuery<Long> select = query.select(cb.count(root));
-
-        List<Predicate> conditions = new ArrayList<>();
-        
-                //number
-        if (number != null)
-            conditions.add(cb.equal(root.get(SiteSurveyRequest_.number), number));
-        
-        //creation
-        if (start != null && end != null)
-            conditions.add(cb.between(root.<Date>get(SiteSurveyRequest_.creation), start, end));
-        
-        //customer
-        if (customer != null && !customer.isEmpty()) {
-            Join<SiteSurveyRequest, CustomerSupplier> customerRoot = root.join(SiteSurveyRequest_.customer);
-            conditions.add(cb.like(cb.lower(customerRoot.get(CustomerSupplier_.name)), "%" + customer.toLowerCase() + "%"));
-        }
-        
-        //system type
-        if (systemType != null && !systemType.isEmpty()) {
-            Join<SiteSurveyRequest, SystemType> systemTypeRoot = root.join(SiteSurveyRequest_.systemType);
-            conditions.add(cb.like(cb.lower(systemTypeRoot.get(SystemType_.name)), "%" + systemType.toLowerCase() + "%"));
-        }
-        
-        //is information
-        if (isInfo != null)
-            conditions.add(cb.equal(root.get(SiteSurveyRequest_.isInfo), isInfo));
-        
-        //is associated with site survey report
-        if (isReportPresent != null) {
-            Path<Object> path = root.get(SiteSurveyRequest_.id.getName()); // field to map with sub-query
-            
-            Subquery<SiteSurveyReport> subquery = query.subquery(SiteSurveyReport.class);
             Root<SiteSurveyReport> subRoot = subquery.from(SiteSurveyReport.class);
             subquery.select(subRoot.get(SiteSurveyReport_.request.getName()).get(SiteSurveyRequest_.id.getName())); // field to map with main-query
             
@@ -235,9 +201,6 @@ public class SiteSurveyRequestService implements Serializable{
                 conditions.add(cb.not(cb.in(path).value(subquery)));
         }
         
-        if (!conditions.isEmpty())
-            query.where(conditions.toArray(new Predicate[conditions.size()]));
-
-        return em.createQuery(select).getSingleResult();
+        return conditions;
     }
 }
