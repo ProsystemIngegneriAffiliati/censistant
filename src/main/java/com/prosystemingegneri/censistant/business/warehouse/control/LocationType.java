@@ -14,44 +14,20 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.prosystemingegneri.censistant.business.warehouse.entity;
-
-import javax.persistence.Column;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.validation.constraints.NotNull;
+package com.prosystemingegneri.censistant.business.warehouse.control;
 
 /**
  *
  * @author Davide Mainardi <ingmainardi@live.com>
  */
-@Entity
-@DiscriminatorValue(value = "0")
-public class Warehouse extends Location {
-    @NotNull
-    @Column(nullable = false)
-    private String name;
+public enum LocationType {
+    WAREHOUSE(0),
+    SUPPLIER(1);
     
-    private String description;
+    private final int value;
 
-    public Warehouse() {
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
+    private LocationType(int value) {
+        this.value = value;
     }
     
 }

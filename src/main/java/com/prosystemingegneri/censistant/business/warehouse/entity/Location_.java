@@ -16,42 +16,15 @@
  */
 package com.prosystemingegneri.censistant.business.warehouse.entity;
 
-import javax.persistence.Column;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.validation.constraints.NotNull;
+import com.prosystemingegneri.censistant.business.warehouse.control.LocationType;
+import javax.persistence.metamodel.SingularAttribute;
+import javax.persistence.metamodel.StaticMetamodel;
 
 /**
  *
  * @author Davide Mainardi <ingmainardi@live.com>
  */
-@Entity
-@DiscriminatorValue(value = "0")
-public class Warehouse extends Location {
-    @NotNull
-    @Column(nullable = false)
-    private String name;
-    
-    private String description;
-
-    public Warehouse() {
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-    
+@StaticMetamodel(Location.class)
+public class Location_ {
+    public static volatile SingularAttribute<Location, LocationType> type;
 }

@@ -28,7 +28,7 @@ import javax.validation.constraints.NotNull;
  * @author Davide Mainardi <ingmainardi@live.com>
  */
 @Entity
-@DiscriminatorValue(value = "2")
+@DiscriminatorValue(value = "1")
 public class SupplierLocation extends Location {
     
     @NotNull

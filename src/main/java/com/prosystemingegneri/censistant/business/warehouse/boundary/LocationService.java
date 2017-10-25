@@ -18,7 +18,9 @@ package com.prosystemingegneri.censistant.business.warehouse.boundary;
 
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier_;
+import com.prosystemingegneri.censistant.business.warehouse.control.LocationType;
 import com.prosystemingegneri.censistant.business.warehouse.entity.Location;
+import com.prosystemingegneri.censistant.business.warehouse.entity.Location_;
 import com.prosystemingegneri.censistant.business.warehouse.entity.SupplierLocation;
 import com.prosystemingegneri.censistant.business.warehouse.entity.SupplierLocation_;
 import com.prosystemingegneri.censistant.business.warehouse.entity.Warehouse;
@@ -50,13 +52,13 @@ public class LocationService implements Serializable {
         return em.find(Location.class, id);
     }
     
-    public List<Location> listLocations(int first, int pageSize, String sortField, Boolean isAscending, String name) {
+    public List<Location> listLocations(int first, int pageSize, String sortField, Boolean isAscending, LocationType locationType, String name) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Location> query = cb.createQuery(Location.class);
         Root<Location> root = query.from(Location.class);
         CriteriaQuery<Location> select = query.select(root).distinct(true);
         
-        List<Predicate> conditions = calculateConditions(cb, root, name);
+        List<Predicate> conditions = calculateConditions(cb, root, locationType, name);
 
         if (!conditions.isEmpty())
             query.where(conditions.toArray(new Predicate[conditions.size()]));
@@ -88,13 +90,13 @@ public class LocationService implements Serializable {
         return typedQuery.getResultList();
     }
     
-    public Long getLocationsCount(String name) {
+    public Long getLocationsCount(LocationType locationType, String name) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Long> query = cb.createQuery(Long.class);
         Root<Location> root = query.from(Location.class);
         CriteriaQuery<Long> select = query.select(cb.count(root));
 
-        List<Predicate> conditions = calculateConditions(cb, root, name);
+        List<Predicate> conditions = calculateConditions(cb, root, locationType, name);
 
         if (!conditions.isEmpty())
             query.where(conditions.toArray(new Predicate[conditions.size()]));
@@ -102,7 +104,7 @@ public class LocationService implements Serializable {
         return em.createQuery(select).getSingleResult();
     }
     
-    private List<Predicate> calculateConditions(CriteriaBuilder cb, Root<Location> root, String name) {
+    private List<Predicate> calculateConditions(CriteriaBuilder cb, Root<Location> root, LocationType locationType, String name) {
         List<Predicate> conditions = new ArrayList<>();
 
         //name
@@ -115,6 +117,10 @@ public class LocationService implements Serializable {
                     cb.like(cb.lower(warehouseRoot.get(Warehouse_.name)), "%" + name.toLowerCase() + "%"),
                     cb.like(cb.lower(supplierRoot.get(CustomerSupplier_.name)), "%" + name.toLowerCase() + "%")));
         }
+        
+        //location type
+        if (locationType != null)
+            conditions.add(cb.equal(root.get(Location_.type), locationType));
         
         return conditions;
     }

@@ -4,9 +4,11 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:oou="http://omnifaces.org/ui"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:composition template="/WEB-INF/template.xhtml">
         <ui:define name="content">
+            <oou:importConstants type="com.prosystemingegneri.censistant.business.warehouse.control.LocationType"/>
             <h:form id="itemMovementForm">
                 <div class="ui-fluid">
                     <div class="ui-g">
@@ -15,19 +17,28 @@
                                 <h1>#{msg.warehouse_itemMovement}</h1>
                                 <p>#{msg.warehouse_itemMovement_tip}</p>
 
-                                <h:panelGroup styleClass="md-inputfield">
-                                    <p:autoComplete id="locations"
-                                                    dropdown="true"
-                                                    completeMethod="#{locationListPresenter.completeLocations}"
-                                                    var="loc"
-                                                    itemLabel="#{loc.name}"
-                                                    itemValue="#{loc}"
-                                                    forceSelection="true">
-                                        <oou:converter converterId="omnifaces.ListConverter" list="#{locationListPresenter.locations}"/>
-                                    </p:autoComplete>
-                                    <p:outputLabel for="locations" value="#{msg.warehouse_locations}"/>
-                                    <p:message for="locations"/>
-                                </h:panelGroup>
+                                <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                    <p:selectOneMenu id="locationTypes" value="#{locationListPresenter.locationType}">
+                                        <f:selectItem itemLabel="#{msg.warehouse_locationType_noSelection}" noSelectionOption="true" />
+                                        <f:selectItem itemLabel="#{msg.warehouse_warehouse_name}" itemValue="#{LocationType.WAREHOUSE}" />
+                                        <f:selectItem itemLabel="#{msg.customerSupplier_supplier}" itemValue="#{LocationType.SUPPLIER}" />
+                                        <p:ajax event="itemSelect" update="locations" />
+                                    </p:selectOneMenu>
+                                    
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:autoComplete id="locations"
+                                                        dropdown="true"
+                                                        completeMethod="#{locationListPresenter.completeLocations}"
+                                                        var="loc"
+                                                        itemLabel="#{loc.name}"
+                                                        itemValue="#{loc}"
+                                                        forceSelection="true">
+                                            <oou:converter converterId="omnifaces.ListConverter" list="#{locationListPresenter.locations}"/>
+                                        </p:autoComplete>
+                                        <p:outputLabel for="locations" value="#{msg.warehouse_locations}"/>
+                                        <p:message for="locations"/>
+                                    </h:panelGroup>
+                                </p:panelGrid>
                             </div>
                         </div>
                     </div>

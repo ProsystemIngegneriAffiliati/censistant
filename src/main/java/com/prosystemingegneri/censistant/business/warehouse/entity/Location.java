@@ -17,11 +17,15 @@
 package com.prosystemingegneri.censistant.business.warehouse.entity;
 
 import com.prosystemingegneri.censistant.business.entity.BaseEntity;
+import com.prosystemingegneri.censistant.business.warehouse.control.LocationType;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -36,11 +40,15 @@ import javax.persistence.Version;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn(discriminatorType = DiscriminatorType.INTEGER, columnDefinition = "smallint")
+@DiscriminatorColumn(name = "dtype", discriminatorType = DiscriminatorType.INTEGER, columnDefinition = "smallint")
 public abstract class Location extends BaseEntity<Long>{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
+    @Enumerated(EnumType.ORDINAL)
+    @Column(name = "dtype", insertable = false, updatable = false, columnDefinition = "smallint")
+    private LocationType type;
     
     @OneToMany(mappedBy = "toLocation")
     private final List<HandledItem> inHandledItem;  //received items

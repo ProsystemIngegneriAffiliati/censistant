@@ -17,6 +17,7 @@
 package com.prosystemingegneri.censistant.presentation.warehouse;
 
 import com.prosystemingegneri.censistant.business.warehouse.boundary.LocationService;
+import com.prosystemingegneri.censistant.business.warehouse.control.LocationType;
 import com.prosystemingegneri.censistant.business.warehouse.entity.Location;
 import java.io.Serializable;
 import java.util.List;
@@ -38,6 +39,7 @@ public class LocationListPresenter implements Serializable{
     private LocationLazyDataModel lazyLocations;
     
     private List<Location> locations;
+    private LocationType locationType;
     
     @PostConstruct
     public void init() {
@@ -45,13 +47,13 @@ public class LocationListPresenter implements Serializable{
     }
     
     public List<Location> completeLocations(String name) {
-        return service.listLocations(0, 10, null, null, name);
+        return service.listLocations(0, 10, null, null, locationType, name);
     }
     
     //Useful only for 'omnifaces.ListConverter' used in 'p:autoComplete'
     public List<Location> getLocations() {
         if (locations == null || locations.isEmpty())
-            locations = service.listLocations(0, 0, null, null, null);
+            locations = service.listLocations(0, 0, null, null, null, null);
         
         return locations;
     }
@@ -63,4 +65,13 @@ public class LocationListPresenter implements Serializable{
     public void setLazyLocations(LocationLazyDataModel lazyLocations) {
         this.lazyLocations = lazyLocations;
     }
+
+    public LocationType getLocationType() {
+        return locationType;
+    }
+
+    public void setLocationType(LocationType locationType) {
+        this.locationType = locationType;
+    }
+    
 }
