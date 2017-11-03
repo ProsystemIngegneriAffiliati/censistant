@@ -1,0 +1,39 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:oou="http://omnifaces.org/ui">
+    <ui:define name="content">
+        <h:form id="warehousesStockForm">
+            <div class="ui-g">
+                <div class="ui-g-12">
+                    <div class="card card-w-title">
+                        <h1>#{msg.warehouse_warehousesStock}</h1>
+                        <p:dataTable id="warehousesStockTable" var="stock" value="#{stockListPresenter.lazyStock}"
+                                     selectionMode="multiple" selection="#{stockListPresenter.selectedStock}" rowKey="#{stock.id}"
+                                     paginator="true" rows="10"
+                                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     rowsPerPageTemplate="10,25,50" lazy="true">
+                            <f:facet name="header">
+                                #{msg.warehouse_warehousesStock_tip}
+                            </f:facet>
+                            <p:column headerText="#{msg.warehouse_location}" field="location" priority="2">
+                                <h:outputText value="#{stock.location.name}" />
+                            </p:column>
+                            <p:column headerText="#{msg.purchasing_supplierItem}" field="item" priority="0">
+                                <h:outputText value="#{stock.purchaseOrderRow.boxedItem.item.code} - #{stock.purchaseOrderRow.boxedItem.item.item.description}" />
+                            </p:column>
+                            <p:column headerText="#{msg.purchasing_purchaseOrderRow_quantity}" priority="0">
+                                <h:outputText value="#{stock.quantity}">
+                                    <f:convertNumber integerOnly="true" />
+                                </h:outputText>
+                            </p:column>
+                        </p:dataTable>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>

@@ -25,17 +25,23 @@ import java.io.Serializable;
  * @author Davide Mainardi <ingmainardi@live.com>
  */
 public class Stock implements Serializable {
+    public static final String SEPARATOR = "-";
+    
     private Location location;
     private PurchaseOrderRow purchaseOrderRow;
     private Integer quantity;
-
-    public Stock() {
-    }
 
     public Stock(Location location, PurchaseOrderRow purchaseOrderRow, Integer quantity) {
         this.location = location;
         this.purchaseOrderRow = purchaseOrderRow;
         this.quantity = quantity;
+    }
+    
+    public String getId() {
+        if (location != null && purchaseOrderRow != null && quantity != null)
+            return location.getId().toString() + SEPARATOR + purchaseOrderRow.getId().toString() + SEPARATOR + quantity.toString();
+        
+        return "";
     }
 
     public Location getLocation() {

@@ -39,24 +39,6 @@
                                         <p:message for="locations"/>
                                     </h:panelGroup>
                                 </p:panelGrid>
-                                <p:dataTable id="stockTable"
-                                             var="stock"
-                                             value="#{locationListPresenter.stock}">
-                                    <f:facet name="header">
-                                        #{msg.warehouse_warehouses_tip}
-                                    </f:facet>
-                                    <p:column headerText="#{msg.warehouse_location}">
-                                        <h:outputText value="#{stock.location.name}" />
-                                    </p:column>
-                                    <p:column headerText="#{msg.purchasing_supplierItem}">
-                                        <h:outputText value="#{stock.purchaseOrderRow.boxedItem.item.code} - #{stock.purchaseOrderRow.boxedItem.item.item.description}" />
-                                    </p:column>
-                                    <p:column headerText="#{msg.purchasing_purchaseOrderRow_quantity}">
-                                        <h:outputText value="#{stock.quantity}">
-                                            <f:convertNumber integerOnly="true" />
-                                        </h:outputText>
-                                    </p:column>
-                                </p:dataTable>
                             </div>
                         </div>
                     </div>

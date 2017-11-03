@@ -18,7 +18,6 @@ package com.prosystemingegneri.censistant.presentation.warehouse;
 
 import com.prosystemingegneri.censistant.business.warehouse.boundary.LocationService;
 import com.prosystemingegneri.censistant.business.warehouse.control.LocationType;
-import com.prosystemingegneri.censistant.business.warehouse.control.Stock;
 import com.prosystemingegneri.censistant.business.warehouse.entity.Location;
 import java.io.Serializable;
 import java.util.List;
@@ -42,12 +41,9 @@ public class LocationListPresenter implements Serializable{
     private List<Location> locations;
     private LocationType locationType;
     
-    private List<Stock> stock;
-    
     @PostConstruct
     public void init() {
         lazyLocations = new LocationLazyDataModel(service);
-        stock = service.listStock(0, 10);
     }
     
     public List<Location> completeLocations(String name) {
@@ -76,10 +72,6 @@ public class LocationListPresenter implements Serializable{
 
     public void setLocationType(LocationType locationType) {
         this.locationType = locationType;
-    }
-
-    public List<Stock> getStock() {
-        return stock;
     }
     
 }
