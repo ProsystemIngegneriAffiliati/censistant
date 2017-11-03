@@ -54,9 +54,9 @@ public class StockService implements Serializable {
         return result;
     }
     
-    public List<Stock> listStock(int first, int pageSize, String sortField, Boolean isAscending, String location, String item) {
+    public List<Stock> listStock(int first, int pageSize, String sortField, Boolean isAscending, String item) {
         List<Stock> result = new ArrayList<>();
-        Query query = queryListStock(location, item, false);
+        Query query = queryListStock(sortField, isAscending, item, false);
         
         if (pageSize > 0) {
             query.setMaxResults(pageSize);
@@ -74,8 +74,8 @@ public class StockService implements Serializable {
         return result;
     }
     
-    public Long getStockCount(String location, String item) {
-        Query query = queryListStock(location, item, true);
+    public Long getStockCount(String item) {
+        Query query = queryListStock(null, null, item, true);
         
         try {
             return (Long) query.getSingleResult();
@@ -88,9 +88,17 @@ public class StockService implements Serializable {
         }
     }
     
-    public Query queryListStock(String location, String item, boolean isCounting) {
+    public Query queryListStock(String sortField, Boolean isAscending, String item, boolean isCounting) {
         
         String queryString = "";
+        String filterString = "";
+        
+        if (item != null && !item.isEmpty())
+            filterString = "JOIN boxeditem ON purchaseorderrow.boxeditem_id = boxeditem.id " +
+                "JOIN supplieritem ON boxeditem.item_id = supplieritem.id " +
+                "JOIN item ON supplieritem.item_id = item.id " +
+                "WHERE LOWER(supplieritem.code) LIKE '%" + item.toLowerCase() + "%' " +
+                "OR LOWER(item.description) LIKE '%" + item.toLowerCase() +"%' ";
         
         if (isCounting)
             queryString = "SELECT COUNT(*) FROM (";
@@ -102,12 +110,15 @@ public class StockService implements Serializable {
                     "FROM purchaseorderrow " +
                     "JOIN purchaseorder ON purchaseorderrow.purchaseorder_id = purchaseorder.id " +
                     "JOIN supplierlocation ON purchaseorder.supplier_id = supplierlocation.supplier_id " +
+                filterString +
                     "GROUP BY supplierlocation.id, purchaseorderrow.id " +
                 ") AS fromSupplier " +
                 "FULL JOIN " +
                 "( " +
                     "SELECT hiFrom.fromlocation_id as loc, hiFrom.purchaseorderrow_id as idpurchaseorderrow, SUM(hiFrom.quantity) as qty " +
                     "FROM handleditem hiFrom " +
+                    "JOIN purchaseorderrow ON hiFrom.purchaseorderrow_id = purchaseorderrow.id " +
+                filterString +
                     "GROUP BY hiFrom.fromlocation_id, hiFrom.purchaseorderrow_id " +
                 ") AS fromLocation " +
                 "ON fromSupplier.loc = fromLocation.loc AND fromSupplier.idpurchaseorderrow = fromLocation.idpurchaseorderrow " +
@@ -115,12 +126,20 @@ public class StockService implements Serializable {
                 "( " +
                     "SELECT hiTo.tolocation_id as loc, hiTo.purchaseorderrow_id as idpurchaseorderrow, SUM(hiTo.quantity) as qty " +
                     "FROM handleditem hiTo " +
+                    "JOIN purchaseorderrow ON hiTo.purchaseorderrow_id = purchaseorderrow.id " +
+                filterString +
                     "GROUP BY hiTo.tolocation_id, hiTo.purchaseorderrow_id " +
                 ") AS inLocation " +
                 "ON fromLocation.loc = inLocation.loc AND fromSupplier.loc = inLocation.loc AND fromLocation.idpurchaseorderrow = inLocation.idpurchaseorderrow AND fromSupplier.idpurchaseorderrow = inLocation.idpurchaseorderrow " +
                 "GROUP BY COALESCE(fromSupplier.loc, fromLocation.loc, inLocation.loc), COALESCE(fromSupplier.idpurchaseorderrow, fromLocation.idpurchaseorderrow, inLocation.idpurchaseorderrow) " +
-                "HAVING SUM(COALESCE(fromSupplier.qty, 0) - COALESCE(fromLocation.qty, 0) + COALESCE(inLocation.qty, 0)) > 0 " +
-                "ORDER BY loc";
+                "HAVING SUM(COALESCE(fromSupplier.qty, 0) - COALESCE(fromLocation.qty, 0) + COALESCE(inLocation.qty, 0)) > 0 ";
+        if (sortField != null && !sortField.isEmpty()) {
+            if ("location".equals(sortField)) {
+                queryString += "ORDER BY loc";
+                if (!isAscending)
+                    queryString += " DESC";
+            }
+        }
         
         if (isCounting)
             queryString += ") AS counting";

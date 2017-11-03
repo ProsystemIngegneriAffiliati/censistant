@@ -45,7 +45,6 @@ public class StockLazyDataModel extends LazyDataModel<Stock>{
     @Override
     public List<Stock> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
         Boolean isAscending = null;
-        String location = null;
         String item = null;
         
         switch (sortOrder) {
@@ -63,16 +62,14 @@ public class StockLazyDataModel extends LazyDataModel<Stock>{
                 String filterProperty = it.next();
 
                 if (!filterProperty.isEmpty()) {
-                    if (filterProperty.equalsIgnoreCase("location"))
-                        location = String.valueOf(filters.get(filterProperty));
                     if (filterProperty.equalsIgnoreCase("item"))
                         item = String.valueOf(filters.get(filterProperty));
                 }
             }
         }
         
-        List<Stock> result = service.listStock(first, pageSize, sortField, isAscending, location, item);
-        this.setRowCount(service.getStockCount(location, item).intValue());
+        List<Stock> result = service.listStock(first, pageSize, sortField, isAscending, item);
+        this.setRowCount(service.getStockCount(item).intValue());
         
         return result;
     }
