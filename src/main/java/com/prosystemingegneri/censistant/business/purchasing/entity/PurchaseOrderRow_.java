@@ -26,7 +26,9 @@ import javax.persistence.metamodel.StaticMetamodel;
  */
 @StaticMetamodel(PurchaseOrderRow.class)
 public class PurchaseOrderRow_ {
+    public static volatile SingularAttribute<PurchaseOrderRow, Long> id;
     public static volatile SingularAttribute<PurchaseOrderRow, Integer> quantity;
     public static volatile SingularAttribute<PurchaseOrderRow, BigDecimal> cost;
     public static volatile SingularAttribute<PurchaseOrderRow, BoxedItem> boxedItem;
+    public static volatile SingularAttribute<PurchaseOrderRow, PurchaseOrder> purchaseOrder;
 }

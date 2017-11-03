@@ -18,7 +18,13 @@ package com.prosystemingegneri.censistant.business.warehouse.boundary;
 
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier_;
+import com.prosystemingegneri.censistant.business.purchasing.entity.PurchaseOrder;
+import com.prosystemingegneri.censistant.business.purchasing.entity.PurchaseOrderRow;
+import com.prosystemingegneri.censistant.business.purchasing.entity.PurchaseOrderRow_;
+import com.prosystemingegneri.censistant.business.purchasing.entity.PurchaseOrder_;
 import com.prosystemingegneri.censistant.business.warehouse.control.LocationType;
+import com.prosystemingegneri.censistant.business.warehouse.entity.HandledItem;
+import com.prosystemingegneri.censistant.business.warehouse.entity.HandledItem_;
 import com.prosystemingegneri.censistant.business.warehouse.entity.Location;
 import com.prosystemingegneri.censistant.business.warehouse.entity.Location_;
 import com.prosystemingegneri.censistant.business.warehouse.entity.SupplierLocation;
@@ -36,8 +42,10 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Subquery;
 
 /**
  *
@@ -121,6 +129,62 @@ public class LocationService implements Serializable {
         //location type
         if (locationType != null)
             conditions.add(cb.equal(root.get(Location_.type), locationType));
+        
+        return conditions;
+    }
+    
+    public List<PurchaseOrderRow> listMovablePurchaseOrderRows(int first, int pageSize, String sortField, Boolean isAscending, Location location) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<PurchaseOrderRow> query = cb.createQuery(PurchaseOrderRow.class);
+        Root<PurchaseOrderRow> root = query.from(PurchaseOrderRow.class);
+        CriteriaQuery<PurchaseOrderRow> select = query.select(root).distinct(true);
+        
+        List<Predicate> conditions = calculateMovablePurchaseOrderRowsConditions(cb, query.subquery(HandledItem.class), root, location);
+
+        if (!conditions.isEmpty())
+            query.where(conditions.toArray(new Predicate[conditions.size()]));
+        
+        TypedQuery<PurchaseOrderRow> typedQuery = em.createQuery(select);
+        if (pageSize > 0) {
+            typedQuery.setMaxResults(pageSize);
+            typedQuery.setFirstResult(first);
+        }
+
+        return typedQuery.getResultList();
+    }
+    
+    public Long getMovablePurchaseOrderRowsCount(Location location) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Long> query = cb.createQuery(Long.class);
+        Root<PurchaseOrderRow> root = query.from(PurchaseOrderRow.class);
+        CriteriaQuery<Long> select = query.select(cb.count(root));
+
+        List<Predicate> conditions = calculateMovablePurchaseOrderRowsConditions(cb, query.subquery(HandledItem.class), root, location);
+
+        if (!conditions.isEmpty())
+            query.where(conditions.toArray(new Predicate[conditions.size()]));
+
+        return em.createQuery(select).getSingleResult();
+    }
+    
+    private List<Predicate> calculateMovablePurchaseOrderRowsConditions(CriteriaBuilder cb, Subquery<HandledItem> subquery, Root<PurchaseOrderRow> root, Location location) {
+        List<Predicate> conditions = new ArrayList<>();
+        
+        //location
+        if (location != null) {
+            if (location instanceof SupplierLocation) {
+                SupplierLocation tempSupplierLocation = (SupplierLocation) location;
+                Join<PurchaseOrderRow, PurchaseOrder> purchaseOrderRoot = root.join(PurchaseOrderRow_.purchaseOrder);
+                conditions.add(cb.equal(purchaseOrderRoot.get(PurchaseOrder_.supplier), tempSupplierLocation.getSupplier()));
+                
+                Path<Object> path = root.get(PurchaseOrderRow_.id.getName()); // field to map with sub-query
+                Root<HandledItem> subRoot = subquery.from(HandledItem.class);
+                subquery.select(subRoot.get(HandledItem_.purchaseOrderRow.getName()).get(PurchaseOrderRow_.id.getName())); // field to map with main-query
+                conditions.add(cb.not(cb.in(path).value(subquery)));
+            }
+            if (location instanceof Warehouse)
+                ;
+        }
         
         return conditions;
     }

@@ -126,3 +126,8 @@ INSERT INTO location(dtype, version) VALUES(0, 0)
 INSERT INTO warehouse(id, name, description) VALUES(3, 'Centrale', 'Magazzino centrale')
 INSERT INTO location(dtype, version) VALUES(0, 0)
 INSERT INTO warehouse(id, name, description) VALUES(4, 'Secondario', null)
+
+INSERT INTO handleditem(purchaseorderrow_id, worker_id, handlingtimestamp, quantity, unitmeasure_id, fromlocation_id, tolocation_id, version) VALUES(1, 1, '2017-10-30 08:00:00', 1, 4, 2, 3, 0)
+INSERT INTO handleditem(purchaseorderrow_id, worker_id, handlingtimestamp, quantity, unitmeasure_id, fromlocation_id, tolocation_id, version) VALUES(3, 1, '2017-10-30 08:00:01', 3, 4, 2, 3, 0)
+INSERT INTO handleditem(purchaseorderrow_id, worker_id, handlingtimestamp, quantity, unitmeasure_id, fromlocation_id, tolocation_id, version) VALUES(3, 1, '2017-10-30 08:30:00', 2, 4, 3, 4, 0)
+INSERT INTO handleditem(purchaseorderrow_id, worker_id, handlingtimestamp, quantity, unitmeasure_id, fromlocation_id, tolocation_id, version) VALUES(3, 1, '2017-10-30 08:30:30', 1, 4, 3, 2, 0)
