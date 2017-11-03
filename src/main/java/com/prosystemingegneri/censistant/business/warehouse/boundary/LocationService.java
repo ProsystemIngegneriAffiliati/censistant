@@ -23,6 +23,7 @@ import com.prosystemingegneri.censistant.business.purchasing.entity.PurchaseOrde
 import com.prosystemingegneri.censistant.business.purchasing.entity.PurchaseOrderRow_;
 import com.prosystemingegneri.censistant.business.purchasing.entity.PurchaseOrder_;
 import com.prosystemingegneri.censistant.business.warehouse.control.LocationType;
+import com.prosystemingegneri.censistant.business.warehouse.control.Stock;
 import com.prosystemingegneri.censistant.business.warehouse.entity.HandledItem;
 import com.prosystemingegneri.censistant.business.warehouse.entity.HandledItem_;
 import com.prosystemingegneri.censistant.business.warehouse.entity.Location;
@@ -32,11 +33,13 @@ import com.prosystemingegneri.censistant.business.warehouse.entity.SupplierLocat
 import com.prosystemingegneri.censistant.business.warehouse.entity.Warehouse;
 import com.prosystemingegneri.censistant.business.warehouse.entity.Warehouse_;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -187,5 +190,109 @@ public class LocationService implements Serializable {
         }
         
         return conditions;
+    }
+    
+    public List<Stock> listStock(int first, int pageSize) {
+        List<Stock> result = new ArrayList<>();
+        Query query = queryListStock();
+        
+        if (pageSize > 0) {
+            query.setMaxResults(pageSize);
+            query.setFirstResult(first);
+        }
+        
+        List<Object[]> rowList = query.getResultList();
+        if (rowList != null && !rowList.isEmpty())
+            for (Object[] objects : rowList) {
+                Location location = em.find(Location.class, (Long) objects[0]);
+                PurchaseOrderRow purchaseOrderRow = em.find(PurchaseOrderRow.class, (Long) objects[1]);
+                result.add(new Stock(location, purchaseOrderRow, ((BigDecimal) objects[2]).intValue()));
+            }
+        
+        return result;
+    }
+    
+    public Long getStockCount() {
+        /*Query query = queryListStock();
+        
+        try {
+            return (Long) query.getSingleResult();
+        } catch (NoResultException e) {
+            return new Long(0);
+        }
+        catch (NonUniqueResultException e) {
+            List<Object> list = query.getResultList();
+            return new Long(list.size());
+        }*/
+        return new Long(5);
+    }
+    
+    public Query queryListStock() {
+        
+        /*String queryString ="SELECT " +
+                "COALESCE(fromSupplier.location, fromLocation.location, toLocation.location) AS location, " +
+                "COALESCE(fromSupplier.purchaseorderrow, fromLocation.purchaseorderrow, toLocation.purchaseorderrow) AS purchaseorderrow, " +
+                "SUM(COALESCE(fromSupplier.qty, 0) - COALESCE(fromLocation.qty, 0) + COALESCE(toLocation.qty, 0)) AS qty " +
+                "FROM " +
+                "( " +
+                    "SELECT location, purchaseorderrow, SUM(purchaseorderrow.quantity) AS qty " +
+                    "FROM purchaseorderrow " +
+                    "JOIN purchaseorder ON purchaseorderrow.purchaseorder_id = purchaseorder.id " +
+                    "JOIN supplierlocation ON purchaseorder.supplier_id = supplierlocation.supplier_id " +
+                    "JOIN location ON supplierlocation.id = location.id " +
+                    "GROUP BY location, purchaseorderrow " +
+                ") AS fromSupplier " +
+                "FULL JOIN " +
+                "( " +
+                    "SELECT location, purchaseorderrow, SUM(hiFrom.quantity) as qty " +
+                    "FROM handleditem hiFrom " +
+                    "JOIN location ON hiFrom.fromlocation_id = location.id " +
+                    "JOIN purchaseorderrow ON hiFrom.purchaseorderrow_id = purchaseorderrow.id " +
+                    "GROUP BY location, purchaseorderrow " +
+                ") AS fromLocation " +
+                "ON fromSupplier.location = fromLocation.location AND fromSupplier.purchaseorderrow = fromLocation.purchaseorderrow " +
+                "FULL JOIN " +
+                "( " +
+                    "SELECT location, purchaseorderrow, SUM(hiTo.quantity) as qty " +
+                    "FROM handleditem hiTo " +
+                    "JOIN location ON hiTo.tolocation_id = location.id " +
+                    "JOIN purchaseorderrow ON hiTo.purchaseorderrow_id = purchaseorderrow.id " +
+                    "GROUP BY location, purchaseorderrow " +
+                ") AS toLocation " +
+                "ON fromLocation.location = toLocation.location AND fromSupplier.location = toLocation.location AND fromLocation.purchaseorderrow = toLocation.purchaseorderrow AND fromSupplier.purchaseorderrow = toLocation.purchaseorderrow " +
+                "GROUP BY COALESCE(fromSupplier.location, fromLocation.location, toLocation.location), COALESCE(fromSupplier.purchaseorderrow, fromLocation.purchaseorderrow, toLocation.purchaseorderrow) " +
+                "HAVING SUM(COALESCE(fromSupplier.qty, 0) - COALESCE(fromLocation.qty, 0) + COALESCE(toLocation.qty, 0)) > 0 " +
+                "ORDER BY location";*/
+        
+        String queryString = "SELECT COALESCE(fromSupplier.loc, fromLocation.loc, inLocation.loc) AS loc, COALESCE(fromSupplier.idpurchaseorderrow, fromLocation.idpurchaseorderrow, inLocation.idpurchaseorderrow) AS idpurchaseorderrow, SUM(COALESCE(fromSupplier.qty, 0) - COALESCE(fromLocation.qty, 0) + COALESCE(inLocation.qty, 0)) AS qty " +
+                "FROM " +
+                "( " +
+                    "SELECT supplierlocation.id AS loc, purchaseorderrow.id AS idpurchaseorderrow, SUM(purchaseorderrow.quantity) AS qty " +
+                    "FROM purchaseorderrow " +
+                    "JOIN purchaseorder ON purchaseorderrow.purchaseorder_id = purchaseorder.id " +
+                    "JOIN supplierlocation ON purchaseorder.supplier_id = supplierlocation.supplier_id " +
+                    "GROUP BY supplierlocation.id, purchaseorderrow.id " +
+                ") AS fromSupplier " +
+                "FULL JOIN " +
+                "( " +
+                    "SELECT hiFrom.fromlocation_id as loc, hiFrom.purchaseorderrow_id as idpurchaseorderrow, SUM(hiFrom.quantity) as qty " +
+                    "FROM handleditem hiFrom " +
+                    "GROUP BY hiFrom.fromlocation_id, hiFrom.purchaseorderrow_id " +
+                ") AS fromLocation " +
+                "ON fromSupplier.loc = fromLocation.loc AND fromSupplier.idpurchaseorderrow = fromLocation.idpurchaseorderrow " +
+                "FULL JOIN " +
+                "( " +
+                    "SELECT hiTo.tolocation_id as loc, hiTo.purchaseorderrow_id as idpurchaseorderrow, SUM(hiTo.quantity) as qty " +
+                    "FROM handleditem hiTo " +
+                    "GROUP BY hiTo.tolocation_id, hiTo.purchaseorderrow_id " +
+                ") AS inLocation " +
+                "ON fromLocation.loc = inLocation.loc AND fromSupplier.loc = inLocation.loc AND fromLocation.idpurchaseorderrow = inLocation.idpurchaseorderrow AND fromSupplier.idpurchaseorderrow = inLocation.idpurchaseorderrow " +
+                "GROUP BY COALESCE(fromSupplier.loc, fromLocation.loc, inLocation.loc), COALESCE(fromSupplier.idpurchaseorderrow, fromLocation.idpurchaseorderrow, inLocation.idpurchaseorderrow) " +
+                "HAVING SUM(COALESCE(fromSupplier.qty, 0) - COALESCE(fromLocation.qty, 0) + COALESCE(inLocation.qty, 0)) > 0 " +
+                "ORDER BY loc";
+        
+        Query query = em.createNativeQuery(queryString);
+        
+        return query;
     }
 }
