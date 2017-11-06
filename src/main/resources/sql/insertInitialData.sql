@@ -122,6 +122,11 @@ INSERT INTO purchaseorderrow(purchaseorder_id, boxeditem_id, cost, quantity, ver
 INSERT INTO purchaseorderrow(purchaseorder_id, boxeditem_id, cost, quantity, version) VALUES (1, 2, 9985, 1, 0)
 INSERT INTO purchaseorderrow(purchaseorder_id, boxeditem_id, cost, quantity, version) VALUES (1, 3, 800, 3, 0)
 
+INSERT INTO purchaseorder(supplier_id, creation, number, version) VALUES(5, '2017-11-01', 2, 0)
+INSERT INTO purchaseorderrow(purchaseorder_id, boxeditem_id, cost, quantity, version) VALUES (2, 8, 14999, 2, 0)
+INSERT INTO purchaseorderrow(purchaseorder_id, boxeditem_id, cost, quantity, version) VALUES (2, 9, 24999, 2, 0)
+INSERT INTO purchaseorderrow(purchaseorder_id, boxeditem_id, cost, quantity, version) VALUES (2, 10, 20500, 10, 0)
+
 INSERT INTO location(dtype, version) VALUES(0, 0)
 INSERT INTO warehouse(id, name, description) VALUES(3, 'Centrale', 'Magazzino centrale')
 INSERT INTO location(dtype, version) VALUES(0, 0)
@@ -131,3 +136,9 @@ INSERT INTO handleditem(purchaseorderrow_id, worker_id, handlingtimestamp, quant
 INSERT INTO handleditem(purchaseorderrow_id, worker_id, handlingtimestamp, quantity, unitmeasure_id, fromlocation_id, tolocation_id, version) VALUES(3, 1, '2017-10-30 08:00:01', 3, 4, 2, 3, 0)
 INSERT INTO handleditem(purchaseorderrow_id, worker_id, handlingtimestamp, quantity, unitmeasure_id, fromlocation_id, tolocation_id, version) VALUES(3, 1, '2017-10-30 08:30:00', 2, 4, 3, 4, 0)
 INSERT INTO handleditem(purchaseorderrow_id, worker_id, handlingtimestamp, quantity, unitmeasure_id, fromlocation_id, tolocation_id, version) VALUES(3, 1, '2017-10-30 08:30:30', 1, 4, 3, 2, 0)
+INSERT INTO handleditem(purchaseorderrow_id, worker_id, handlingtimestamp, quantity, unitmeasure_id, fromlocation_id, tolocation_id, version) VALUES(4, 1, '2017-11-01 08:30:30', 2, 4, 1, 3, 0)
+INSERT INTO handleditem(purchaseorderrow_id, worker_id, handlingtimestamp, quantity, unitmeasure_id, fromlocation_id, tolocation_id, version) VALUES(4, 1, '2017-11-02 08:30:30', 1, 4, 3, 1, 0)
+INSERT INTO handleditem(purchaseorderrow_id, worker_id, handlingtimestamp, quantity, unitmeasure_id, fromlocation_id, tolocation_id, version) VALUES(4, 1, '2017-11-02 08:35:30', 1, 4, 3, 4, 0)
+INSERT INTO handleditem(purchaseorderrow_id, worker_id, handlingtimestamp, quantity, unitmeasure_id, fromlocation_id, tolocation_id, version) VALUES(6, 1, '2017-11-03 08:30:30', 10, 4, 1, 4, 0)
+INSERT INTO handleditem(purchaseorderrow_id, worker_id, handlingtimestamp, quantity, unitmeasure_id, fromlocation_id, tolocation_id, version) VALUES(6, 1, '2017-11-03 08:30:30', 5, 4, 4, 3, 0)
+INSERT INTO handleditem(purchaseorderrow_id, worker_id, handlingtimestamp, quantity, unitmeasure_id, fromlocation_id, tolocation_id, version) VALUES(2, 1, '2017-11-04 08:00:00', 3, 2, 2, 4, 0)
