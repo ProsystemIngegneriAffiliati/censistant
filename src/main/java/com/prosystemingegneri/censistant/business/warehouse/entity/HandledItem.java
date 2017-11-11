@@ -57,9 +57,8 @@ public class HandledItem extends BaseEntity<Long>{
     @Column(nullable = false)
     private Integer quantity;
     
-    @NotNull
-    @ManyToOne(optional = false)
-    private UnitMeasure unitMeasure;
+    //unit measure will always be item's one
+    //private UnitMeasure unitMeasure;
     
     @NotNull
     @ManyToOne(optional = false)
@@ -105,14 +104,6 @@ public class HandledItem extends BaseEntity<Long>{
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
-    }
-
-    public UnitMeasure getUnitMeasure() {
-        return unitMeasure;
-    }
-
-    public void setUnitMeasure(UnitMeasure unitMeasure) {
-        this.unitMeasure = unitMeasure;
     }
 
     public PurchaseOrderRow getPurchaseOrderRow() {

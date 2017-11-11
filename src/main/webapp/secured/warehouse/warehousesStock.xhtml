@@ -29,6 +29,10 @@
                                 <h:outputText value="#{stock.quantity}">
                                     <f:convertNumber integerOnly="true" />
                                 </h:outputText>
+                                <h:outputText value=" #{stock.purchaseOrderRow.boxedItem.item.item.unitMeasure.symbol}" />
+                            </p:column>
+                            <p:column headerText="#{msg.purchasing_box_name}" priority="4">
+                                <h:outputText rendered="#{stock.quantity != stock.quantity / stock.purchaseOrderRow.boxedItem.box.quantity and stock.quantity / stock.purchaseOrderRow.boxedItem.box.quantity >= 1}" value="#{stock.quantity / stock.purchaseOrderRow.boxedItem.box.quantity} #{stock.purchaseOrderRow.boxedItem.box.unitMeasure.name} #{stock.purchaseOrderRow.boxedItem.box.quantity} #{stock.purchaseOrderRow.boxedItem.item.item.unitMeasure.symbol}" />
                             </p:column>
                         </p:dataTable>
                     </div>

@@ -91,14 +91,16 @@ public class StockService implements Serializable {
     public Query queryListStock(String sortField, Boolean isAscending, String item, boolean isCounting) {
         
         String queryString = "";
-        String filterString = "";
+        String filterStringSupplier = "";
+        String filterStringHandledItem = "";
         
-        if (item != null && !item.isEmpty())
-            filterString = "JOIN boxeditem ON purchaseorderrow.boxeditem_id = boxeditem.id " +
-                "JOIN supplieritem ON boxeditem.item_id = supplieritem.id " +
+        if (item != null && !item.isEmpty()) {
+            filterStringSupplier = "JOIN supplieritem ON boxeditem.item_id = supplieritem.id " +
                 "JOIN item ON supplieritem.item_id = item.id " +
                 "WHERE LOWER(supplieritem.code) LIKE '%" + item.toLowerCase() + "%' " +
                 "OR LOWER(item.description) LIKE '%" + item.toLowerCase() +"%' ";
+            filterStringHandledItem = "JOIN boxeditem ON purchaseorderrow.boxeditem_id = boxeditem.id " + filterStringSupplier;
+        }
         
         if (isCounting)
             queryString = "SELECT COUNT(*) FROM (";
@@ -106,11 +108,13 @@ public class StockService implements Serializable {
         queryString += "SELECT COALESCE(fromSupplier.loc, fromLocation.loc, inLocation.loc) AS loc, COALESCE(fromSupplier.idpurchaseorderrow, fromLocation.idpurchaseorderrow, inLocation.idpurchaseorderrow) AS idpurchaseorderrow, SUM(COALESCE(fromSupplier.qty, 0) - COALESCE(fromLocation.qty, 0) + COALESCE(inLocation.qty, 0)) AS qty " +
                 "FROM " +
                 "( " +
-                    "SELECT supplierlocation.id AS loc, purchaseorderrow.id AS idpurchaseorderrow, SUM(purchaseorderrow.quantity) AS qty " +
+                    "SELECT supplierlocation.id AS loc, purchaseorderrow.id AS idpurchaseorderrow, SUM(box.quantity*purchaseorderrow.quantity) AS qty " +
                     "FROM purchaseorderrow " +
                     "JOIN purchaseorder ON purchaseorderrow.purchaseorder_id = purchaseorder.id " +
                     "JOIN supplierlocation ON purchaseorder.supplier_id = supplierlocation.supplier_id " +
-                filterString +
+                    "JOIN boxeditem ON purchaseorderrow.boxeditem_id = boxeditem.id " +
+                    "JOIN box ON boxeditem.box_id = box.id " +
+                    filterStringSupplier +
                     "GROUP BY supplierlocation.id, purchaseorderrow.id " +
                 ") AS fromSupplier " +
                 "FULL JOIN " +
@@ -118,7 +122,7 @@ public class StockService implements Serializable {
                     "SELECT hiFrom.fromlocation_id as loc, hiFrom.purchaseorderrow_id as idpurchaseorderrow, SUM(hiFrom.quantity) as qty " +
                     "FROM handleditem hiFrom " +
                     "JOIN purchaseorderrow ON hiFrom.purchaseorderrow_id = purchaseorderrow.id " +
-                filterString +
+                    filterStringHandledItem +
                     "GROUP BY hiFrom.fromlocation_id, hiFrom.purchaseorderrow_id " +
                 ") AS fromLocation " +
                 "ON fromSupplier.loc = fromLocation.loc AND fromSupplier.idpurchaseorderrow = fromLocation.idpurchaseorderrow " +
@@ -127,7 +131,7 @@ public class StockService implements Serializable {
                     "SELECT hiTo.tolocation_id as loc, hiTo.purchaseorderrow_id as idpurchaseorderrow, SUM(hiTo.quantity) as qty " +
                     "FROM handleditem hiTo " +
                     "JOIN purchaseorderrow ON hiTo.purchaseorderrow_id = purchaseorderrow.id " +
-                filterString +
+                    filterStringHandledItem +
                     "GROUP BY hiTo.tolocation_id, hiTo.purchaseorderrow_id " +
                 ") AS inLocation " +
                 "ON fromLocation.loc = inLocation.loc AND fromSupplier.loc = inLocation.loc AND fromLocation.idpurchaseorderrow = inLocation.idpurchaseorderrow AND fromSupplier.idpurchaseorderrow = inLocation.idpurchaseorderrow " +
