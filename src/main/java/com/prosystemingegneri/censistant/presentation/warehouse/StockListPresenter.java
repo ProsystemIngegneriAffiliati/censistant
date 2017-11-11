@@ -18,6 +18,7 @@ package com.prosystemingegneri.censistant.presentation.warehouse;
 
 import com.prosystemingegneri.censistant.business.warehouse.boundary.StockService;
 import com.prosystemingegneri.censistant.business.warehouse.control.Stock;
+import com.prosystemingegneri.censistant.business.warehouse.entity.Location;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -57,5 +58,13 @@ public class StockListPresenter implements Serializable{
 
     public void setSelectedStock(List<Stock> selectedStock) {
         this.selectedStock = selectedStock;
+    }
+    
+    public Location getLocation() {
+        return lazyStock.getLocation();
+    }
+
+    public void setLocation(Location location) {
+        lazyStock.setLocation(location);
     }
 }

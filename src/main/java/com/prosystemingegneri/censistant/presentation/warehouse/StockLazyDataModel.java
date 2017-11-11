@@ -18,6 +18,7 @@ package com.prosystemingegneri.censistant.presentation.warehouse;
 
 import com.prosystemingegneri.censistant.business.warehouse.boundary.StockService;
 import com.prosystemingegneri.censistant.business.warehouse.control.Stock;
+import com.prosystemingegneri.censistant.business.warehouse.entity.Location;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +33,8 @@ import static org.primefaces.model.SortOrder.DESCENDING;
  */
 public class StockLazyDataModel extends LazyDataModel<Stock>{
     private final StockService service;
+    
+    private Location location = null;
 
     public StockLazyDataModel(StockService service) {
         this.service = service;
@@ -46,6 +49,10 @@ public class StockLazyDataModel extends LazyDataModel<Stock>{
     public List<Stock> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
         Boolean isAscending = null;
         String item = null;
+        Long idLocation = null;
+        
+        if (location != null)
+            idLocation = location.getId();
         
         switch (sortOrder) {
             case ASCENDING:
@@ -68,8 +75,8 @@ public class StockLazyDataModel extends LazyDataModel<Stock>{
             }
         }
         
-        List<Stock> result = service.listStock(first, pageSize, sortField, isAscending, item);
-        this.setRowCount(service.getStockCount(item).intValue());
+        List<Stock> result = service.listStock(first, pageSize, sortField, isAscending, idLocation, item);
+        this.setRowCount(service.getStockCount(idLocation, item).intValue());
         
         return result;
     }
@@ -78,4 +85,13 @@ public class StockLazyDataModel extends LazyDataModel<Stock>{
     public Stock getRowData(String rowKey) {
         return service.getStock(rowKey);
     }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
+    }
+    
 }

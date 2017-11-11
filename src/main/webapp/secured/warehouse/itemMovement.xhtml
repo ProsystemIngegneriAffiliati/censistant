@@ -28,17 +28,41 @@
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:autoComplete id="locations"
                                                         dropdown="true"
+                                                        value="#{stockListPresenter.location}"
                                                         completeMethod="#{locationListPresenter.completeLocations}"
                                                         var="loc"
                                                         itemLabel="#{loc.name}"
                                                         itemValue="#{loc}"
                                                         forceSelection="true">
+                                            <p:ajax event="itemSelect" update="warehouseStockTable" />
                                             <oou:converter converterId="omnifaces.ListConverter" list="#{locationListPresenter.locations}"/>
                                         </p:autoComplete>
                                         <p:outputLabel for="locations" value="#{msg.warehouse_locations}"/>
                                         <p:message for="locations"/>
                                     </h:panelGroup>
                                 </p:panelGrid>
+                                
+                                <p:dataTable id="warehouseStockTable" var="stock" value="#{stockListPresenter.lazyStock}"
+                                             selectionMode="multiple" selection="#{stockListPresenter.selectedStock}" rowKey="#{stock.id}"
+                                             paginator="true" rows="10"
+                                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                             rowsPerPageTemplate="10,25,50" lazy="true">
+                                    <f:facet name="header">
+                                        #{msg.warehouse_warehousesStock_tip}
+                                    </f:facet>
+                                    <p:column headerText="#{msg.purchasing_supplierItem}" field="item" sortable="false" priority="0">
+                                        <h:outputText value="#{stock.purchaseOrderRow.boxedItem.item.code} - #{stock.purchaseOrderRow.boxedItem.item.item.description}" />
+                                    </p:column>
+                                    <p:column headerText="#{msg.purchasing_purchaseOrderRow_quantity}" priority="0">
+                                        <h:outputText value="#{stock.quantity}">
+                                            <f:convertNumber integerOnly="true" />
+                                        </h:outputText>
+                                        <h:outputText value=" #{stock.purchaseOrderRow.boxedItem.item.item.unitMeasure.symbol}" />
+                                    </p:column>
+                                    <p:column headerText="#{msg.purchasing_box_name}" priority="4">
+                                        <h:outputText rendered="#{stock.quantity != stock.quantity / stock.purchaseOrderRow.boxedItem.box.quantity and stock.quantity / stock.purchaseOrderRow.boxedItem.box.quantity >= 1}" value="#{stock.quantity / stock.purchaseOrderRow.boxedItem.box.quantity} #{stock.purchaseOrderRow.boxedItem.box.unitMeasure.name} #{stock.purchaseOrderRow.boxedItem.box.quantity} #{stock.purchaseOrderRow.boxedItem.item.item.unitMeasure.symbol}" />
+                                    </p:column>
+                                </p:dataTable>
                             </div>
                         </div>
                     </div>

@@ -54,9 +54,9 @@ public class StockService implements Serializable {
         return result;
     }
     
-    public List<Stock> listStock(int first, int pageSize, String sortField, Boolean isAscending, String item) {
+    public List<Stock> listStock(int first, int pageSize, String sortField, Boolean isAscending, Long idLocation, String item) {
         List<Stock> result = new ArrayList<>();
-        Query query = queryListStock(sortField, isAscending, item, false);
+        Query query = queryListStock(sortField, isAscending, idLocation, item, false);
         
         if (pageSize > 0) {
             query.setMaxResults(pageSize);
@@ -74,8 +74,8 @@ public class StockService implements Serializable {
         return result;
     }
     
-    public Long getStockCount(String item) {
-        Query query = queryListStock(null, null, item, true);
+    public Long getStockCount(Long idLocation, String item) {
+        Query query = queryListStock(null, null, idLocation, item, true);
         
         try {
             return (Long) query.getSingleResult();
@@ -88,7 +88,7 @@ public class StockService implements Serializable {
         }
     }
     
-    public Query queryListStock(String sortField, Boolean isAscending, String item, boolean isCounting) {
+    public Query queryListStock(String sortField, Boolean isAscending, Long idLocation, String item, boolean isCounting) {
         
         String queryString = "";
         String filterStringSupplier = "";
@@ -137,6 +137,8 @@ public class StockService implements Serializable {
                 "ON fromLocation.loc = inLocation.loc AND fromSupplier.loc = inLocation.loc AND fromLocation.idpurchaseorderrow = inLocation.idpurchaseorderrow AND fromSupplier.idpurchaseorderrow = inLocation.idpurchaseorderrow " +
                 "GROUP BY COALESCE(fromSupplier.loc, fromLocation.loc, inLocation.loc), COALESCE(fromSupplier.idpurchaseorderrow, fromLocation.idpurchaseorderrow, inLocation.idpurchaseorderrow) " +
                 "HAVING SUM(COALESCE(fromSupplier.qty, 0) - COALESCE(fromLocation.qty, 0) + COALESCE(inLocation.qty, 0)) > 0 ";
+        if (idLocation != null)
+            queryString += " AND COALESCE(fromSupplier.loc, fromLocation.loc, inLocation.loc) = " + idLocation + " ";
         if (sortField != null && !sortField.isEmpty()) {
             if ("location".equals(sortField)) {
                 queryString += "ORDER BY loc";
