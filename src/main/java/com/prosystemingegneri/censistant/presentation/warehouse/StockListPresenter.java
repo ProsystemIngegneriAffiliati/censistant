@@ -20,11 +20,14 @@ import com.prosystemingegneri.censistant.business.warehouse.boundary.StockServic
 import com.prosystemingegneri.censistant.business.warehouse.control.Stock;
 import com.prosystemingegneri.censistant.business.warehouse.entity.Location;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.omnifaces.cdi.ViewScoped;
+import org.primefaces.event.SelectEvent;
 
 /**
  *
@@ -39,9 +42,30 @@ public class StockListPresenter implements Serializable{
     private StockLazyDataModel lazyStock;
     private List<Stock> selectedStock;
     
+    private List<Stock> preparedStockForMovement;
+    private HashMap<String, Integer> preparedIdStockForMovement;    //only for checking before insertion in 'preparedStockForMovement' list
+    
     @PostConstruct
     public void init() {
         lazyStock = new StockLazyDataModel(service);
+        initPreparedStock();
+    }
+    
+    private void initPreparedStock() {
+        preparedStockForMovement = new ArrayList<>();
+        preparedIdStockForMovement = new HashMap<>();
+    }
+    
+    public void onWarehouseStockSelect(SelectEvent event) {
+        Stock tempStock = (Stock) event.getObject();
+        if (!preparedIdStockForMovement.containsKey(tempStock.getLocationIdPurchaseOrderRowId())) {
+            preparedStockForMovement.add(tempStock);
+            preparedIdStockForMovement.put(tempStock.getLocationIdPurchaseOrderRowId(), 0);
+        }
+    }
+
+    public void onLocationSelect(SelectEvent event) {
+        initPreparedStock();
     }
 
     public StockLazyDataModel getLazyStock() {
@@ -67,4 +91,9 @@ public class StockListPresenter implements Serializable{
     public void setLocation(Location location) {
         lazyStock.setLocation(location);
     }
+
+    public List<Stock> getPreparedStockForMovement() {
+        return preparedStockForMovement;
+    }
+    
 }

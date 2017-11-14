@@ -47,9 +47,9 @@ public class StockService implements Serializable {
         Stock result = null;
         String[] ids = id.split(Stock.SEPARATOR);
         if (ids[0] != null && !ids[0].isEmpty() && ids[1] != null && !ids[1].isEmpty() && ids[2] != null && !ids[2].isEmpty()) {
-            Location location = locationService.readLocation(Long.getLong(ids[0]));
-            PurchaseOrderRow purchaseOrderRow = em.find(PurchaseOrderRow.class, Long.getLong(ids[1]));
-            result = new Stock(location, purchaseOrderRow, Integer.getInteger(ids[2]));
+            Location location = locationService.readLocation(Long.parseLong(ids[0]));
+            PurchaseOrderRow purchaseOrderRow = em.find(PurchaseOrderRow.class, Long.parseLong(ids[1]));
+            result = new Stock(location, purchaseOrderRow, Integer.parseInt(ids[2]));
         }
         return result;
     }

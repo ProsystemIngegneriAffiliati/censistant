@@ -43,6 +43,13 @@ public class Stock implements Serializable {
         
         return "";
     }
+    
+    public String getLocationIdPurchaseOrderRowId() {
+        if (location != null && purchaseOrderRow != null)
+            return location.getId().toString() + SEPARATOR + purchaseOrderRow.getId().toString();
+        
+        return "";
+    }
 
     public Location getLocation() {
         return location;
