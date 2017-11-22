@@ -70,15 +70,15 @@
                                                  paginator="true" rows="10"
                                                  paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                                  rowsPerPageTemplate="10,25,50"
-                                                 editable="true" editMode="cell" cellEditMode="lazy">
+                                                 editable="true" editMode="cell" >
                                         <f:facet name="header">
                                             #{msg.warehouse_itemMovement_preparedStockForMovement}
                                         </f:facet>
-                                        <p:ajax event="cellEditInit" listener="#{stockListPresenter.onPreparedStockForMovementEditing}" />
+                                        <p:ajax event="cellEdit" listener="#{stockListPresenter.onCellEdit}" />
                                         <p:column headerText="#{msg.purchasing_supplierItem}" priority="0">
                                             <h:outputText value="#{prepStock.purchaseOrderRow.boxedItem.item.code} - #{prepStock.purchaseOrderRow.boxedItem.item.item.description}" />
                                         </p:column>
-                                        <p:column headerText="#{msg.purchasing_purchaseOrderRow_quantity}" priority="0">
+                                        <p:column id="qtyPreparedForMovement" headerText="#{msg.purchasing_purchaseOrderRow_quantity}" priority="0">
                                             <p:cellEditor>
                                                 <f:facet name="output">
                                                     <h:outputText value="#{prepStock.quantity}">
@@ -86,23 +86,23 @@
                                                     </h:outputText>
                                                 </f:facet>
                                                 <f:facet name="input">
-                                                    <p:inputNumber value="#{prepStock.quantity}" decimalPlaces="0" minValue="1" maxValue="#{prepStock.maxQuantity}" />
+                                                    <p:inputNumber value="#{prepStock.quantity}" decimalPlaces="0" minValue="1" maxValue="#{(prepStock.unitMeasure eq prepStock.nakedUnitMeasure) ? prepStock.nakedQuantity : prepStock.boxedQuantity}" />
                                                 </f:facet>
                                             </p:cellEditor>
                                         </p:column>
                                         <p:column headerText="#{msg.production_unitMeasure_name}" priority="4">
-                                            <p:cellEditor>
+                                            <p:cellEditor rendered="#{prepStock.boxedQuantity > 0 and prepStock.purchaseOrderRow.boxedItem.box.quantity > 1}">
                                                 <f:facet name="output">
                                                     <h:outputText value="#{prepStock.unitMeasure.symbol}" />
                                                 </f:facet>
                                                 <f:facet name="input">
-                                                    <p:selectOneMenu value="#{prepStock.unitMeasure}" immediate="true" converter="omnifaces.SelectItemsConverter">
-                                                        <f:selectItem itemLabel="#{prepStock.purchaseOrderRow.boxedItem.item.item.unitMeasure.symbol}" itemValue="#{prepStock.purchaseOrderRow.boxedItem.item.item.unitMeasure}" />
-                                                        <f:selectItem itemLabel="#{prepStock.purchaseOrderRow.boxedItem.box.unitMeasure.symbol}" itemValue="#{prepStock.purchaseOrderRow.boxedItem.box.unitMeasure}" rendered="#{prepStock.purchaseOrderRow.boxedItem.box.quantity > 1}" />
-                                                        <p:ajax event="itemSelect" listener="#{stockListPresenter.onUnitMeasureSelect}" update="preparedStockForMovementTable" />
+                                                    <p:selectOneMenu value="#{prepStock.unitMeasure}" converter="omnifaces.SelectItemsConverter">
+                                                        <f:selectItem itemLabel="#{prepStock.nakedUnitMeasure.symbol}" itemValue="#{prepStock.nakedUnitMeasure}" />
+                                                        <f:selectItem itemLabel="#{prepStock.boxedUnitMeasure.symbol}" itemValue="#{prepStock.boxedUnitMeasure}" />
                                                     </p:selectOneMenu>
                                                 </f:facet>
                                             </p:cellEditor>
+                                            <h:outputText value="#{prepStock.unitMeasure.symbol}" rendered="#{prepStock.boxedQuantity == 0 or prepStock.purchaseOrderRow.boxedItem.box.quantity == 1}" />
                                         </p:column>
                                         <p:column headerText="#{msg.purchasing_box_name}" priority="4">
                                             <h:outputText value="#{prepStock.purchaseOrderRow.boxedItem.box.quantity}" />

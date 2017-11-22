@@ -20,7 +20,6 @@ import com.prosystemingegneri.censistant.business.production.entity.UnitMeasure;
 import com.prosystemingegneri.censistant.business.purchasing.entity.PurchaseOrderRow;
 import com.prosystemingegneri.censistant.business.warehouse.entity.Location;
 import java.io.Serializable;
-import org.primefaces.model.SelectableDataModel;
 
 /**
  *
@@ -31,20 +30,26 @@ public class Stock implements Serializable {
     
     private Location location;
     private PurchaseOrderRow purchaseOrderRow;
-    private Integer quantity;
     
-    private Integer nakedQuantity;    //the quantity of "naked" item, without any box. It's the quantity with item's unit of measure
-    private Integer maxQuantity;    //useful for limit the maximum movable amount
-    private UnitMeasure unitMeasure;    //userful for choosing movement unit of measure
+    private Integer quantity;           //quantity chosen by the user for doing the item movement
+    private UnitMeasure unitMeasure;   //unit of measure chosen by the user for doing the item movement
+    
+    private Integer nakedQuantity;  //stock (maxmimum) "naked" (item without the box) quantity
+    private Integer boxedQuantity;  //stock (maxmimum) "boxed" (item with the box) quantity
+    private UnitMeasure nakedUnitMeasure;   //item unit of measure
+    private UnitMeasure boxedUnitMeasure;   //box unit of measure
 
     public Stock(Location location, PurchaseOrderRow purchaseOrderRow, Integer quantity) {
         this.location = location;
         this.purchaseOrderRow = purchaseOrderRow;
+        
         this.quantity = quantity;
+        this.unitMeasure = purchaseOrderRow.getBoxedItem().getItem().getItem().getUnitMeasure();
         
         this.nakedQuantity = quantity;
-        this.maxQuantity = quantity;
-        this.unitMeasure = purchaseOrderRow.getBoxedItem().getItem().getItem().getUnitMeasure();
+        this.boxedQuantity = quantity / purchaseOrderRow.getBoxedItem().getBox().getQuantity();
+        this.nakedUnitMeasure = purchaseOrderRow.getBoxedItem().getItem().getItem().getUnitMeasure();
+        this.boxedUnitMeasure = purchaseOrderRow.getBoxedItem().getBox().getUnitMeasure();
     }
     
     public String getId() {
@@ -85,12 +90,36 @@ public class Stock implements Serializable {
         this.quantity = quantity;
     }
 
-    public Integer getMaxQuantity() {
-        return maxQuantity;
+    public Integer getNakedQuantity() {
+        return nakedQuantity;
     }
 
-    public void setMaxQuantity(Integer maxQuantity) {
-        this.maxQuantity = maxQuantity;
+    public void setNakedQuantity(Integer nakedQuantity) {
+        this.nakedQuantity = nakedQuantity;
+    }
+
+    public Integer getBoxedQuantity() {
+        return boxedQuantity;
+    }
+
+    public void setBoxedQuantity(Integer boxedQuantity) {
+        this.boxedQuantity = boxedQuantity;
+    }
+
+    public UnitMeasure getNakedUnitMeasure() {
+        return nakedUnitMeasure;
+    }
+
+    public void setNakedUnitMeasure(UnitMeasure nakedUnitMeasure) {
+        this.nakedUnitMeasure = nakedUnitMeasure;
+    }
+
+    public UnitMeasure getBoxedUnitMeasure() {
+        return boxedUnitMeasure;
+    }
+
+    public void setBoxedUnitMeasure(UnitMeasure boxedUnitMeasure) {
+        this.boxedUnitMeasure = boxedUnitMeasure;
     }
 
     public UnitMeasure getUnitMeasure() {
@@ -99,14 +128,6 @@ public class Stock implements Serializable {
 
     public void setUnitMeasure(UnitMeasure unitMeasure) {
         this.unitMeasure = unitMeasure;
-    }
-
-    public Integer getNakedQuantity() {
-        return nakedQuantity;
-    }
-
-    public void setNakedQuantity(Integer nakedQuantity) {
-        this.nakedQuantity = nakedQuantity;
     }
     
 }
