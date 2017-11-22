@@ -16,9 +16,11 @@
  */
 package com.prosystemingegneri.censistant.business.warehouse.control;
 
+import com.prosystemingegneri.censistant.business.production.entity.UnitMeasure;
 import com.prosystemingegneri.censistant.business.purchasing.entity.PurchaseOrderRow;
 import com.prosystemingegneri.censistant.business.warehouse.entity.Location;
 import java.io.Serializable;
+import org.primefaces.model.SelectableDataModel;
 
 /**
  *
@@ -30,13 +32,19 @@ public class Stock implements Serializable {
     private Location location;
     private PurchaseOrderRow purchaseOrderRow;
     private Integer quantity;
+    
+    private Integer nakedQuantity;    //the quantity of "naked" item, without any box. It's the quantity with item's unit of measure
     private Integer maxQuantity;    //useful for limit the maximum movable amount
+    private UnitMeasure unitMeasure;    //userful for choosing movement unit of measure
 
     public Stock(Location location, PurchaseOrderRow purchaseOrderRow, Integer quantity) {
         this.location = location;
         this.purchaseOrderRow = purchaseOrderRow;
         this.quantity = quantity;
+        
+        this.nakedQuantity = quantity;
         this.maxQuantity = quantity;
+        this.unitMeasure = purchaseOrderRow.getBoxedItem().getItem().getItem().getUnitMeasure();
     }
     
     public String getId() {
@@ -83,6 +91,22 @@ public class Stock implements Serializable {
 
     public void setMaxQuantity(Integer maxQuantity) {
         this.maxQuantity = maxQuantity;
+    }
+
+    public UnitMeasure getUnitMeasure() {
+        return unitMeasure;
+    }
+
+    public void setUnitMeasure(UnitMeasure unitMeasure) {
+        this.unitMeasure = unitMeasure;
+    }
+
+    public Integer getNakedQuantity() {
+        return nakedQuantity;
+    }
+
+    public void setNakedQuantity(Integer nakedQuantity) {
+        this.nakedQuantity = nakedQuantity;
     }
     
 }

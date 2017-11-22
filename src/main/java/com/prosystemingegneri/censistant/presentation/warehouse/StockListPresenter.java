@@ -16,6 +16,7 @@
  */
 package com.prosystemingegneri.censistant.presentation.warehouse;
 
+import com.prosystemingegneri.censistant.business.production.entity.UnitMeasure;
 import com.prosystemingegneri.censistant.business.warehouse.boundary.StockService;
 import com.prosystemingegneri.censistant.business.warehouse.control.Stock;
 import com.prosystemingegneri.censistant.business.warehouse.entity.Location;
@@ -27,6 +28,7 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.omnifaces.cdi.ViewScoped;
+import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.SelectEvent;
 
 /**
@@ -42,8 +44,11 @@ public class StockListPresenter implements Serializable{
     private StockLazyDataModel lazyStock;
     private List<Stock> selectedStock;
     
+    private Stock selectedPreparedStockForMovement;
+    
     private List<Stock> preparedStockForMovement;
     private HashMap<String, Integer> preparedIdStockForMovement;    //only for checking before insertion in 'preparedStockForMovement' list
+    private UnitMeasure oldUnitMeasure;
     
     @PostConstruct
     public void init() {
@@ -61,6 +66,27 @@ public class StockListPresenter implements Serializable{
         if (!preparedIdStockForMovement.containsKey(tempStock.getLocationIdPurchaseOrderRowId())) {
             preparedStockForMovement.add(tempStock);
             preparedIdStockForMovement.put(tempStock.getLocationIdPurchaseOrderRowId(), 0);
+        }
+    }
+    
+    //Useful because setSelectedPreparedStockForMovement() does not work
+    public void onPreparedStockForMovementEditing(CellEditEvent event) {
+        if (preparedStockForMovement != null && !preparedStockForMovement.isEmpty()) {
+            selectedPreparedStockForMovement = preparedStockForMovement.get(event.getRowIndex());
+            oldUnitMeasure = selectedPreparedStockForMovement.getUnitMeasure();
+        }
+    }
+    
+    public void onUnitMeasureSelect(SelectEvent event) {
+        UnitMeasure um = (UnitMeasure) event.getObject();
+        if (selectedPreparedStockForMovement != null && !oldUnitMeasure.equals(um)) {
+            if (um.equals(selectedPreparedStockForMovement.getPurchaseOrderRow().getBoxedItem().getItem().getItem().getUnitMeasure()))
+                selectedPreparedStockForMovement.setQuantity(selectedPreparedStockForMovement.getNakedQuantity());
+            else
+                selectedPreparedStockForMovement.setQuantity(selectedPreparedStockForMovement.getNakedQuantity() / selectedPreparedStockForMovement.getPurchaseOrderRow().getBoxedItem().getBox().getQuantity());
+            
+            selectedPreparedStockForMovement.setMaxQuantity(selectedPreparedStockForMovement.getQuantity());
+            selectedPreparedStockForMovement.setUnitMeasure(um);
         }
     }
 
@@ -94,6 +120,14 @@ public class StockListPresenter implements Serializable{
 
     public List<Stock> getPreparedStockForMovement() {
         return preparedStockForMovement;
+    }
+
+    public Stock getSelectedPreparedStockForMovement() {
+        return selectedPreparedStockForMovement;
+    }
+
+    public void setSelectedPreparedStockForMovement(Stock selectedPreparedStockForMovement) {
+        this.selectedPreparedStockForMovement = selectedPreparedStockForMovement;
     }
     
 }
