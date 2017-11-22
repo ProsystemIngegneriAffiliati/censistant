@@ -29,8 +29,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import org.omnifaces.cdi.ViewScoped;
 import org.omnifaces.util.Ajax;
-import org.omnifaces.util.Components;
-import org.primefaces.component.api.UIData;
+import org.primefaces.component.datatable.DataTable;
 import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.SelectEvent;
 
@@ -78,7 +77,7 @@ public class StockListPresenter implements Serializable{
                 else
                     stock.setQuantity(stock.getNakedQuantity());
                 
-                Ajax.updateRow((UIData) Components.findComponent(":itemMovementForm:preparedStockForMovementTable"), event.getRowIndex());
+                //Ajax.updateRow((DataTable) event.getComponent(), event.getRowIndex());
             }
         }
     }

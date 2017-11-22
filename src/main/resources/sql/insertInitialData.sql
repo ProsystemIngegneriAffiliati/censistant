@@ -121,6 +121,7 @@ INSERT INTO purchaseorder(supplier_id, creation, number, version) VALUES(6, '201
 INSERT INTO purchaseorderrow(purchaseorder_id, boxeditem_id, cost, quantity, version) VALUES (1, 1, 950, 7, 0)
 INSERT INTO purchaseorderrow(purchaseorder_id, boxeditem_id, cost, quantity, version) VALUES (1, 2, 9985, 1, 0)
 INSERT INTO purchaseorderrow(purchaseorder_id, boxeditem_id, cost, quantity, version) VALUES (1, 3, 800, 3, 0)
+INSERT INTO purchaseorderrow(purchaseorder_id, boxeditem_id, cost, quantity, version) VALUES (1, 6, 4250, 7, 0)
 
 INSERT INTO purchaseorder(supplier_id, creation, number, version) VALUES(5, '2017-11-01', 2, 0)
 INSERT INTO purchaseorderrow(purchaseorder_id, boxeditem_id, cost, quantity, version) VALUES (2, 8, 14999, 2, 0)

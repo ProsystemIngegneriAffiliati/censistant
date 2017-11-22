@@ -1,6 +1,6 @@
 #!/bin/sh
 
-readonly IP_ADDRESS=192.168.2.116
+readonly IP_ADDRESS=192.168.1.57
 readonly POSTGRESQL_JDBC_DRIVER=postgresql-42.1.4.jar
 
 mkdir $HOME/censistant
