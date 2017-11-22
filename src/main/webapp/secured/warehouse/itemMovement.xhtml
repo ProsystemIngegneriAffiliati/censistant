@@ -69,7 +69,8 @@
                                     <p:dataTable id="preparedStockForMovementTable" var="prepStock" value="#{stockListPresenter.preparedStockForMovement}"
                                                  paginator="true" rows="10"
                                                  paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                                 rowsPerPageTemplate="10,25,50">
+                                                 rowsPerPageTemplate="10,25,50"
+                                                 editable="true" editMode="cell">
                                         <f:facet name="header">
                                             #{msg.warehouse_itemMovement_preparedStockForMovement}
                                         </f:facet>
@@ -77,9 +78,16 @@
                                             <h:outputText value="#{prepStock.purchaseOrderRow.boxedItem.item.code} - #{prepStock.purchaseOrderRow.boxedItem.item.item.description}" />
                                         </p:column>
                                         <p:column headerText="#{msg.purchasing_purchaseOrderRow_quantity}" priority="0">
-                                            <h:outputText value="#{prepStock.quantity}">
-                                                <f:convertNumber integerOnly="true" />
-                                            </h:outputText>
+                                            <p:cellEditor>
+                                                <f:facet name="output">
+                                                    <h:outputText value="#{prepStock.quantity}">
+                                                        <f:convertNumber integerOnly="true" />
+                                                    </h:outputText>
+                                                </f:facet>
+                                                <f:facet name="input">
+                                                    <p:inputNumber value="#{prepStock.quantity}" decimalPlaces="0" maxValue="#{prepStock.maxQuantity}" />
+                                                </f:facet>
+                                            </p:cellEditor>
                                         </p:column>
                                         <p:column headerText="#{msg.purchasing_box_name}" priority="4">
                                             <h:outputText value=" #{prepStock.purchaseOrderRow.boxedItem.item.item.unitMeasure.symbol}" />

@@ -30,11 +30,13 @@ public class Stock implements Serializable {
     private Location location;
     private PurchaseOrderRow purchaseOrderRow;
     private Integer quantity;
+    private Integer maxQuantity;    //useful for limit the maximum movable amount
 
     public Stock(Location location, PurchaseOrderRow purchaseOrderRow, Integer quantity) {
         this.location = location;
         this.purchaseOrderRow = purchaseOrderRow;
         this.quantity = quantity;
+        this.maxQuantity = quantity;
     }
     
     public String getId() {
@@ -73,6 +75,14 @@ public class Stock implements Serializable {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
+    }
+
+    public Integer getMaxQuantity() {
+        return maxQuantity;
+    }
+
+    public void setMaxQuantity(Integer maxQuantity) {
+        this.maxQuantity = maxQuantity;
     }
     
 }
