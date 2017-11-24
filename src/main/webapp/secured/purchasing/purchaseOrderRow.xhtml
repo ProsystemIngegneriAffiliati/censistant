@@ -4,7 +4,8 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:oou="http://omnifaces.org/ui">
+      xmlns:oou="http://omnifaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:composition template="/WEB-INF/template.xhtml">
         <ui:define name="content">
             <oou:importConstants type="com.prosystemingegneri.censistant.business.purchasing.entity.PurchaseOrderRow"/>
@@ -16,71 +17,107 @@
                                 <h1>#{msg.purchasing_purchaseOrderRow}</h1>
                                 <p>#{msg.purchasing_purchaseOrderRow_tip}</p>
 
-                                <p:panelGrid columns="2" columnClasses="ui-grid-col-5,ui-grid-col-7" layout="grid" styleClass="ui-panelgrid-blank form-group">
-                                    <h:panelGroup styleClass="md-inputfield">
-                                        <p:autoComplete id="supplier"
-                                                        dropdown="true"
-                                                        value="#{purchaseOrderRowPresenter.supplier}"
-                                                        completeMethod="#{customerSupplierListPresenter.completeSupplier}"
-                                                        var="supplier"
-                                                        itemLabel="#{supplier.name}"
-                                                        itemValue="#{supplier}"
-                                                        forceSelection="true">
-                                            <oou:converter converterId="omnifaces.ListConverter" list="#{customerSupplierListPresenter.suppliers}"/>
-                                            <p:ajax event="itemSelect" listener="#{purchaseOrderRowPresenter.updateSupplier}" update="boxedItem" />
-                                        </p:autoComplete>
-                                        <p:outputLabel for="supplier" value="#{msg.customerSupplier_supplier}"/>
-                                        <p:message for="supplier"/>
-                                    </h:panelGroup>
+                                <p:tabView dynamic="true">
+                                    <p:tab title="#{msg.purchasing_purchaseOrderRow}">
+                                        <p:panelGrid columns="2" columnClasses="ui-grid-col-5,ui-grid-col-7" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                            <h:panelGroup styleClass="md-inputfield">
+                                                <p:autoComplete id="supplier"
+                                                                dropdown="true"
+                                                                value="#{purchaseOrderRowPresenter.supplier}"
+                                                                completeMethod="#{customerSupplierListPresenter.completeSupplier}"
+                                                                var="supplier"
+                                                                itemLabel="#{supplier.name}"
+                                                                itemValue="#{supplier}"
+                                                                forceSelection="true">
+                                                    <oou:converter converterId="omnifaces.ListConverter" list="#{customerSupplierListPresenter.suppliers}"/>
+                                                    <p:ajax event="itemSelect" listener="#{purchaseOrderRowPresenter.updateSupplier}" update="boxedItem" />
+                                                </p:autoComplete>
+                                                <p:outputLabel for="supplier" value="#{msg.customerSupplier_supplier}"/>
+                                                <p:message for="supplier"/>
+                                            </h:panelGroup>
 
-                                    <h:panelGroup styleClass="md-inputfield">
-                                        <p:autoComplete id="boxedItem"
-                                                        dropdown="true"
-                                                        value="#{purchaseOrderRowPresenter.row.boxedItem}"
-                                                        completeMethod="#{purchaseOrderRowPresenter.completeItems}"
-                                                        var="boxedItem"
-                                                        itemLabel="#{boxedItem.item.code} #{boxedItem.item.item.description} #{boxedItem.box.unitMeasure.name} #{boxedItem.box.quantity} #{boxedItem.item.item.unitMeasure.symbol}"
-                                                        itemValue="#{boxedItem}"
-                                                        forceSelection="true">
-                                            <oou:converter converterId="omnifaces.ListConverter" list="#{purchaseOrderRowPresenter.items}"/>
-                                            <p:ajax event="itemSelect" update="cost rowCost" />
-                                        </p:autoComplete>
-                                        <p:outputLabel for="boxedItem" value="#{msg.purchasing_boxedItem}"/>
-                                        <p:message for="boxedItem"/>
-                                    </h:panelGroup>
-                                </p:panelGrid>
+                                            <h:panelGroup styleClass="md-inputfield">
+                                                <p:autoComplete id="boxedItem"
+                                                                dropdown="true"
+                                                                value="#{purchaseOrderRowPresenter.row.boxedItem}"
+                                                                completeMethod="#{purchaseOrderRowPresenter.completeItems}"
+                                                                var="boxedItem"
+                                                                itemLabel="#{boxedItem.item.code} #{boxedItem.item.item.description} #{boxedItem.box.unitMeasure.name} #{boxedItem.box.quantity} #{boxedItem.item.item.unitMeasure.symbol}"
+                                                                itemValue="#{boxedItem}"
+                                                                forceSelection="true">
+                                                    <oou:converter converterId="omnifaces.ListConverter" list="#{purchaseOrderRowPresenter.items}"/>
+                                                    <p:ajax event="itemSelect" update="cost rowCost" />
+                                                </p:autoComplete>
+                                                <p:outputLabel for="boxedItem" value="#{msg.purchasing_boxedItem}"/>
+                                                <p:message for="boxedItem"/>
+                                            </h:panelGroup>
+                                        </p:panelGrid>
 
-                                <p:panelGrid columns="3" columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group">
-                                    <h:panelGroup styleClass="md-inputfield">
-                                        <p:inputNumber id="quantity" decimalPlaces="0" value="#{purchaseOrderRowPresenter.row.quantity}">
-                                            <p:ajax update="rowCost" />
-                                        </p:inputNumber>
-                                        <p:outputLabel for="quantity" value="#{msg.purchasing_purchaseOrderRow_quantity}"/>
-                                        <p:message for="quantity"/>
-                                    </h:panelGroup>
+                                        <p:panelGrid columns="3" columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                            <h:panelGroup styleClass="md-inputfield">
+                                                <p:inputNumber id="quantity" decimalPlaces="0" value="#{purchaseOrderRowPresenter.row.quantity}">
+                                                    <p:ajax update="rowCost" />
+                                                </p:inputNumber>
+                                                <p:outputLabel for="quantity" value="#{msg.purchasing_purchaseOrderRow_quantity}"/>
+                                                <p:message for="quantity"/>
+                                            </h:panelGroup>
 
-                                    <h:panelGroup styleClass="md-inputfield">
-                                        <p:inputNumber id="cost" decimalPlaces="#{PurchaseOrderRow.SCALE_COST}" symbol="€ " value="#{purchaseOrderRowPresenter.row.cost}">
-                                            <p:ajax update="rowCost" />
-                                        </p:inputNumber>
-                                        <p:outputLabel for="cost" value="#{msg.purchasing_purchaseOrderRow_cost}"/>
-                                        <p:message for="cost"/>
-                                    </h:panelGroup>
-                                    
-                                    <h:panelGroup styleClass="md-inputfield">
-                                        <p:inputNumber id="rowCost" readonly="true" decimalPlaces="#{PurchaseOrderRow.SCALE_COST}" symbol="€ " value="#{purchaseOrderRowPresenter.row.totalCost}" />
-                                        <p:outputLabel for="rowCost" value="#{msg.purchasing_purchaseOrderRow_cost_total}"/>
-                                        <p:message for="rowCost"/>
-                                    </h:panelGroup>
-                                </p:panelGrid>
+                                            <h:panelGroup styleClass="md-inputfield">
+                                                <p:inputNumber id="cost" decimalPlaces="#{PurchaseOrderRow.SCALE_COST}" symbol="€ " value="#{purchaseOrderRowPresenter.row.cost}">
+                                                    <p:ajax update="rowCost" />
+                                                </p:inputNumber>
+                                                <p:outputLabel for="cost" value="#{msg.purchasing_purchaseOrderRow_cost}"/>
+                                                <p:message for="cost"/>
+                                            </h:panelGroup>
 
-                                <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
-                                    <h:panelGroup styleClass="md-inputfield">
-                                        <p:inputTextarea id="notes" value="#{purchaseOrderRowPresenter.row.notes}" />
-                                        <p:outputLabel for="notes" value="#{msg.purchasing_purchaseOrderRow_notes}"/>
-                                        <p:message for="notes"/>
-                                    </h:panelGroup>
-                                </p:panelGrid>
+                                            <h:panelGroup styleClass="md-inputfield">
+                                                <p:inputNumber id="rowCost" readonly="true" decimalPlaces="#{PurchaseOrderRow.SCALE_COST}" symbol="€ " value="#{purchaseOrderRowPresenter.row.totalCost}" />
+                                                <p:outputLabel for="rowCost" value="#{msg.purchasing_purchaseOrderRow_cost_total}"/>
+                                                <p:message for="rowCost"/>
+                                            </h:panelGroup>
+                                        </p:panelGrid>
+
+                                        <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                            <h:panelGroup styleClass="md-inputfield">
+                                                <p:inputTextarea id="notes" value="#{purchaseOrderRowPresenter.row.notes}" />
+                                                <p:outputLabel for="notes" value="#{msg.purchasing_purchaseOrderRow_notes}"/>
+                                                <p:message for="notes"/>
+                                            </h:panelGroup>
+                                        </p:panelGrid>
+                                    </p:tab>
+                                    <p:tab title="#{msg.warehouse_itemMovement}">
+                                        <p:dataTable id="handledItemsTable"
+                                                     var="hi"
+                                                     value="#{purchaseOrderRowPresenter.listHandledItems()}">
+                                            <p:column headerText="#{msg.warehouse_handledItem_handlingTimestamp}" sortBy="#{hi.handlingTimestamp}" priority="0">
+                                                <h:outputText value="#{hi.handlingTimestamp}">
+                                                    <f:convertDateTime type="both" />
+                                                </h:outputText>
+                                            </p:column>
+                                            <p:column headerText="#{msg.siteSurvey_worker}" sortBy="#{hi.worker.name}" filterBy="#{hi.worker.name}" filterMatchMode="contains" priority="4">
+                                                <h:outputText value="#{hi.worker.name}" />
+                                            </p:column>
+                                            <p:column headerText="#{msg.purchasing_boxedItem}" sortBy="#{hi.purchaseOrderRow.boxedItem.item.code} #{hi.purchaseOrderRow.boxedItem.item.item.description}" filterBy="#{hi.purchaseOrderRow.boxedItem.item.code} #{hi.purchaseOrderRow.boxedItem.item.item.description}" filterMatchMode="contains" priority="4">
+                                                <h:outputText value="#{hi.purchaseOrderRow.boxedItem.item.code} #{hi.purchaseOrderRow.boxedItem.item.item.description}" />
+                                            </p:column>
+                                            <p:column headerText="#{msg.warehouse_handledItem_quantity}" priority="0">
+                                                <h:outputText value="#{hi.quantity}">
+                                                    <f:convertNumber integerOnly="true" />
+                                                </h:outputText>
+                                                <h:outputText value=" #{hi.purchaseOrderRow.boxedItem.item.item.unitMeasure.symbol}" />
+                                            </p:column>
+                                            <p:column headerText="#{msg.purchasing_box_name}" priority="4">
+                                                <h:outputText rendered="#{hi.quantity != hi.quantity / hi.purchaseOrderRow.boxedItem.box.quantity and hi.quantity / hi.purchaseOrderRow.boxedItem.box.quantity >= 1}" value="#{hi.quantity / hi.purchaseOrderRow.boxedItem.box.quantity} #{hi.purchaseOrderRow.boxedItem.box.unitMeasure.name} #{hi.purchaseOrderRow.boxedItem.box.quantity} #{hi.purchaseOrderRow.boxedItem.item.item.unitMeasure.symbol}" />
+                                            </p:column>
+                                            <p:column headerText="#{msg.warehouse_handledItem_fromLocation}" sortBy="#{hi.fromLocation.name}" priority="2">
+                                                <h:outputText value="#{hi.fromLocation.name}" />
+                                            </p:column>
+                                            <p:column headerText="#{msg.warehouse_handledItem_toLocation}" sortBy="#{hi.toLocation.name}" priority="0">
+                                                <h:outputText value="#{hi.toLocation.name}" />
+                                            </p:column>
+                                        </p:dataTable>
+                                    </p:tab>
+                                </p:tabView>
 
                                 <div class="ui-g">
                                     <div class="ui-g-1 ui-md-2"></div>

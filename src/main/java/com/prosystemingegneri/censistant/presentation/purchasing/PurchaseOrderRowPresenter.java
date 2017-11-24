@@ -21,6 +21,8 @@ import com.prosystemingegneri.censistant.business.customerSupplier.entity.Custom
 import com.prosystemingegneri.censistant.business.purchasing.entity.BoxedItem;
 import com.prosystemingegneri.censistant.business.purchasing.entity.PurchaseOrder;
 import com.prosystemingegneri.censistant.business.purchasing.entity.PurchaseOrderRow;
+import com.prosystemingegneri.censistant.business.warehouse.boundary.HandledItemService;
+import com.prosystemingegneri.censistant.business.warehouse.entity.HandledItem;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
@@ -43,6 +45,8 @@ public class PurchaseOrderRowPresenter implements Serializable {
     
     @Inject
     private CustomerSupplierService service;
+    @Inject
+    private HandledItemService handledItemService;
     
     private CustomerSupplier supplier;
     private List<BoxedItem> items;
@@ -63,6 +67,10 @@ public class PurchaseOrderRowPresenter implements Serializable {
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("purchaseOrder", purchaseOrder);
         
         return "/secured/purchasing/purchaseOrder?faces-redirect=true";
+    }
+    
+    public List<HandledItem> listHandledItems() {
+        return handledItemService.listHandledItems(0, 0, null, Boolean.FALSE, row);
     }
     
     public List<BoxedItem> completeItems(String filter) {

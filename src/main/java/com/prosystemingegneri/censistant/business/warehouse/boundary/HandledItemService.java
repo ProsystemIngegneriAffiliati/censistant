@@ -16,11 +16,13 @@
  */
 package com.prosystemingegneri.censistant.business.warehouse.boundary;
 
+import com.prosystemingegneri.censistant.business.purchasing.entity.PurchaseOrderRow;
 import com.prosystemingegneri.censistant.business.siteSurvey.boundary.WorkerService;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.Worker;
 import com.prosystemingegneri.censistant.business.user.entity.UserApp;
 import com.prosystemingegneri.censistant.business.warehouse.control.Stock;
 import com.prosystemingegneri.censistant.business.warehouse.entity.HandledItem;
+import com.prosystemingegneri.censistant.business.warehouse.entity.HandledItem_;
 import com.prosystemingegneri.censistant.business.warehouse.entity.Location;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -30,6 +32,13 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Order;
+import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 /**
  *
@@ -76,10 +85,8 @@ public class HandledItemService implements Serializable{
         return result;
     }
     
-    public HandledItem saveHandledItem(HandledItem handledItem) {        
-        if (handledItem.getId() == null)
-            em.persist(handledItem);
-        else
+    public HandledItem updateHandledItem(HandledItem handledItem) {        
+        if (handledItem.getId() != null)
             return em.merge(handledItem);
         
         return null;
@@ -91,5 +98,69 @@ public class HandledItemService implements Serializable{
     
     public void deleteHandledItem(Long id) {
         em.remove(readHandledItem(id));
+    }
+    
+    public List<HandledItem> listHandledItems(int first, int pageSize, String sortField, Boolean isAscending, PurchaseOrderRow purchaseOrderRow) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<HandledItem> query = cb.createQuery(HandledItem.class);
+        Root<HandledItem> root = query.from(HandledItem.class);
+        CriteriaQuery<HandledItem> select = query.select(root).distinct(true);
+        
+        List<Predicate> conditions = calculateConditions(cb, root, purchaseOrderRow);
+
+        if (!conditions.isEmpty())
+            query.where(conditions.toArray(new Predicate[conditions.size()]));
+        
+        Order order = cb.desc(root.get(HandledItem_.handlingTimestamp));
+        if (isAscending != null && sortField != null && !sortField.isEmpty()) {
+            Path<?> path;
+            switch (sortField) {
+                default:
+                    path = root.get(sortField);
+            }
+            if (isAscending)
+                order = cb.asc(path);
+            else
+                order = cb.desc(path);
+        }
+        query.orderBy(order);
+        
+        TypedQuery<HandledItem> typedQuery = em.createQuery(select);
+        if (pageSize > 0) {
+            typedQuery.setMaxResults(pageSize);
+            typedQuery.setFirstResult(first);
+        }
+
+        if (purchaseOrderRow != null)   //we don't want all the handled items!
+            return typedQuery.getResultList();
+        else
+            return null;
+    }
+    
+    public Long getLocationsCount(PurchaseOrderRow purchaseOrderRow) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Long> query = cb.createQuery(Long.class);
+        Root<HandledItem> root = query.from(HandledItem.class);
+        CriteriaQuery<Long> select = query.select(cb.count(root));
+
+        List<Predicate> conditions = calculateConditions(cb, root, purchaseOrderRow);
+
+        if (!conditions.isEmpty())
+            query.where(conditions.toArray(new Predicate[conditions.size()]));
+
+        if (purchaseOrderRow != null)   //we don't want all the handled items!
+            return em.createQuery(select).getSingleResult();
+        else
+            return Long.valueOf(0);
+    }
+    
+    private List<Predicate> calculateConditions(CriteriaBuilder cb, Root<HandledItem> root, PurchaseOrderRow purchaseOrderRow) {
+        List<Predicate> conditions = new ArrayList<>();
+        
+        //Purchase order row
+        if (purchaseOrderRow != null)
+            conditions.add(cb.equal(root.get(HandledItem_.purchaseOrderRow), purchaseOrderRow));
+        
+        return conditions;
     }
 }

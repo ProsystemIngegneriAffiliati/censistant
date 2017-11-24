@@ -17,7 +17,6 @@
 package com.prosystemingegneri.censistant.business.warehouse.entity;
 
 import com.prosystemingegneri.censistant.business.entity.BaseEntity;
-import com.prosystemingegneri.censistant.business.production.entity.UnitMeasure;
 import com.prosystemingegneri.censistant.business.purchasing.entity.PurchaseOrderRow;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.Worker;
 import java.util.Date;
