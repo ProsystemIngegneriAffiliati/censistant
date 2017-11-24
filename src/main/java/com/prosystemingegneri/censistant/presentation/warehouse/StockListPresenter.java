@@ -17,19 +17,26 @@
 package com.prosystemingegneri.censistant.presentation.warehouse;
 
 import com.prosystemingegneri.censistant.business.production.entity.UnitMeasure;
+import com.prosystemingegneri.censistant.business.warehouse.boundary.HandledItemService;
+import com.prosystemingegneri.censistant.business.warehouse.boundary.LocationService;
 import com.prosystemingegneri.censistant.business.warehouse.boundary.StockService;
+import com.prosystemingegneri.censistant.business.warehouse.control.LocationType;
 import com.prosystemingegneri.censistant.business.warehouse.control.Stock;
+import com.prosystemingegneri.censistant.business.warehouse.entity.HandledItem;
 import com.prosystemingegneri.censistant.business.warehouse.entity.Location;
+import com.prosystemingegneri.censistant.presentation.Authenticator;
+import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.ejb.EJBException;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.omnifaces.cdi.ViewScoped;
-import org.omnifaces.util.Ajax;
-import org.primefaces.component.datatable.DataTable;
 import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.SelectEvent;
 
@@ -42,12 +49,21 @@ import org.primefaces.event.SelectEvent;
 public class StockListPresenter implements Serializable{
     @Inject
     StockService service;
+    @Inject
+    LocationService locationService;
+    @Inject
+    HandledItemService handledItemService;
+    @Inject
+    Authenticator authenticator;
     
     private StockLazyDataModel lazyStock;
     private List<Stock> selectedStock;
     
     private List<Stock> preparedStockForMovement;
     private HashMap<String, Integer> preparedIdStockForMovement;    //only for checking before insertion in 'preparedStockForMovement' list
+    
+    private LocationType locationTypeArrival;
+    private Location locationArrival;
     
     @PostConstruct
     public void init() {
@@ -76,10 +92,30 @@ public class StockListPresenter implements Serializable{
                     stock.setQuantity(stock.getBoxedQuantity());
                 else
                     stock.setQuantity(stock.getNakedQuantity());
-                
-                //Ajax.updateRow((DataTable) event.getComponent(), event.getRowIndex());
             }
         }
+    }
+    
+    public List<Location> completeLocationsArrival(String name) {
+        return locationService.listLocations(0, 10, null, null, locationTypeArrival, name);
+    }
+    
+    public String move() {
+        if (preparedStockForMovement == null || preparedStockForMovement.isEmpty() || locationArrival == null)
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Select item and destination location"));
+        else {
+            try {
+                List<HandledItem> created = handledItemService.createNewHandledItems(selectedStock, locationArrival, authenticator.getLoggedUser());
+                if (created != null && !created.isEmpty())
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success", "Items movement performed successfully"));
+                else
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Items movement not performed"));
+            } catch (EJBException e) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", ExceptionUtility.unwrap(e.getCausedByException()).getLocalizedMessage()));
+            }
+        }
+        
+        return null;
     }
 
     public void onLocationSelect(SelectEvent event) {
@@ -112,6 +148,22 @@ public class StockListPresenter implements Serializable{
 
     public List<Stock> getPreparedStockForMovement() {
         return preparedStockForMovement;
+    }
+
+    public LocationType getLocationTypeArrival() {
+        return locationTypeArrival;
+    }
+
+    public void setLocationTypeArrival(LocationType locationTypeArrival) {
+        this.locationTypeArrival = locationTypeArrival;
+    }
+
+    public Location getLocationArrival() {
+        return locationArrival;
+    }
+
+    public void setLocationArrival(Location locationArrival) {
+        this.locationArrival = locationArrival;
     }
     
 }
