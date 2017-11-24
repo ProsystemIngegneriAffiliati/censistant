@@ -49,20 +49,24 @@ public class HandledItemService implements Serializable{
             Worker worker = workerService.findWorker(null, false, loggedUser);
             if (worker != null) {
                 for (Stock stock : stockList) {
-                    HandledItem newHandledItem = new HandledItem();
+                    if (!stock.getLocation().equals(locationArrival)) {
+                        HandledItem newHandledItem = new HandledItem();
 
-                    newHandledItem.setFromLocation(stock.getLocation());
-                    newHandledItem.setHandlingTimestamp(new Date());
-                    newHandledItem.setPurchaseOrderRow(stock.getPurchaseOrderRow());
-                    newHandledItem.setToLocation(locationArrival);
-                    newHandledItem.setWorker(worker);
-                    
-                    if (stock.getUnitMeasure().equals(stock.getNakedUnitMeasure()))
-                        newHandledItem.setQuantity(stock.getQuantity());
-                    else
-                        newHandledItem.setQuantity(stock.getQuantity() * stock.getPurchaseOrderRow().getBoxedItem().getBox().getQuantity());
+                        newHandledItem.setFromLocation(stock.getLocation());
+                        newHandledItem.setHandlingTimestamp(new Date());
+                        newHandledItem.setPurchaseOrderRow(stock.getPurchaseOrderRow());
+                        newHandledItem.setToLocation(locationArrival);
+                        newHandledItem.setWorker(worker);
 
-                    result.add(newHandledItem);
+                        if (stock.getUnitMeasure().equals(stock.getNakedUnitMeasure()))
+                            newHandledItem.setQuantity(stock.getQuantity());
+                        else
+                            newHandledItem.setQuantity(stock.getQuantity() * stock.getPurchaseOrderRow().getBoxedItem().getBox().getQuantity());
+
+                        em.persist(newHandledItem);
+
+                        result.add(newHandledItem);
+                    }
                 }
             }
             else

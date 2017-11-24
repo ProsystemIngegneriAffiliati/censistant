@@ -76,6 +76,14 @@ public class StockListPresenter implements Serializable{
         preparedIdStockForMovement = new HashMap<>();
     }
     
+    private void initStockAfterSuccessfulMovement() {
+        setLocation(null);
+        selectedStock = null;
+        initPreparedStock();
+        locationTypeArrival = null;
+        locationArrival = null;
+    }
+    
     public void onWarehouseStockSelect(SelectEvent event) {
         Stock tempStock = (Stock) event.getObject();
         if (!preparedIdStockForMovement.containsKey(tempStock.getLocationIdPurchaseOrderRowId())) {
@@ -105,13 +113,21 @@ public class StockListPresenter implements Serializable{
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Select item and destination location"));
         else {
             try {
-                List<HandledItem> created = handledItemService.createNewHandledItems(selectedStock, locationArrival, authenticator.getLoggedUser());
-                if (created != null && !created.isEmpty())
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success", "Items movement performed successfully"));
+                List<HandledItem> created = handledItemService.createNewHandledItems(preparedStockForMovement, locationArrival, authenticator.getLoggedUser());
+                if (created != null && !created.isEmpty()) {
+                    int moved = created.size();
+                    String itemStr = "item";
+                    if (moved > 1)
+                        itemStr += "s";
+                    initStockAfterSuccessfulMovement();
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success", "Successfully moved " + moved + " " + itemStr ));
+                }
                 else
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Items movement not performed"));
             } catch (EJBException e) {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", ExceptionUtility.unwrap(e.getCausedByException()).getLocalizedMessage()));
+            } catch (NoSuchFieldException e1) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", e1.getMessage()));
             }
         }
         

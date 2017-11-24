@@ -136,7 +136,7 @@
                                                      value="#{msg.warehouse_itemMovement_move}"
                                                      disabled="#{empty stockListPresenter.locationArrival or empty stockListPresenter.preparedStockForMovement}"
                                                      action="#{stockListPresenter.move()}"
-                                                     ajax="false"/>
+                                                     update="@form"/>
                                 </p:panelGrid>
                             </div>
                         </div>
