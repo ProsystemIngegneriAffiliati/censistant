@@ -16,6 +16,7 @@
  */
 package com.prosystemingegneri.censistant.business.warehouse.entity;
 
+import com.prosystemingegneri.censistant.business.deliveryNote.entity.DeliveryNoteRow;
 import com.prosystemingegneri.censistant.business.entity.BaseEntity;
 import com.prosystemingegneri.censistant.business.purchasing.entity.PurchaseOrderRow;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.Worker;
@@ -26,6 +27,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
@@ -70,6 +72,9 @@ public class HandledItem extends BaseEntity<Long>{
     @NotNull
     @ManyToOne(optional = false)
     private Location toLocation;
+    
+    @OneToOne(mappedBy = "handledItem")
+    private DeliveryNoteRow deliveryNoteRow;
     
     private String notes;
     
@@ -140,6 +145,14 @@ public class HandledItem extends BaseEntity<Long>{
     @Override
     public Long getId() {
         return id;
+    }
+
+    public DeliveryNoteRow getDeliveryNoteRow() {
+        return deliveryNoteRow;
+    }
+
+    public void setDeliveryNoteRow(DeliveryNoteRow deliveryNoteRow) {
+        this.deliveryNoteRow = deliveryNoteRow;
     }
     
 }

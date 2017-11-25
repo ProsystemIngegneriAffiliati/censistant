@@ -43,7 +43,7 @@ public class Box extends BaseEntity<Long>{
 
     @NotNull
     @Min(1)
-    @Column(nullable = false)    
+    @Column(nullable = false)
     private Integer quantity;
     
     @OneToMany(mappedBy = "box")
