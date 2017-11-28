@@ -16,8 +16,8 @@
  */
 package com.prosystemingegneri.censistant.business.deliveryNote.entity;
 
+import com.prosystemingegneri.censistant.business.deliveryNote.control.DeliveryNoteType;
 import com.prosystemingegneri.censistant.business.entity.BaseEntity;
-import com.prosystemingegneri.censistant.business.warehouse.control.LocationType;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -54,7 +54,7 @@ public abstract class DeliveryNoteCommon extends BaseEntity<Long>{
     
     @Enumerated(EnumType.ORDINAL)
     @Column(name = "dtype", insertable = false, updatable = false, columnDefinition = "smallint")
-    private LocationType type;
+    private DeliveryNoteType type;
     
     @NotNull
     @Temporal(TemporalType.DATE)
