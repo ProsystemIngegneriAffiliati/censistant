@@ -121,12 +121,10 @@ public class SiteSurveyRequestService implements Serializable{
             Path<?> path;
             switch (sortField) {
                 case "customer":
-                    Join<SiteSurveyRequest, CustomerSupplier> customerRoot = root.join(SiteSurveyRequest_.customer);
-                    path = customerRoot.get(CustomerSupplier_.name);
+                    path = root.get(SiteSurveyRequest_.customer).get(CustomerSupplier_.name);
                     break;
                 case "systemType":
-                    Join<SiteSurveyRequest, SystemType> systemTypeRoot = root.join(SiteSurveyRequest_.systemType);
-                    path = systemTypeRoot.get(SystemType_.name);
+                    path = root.get(SiteSurveyRequest_.systemType).get(SystemType_.name);
                     break;
                 default:
                     path = root.get(sortField);
