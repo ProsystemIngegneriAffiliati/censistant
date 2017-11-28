@@ -43,6 +43,10 @@ public class DeliveryNoteInService implements Serializable{
     @PersistenceContext
     EntityManager em;
     
+    public DeliveryNoteIn createNewDeliveryNoteIn() {
+        throw new IllegalArgumentException();
+    }
+    
     public DeliveryNoteIn saveDeliveryNoteIn(DeliveryNoteIn deliveryNoteIn) {        
         if (deliveryNoteIn.getId() == null)
             em.persist(deliveryNoteIn);
