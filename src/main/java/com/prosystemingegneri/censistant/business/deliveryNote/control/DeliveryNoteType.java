@@ -14,33 +14,19 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.prosystemingegneri.censistant.business.deliveryNote.entity;
-
-import javax.persistence.Column;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.validation.constraints.NotNull;
+package com.prosystemingegneri.censistant.business.deliveryNote.control;
 
 /**
  *
  * @author Davide Mainardi <ingmainardi@live.com>
  */
-@Entity
-@DiscriminatorValue(value = "0")
-public class DeliveryNoteIn extends DeliveryNoteCommon {
-    @NotNull
-    @Column(nullable = false)
-    private String numberStr;
-
-    public DeliveryNoteIn() {
-    }
-
-    public String getNumberStr() {
-        return numberStr;
-    }
-
-    public void setNumberStr(String numberStr) {
-        this.numberStr = numberStr;
-    }
+public enum DeliveryNoteType {
+    IN(0),
+    OUT(1);
     
+    private final int value;
+
+    private DeliveryNoteType(int value) {
+        this.value = value;
+    }
 }

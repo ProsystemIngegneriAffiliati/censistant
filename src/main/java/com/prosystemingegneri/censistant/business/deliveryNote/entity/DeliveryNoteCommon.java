@@ -17,15 +17,22 @@
 package com.prosystemingegneri.censistant.business.deliveryNote.entity;
 
 import com.prosystemingegneri.censistant.business.entity.BaseEntity;
+import com.prosystemingegneri.censistant.business.warehouse.control.LocationType;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -37,11 +44,17 @@ import javax.validation.constraints.NotNull;
  *
  * @author Davide Mainardi <ingmainardi@live.com>
  */
-@MappedSuperclass
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "dtype", discriminatorType = DiscriminatorType.INTEGER, columnDefinition = "smallint")
 public abstract class DeliveryNoteCommon extends BaseEntity<Long>{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
+    @Enumerated(EnumType.ORDINAL)
+    @Column(name = "dtype", insertable = false, updatable = false, columnDefinition = "smallint")
+    private LocationType type;
     
     @NotNull
     @Temporal(TemporalType.DATE)

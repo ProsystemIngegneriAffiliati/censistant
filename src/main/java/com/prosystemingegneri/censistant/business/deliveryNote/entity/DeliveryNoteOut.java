@@ -19,6 +19,7 @@ package com.prosystemingegneri.censistant.business.deliveryNote.entity;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
 import java.math.BigDecimal;
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.DecimalMin;
@@ -30,6 +31,7 @@ import javax.validation.constraints.NotNull;
  * @author Davide Mainardi <ingmainardi@live.com>
  */
 @Entity
+@DiscriminatorValue(value = "1")
 public class DeliveryNoteOut extends DeliveryNoteCommon {
     
     @NotNull
