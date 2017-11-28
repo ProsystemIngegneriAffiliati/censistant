@@ -143,3 +143,25 @@ INSERT INTO handleditem(purchaseorderrow_id, worker_id, handlingtimestamp, quant
 INSERT INTO handleditem(purchaseorderrow_id, worker_id, handlingtimestamp, quantity, fromlocation_id, tolocation_id, version) VALUES(6, 1, '2017-11-03 08:30:30', 10, 1, 4, 0)
 INSERT INTO handleditem(purchaseorderrow_id, worker_id, handlingtimestamp, quantity, fromlocation_id, tolocation_id, version) VALUES(6, 1, '2017-11-03 08:30:30', 5, 4, 3, 0)
 INSERT INTO handleditem(purchaseorderrow_id, worker_id, handlingtimestamp, quantity, fromlocation_id, tolocation_id, version) VALUES(2, 1, '2017-11-04 08:00:00', 3, 2, 4, 0)
+
+INSERT INTO carrier(name, version) VALUES('TNT', 0)
+INSERT INTO carrier(name, version) VALUES('SDA', 0)
+INSERT INTO carrier(name, version) VALUES('BRT', 0)
+INSERT INTO carrier(name, version) VALUES('Express Courier', 0)
+
+INSERT INTO goodsdescription(name, version) VALUES('Cassoni', 0)
+INSERT INTO goodsdescription(name, version) VALUES('Scatole', 0)
+INSERT INTO goodsdescription(name, version) VALUES('Sfuso', 0)
+INSERT INTO goodsdescription(name, version) VALUES('Vassoi', 0)
+INSERT INTO goodsdescription(name, version) VALUES('Bobine', 0)
+INSERT INTO goodsdescription(name, version) VALUES('A vista', 0)
+
+INSERT INTO shipmentreason(name, version) VALUES('Vendita', 0)
+INSERT INTO shipmentreason(name, version) VALUES('Conto lavoro', 0)
+INSERT INTO shipmentreason(name, version) VALUES('Riparazione', 0)
+INSERT INTO shipmentreason(name, version) VALUES('Campionatura', 0)
+INSERT INTO shipmentreason(name, version) VALUES('Esposizione', 0)
+INSERT INTO shipmentreason(name, version) VALUES('Conto visione', 0)
+
+INSERT INTO shippingpayment(name, version) VALUES('Porto franco', 0)
+INSERT INTO shippingpayment(name, version) VALUES('Porto assegnato', 0)
