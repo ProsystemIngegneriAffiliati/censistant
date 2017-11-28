@@ -56,7 +56,7 @@ public abstract class Location extends BaseEntity<Long>{
     @OneToMany(mappedBy = "fromLocation")
     private final List<HandledItem> outHandledItem; //picked items
     
-    abstract String getName();
+    public abstract String getName();
     
     @Version
     private int version;

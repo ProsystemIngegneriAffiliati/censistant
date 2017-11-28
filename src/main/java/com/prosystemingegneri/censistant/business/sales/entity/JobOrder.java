@@ -14,11 +14,11 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.prosystemingegneri.censistant.business.siteSurvey.entity;
+package com.prosystemingegneri.censistant.business.sales.entity;
 
-import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
 import com.prosystemingegneri.censistant.business.entity.BaseEntity;
-import com.prosystemingegneri.censistant.business.sales.entity.JobOrder;
+import com.prosystemingegneri.censistant.business.production.entity.System;
+import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -38,50 +38,59 @@ import javax.validation.constraints.NotNull;
  * @author Davide Mainardi <ingmainardi@live.com>
  */
 @Entity
-public class SiteSurveyReport extends BaseEntity<Long>{
+public class JobOrder extends BaseEntity<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
     @NotNull
+    @Temporal(TemporalType.DATE)
+    @Column(nullable = false)
+    private Date creation;
+    
     @Min(1)
+    @NotNull
     @Column(nullable = false)
     private Integer number;
-
-    @NotNull
-    @Column(nullable = false)    
-    @Temporal(TemporalType.DATE)
-    private Date expected;
     
-    @Temporal(TemporalType.DATE)
-    private Date actual;
+    @NotNull
+    @Column(nullable = false)
+    private String description;
+    
+    private String customerOrderNumber;
     
     @NotNull
     @OneToOne(optional = false)
-    private SiteSurveyRequest request;
+    private SiteSurveyReport siteSurveyReport;
     
     @NotNull
     @ManyToOne(optional = false)
-    private Plant plant;
+    private System system;
     
     @NotNull
     @ManyToOne(optional = false)
-    private Worker seller;
-    
-    @OneToOne(mappedBy = "siteSurveyReport")
-    private JobOrder jobOrder;
+    private PlaceType placeType;
     
     private String notes;
     
     @Version
     private int version;
 
-    public SiteSurveyReport() {
+    public JobOrder() {
+        creation = new Date();
     }
 
-    public SiteSurveyReport(Integer number) {
+    public JobOrder(Integer number) {
         this();
         this.number = number;
+    }
+
+    public Date getCreation() {
+        return creation;
+    }
+
+    public void setCreation(Date creation) {
+        this.creation = creation;
     }
 
     public Integer getNumber() {
@@ -92,36 +101,37 @@ public class SiteSurveyReport extends BaseEntity<Long>{
         this.number = number;
     }
 
-    public Date getExpected() {
-        return expected;
+    public String getDescription() {
+        return description;
     }
 
-    public void setExpected(Date expected) {
-        this.expected = expected;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public Date getActual() {
-        return actual;
+    public String getCustomerOrderNumber() {
+        return customerOrderNumber;
     }
 
-    public void setActual(Date actual) {
-        this.actual = actual;
+    public void setCustomerOrderNumber(String customerOrderNumber) {
+        this.customerOrderNumber = customerOrderNumber;
     }
 
-    public Plant getPlant() {
-        return plant;
+    public SiteSurveyReport getSiteSurveyReport() {
+        return siteSurveyReport;
     }
 
-    public void setPlant(Plant plant) {
-        this.plant = plant;
+    public void addSiteSurveyReport(SiteSurveyReport siteSurveyReport) {
+        siteSurveyReport.setJobOrder(this);
+        this.siteSurveyReport = siteSurveyReport;
     }
 
-    public Worker getSeller() {
-        return seller;
+    public PlaceType getPlaceType() {
+        return placeType;
     }
 
-    public void setSeller(Worker seller) {
-        this.seller = seller;
+    public void setPlaceType(PlaceType placeType) {
+        this.placeType = placeType;
     }
 
     public String getNotes() {
@@ -137,21 +147,12 @@ public class SiteSurveyReport extends BaseEntity<Long>{
         return id;
     }
 
-    public SiteSurveyRequest getRequest() {
-        return request;
+    public System getSystem() {
+        return system;
     }
 
-    public void addRequest(SiteSurveyRequest request) {
-        request.setReport(this);
-        this.request = request;
-    }
-
-    public JobOrder getJobOrder() {
-        return jobOrder;
-    }
-
-    public void setJobOrder(JobOrder jobOrder) {
-        this.jobOrder = jobOrder;
+    public void setSystem(System system) {
+        this.system = system;
     }
     
 }
