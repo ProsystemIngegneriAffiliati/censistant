@@ -1,0 +1,47 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:define name="content">
+        <h:form id="carriersForm">
+            <div class="ui-g">
+                <div class="ui-g-12">
+                    <div class="card card-w-title">
+                        <h1>#{msg.deliveryNote_carriers}</h1>
+
+                        <p:dataTable id="carriersTable"
+                                     var="item"
+                                     value="#{carrierListPresenter.carriers}"
+                                     selectionMode="multiple"
+                                     selection="#{carrierListPresenter.selectedCarriers}"
+                                     rowKey="#{item.id}">
+                            <f:facet name="header">
+                                <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
+                                    #{msg.deliveryNote_carriers_tip}
+                                    <p:outputPanel>
+                                        <p:button title="#{msg.new}" icon="ui-icon-create" styleClass="AquaButton" outcome="/secured/deliveryNote/carrier">
+                                            <f:param name="id" value="0" />
+                                        </p:button>
+                                        <p:commandButton title="#{msg.delete}" icon="ui-icon-delete" actionListener="#{carrierListPresenter.deleteCarriers()}" update="carriersTable">
+                                            <p:confirm header="#{msg.deliveryNote_carriers_delete}" message="#{msg.deliveryNote_carriers_delete_tip}" icon="ui-icon-alert"/>
+                                        </p:commandButton>
+                                    </p:outputPanel>
+                                </p:panelGrid>
+                            </f:facet>
+                            <p:column headerText="#{msg.deliveryNote_carrier_name}" sortBy="#{item.name}" filterBy="#{item.name}" filterMatchMode="contains">
+                                <h:outputText value="#{item.name}"/>
+                            </p:column>
+                            <p:column headerText="#{msg.actions}" style="width:64px; text-align:center">
+                                <p:button title="#{msg.edit}" icon="ui-icon-edit" styleClass="AquaButton" outcome="/secured/deliveryNote/carrier">
+                                    <f:param name="id" value="#{item.id}" />
+                                </p:button>
+                            </p:column>
+                        </p:dataTable>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>

@@ -32,6 +32,14 @@
                                 <p:menuitem id="boxesMenu" value="#{msg.purchasing_boxes}" icon="&#xE8F8;" outcome="/secured/purchasing/boxes"/>
                             </p:submenu>
                         </p:submenu>
+                        <p:submenu id="deliveryNoteMenu" label="#{msg.deliveryNote}" icon="&#xE865;">
+                            <p:submenu id="deliveryNoteUtils" label="#{msg.utils}" icon="&#xE85D;">
+                                <p:menuitem id="carriersMenu" value="#{msg.deliveryNote_carriers}" icon="&#xE8F8;" outcome="/secured/deliveryNote/carriers"/>
+                                <p:menuitem id="goodsDescriptionsMenu" value="#{msg.deliveryNote_goodsDescriptions}" icon="&#xE8F8;" outcome="/secured/deliveryNote/goodsDescriptions"/>
+                                <p:menuitem id="shipmentReasonsMenu" value="#{msg.deliveryNote_shipmentReasons}" icon="&#xE8F8;" outcome="/secured/deliveryNote/shipmentReasons"/>
+                                <p:menuitem id="shippingPaymentsMenu" value="#{msg.deliveryNote_shippingPayments}" icon="&#xE8F8;" outcome="/secured/deliveryNote/shippingPayments"/>
+                            </p:submenu>
+                        </p:submenu>
                         <p:submenu id="warehouseMenu" label="#{msg.warehouse}" icon="&#xE8D1;">
                             <p:menuitem id="itemMovementsMenu" value="#{msg.warehouse_itemMovement}" icon="&#xE8F8;" outcome="/secured/warehouse/itemMovement"/>
                             <p:menuitem id="warehousesStockMenu" value="#{msg.warehouse_warehousesStock}" icon="&#xE8F8;" outcome="/secured/warehouse/warehousesStock"/>
