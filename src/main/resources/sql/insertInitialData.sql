@@ -165,3 +165,12 @@ INSERT INTO shipmentreason(name, version) VALUES('Conto visione', 0)
 
 INSERT INTO shippingpayment(name, version) VALUES('Porto franco', 0)
 INSERT INTO shippingpayment(name, version) VALUES('Porto assegnato', 0)
+
+INSERT INTO deviceprogrammingtype(name, version) VALUES('Immediato', 0)
+INSERT INTO deviceprogrammingtype(name, version) VALUES('Ritardato', 0)
+INSERT INTO deviceprogrammingtype(name, version) VALUES('24h', 0)
+
+INSERT INTO placetype(name, version) VALUES('Industriale', 0)
+INSERT INTO placetype(name, version) VALUES('Abitazione privata', 0)
+INSERT INTO placetype(name, version) VALUES('Attività commerciale', 0)
+INSERT INTO placetype(name, version) VALUES('Altro', 0)
