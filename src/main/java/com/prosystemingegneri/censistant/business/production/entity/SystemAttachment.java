@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.prosystemingegneri.censistant.business.sales.entity;
+package com.prosystemingegneri.censistant.business.production.entity;
 
 import com.prosystemingegneri.censistant.business.entity.BaseEntity;
 import javax.persistence.Column;
@@ -22,6 +22,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
@@ -30,27 +31,39 @@ import javax.validation.constraints.NotNull;
  * @author Davide Mainardi <ingmainardi@live.com>
  */
 @Entity
-public class PlaceType extends BaseEntity<Long> {
+public class SystemAttachment extends BaseEntity<Long>{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
     @NotNull
-    @Column(nullable = false, unique = true)
-    private String name;
+    @ManyToOne(optional = false)
+    private System system;
+    
+    @NotNull
+    @Column(nullable = false)
+    private String attachmentFilename;
     
     @Version
     private int version;
 
-    public PlaceType() {
+    public SystemAttachment() {
     }
 
-    public String getName() {
-        return name;
+    public System getSystem() {
+        return system;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setSystem(System system) {
+        this.system = system;
+    }
+
+    public String getAttachmentFilename() {
+        return attachmentFilename;
+    }
+
+    public void setAttachmentFilename(String attachmentFilename) {
+        this.attachmentFilename = attachmentFilename;
     }
 
     @Override

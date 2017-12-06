@@ -16,18 +16,15 @@
  */
 package com.prosystemingegneri.censistant.business.production.entity;
 
-import com.prosystemingegneri.censistant.business.entity.BaseEntity;
 import com.prosystemingegneri.censistant.business.sales.entity.JobOrder;
+import com.prosystemingegneri.censistant.business.warehouse.entity.Location;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -35,18 +32,21 @@ import javax.validation.constraints.NotNull;
  * @author Davide Mainardi <ingmainardi@live.com>
  */
 @Entity
-public class System extends BaseEntity<Long>{
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@DiscriminatorValue(value = "2")
+public class System extends Location {
     
     @NotNull
     @Column(nullable = false)
     private String description;
     
-    @NotNull
-    @OneToOne(optional = false)
-    private Node node;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "system", orphanRemoval = true)
+    private final List<Device> devices;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "system", orphanRemoval = true)
+    private final List<SystemAttachment> systemAttachments;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "system", orphanRemoval = true)
+    private final List<Area> areas;
     
     @OneToMany(mappedBy = "system")
     private final List<JobOrder> jobOrders;
@@ -60,12 +60,12 @@ public class System extends BaseEntity<Long>{
     private String powerSource;
     
     private String notes;
-    
-    @Version
-    private int version;
 
     public System() {
         jobOrders = new ArrayList<>();
+        devices = new ArrayList<>();
+        systemAttachments = new ArrayList<>();
+        areas = new ArrayList<>();
     }
 
     public String getDescription() {
@@ -74,15 +74,6 @@ public class System extends BaseEntity<Long>{
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public Node getNode() {
-        return node;
-    }
-
-    public void addNode(Node node) {
-        node.setSystem(this);
-        this.node = node;
     }
 
     public String getUserCode() {
@@ -124,11 +115,6 @@ public class System extends BaseEntity<Long>{
     public void setNotes(String notes) {
         this.notes = notes;
     }
-
-    @Override
-    public Long getId() {
-        return id;
-    }
     
     public void addJobOrder(JobOrder jobOrder) {
         if (!jobOrders.contains(jobOrder)) {
@@ -146,6 +132,74 @@ public class System extends BaseEntity<Long>{
     
     public List<JobOrder> getJobOrders() {
         return jobOrders;
+    }
+    
+    public void addDevice(Device device) {
+        if (!devices.contains(device)) {
+            device.setSystem(this);
+            devices.add(device);
+        }
+    }
+    
+    public void removeDevice(Device device) {
+        if (devices.contains(device)) {
+            device.setSystem(null);
+            devices.remove(device);
+        }
+    }
+    
+    public List<Device> getDevices() {
+        return devices;
+    }
+    
+    public void addSystemAttachment(SystemAttachment systemAttachment) {
+        if (!systemAttachments.contains(systemAttachment)) {
+            systemAttachment.setSystem(this);
+            systemAttachments.add(systemAttachment);
+        }
+    }
+    
+    public void removeSystemAttachment(SystemAttachment systemAttachment) {
+        if (systemAttachments.contains(systemAttachment)) {
+            systemAttachment.setSystem(null);
+            systemAttachments.remove(systemAttachment);
+        }
+    }
+
+    public List<SystemAttachment> getSystemAttachments() {
+        return systemAttachments;
+    }
+    
+    public void addArea(Area area) {
+        if (!areas.contains(area)) {
+            area.setSystem(this);
+            areas.add(area);
+        }
+    }
+    
+    public void removeArea(Area area) {
+        if (areas.contains(area)) {
+            area.setSystem(null);
+            areas.remove(area);
+        }
+    }
+
+    public List<Area> getAreas() {
+        return areas;
+    }
+
+    @Override
+    public String getName() {
+        String delimiter = " - ";
+        String jobOrderNumber = "";
+        String customerName = "";
+        
+        if (jobOrders != null && !jobOrders.isEmpty()) {
+            jobOrderNumber = jobOrders.get(jobOrders.size() - 1).getNumber().toString() + delimiter;
+            customerName = jobOrders.get(jobOrders.size() - 1).getSiteSurveyReport().getPlant().getCustomerSupplier().getName() + delimiter;
+        }
+        
+        return customerName + jobOrderNumber + description;
     }
     
 }

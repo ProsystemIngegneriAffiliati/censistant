@@ -16,11 +16,14 @@
  */
 package com.prosystemingegneri.censistant.business.production.entity;
 
-import com.prosystemingegneri.censistant.business.warehouse.entity.Location;
+import com.prosystemingegneri.censistant.business.entity.BaseEntity;
 import javax.persistence.Column;
-import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Version;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
@@ -29,11 +32,14 @@ import javax.validation.constraints.NotNull;
  * @author Davide Mainardi <ingmainardi@live.com>
  */
 @Entity
-@DiscriminatorValue(value = "2")
-public class Device extends Location {
+public class Device extends BaseEntity<Long> {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     
+    @NotNull
     @ManyToOne(optional = false)
-    private Node node;
+    private System system;
     
     @NotNull
     @ManyToOne(optional = false)
@@ -43,21 +49,19 @@ public class Device extends Location {
     @NotNull
     @Column(nullable = false)
     private Integer quantity;
+    
+    @Version
+    private int version;
 
     public Device() {
     }
-    
-    @Override
-    public String getName() {
-        throw new UnsupportedOperationException("Not supported yet.");
+
+    public System getSystem() {
+        return system;
     }
 
-    public Node getNode() {
-        return node;
-    }
-
-    public void setNode(Node node) {
-        this.node = node;
+    public void setSystem(System system) {
+        this.system = system;
     }
 
     public Item getItem() {
@@ -74,6 +78,11 @@ public class Device extends Location {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
+    }
+
+    @Override
+    public Long getId() {
+        return id;
     }
     
 }

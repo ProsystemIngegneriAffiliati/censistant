@@ -14,14 +14,16 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.prosystemingegneri.censistant.business.sales.entity;
+package com.prosystemingegneri.censistant.business.production.entity;
 
 import com.prosystemingegneri.censistant.business.entity.BaseEntity;
+import com.prosystemingegneri.censistant.business.purchasing.entity.SupplierItem;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
@@ -30,19 +32,51 @@ import javax.validation.constraints.NotNull;
  * @author Davide Mainardi <ingmainardi@live.com>
  */
 @Entity
-public class PlaceType extends BaseEntity<Long> {
+public class Area extends BaseEntity<Long>{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
     @NotNull
-    @Column(nullable = false, unique = true)
+    @ManyToOne(optional = false)
+    private System system;
+    
+    @NotNull
+    @Column(nullable = false)
+    private String number;
+    
+    @NotNull
+    @Column(nullable = false)
     private String name;
+    
+    @NotNull
+    @ManyToOne(optional = false)
+    private SupplierItem supplierItem;
+    
+    @NotNull
+    @ManyToOne(optional = false)
+    private DeviceProgrammingType deviceProgrammingType;
     
     @Version
     private int version;
 
-    public PlaceType() {
+    public Area() {
+    }
+
+    public System getSystem() {
+        return system;
+    }
+
+    public void setSystem(System system) {
+        this.system = system;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
     }
 
     public String getName() {
@@ -51,6 +85,22 @@ public class PlaceType extends BaseEntity<Long> {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public SupplierItem getSupplierItem() {
+        return supplierItem;
+    }
+
+    public void setSupplierItem(SupplierItem supplierItem) {
+        this.supplierItem = supplierItem;
+    }
+
+    public DeviceProgrammingType getDeviceProgrammingType() {
+        return deviceProgrammingType;
+    }
+
+    public void setDeviceProgrammingType(DeviceProgrammingType deviceProgrammingType) {
+        this.deviceProgrammingType = deviceProgrammingType;
     }
 
     @Override

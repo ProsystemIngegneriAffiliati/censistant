@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.prosystemingegneri.censistant.business.sales.entity;
+package com.prosystemingegneri.censistant.business.production.entity;
 
 import com.prosystemingegneri.censistant.business.entity.BaseEntity;
 import javax.persistence.Column;
@@ -30,7 +30,7 @@ import javax.validation.constraints.NotNull;
  * @author Davide Mainardi <ingmainardi@live.com>
  */
 @Entity
-public class PlaceType extends BaseEntity<Long> {
+public class DeviceProgrammingType extends BaseEntity<Long>{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -42,7 +42,7 @@ public class PlaceType extends BaseEntity<Long> {
     @Version
     private int version;
 
-    public PlaceType() {
+    public DeviceProgrammingType() {
     }
 
     public String getName() {

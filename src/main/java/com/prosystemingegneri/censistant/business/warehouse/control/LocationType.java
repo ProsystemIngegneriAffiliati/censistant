@@ -23,7 +23,7 @@ package com.prosystemingegneri.censistant.business.warehouse.control;
 public enum LocationType {
     WAREHOUSE(0),
     SUPPLIER(1),
-    DEVICE(2);
+    SYSTEM(2);
     
     private final int value;
 
