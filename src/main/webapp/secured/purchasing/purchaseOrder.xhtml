@@ -93,7 +93,7 @@
                                         </p:column>
                                         <p:column headerText="#{msg.actions}" style="width:72px; text-align:center" priority="0">
                                             <p:splitButton value="" icon="ui-icon-edit" action="#{purchaseOrderPresenter.detailRow(purchaseOrderRow)}" ajax="false">
-                                                <p:menuitem  value="#{msg.delete}" icon="ui-icon-delete" actionListener="#{purchaseOrderPresenter.deleteRow(purchaseOrderRow)}" update="@form">
+                                                <p:menuitem  value="#{msg.delete}" icon="ui-icon-delete" actionListener="#{purchaseOrderPresenter.deleteRow(purchaseOrderRow)}" update="purchaseOrderRowsTable">
                                                     <p:confirm header="#{msg.purchasing_purchaseOrderRows_remove}" message="#{msg.purchasing_purchaseOrderRows_remove_tip}" icon="ui-icon-alert"/>
                                                 </p:menuitem>
                                             </p:splitButton>

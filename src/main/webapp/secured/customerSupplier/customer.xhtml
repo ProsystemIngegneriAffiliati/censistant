@@ -99,7 +99,7 @@
                                         </p:column>
                                         <p:column headerText="#{msg.actions}" style="width:72px; text-align:center" priority="0">
                                             <p:splitButton value="" icon="ui-icon-edit" action="#{customerSupplierPresenter.detailPlant(plant)}" ajax="false">
-                                                <p:menuitem  value="#{msg.delete}" icon="ui-icon-delete" actionListener="#{customerSupplierPresenter.deletePlant(plant)}" update="@form">
+                                                <p:menuitem  value="#{msg.delete}" icon="ui-icon-delete" actionListener="#{customerSupplierPresenter.deletePlant(plant)}" update="plantsTable">
                                                     <p:confirm header="#{msg.customerSupplier_plants_delete}" message="#{msg.customerSupplier_plants_delete_tip}" icon="ui-icon-alert"/>
                                                 </p:menuitem>
                                             </p:splitButton>
@@ -126,7 +126,7 @@
                                         </p:column>
                                         <p:column headerText="#{msg.actions}" style="width:72px; text-align:center" priority="0">
                                             <p:splitButton value="" icon="ui-icon-edit" action="#{customerSupplierPresenter.detailReferee(referee)}" ajax="false">
-                                                <p:menuitem  value="#{msg.delete}" icon="ui-icon-delete" actionListener="#{customerSupplierPresenter.deleteReferee(referee)}" update="@form">
+                                                <p:menuitem  value="#{msg.delete}" icon="ui-icon-delete" actionListener="#{customerSupplierPresenter.deleteReferee(referee)}" update="refereesTable">
                                                     <p:confirm header="#{msg.customerSupplier_referees_delete}" message="#{msg.customerSupplier_referees_delete_tip}" icon="ui-icon-alert"/>
                                                 </p:menuitem>
                                             </p:splitButton>

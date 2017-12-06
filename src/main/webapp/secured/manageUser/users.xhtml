@@ -19,7 +19,7 @@
                                      selection="#{listUserPresenter.selectedUsers}"
                                      rowKey="#{userApp.userName}">
                             <f:facet name="header">
-                                <p:commandButton title="#{msg.delete}" icon="ui-icon-delete" actionListener="#{listUserPresenter.deleteUsers()}" update="@form">
+                                <p:commandButton title="#{msg.delete}" icon="ui-icon-delete" actionListener="#{listUserPresenter.deleteUsers()}" update="usersList">
                                     <p:confirm header="#{msg.manageUsers_users_delete}" message="#{msg.manageUsers_users_delete_tip}" icon="ui-icon-alert"/>
                                 </p:commandButton>
                             </f:facet>

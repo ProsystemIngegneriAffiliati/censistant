@@ -23,7 +23,7 @@
                                             <p:button title="#{msg.new}" icon="ui-icon-create" styleClass="AquaButton" outcome="/secured/siteSurvey/siteSurveyRequest">
                                                 <f:param name="id" value="0" />
                                             </p:button>
-                                            <p:commandButton title="#{msg.delete}" icon="ui-icon-delete" actionListener="#{siteSurveyRequestListPresenter.deleteSiteSurveyRequest()}" update="@form">
+                                            <p:commandButton title="#{msg.delete}" icon="ui-icon-delete" actionListener="#{siteSurveyRequestListPresenter.deleteSiteSurveyRequest()}" update="siteSurveyRequestsTable">
                                                 <p:confirm header="#{msg.siteSurvey_siteSurveyRequests_delete}" message="#{msg.siteSurvey_siteSurveyRequests_delete_tip}" icon="ui-icon-alert"/>
                                             </p:commandButton>
                                         </p:outputPanel>

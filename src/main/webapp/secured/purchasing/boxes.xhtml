@@ -23,7 +23,7 @@
                                             <p:button title="#{msg.new}" icon="ui-icon-create" styleClass="AquaButton" outcome="/secured/purchasing/box">
                                                 <f:param name="id" value="0" />
                                             </p:button>
-                                            <p:commandButton title="#{msg.delete}" icon="ui-icon-delete" actionListener="#{boxListPresenter.deleteBox()}" update="@form">
+                                            <p:commandButton title="#{msg.delete}" icon="ui-icon-delete" actionListener="#{boxListPresenter.deleteBox()}" update="boxesTable">
                                                 <p:confirm header="#{msg.purchasing_boxes_delete}" message="#{msg.purchasing_boxes_delete_tip}" icon="ui-icon-alert"/>
                                             </p:commandButton>
                                         </p:outputPanel>

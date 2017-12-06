@@ -25,7 +25,7 @@
                                                 <f:param name="isCustomerView" value="false" />
                                                 <f:param name="returnPage" value="customerSupplier/suppliers" />
                                             </p:button>
-                                            <p:commandButton title="#{msg.delete}" icon="ui-icon-delete" actionListener="#{customerSupplierListPresenter.deleteCustomerSupplier()}" update="@form">
+                                            <p:commandButton title="#{msg.delete}" icon="ui-icon-delete" actionListener="#{customerSupplierListPresenter.deleteCustomerSupplier()}" update="suppliersTable">
                                                 <p:confirm header="#{msg.customerSupplier_suppliers_delete}" message="#{msg.customerSupplier_suppliers_delete_tip}" icon="ui-icon-alert"/>
                                             </p:commandButton>
                                         </p:outputPanel>

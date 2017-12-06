@@ -25,6 +25,7 @@ import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderColumn;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -39,12 +40,14 @@ public class System extends Location {
     @Column(nullable = false)
     private String description;
     
+    @OrderColumn
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "system", orphanRemoval = true)
     private final List<Device> devices;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "system", orphanRemoval = true)
     private final List<SystemAttachment> systemAttachments;
     
+    @OrderColumn
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "system", orphanRemoval = true)
     private final List<Area> areas;
     

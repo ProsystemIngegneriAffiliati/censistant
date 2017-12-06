@@ -1,0 +1,65 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:oou="http://omnifaces.org/ui">
+    <ui:define name="content">
+        <h:form id="jobOrdersForm">
+            <div class="ui-g">
+                <div class="ui-g-12">
+                    <div class="card card-w-title">
+                        <h1>#{msg.sales_jobOrders}</h1>
+                        <p:dataTable id="jobOrdersTable" widgetVar="jobOrdersTable" var="jobOrder" value="#{jobOrderListPresenter.lazyJobOrders}"
+                                     selectionMode="multiple" selection="#{jobOrderListPresenter.selectedJobOrders}" rowKey="#{jobOrder.id}"
+                                     paginator="true" rows="10"
+                                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     rowsPerPageTemplate="10,25,50" lazy="true">
+                            <f:facet name="header">
+                                <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
+                                    #{msg.sales_jobOrders_tip}
+                                    <p:outputPanel>
+                                        <p:outputPanel style="display: inline-block">
+                                            <p:button title="#{msg.new}" icon="ui-icon-create" styleClass="AquaButton" outcome="/secured/sales/jobOrder">
+                                                <f:param name="id" value="0" />
+                                            </p:button>
+                                            <p:commandButton title="#{msg.delete}" icon="ui-icon-delete" actionListener="#{jobOrderListPresenter.deleteJobOrder()}" update="jobOrdersTable">
+                                                <p:confirm header="#{msg.sales_jobOrders_delete}" message="#{msg.sales_jobOrders_delete_tip}" icon="ui-icon-alert"/>
+                                            </p:commandButton>
+                                        </p:outputPanel>
+                                    </p:outputPanel>
+                                </p:panelGrid>
+                            </f:facet>
+                            <p:column headerText="#{msg.sales_jobOrder_creation}" field="creation" filterable="false" priority="2">
+                                <h:outputText value="#{jobOrder.creation}">
+                                    <f:convertDateTime pattern="dd/MM/YYYY" />
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="#{msg.sales_jobOrder_number}" field="number" priority="0">
+                                <h:outputText value="#{jobOrder.number}"/>
+                            </p:column>
+                            <p:column headerText="#{msg.customerSupplier_customer}" field="customerName" priority="4">
+                                <h:outputText value="#{jobOrder.siteSurveyReport.plant.customerSupplier.name}"/>
+                            </p:column>
+                            <p:column headerText="#{msg.customerSupplier_plant_address}" field="plantAddress" priority="5">
+                                <h:outputText value="#{jobOrder.siteSurveyReport.plant.address}"/>
+                            </p:column>
+                            <p:column headerText="#{msg.sales_jobOrder_description}" field="description" priority="3">
+                                <h:outputText value="#{jobOrder.description}"/>
+                            </p:column>
+                            <p:column headerText="#{msg.siteSurvey_systemType_name}" field="systemType" priority="2">
+                                <h:outputText value="#{jobOrder.siteSurveyReport.request.systemType.name}"/>
+                            </p:column>
+                            <p:column headerText="#{msg.actions}" style="width:64px; text-align:center" priority="0" exportable="false">
+                                <p:button title="#{msg.edit}" icon="ui-icon-edit" styleClass="AquaButton" outcome="/secured/sales/jobOrder">
+                                    <f:param name="id" value="#{jobOrder.id}" />
+                                </p:button>
+                            </p:column>
+                        </p:dataTable>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>
