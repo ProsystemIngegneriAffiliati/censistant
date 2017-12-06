@@ -20,6 +20,7 @@ import com.prosystemingegneri.censistant.business.customerSupplier.boundary.Cust
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Referee;
+import com.prosystemingegneri.censistant.business.sales.entity.JobOrder;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyRequest;
 import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
@@ -54,6 +55,8 @@ public class CustomerSupplierPresenter implements Serializable{
     private SiteSurveyRequest siteSurveyRequest;
     private SiteSurveyReport siteSurveyReport;
     
+    private JobOrder jobOrder;
+    
     @Resource
     Validator validator;
     
@@ -65,6 +68,8 @@ public class CustomerSupplierPresenter implements Serializable{
         
         siteSurveyRequest = (SiteSurveyRequest) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("siteSurveyRequest");
         siteSurveyReport = (SiteSurveyReport) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("siteSurveyReport");
+        
+        jobOrder = (JobOrder) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("jobOrder");
     }
     
     public String saveCustomerSupplier() {
@@ -85,6 +90,7 @@ public class CustomerSupplierPresenter implements Serializable{
         
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("siteSurveyRequest", siteSurveyRequest);
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("siteSurveyReport", siteSurveyReport);
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("jobOrder", jobOrder);
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("idCustomer", customerSupplier.getId());
         
         return "/secured/" + returnPage + "?faces-redirect=true";
@@ -127,6 +133,7 @@ public class CustomerSupplierPresenter implements Serializable{
     public String cancel() {
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("siteSurveyRequest", siteSurveyRequest);
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("siteSurveyReport", siteSurveyReport);
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("jobOrder", jobOrder);
         
         return "/secured/" + returnPage + "?faces-redirect=true";
     }
@@ -137,6 +144,7 @@ public class CustomerSupplierPresenter implements Serializable{
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("returnPage", returnPage);
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("siteSurveyRequest", siteSurveyRequest);
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("siteSurveyReport", siteSurveyReport);
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("jobOrder", jobOrder);
     }
     
     public void deleteReferee(Referee referee) {

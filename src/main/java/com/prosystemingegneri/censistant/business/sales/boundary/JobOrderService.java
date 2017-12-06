@@ -22,6 +22,7 @@ import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant_;
 import com.prosystemingegneri.censistant.business.sales.entity.JobOrder;
 import com.prosystemingegneri.censistant.business.sales.entity.JobOrder_;
+import com.prosystemingegneri.censistant.business.siteSurvey.boundary.SiteSurveyReportService;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport_;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyRequest;
@@ -35,6 +36,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -56,8 +58,17 @@ public class JobOrderService implements Serializable{
     @PersistenceContext
     EntityManager em;
     
+    @Inject
+    SiteSurveyReportService siteSurveyReportService;
+    
     public JobOrder createNewJobOrder() {
-        return new JobOrder(getNextNumber());
+        JobOrder jobOrder = new JobOrder(getNextNumber());
+        SiteSurveyReport siteSurveyReport = siteSurveyReportService.createNewSiteSurveyReport();
+        siteSurveyReport.setActual(new Date());
+        siteSurveyReport.setExpected(new Date());
+        jobOrder.addSiteSurveyReport(siteSurveyReport);
+        
+        return jobOrder;
     }
     
     private Integer getNextNumber() {

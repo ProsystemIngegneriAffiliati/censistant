@@ -87,8 +87,8 @@ public class SiteSurveyReportLazyDataModel extends LazyDataModel<SiteSurveyRepor
             }
         }
         
-        List<SiteSurveyReport> result = service.listSiteSurveyReports(first, pageSize, sortField, isAscending, number, start, end, customer, systemType, seller, plant);
-        this.setRowCount(service.getSiteSurveyReportsCount(number, start, end, customer, systemType, seller, plant).intValue());
+        List<SiteSurveyReport> result = service.listSiteSurveyReports(first, pageSize, sortField, isAscending, number, start, end, customer, systemType, seller, plant, null);
+        this.setRowCount(service.getSiteSurveyReportsCount(number, start, end, customer, systemType, seller, plant, null).intValue());
         
         return result;
     }

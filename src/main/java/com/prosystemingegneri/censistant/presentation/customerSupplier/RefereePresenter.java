@@ -18,6 +18,7 @@ package com.prosystemingegneri.censistant.presentation.customerSupplier;
 
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Referee;
+import com.prosystemingegneri.censistant.business.sales.entity.JobOrder;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyRequest;
 import java.io.Serializable;
@@ -41,6 +42,8 @@ public class RefereePresenter implements Serializable {
     private SiteSurveyRequest siteSurveyRequest;
     private SiteSurveyReport siteSurveyReport;
     
+    private JobOrder jobOrder;
+    
     @PostConstruct
     public void init() {
         customerSupplier = (CustomerSupplier) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("customerSupplier");
@@ -49,6 +52,8 @@ public class RefereePresenter implements Serializable {
         
         siteSurveyRequest = (SiteSurveyRequest) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("siteSurveyRequest");
         siteSurveyReport = (SiteSurveyReport) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("siteSurveyReport");
+        
+        jobOrder = (JobOrder) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("jobOrder");
         
         referee = (Referee) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("referee");
         if (referee == null)
@@ -86,6 +91,7 @@ public class RefereePresenter implements Serializable {
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("returnPage", returnInitialPage);
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("siteSurveyRequest", siteSurveyRequest);
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("siteSurveyReport", siteSurveyReport);
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("jobOrder", jobOrder);
     }
 
     public Referee getReferee() {

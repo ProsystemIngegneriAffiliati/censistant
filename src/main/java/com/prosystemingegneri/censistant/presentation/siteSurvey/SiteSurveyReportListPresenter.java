@@ -43,6 +43,8 @@ public class SiteSurveyReportListPresenter implements Serializable{
     private SiteSurveyReportLazyDataModel lazySiteSurveyReports;
     private List<SiteSurveyReport> selectedSiteSurveyReports;
     
+    private List<SiteSurveyReport> reportsNotAssociatedToJobOrder;
+    
     @PostConstruct
     public void init() {
         lazySiteSurveyReports = new SiteSurveyReportLazyDataModel(service);
@@ -60,6 +62,16 @@ public class SiteSurveyReportListPresenter implements Serializable{
         }
         else
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Missing selection", "Select a row before deleting"));
+    }
+    
+    public List<SiteSurveyReport> completeReportsNotAssociatedToJobOrder(String name) {
+        return service.listSiteSurveyReports(0, 10, "expected", Boolean.FALSE, null, null, null, name, null, null, null, Boolean.FALSE);
+    }
+
+    public List<SiteSurveyReport> getReportsNotAssociatedToJobOrder() {
+        if (reportsNotAssociatedToJobOrder == null || reportsNotAssociatedToJobOrder.isEmpty())
+            reportsNotAssociatedToJobOrder = service.listSiteSurveyReports(0, 0, null, Boolean.FALSE, null, null, null, null, null, null, null, Boolean.FALSE);
+        return reportsNotAssociatedToJobOrder;
     }
 
     public SiteSurveyReportLazyDataModel getLazySiteSurveyReports() {

@@ -17,6 +17,7 @@
 package com.prosystemingegneri.censistant.business.siteSurvey.entity;
 
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
+import com.prosystemingegneri.censistant.business.sales.entity.JobOrder;
 import java.util.Date;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
@@ -33,4 +34,5 @@ public class SiteSurveyReport_ {
     public static volatile SingularAttribute<SiteSurveyReport, SiteSurveyRequest> request;
     public static volatile SingularAttribute<SiteSurveyReport, Plant> plant;
     public static volatile SingularAttribute<SiteSurveyReport, Worker> seller;
+    public static volatile SingularAttribute<SiteSurveyReport, JobOrder> jobOrder;
 }
