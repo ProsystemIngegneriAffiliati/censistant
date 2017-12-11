@@ -42,6 +42,10 @@ public class SystemAttachment extends BaseEntity<Long>{
     
     @NotNull
     @Column(nullable = false)
+    private String name;
+    
+    @NotNull
+    @Column(nullable = false)
     private String attachmentFilename;
     
     @Version
@@ -69,6 +73,14 @@ public class SystemAttachment extends BaseEntity<Long>{
     @Override
     public Long getId() {
         return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
     
 }

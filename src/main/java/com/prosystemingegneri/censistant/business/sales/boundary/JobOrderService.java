@@ -20,6 +20,8 @@ import com.prosystemingegneri.censistant.business.customerSupplier.entity.Custom
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier_;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant_;
+import com.prosystemingegneri.censistant.business.production.boundary.SystemService;
+import com.prosystemingegneri.censistant.business.production.entity.System;
 import com.prosystemingegneri.censistant.business.sales.entity.JobOrder;
 import com.prosystemingegneri.censistant.business.sales.entity.JobOrder_;
 import com.prosystemingegneri.censistant.business.siteSurvey.boundary.SiteSurveyReportService;
@@ -61,12 +63,18 @@ public class JobOrderService implements Serializable{
     @Inject
     SiteSurveyReportService siteSurveyReportService;
     
+    @Inject
+    SystemService systemService;
+    
     public JobOrder createNewJobOrder() {
         JobOrder jobOrder = new JobOrder(getNextNumber());
         SiteSurveyReport siteSurveyReport = siteSurveyReportService.createNewSiteSurveyReport();
         siteSurveyReport.setActual(new Date());
         siteSurveyReport.setExpected(new Date());
         jobOrder.addSiteSurveyReport(siteSurveyReport);
+        
+        System system = new System();
+        system.addJobOrder(jobOrder);
         
         return jobOrder;
     }
@@ -102,7 +110,9 @@ public class JobOrderService implements Serializable{
 	return result;
     }
     
-    public JobOrder saveJobOrder(JobOrder jobOrder) {        
+    public JobOrder saveJobOrder(JobOrder jobOrder) {
+        systemService.saveSystem(jobOrder.getSystem());
+        
         if (jobOrder.getId() == null)
             em.persist(jobOrder);
         else

@@ -19,12 +19,22 @@ package com.prosystemingegneri.censistant.presentation.sales;
 import com.prosystemingegneri.censistant.business.customerSupplier.boundary.CustomerSupplierService;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
+import com.prosystemingegneri.censistant.business.production.entity.SystemAttachment;
 import com.prosystemingegneri.censistant.business.sales.boundary.JobOrderService;
 import com.prosystemingegneri.censistant.business.sales.entity.JobOrder;
 import com.prosystemingegneri.censistant.business.siteSurvey.boundary.SiteSurveyReportService;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport;
+import com.prosystemingegneri.censistant.presentation.DocumentAndImageUtils;
 import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJBException;
@@ -32,8 +42,13 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import org.apache.commons.io.FilenameUtils;
 import org.omnifaces.cdi.ViewScoped;
+import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.SelectEvent;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
+import org.primefaces.model.UploadedFile;
 
 /**
  *
@@ -115,6 +130,49 @@ public class JobOrderPresenter implements Serializable{
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("returnPage", "sales/jobOrder");
         
         return "/secured/customerSupplier/customer?faces-redirect=true";
+    }
+    
+    public String chooseSystem() {
+        //TODO
+        return "";
+    }
+    
+    public void handleSystemAttachmentUpload(FileUploadEvent event) {
+        String idMessageWidget = "addSystemAttachmentMessage";
+        try {
+            UploadedFile uploadedFile = event.getFile();
+            InputStream input = uploadedFile.getInputstream();
+            
+            Path folder = Paths.get(DocumentAndImageUtils.IMAGE_PATH);
+            String filename = FilenameUtils.getBaseName(uploadedFile.getFileName()); 
+            String extension = FilenameUtils.getExtension(uploadedFile.getFileName());
+            Path file = Files.createTempFile(folder, filename + "-", "." + extension);
+            Files.copy(input, file, StandardCopyOption.REPLACE_EXISTING);
+         
+            FacesContext.getCurrentInstance().addMessage(idMessageWidget, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success", "File uploaed successfully"));
+            
+            SystemAttachment attachment = new SystemAttachment();
+            attachment.setName(FilenameUtils.getName(file.toString()));
+            attachment.setAttachmentFilename(filename);
+            jobOrder.getSystem().addSystemAttachment(attachment);
+        } catch (IOException ex) {
+            FacesContext.getCurrentInstance().addMessage(idMessageWidget, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Error during file uploading" + 
+                    System.lineSeparator() +
+                    System.lineSeparator() + ex.getLocalizedMessage()));
+        }
+    }
+    
+    public StreamedContent downloadSystemAttachment(SystemAttachment attachment) {
+        String path = DocumentAndImageUtils.DOCUMENT_PATH + "/" + attachment.getAttachmentFilename();
+        String contentType = FacesContext.getCurrentInstance().getExternalContext().getMimeType(path);
+        try {
+            return new DefaultStreamedContent(new FileInputStream(path), contentType, attachment.getName());
+        } catch (FileNotFoundException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Error during file downloading" + 
+                    System.lineSeparator() +
+                    System.lineSeparator() + ex.getLocalizedMessage()));
+        }
+        return null;
     }
     
     public List<Plant> completePlant(String value) {

@@ -167,6 +167,94 @@
                                         </p:panelGrid>
                                     </p:tab>
                                     <p:tab title="#{msg.sales_jobOrder_systemData}">
+                                        <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                            <h:panelGroup styleClass="md-inputfield">
+                                                <p:inputText id="systemDescription" value="#{jobOrderPresenter.jobOrder.system.description}"/>
+                                                <p:outputLabel for="systemDescription" value="#{msg.sales_jobOrder_customerOrderNumber}"/>
+                                                <p:message for="systemDescription"/>
+                                            </h:panelGroup>
+
+                                            <p:commandButton action="#{jobOrderPresenter.chooseSystem()}"
+                                                             value="#{msg.choose} #{msg.production_system}"
+                                                             icon="ui-icon-create"
+                                                             ajax="false">
+                                                <oou:ignoreValidationFailed />
+                                            </p:commandButton>
+                                        </p:panelGrid>
+
+                                        <p:dialog header="#{msg.production_systemAttachment_add_tip}"
+                                                  widgetVar="addSystemAttachmentDialog"
+                                                  modal="true"
+                                                  responsive="true"
+                                                  closeOnEscape="true">
+                                            <p:ajax event="close" update="systemAttachmentsTable" />
+                                            <p:messages id="addSystemAttachmentMessage" showDetail="true" />
+                                            <p:fileUpload
+                                                auto="true"
+                                                multiple="true"
+                                                dragDropSupport="false"
+                                                fileUploadListener="#{jobOrderPresenter.handleSystemAttachmentUpload}"
+                                                update="addSystemAttachmentMessage"
+                                                label="#{msg.choose}"/>
+                                        </p:dialog>
+
+                                        <p:panelGrid columns="2" columnClasses="ui-grid-col-7,ui-grid-col-5" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                            <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                                <h:panelGroup styleClass="md-inputfield">
+                                                    <p:inputText id="systemUserCode" value="#{jobOrderPresenter.jobOrder.system.userCode}"/>
+                                                    <p:outputLabel for="systemUserCode" value="#{msg.production_system_userCode}"/>
+                                                    <p:message for="systemUserCode"/>
+                                                </h:panelGroup>
+
+                                                <h:panelGroup styleClass="md-inputfield">
+                                                    <p:inputText id="systemControlPanelPhoneNumber" value="#{jobOrderPresenter.jobOrder.system.controlPanelPhoneNumber}"/>
+                                                    <p:outputLabel for="systemControlPanelPhoneNumber" value="#{msg.production_system_controlPanelPhoneNumber}"/>
+                                                    <p:message for="systemControlPanelPhoneNumber"/>
+                                                </h:panelGroup>
+
+                                                <h:panelGroup styleClass="md-inputfield">
+                                                    <p:inputText id="systemControlPanelPosition" value="#{jobOrderPresenter.jobOrder.system.controlPanelPosition}"/>
+                                                    <p:outputLabel for="systemControlPanelPosition" value="#{msg.production_system_controlPanelPosition}"/>
+                                                    <p:message for="systemControlPanelPosition"/>
+                                                </h:panelGroup>
+
+                                                <h:panelGroup styleClass="md-inputfield">
+                                                    <p:inputText id="systemPowerSource" value="#{jobOrderPresenter.jobOrder.system.powerSource}"/>
+                                                    <p:outputLabel for="systemPowerSource" value="#{msg.production_system_powerSource}"/>
+                                                    <p:message for="systemPowerSource"/>
+                                                </h:panelGroup>
+                                            </p:panelGrid>
+
+                                            <p:dataTable id="systemAttachmentsTable"
+                                                         var="systemAttachment"
+                                                         value="#{jobOrderPresenter.jobOrder.system.systemAttachments}">
+                                                <f:facet name="header">
+                                                    <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
+                                                        #{msg.production_systemAttachments}
+                                                        <p:commandButton title="#{msg.new}" icon="ui-icon-create" onclick="PF('addSystemAttachmentDialog').show();" />
+                                                    </p:panelGrid>
+                                                </f:facet>
+                                                <p:column headerText="#{msg.production_systemAttachment_name}">
+                                                    <h:outputText value="#{systemAttachment.name}" />
+                                                </p:column>
+                                                <p:column headerText="#{msg.actions}" style="width:72px; text-align:center">
+                                                    <p:splitButton value="" icon="ui-icon-file-download" ajax="false">
+                                                        <p:fileDownload value="#{jobOrderPresenter.downloadSystemAttachment(systemAttachment)}" />
+                                                        <p:menuitem  value="#{msg.delete}" icon="ui-icon-delete" actionListener="#{jobOrderPresenter.jobOrder.system.removeSystemAttachment(systemAttachment)}" update="systemAttachmentsTable">
+                                                            <p:confirm header="#{msg.production_systemAttachments_delete}" message="#{msg.production_systemAttachments_delete_tip}" icon="ui-icon-alert"/>
+                                                        </p:menuitem>
+                                                    </p:splitButton>
+                                                </p:column>
+                                            </p:dataTable>
+                                        </p:panelGrid>
+
+                                        <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                            <h:panelGroup styleClass="md-inputfield">
+                                                <p:inputTextarea id="systemNotes" value="#{jobOrderPresenter.jobOrder.system.notes}"/>
+                                                <p:outputLabel for="systemNotes" value="#{msg.production_system_notes}"/>
+                                                <p:message for="systemNotes"/>
+                                            </h:panelGroup>
+                                        </p:panelGrid>
                                     </p:tab>
                                     <p:tab title="#{msg.sales_jobOrder_areaList}">
                                     </p:tab>
