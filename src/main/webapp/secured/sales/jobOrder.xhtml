@@ -15,7 +15,7 @@
     </f:metadata>
     <ui:composition template="/WEB-INF/template.xhtml">
         <ui:define name="content">
-            <h:form id="jobOrderForm">
+            <oou:form id="jobOrderForm">
                 <div class="ui-fluid">
                     <div class="ui-g">
                         <div class="ui-g-12">
@@ -83,6 +83,7 @@
                                                                     forceSelection="true"
                                                                     disabled="#{jobOrderPresenter.jobOrder.siteSurveyReport.request.id != null}">
                                                         <oou:converter converterId="omnifaces.ListConverter" list="#{customerSupplierListPresenter.customers}"/>
+                                                        <p:ajax event="itemSelect" update="plant" />
                                                     </p:autoComplete>
                                                     <p:outputLabel for="requestCustomer" value="#{msg.customerSupplier_customer}"/>
                                                     <p:message for="requestCustomer"/>
@@ -196,7 +197,7 @@
                         </div>
                     </div>
                 </div>
-            </h:form>
+            </oou:form>
         </ui:define>
     </ui:composition>
 
