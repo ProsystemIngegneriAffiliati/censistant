@@ -66,13 +66,15 @@
 
                                             <p:panelGrid id="reportData" columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                                 <h:panelGroup styleClass="md-inputfield">
-                                                    <p:commandButton rendered="#{jobOrderPresenter.jobOrder.siteSurveyReport.request.customer == null}"
-                                                                     action="#{jobOrderPresenter.createCustomer()}"
-                                                                     title="#{msg.new} #{msg.customerSupplier_customer}"
-                                                                     icon="ui-icon-create"
-                                                                     ajax="false">
-                                                        <oou:ignoreValidationFailed />
-                                                    </p:commandButton>
+                                                    <h:panelGroup id="newCustomer">
+                                                        <p:commandButton rendered="#{jobOrderPresenter.jobOrder.siteSurveyReport.request.customer == null}"
+                                                                         action="#{jobOrderPresenter.createCustomer()}"
+                                                                         title="#{msg.new} #{msg.customerSupplier_customer}"
+                                                                         icon="ui-icon-create"
+                                                                         ajax="false">
+                                                            <oou:ignoreValidationFailed />
+                                                        </p:commandButton>
+                                                    </h:panelGroup>
                                                     <p:autoComplete id="requestCustomer"
                                                                     dropdown="true"
                                                                     value="#{jobOrderPresenter.jobOrder.siteSurveyReport.request.customer}"
@@ -83,20 +85,22 @@
                                                                     forceSelection="true"
                                                                     disabled="#{jobOrderPresenter.jobOrder.siteSurveyReport.request.id != null}">
                                                         <oou:converter converterId="omnifaces.ListConverter" list="#{customerSupplierListPresenter.customers}"/>
-                                                        <p:ajax event="itemSelect" update="plant" />
+                                                        <p:ajax event="itemSelect" update="newCustomer openCustomer plant" />
                                                     </p:autoComplete>
                                                     <p:outputLabel for="requestCustomer" value="#{msg.customerSupplier_customer}"/>
                                                     <p:message for="requestCustomer"/>
                                                 </h:panelGroup>
 
                                                 <h:panelGroup styleClass="md-inputfield">
-                                                    <p:commandButton rendered="#{jobOrderPresenter.jobOrder.siteSurveyReport.plant == null}"
-                                                                     action="#{jobOrderPresenter.openCustomer()}"
-                                                                     title="#{msg.new} #{msg.siteSurvey_siteSurveyReport_constructionSite}"
-                                                                     icon="ui-icon-create"
-                                                                     ajax="false">
-                                                        <oou:ignoreValidationFailed />
-                                                    </p:commandButton>
+                                                    <h:panelGroup id="openCustomer">
+                                                        <p:commandButton rendered="#{jobOrderPresenter.jobOrder.siteSurveyReport.plant == null}"
+                                                                         action="#{jobOrderPresenter.openCustomer()}"
+                                                                         title="#{msg.new} #{msg.siteSurvey_siteSurveyReport_constructionSite}"
+                                                                         icon="ui-icon-create"
+                                                                         ajax="false">
+                                                            <oou:ignoreValidationFailed />
+                                                        </p:commandButton>
+                                                    </h:panelGroup>
                                                     <p:autoComplete id="plant"
                                                                     dropdown="true"
                                                                     value="#{jobOrderPresenter.jobOrder.siteSurveyReport.plant}"
@@ -106,6 +110,7 @@
                                                                     itemValue="#{plant}"
                                                                     forceSelection="true">
                                                         <oou:converter converterId="omnifaces.ListConverter" list="#{jobOrderPresenter.plants}"/>
+                                                        <p:ajax event="itemSelect" update="openCustomer" />
                                                     </p:autoComplete>
                                                     <p:outputLabel for="plant" value="#{msg.siteSurvey_siteSurveyReport_constructionSite}"/>
                                                     <p:message for="plant"/>
