@@ -19,6 +19,7 @@ package com.prosystemingegneri.censistant.presentation.sales;
 import com.prosystemingegneri.censistant.business.customerSupplier.boundary.CustomerSupplierService;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
+import com.prosystemingegneri.censistant.business.production.entity.Area;
 import com.prosystemingegneri.censistant.business.production.entity.System;
 import com.prosystemingegneri.censistant.business.production.entity.SystemAttachment;
 import com.prosystemingegneri.censistant.business.sales.boundary.JobOrderService;
@@ -201,6 +202,19 @@ public class JobOrderPresenter implements Serializable{
         if (plants == null || plants.isEmpty())
             plants = customerSupplierService.listPlants(0, 0, null, null, jobOrder.getSiteSurveyReport().getRequest().getCustomer(), null);
         return plants;
+    }
+    
+    public void createNewArea() {
+        jobOrder.getSystem().addArea(new Area());
+    }
+    
+    public void duplicateArea(Area area) {
+        jobOrder.getSystem().addArea(area.duplicate());
+    }
+    
+    public void deleteArea(Area area) {
+        if (area != null)
+            jobOrder.getSystem().removeArea(area);
     }
     
     public JobOrder getJobOrder() {

@@ -62,6 +62,19 @@ public class Area extends BaseEntity<Long>{
 
     public Area() {
     }
+    
+    public Area duplicate() {
+        Area newArea = new Area();
+        
+        final String append = " copied";
+        
+        newArea.setDeviceProgrammingType(deviceProgrammingType);
+        newArea.setName(name);
+        newArea.setNumber(number + append);
+        newArea.setSupplierItem(supplierItem);
+        
+        return newArea;
+    }
 
     public System getSystem() {
         return system;

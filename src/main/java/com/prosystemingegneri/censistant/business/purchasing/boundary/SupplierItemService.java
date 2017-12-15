@@ -62,6 +62,28 @@ public class SupplierItemService implements Serializable{
     public void deleteSupplierItem(Long id) {
         em.remove(readSupplierItem(id));
     }
+    
+    public List<SupplierItem> listSupplierItemsAllField(int first, int pageSize, String search) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<SupplierItem> query = cb.createQuery(SupplierItem.class);
+        Root<SupplierItem> root = query.from(SupplierItem.class);
+        CriteriaQuery<SupplierItem> select = query.select(root).distinct(true);
+
+        if (search != null && !search.isEmpty())
+            query.where(cb.or(
+                    cb.like(cb.lower(root.get(SupplierItem_.code)), "%" + search.toLowerCase() + "%"),
+                    cb.like(cb.lower(root.join(SupplierItem_.item).get(Item_.description)), "%" + search.toLowerCase() + "%")));
+        
+        query.orderBy(cb.asc(root.get(SupplierItem_.code)));
+        
+        TypedQuery<SupplierItem> typedQuery = em.createQuery(select);
+        if (pageSize > 0) {
+            typedQuery.setMaxResults(pageSize);
+            typedQuery.setFirstResult(first);
+        }
+
+        return typedQuery.getResultList();
+    }
 
     public List<SupplierItem> listSupplierItems(int first, int pageSize, String sortField, Boolean isAscending, String code, String supplier, String item) {
         CriteriaBuilder cb = em.getCriteriaBuilder();

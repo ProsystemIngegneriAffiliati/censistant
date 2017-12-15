@@ -42,6 +42,8 @@ public class SupplierItemListPresenter implements Serializable{
     private SupplierItemLazyDataModel lazySupplierItems;
     private List<SupplierItem> selectedSupplierItems;
     
+    private List<SupplierItem> supplierItems;
+    
     @PostConstruct
     public void init() {
         lazySupplierItems = new SupplierItemLazyDataModel(service);
@@ -59,6 +61,16 @@ public class SupplierItemListPresenter implements Serializable{
         }
         else
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Missing selection", "Select a row before deleting"));
+    }
+    
+    public List<SupplierItem> completeSupplierItems(String value) {
+        return service.listSupplierItemsAllField(0, 10, value);
+    }
+
+    public List<SupplierItem> getSupplierItems() {
+        if (supplierItems == null || supplierItems.isEmpty())
+            supplierItems = service.listSupplierItemsAllField(0, 0, null);
+        return supplierItems;
     }
 
     public SupplierItemLazyDataModel getLazySupplierItems() {

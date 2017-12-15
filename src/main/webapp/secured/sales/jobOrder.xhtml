@@ -190,7 +190,7 @@
                                                                     itemValue="#{system}"
                                                                     forceSelection="true">
                                                         <oou:converter converterId="omnifaces.ListConverter" list="#{systemListPresenter.systems}"/>
-                                                        <p:ajax event="itemSelect" listener="#{jobOrderPresenter.onSystemSelect}" update="systemData jobOrderTabs:systemDevices" />
+                                                        <p:ajax event="itemSelect" listener="#{jobOrderPresenter.onSystemSelect}" update="systemData systemDevices areaList" />
                                                     </p:autoComplete>
                                                     <p:outputLabel for="system" value="#{msg.choose} #{msg.production_system}"/>
                                                     <p:message for="system"/>
@@ -274,10 +274,76 @@
                                     </p:tab>
                                     <p:tab title="#{msg.sales_jobOrder_systemDevices}">
                                         <h:panelGroup id="systemDevices">
-                                            
+
                                         </h:panelGroup>
                                     </p:tab>
                                     <p:tab title="#{msg.sales_jobOrder_areaList}">
+                                        <h:panelGroup id="areaList">
+                                            <p:dataTable id="areasTable"
+                                                         var="area"
+                                                         value="#{jobOrderPresenter.jobOrder.system.areas}"
+                                                         editable="true" editMode="cell">
+                                                <f:facet name="header">
+                                                    <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
+                                                        #{msg.production_areas}
+                                                        <p:commandButton title="#{msg.new}" icon="ui-icon-create" action="#{jobOrderPresenter.createNewArea()}" update="areasTable" />
+                                                    </p:panelGrid>
+                                                </f:facet>
+                                                <p:column headerText="#{msg.production_area_number}" filterBy="#{area.number}" filterMatchMode="contains" priority="0">
+                                                    <p:cellEditor>
+                                                        <f:facet name="output"><h:outputText value="#{area.number}" /></f:facet>
+                                                        <f:facet name="input"><p:inputText value="#{area.number}" /></f:facet>
+                                                    </p:cellEditor>
+                                                </p:column>
+                                                <p:column headerText="#{msg.production_area_name}" filterBy="#{area.name}" filterMatchMode="contains" priority="2">
+                                                    <p:cellEditor>
+                                                        <f:facet name="output"><h:outputText value="#{area.name}" /></f:facet>
+                                                        <f:facet name="input"><p:inputText value="#{area.name}" /></f:facet>
+                                                    </p:cellEditor>
+                                                </p:column>
+                                                <p:column headerText="#{msg.purchasing_supplierItem}" filterBy="#{area.supplierItem.code} - #{area.supplierItem.item.description}" filterMatchMode="contains" priority="4">
+                                                    <p:cellEditor>
+                                                        <f:facet name="output"><h:outputText value="#{area.supplierItem.code} - #{area.supplierItem.item.description}" /></f:facet>
+                                                        <f:facet name="input">
+                                                            <p:autoComplete id="supplierItem"
+                                                                            dropdown="true"
+                                                                            value="#{area.supplierItem}"
+                                                                            completeMethod="#{supplierItemListPresenter.completeSupplierItems}"
+                                                                            var="supplierItem"
+                                                                            itemLabel="#{supplierItem.code} - #{supplierItem.item.description}"
+                                                                            itemValue="#{supplierItem}"
+                                                                            forceSelection="true">
+                                                                <oou:converter converterId="omnifaces.ListConverter" list="#{supplierItemListPresenter.supplierItems}"/>
+                                                            </p:autoComplete>
+                                                        </f:facet>
+                                                    </p:cellEditor>
+                                                </p:column>
+                                                <p:column headerText="#{msg.production_deviceProgrammingType_name}" filterBy="#{area.deviceProgrammingType.name}" filterMatchMode="contains" priority="6">
+                                                    <p:cellEditor>
+                                                        <f:facet name="output"><h:outputText value="#{area.deviceProgrammingType.name}" /></f:facet>
+                                                        <f:facet name="input">
+                                                            <p:autoComplete id="deviceProgrammingType"
+                                                                            dropdown="true"
+                                                                            value="#{area.deviceProgrammingType}"
+                                                                            completeMethod="#{deviceProgrammingTypeListPresenter.completeDeviceProgrammingTypes}"
+                                                                            var="deviceProgrammingType"
+                                                                            itemLabel="#{deviceProgrammingType.name}"
+                                                                            itemValue="#{deviceProgrammingType}"
+                                                                            forceSelection="true">
+                                                                <oou:converter converterId="omnifaces.ListConverter" list="#{deviceProgrammingTypeListPresenter.deviceProgrammingTypes}"/>
+                                                            </p:autoComplete>
+                                                        </f:facet>
+                                                    </p:cellEditor>
+                                                </p:column>
+                                                <p:column headerText="#{msg.actions}" style="width:72px; text-align:center" priority="0">
+                                                    <p:splitButton value="#{msg.duplicate}" icon="ui-icon-control-point-duplicate" action="#{jobOrderPresenter.duplicateArea(area)}" update="areasTable">
+                                                        <p:menuitem  value="#{msg.delete}" icon="ui-icon-delete" actionListener="#{jobOrderPresenter.deleteArea(area)}" update="areasTable">
+                                                            <p:confirm header="#{msg.production_areas_delete}" message="#{msg.production_areas_delete_tip}" icon="ui-icon-alert"/>
+                                                        </p:menuitem>
+                                                    </p:splitButton>
+                                                </p:column>
+                                            </p:dataTable>
+                                        </h:panelGroup>
                                     </p:tab>
                                     <p:tab title="#{msg.sales_jobOrder_notes}">
                                         <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
