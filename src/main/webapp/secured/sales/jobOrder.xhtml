@@ -274,7 +274,41 @@
                                     </p:tab>
                                     <p:tab title="#{msg.sales_jobOrder_systemDevices}">
                                         <h:panelGroup id="systemDevices">
-
+                                            <p:dataTable id="devicesTable"
+                                                         var="device"
+                                                         value="#{jobOrderPresenter.jobOrder.system.devices}">
+                                                <f:facet name="header">
+                                                    <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
+                                                        #{msg.production_devices}
+                                                        <p:outputPanel style="display: inline-block">
+                                                            <p:commandButton title="#{msg.warehouse_itemMovement}" icon="ui-icon-card-travel" action="#{jobOrderPresenter.openItemMovement()}" ajax="false">
+                                                                <oou:ignoreValidationFailed />
+                                                            </p:commandButton>
+                                                            <p:commandButton title="#{msg.add}" icon="ui-icon-add" action="#{jobOrderPresenter.detailDevice(null)}" ajax="false">
+                                                                <oou:ignoreValidationFailed />
+                                                            </p:commandButton>
+                                                        </p:outputPanel>
+                                                    </p:panelGrid>
+                                                </f:facet>
+                                                <p:column headerText="#{msg.production_device}" filterBy="#{device.item.description}" filterMatchMode="contains" priority="0">
+                                                    <h:outputText value="#{device.item.description}"/>
+                                                </p:column>
+                                                <p:column headerText="#{msg.production_device_quantity}" priority="2">
+                                                    <h:outputText value="#{device.quantity}">
+                                                        <f:convertNumber integerOnly="true" />
+                                                    </h:outputText>
+                                                </p:column>
+                                                <p:column headerText="#{msg.production_unitMeasure_symbol}" priority="4">
+                                                    <h:outputText value="#{device.item.unitMeasure.symbol}"/>
+                                                </p:column>
+                                                <p:column headerText="#{msg.actions}" style="width:72px; text-align:center" priority="0">
+                                                    <p:splitButton value="" icon="ui-icon-edit" action="#{jobOrderPresenter.detailDevice(device)}" ajax="false">
+                                                        <p:menuitem  value="#{msg.delete}" icon="ui-icon-delete" actionListener="#{jobOrderPresenter.deleteDevice(device)}" update="devicesTable">
+                                                            <p:confirm header="#{msg.production_devices_delete}" message="#{msg.production_devices_delete_tip}" icon="ui-icon-alert"/>
+                                                        </p:menuitem>
+                                                    </p:splitButton>
+                                                </p:column>
+                                            </p:dataTable>
                                         </h:panelGroup>
                                     </p:tab>
                                     <p:tab title="#{msg.sales_jobOrder_areaList}">

@@ -24,7 +24,6 @@ import com.prosystemingegneri.censistant.business.purchasing.entity.PurchaseOrde
 import com.prosystemingegneri.censistant.business.warehouse.boundary.HandledItemService;
 import com.prosystemingegneri.censistant.business.warehouse.entity.HandledItem;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;

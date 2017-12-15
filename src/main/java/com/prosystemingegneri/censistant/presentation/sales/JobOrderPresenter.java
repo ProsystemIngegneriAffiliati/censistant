@@ -20,6 +20,7 @@ import com.prosystemingegneri.censistant.business.customerSupplier.boundary.Cust
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
 import com.prosystemingegneri.censistant.business.production.entity.Area;
+import com.prosystemingegneri.censistant.business.production.entity.Device;
 import com.prosystemingegneri.censistant.business.production.entity.System;
 import com.prosystemingegneri.censistant.business.production.entity.SystemAttachment;
 import com.prosystemingegneri.censistant.business.sales.boundary.JobOrderService;
@@ -215,6 +216,24 @@ public class JobOrderPresenter implements Serializable{
     public void deleteArea(Area area) {
         if (area != null)
             jobOrder.getSystem().removeArea(area);
+    }
+    
+    public String openItemMovement() {
+        //TODO
+        return "";
+    }
+    
+    public String detailDevice(Device device) {
+        if (device != null)
+            FacesContext.getCurrentInstance().getExternalContext().getFlash().put("device", device);
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("jobOrder", jobOrder);
+        
+        return "/secured/production/device?faces-redirect=true";
+    }
+    
+    public void deleteDevice(Device device) {
+        if (device != null)
+            jobOrder.getSystem().removeDevice(device);
     }
     
     public JobOrder getJobOrder() {
