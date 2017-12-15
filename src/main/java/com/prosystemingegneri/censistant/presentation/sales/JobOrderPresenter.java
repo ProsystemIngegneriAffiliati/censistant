@@ -43,6 +43,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJBException;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.event.AjaxBehaviorEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.apache.commons.io.FilenameUtils;
@@ -76,9 +77,16 @@ public class JobOrderPresenter implements Serializable{
     
     private System system;
     
+    private Integer activeIndex;    //useful for keep tab opened when reloading a page
+    
     @PostConstruct
     public void init() {
         jobOrder = (JobOrder) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("jobOrder");
+        activeIndex = (Integer) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("activeIndex");
+        
+        if (activeIndex == null)
+            activeIndex = 0;
+        
         if (jobOrder != null) {
             Long idCustomer = (Long) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("idCustomer");
             if (idCustomer != null && idCustomer > 0) {
@@ -117,6 +125,11 @@ public class JobOrderPresenter implements Serializable{
         }
     }
     
+    public void copyJobOrderDescriptionIntoSystemDescription(AjaxBehaviorEvent event){
+        if (jobOrder.getSystem().getDescription() == null || jobOrder.getSystem().getDescription().isEmpty())
+            jobOrder.getSystem().setDescription(jobOrder.getDescription());
+    }
+    
     public void onSiteSurveyReportSelect(SelectEvent event) {
         jobOrder.addSiteSurveyReport((SiteSurveyReport) event.getObject());
     }
@@ -145,6 +158,7 @@ public class JobOrderPresenter implements Serializable{
     
     private String prepareToOpenCustomer(CustomerSupplier customer) {
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("jobOrder", jobOrder);
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("activeIndex", activeIndex);
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("customerSupplier", customer);
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("isCustomerView", Boolean.TRUE);
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("returnPage", "sales/jobOrder");
@@ -227,6 +241,7 @@ public class JobOrderPresenter implements Serializable{
         if (device != null)
             FacesContext.getCurrentInstance().getExternalContext().getFlash().put("device", device);
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("jobOrder", jobOrder);
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("activeIndex", activeIndex);
         
         return "/secured/production/device?faces-redirect=true";
     }
@@ -266,6 +281,14 @@ public class JobOrderPresenter implements Serializable{
 
     public void setSystem(System system) {
         this.system = system;
+    }
+
+    public Integer getActiveIndex() {
+        return activeIndex;
+    }
+
+    public void setActiveIndex(Integer activeIndex) {
+        this.activeIndex = activeIndex;
     }
     
 }

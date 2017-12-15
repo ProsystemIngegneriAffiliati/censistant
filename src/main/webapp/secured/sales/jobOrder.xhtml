@@ -36,13 +36,15 @@
                                     </h:panelGroup>
 
                                     <h:panelGroup styleClass="md-inputfield">
-                                        <p:inputText id="description" value="#{jobOrderPresenter.jobOrder.description}"/>
+                                        <p:inputText id="description" value="#{jobOrderPresenter.jobOrder.description}">
+                                            <p:ajax event="blur" listener="#{jobOrderPresenter.copyJobOrderDescriptionIntoSystemDescription}" />
+                                        </p:inputText>
                                         <p:outputLabel for="description" value="#{msg.sales_jobOrder_description}"/>
                                         <p:message for="description"/>
                                     </h:panelGroup>
                                 </p:panelGrid>
 
-                                <p:tabView id="jobOrderTabs" dynamic="true">
+                                <p:tabView id="jobOrderTabs" dynamic="true" activeIndex="#{jobOrderPresenter.activeIndex}">
                                     <p:tab title="#{msg.sales_jobOrder_customerData}">
                                         <p:panel header="#{msg.siteSurvey_siteSurveyReport}" style="margin-bottom: 25px">
                                             <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group" rendered="#{jobOrderPresenter.jobOrder.siteSurveyReport.id == null}">

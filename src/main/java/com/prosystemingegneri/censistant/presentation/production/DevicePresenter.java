@@ -16,17 +16,11 @@
  */
 package com.prosystemingegneri.censistant.presentation.production;
 
-import com.prosystemingegneri.censistant.business.customerSupplier.boundary.CustomerSupplierService;
-import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
 import com.prosystemingegneri.censistant.business.production.entity.Device;
-import com.prosystemingegneri.censistant.business.purchasing.entity.BoxedItem;
 import com.prosystemingegneri.censistant.business.sales.entity.JobOrder;
-import com.prosystemingegneri.censistant.business.warehouse.boundary.HandledItemService;
 import java.io.Serializable;
-import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
-import javax.inject.Inject;
 import javax.inject.Named;
 import org.omnifaces.cdi.ViewScoped;
 
@@ -39,18 +33,12 @@ import org.omnifaces.cdi.ViewScoped;
 public class DevicePresenter implements Serializable {
     private Device device;
     private JobOrder jobOrder;
-    
-    @Inject
-    private CustomerSupplierService service;
-    @Inject
-    private HandledItemService handledItemService;
-    
-    private CustomerSupplier supplier;
-    private List<BoxedItem> items;
+    private Integer activeIndex;
     
     @PostConstruct
     public void init() {
         jobOrder = (JobOrder) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("jobOrder");
+        activeIndex = (Integer) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("activeIndex");
         device = (Device) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("device");
         if (device == null)
             device = new Device();
@@ -60,15 +48,20 @@ public class DevicePresenter implements Serializable {
         if (device.getSystem() == null)
             jobOrder.getSystem().addDevice(device);
         
-        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("jobOrder", jobOrder);
+        putExternalContext();
         
         return "/secured/sales/jobOrder?faces-redirect=true";
     }
     
     public String cancel() {
-        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("jobOrder", jobOrder);
+        putExternalContext();
         
         return "/secured/sales/jobOrder?faces-redirect=true";
+    }
+    
+    private void putExternalContext() {
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("jobOrder", jobOrder);
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("activeIndex", activeIndex);
     }
 
     public Device getDevice() {
