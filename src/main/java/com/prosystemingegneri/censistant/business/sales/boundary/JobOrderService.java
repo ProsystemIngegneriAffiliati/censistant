@@ -111,6 +111,9 @@ public class JobOrderService implements Serializable{
     }
     
     public JobOrder saveJobOrder(JobOrder jobOrder) {
+        if (jobOrder.getSiteSurveyReport().getId() == null)
+            siteSurveyReportService.saveSiteSurveyReport(jobOrder.getSiteSurveyReport());
+        
         systemService.saveSystem(jobOrder.getSystem());
         
         if (jobOrder.getId() == null)

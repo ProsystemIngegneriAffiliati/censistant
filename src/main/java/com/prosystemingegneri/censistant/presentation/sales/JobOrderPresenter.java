@@ -19,6 +19,7 @@ package com.prosystemingegneri.censistant.presentation.sales;
 import com.prosystemingegneri.censistant.business.customerSupplier.boundary.CustomerSupplierService;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
+import com.prosystemingegneri.censistant.business.production.entity.System;
 import com.prosystemingegneri.censistant.business.production.entity.SystemAttachment;
 import com.prosystemingegneri.censistant.business.sales.boundary.JobOrderService;
 import com.prosystemingegneri.censistant.business.sales.entity.JobOrder;
@@ -71,6 +72,8 @@ public class JobOrderPresenter implements Serializable{
     
     private List<Plant> plants;
     
+    private System system;
+    
     @PostConstruct
     public void init() {
         jobOrder = (JobOrder) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("jobOrder");
@@ -88,6 +91,7 @@ public class JobOrderPresenter implements Serializable{
                     jobOrder.getSiteSurveyReport().setPlant(mostRecentPlant);
                 }
             }
+            system = jobOrder.getSystem();
         }
     }
     
@@ -113,6 +117,20 @@ public class JobOrderPresenter implements Serializable{
     
     public void onSiteSurveyReportSelect(SelectEvent event) {
         jobOrder.addSiteSurveyReport((SiteSurveyReport) event.getObject());
+    }
+    
+    public void onRequestCustomerSelect(SelectEvent event) {
+        jobOrder.getSiteSurveyReport().setPlant(null);
+    }
+
+    public void onSystemSelect(SelectEvent event) {
+        if (event.getObject() != null) {
+            System oldSystem = jobOrder.getSystem();
+            oldSystem.removeJobOrder(jobOrder);
+            
+            System selectedSystem = (System) event.getObject();
+            selectedSystem.addJobOrder(jobOrder);
+        }
     }
     
     public String createCustomer() {
@@ -143,7 +161,7 @@ public class JobOrderPresenter implements Serializable{
             UploadedFile uploadedFile = event.getFile();
             InputStream input = uploadedFile.getInputstream();
             
-            Path folder = Paths.get(DocumentAndImageUtils.IMAGE_PATH);
+            Path folder = Paths.get(DocumentAndImageUtils.DOCUMENT_PATH);
             String filename = FilenameUtils.getBaseName(uploadedFile.getFileName()); 
             String extension = FilenameUtils.getExtension(uploadedFile.getFileName());
             Path file = Files.createTempFile(folder, filename + "-", "." + extension);
@@ -152,13 +170,13 @@ public class JobOrderPresenter implements Serializable{
             FacesContext.getCurrentInstance().addMessage(idMessageWidget, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success", "File uploaed successfully"));
             
             SystemAttachment attachment = new SystemAttachment();
-            attachment.setName(FilenameUtils.getName(file.toString()));
-            attachment.setAttachmentFilename(filename);
+            attachment.setName(filename);
+            attachment.setAttachmentFilename(FilenameUtils.getName(file.toString()));
             jobOrder.getSystem().addSystemAttachment(attachment);
         } catch (IOException ex) {
             FacesContext.getCurrentInstance().addMessage(idMessageWidget, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Error during file uploading" + 
-                    System.lineSeparator() +
-                    System.lineSeparator() + ex.getLocalizedMessage()));
+                    java.lang.System.lineSeparator() +
+                    java.lang.System.lineSeparator() + ex.getLocalizedMessage()));
         }
     }
     
@@ -169,8 +187,8 @@ public class JobOrderPresenter implements Serializable{
             return new DefaultStreamedContent(new FileInputStream(path), contentType, attachment.getName());
         } catch (FileNotFoundException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Error during file downloading" + 
-                    System.lineSeparator() +
-                    System.lineSeparator() + ex.getLocalizedMessage()));
+                    java.lang.System.lineSeparator() +
+                    java.lang.System.lineSeparator() + ex.getLocalizedMessage()));
         }
         return null;
     }
@@ -207,6 +225,14 @@ public class JobOrderPresenter implements Serializable{
 
     public void setSelectedReport(SiteSurveyReport selectedReport) {
         this.selectedReport = selectedReport;
+    }
+
+    public System getSystem() {
+        return system;
+    }
+
+    public void setSystem(System system) {
+        this.system = system;
     }
     
 }
