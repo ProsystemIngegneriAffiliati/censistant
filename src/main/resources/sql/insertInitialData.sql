@@ -174,3 +174,13 @@ INSERT INTO placetype(name, version) VALUES('Industriale', 0)
 INSERT INTO placetype(name, version) VALUES('Abitazione privata', 0)
 INSERT INTO placetype(name, version) VALUES('Attività commerciale', 0)
 INSERT INTO placetype(name, version) VALUES('Altro', 0)
+
+INSERT INTO location(dtype, version) VALUES(2, 0)
+INSERT INTO system(id, description) VALUES(5, 'Impianto di prova')
+
+INSERT INTO device(system_id, item_id, quantity, devices_order, version) VALUES(5, 4, 10, 0, 0)
+INSERT INTO device(system_id, item_id, quantity, devices_order, version) VALUES(5, 6, 3, 1, 0)
+
+INSERT INTO joborder(creation, number, description, sitesurveyreport_id, placetype_id, system_id, version) VALUES('2017-12-20', 1, 'Commessa di prova', 1, 2, 5, 0)
+
+INSERT INTO handleditem(purchaseorderrow_id, worker_id, handlingtimestamp, quantity, fromlocation_id, tolocation_id, version) VALUES(1, 1, '2017-12-20 11:14:00', 1, 3, 5, 0)
