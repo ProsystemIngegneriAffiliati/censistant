@@ -16,7 +16,9 @@
  */
 package com.prosystemingegneri.censistant.presentation.warehouse;
 
+import com.prosystemingegneri.censistant.business.production.entity.System;
 import com.prosystemingegneri.censistant.business.production.entity.UnitMeasure;
+import com.prosystemingegneri.censistant.business.sales.entity.JobOrder;
 import com.prosystemingegneri.censistant.business.warehouse.boundary.HandledItemService;
 import com.prosystemingegneri.censistant.business.warehouse.boundary.LocationService;
 import com.prosystemingegneri.censistant.business.warehouse.boundary.StockService;
@@ -65,9 +67,23 @@ public class StockListPresenter implements Serializable{
     private LocationType locationTypeArrival;
     private Location locationArrival;
     
+    private JobOrder jobOrder;
+    private Integer activeIndex;
+    
+    private String returnPage;
+    
     @PostConstruct
     public void init() {
         lazyStock = new StockLazyDataModel(service);
+        jobOrder = (JobOrder) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("jobOrder");
+        activeIndex = (Integer) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("activeIndex");
+        returnPage = (String) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("returnPage");
+        
+        if (jobOrder != null) {
+            locationTypeArrival = LocationType.SYSTEM;
+            locationArrival = jobOrder.getSystem();
+        }
+        
         initPreparedStock();
     }
     
@@ -119,6 +135,11 @@ public class StockListPresenter implements Serializable{
                     String itemStr = "item";
                     if (moved > 1)
                         itemStr += "s";
+                    if (returnPage != null && !returnPage.isEmpty()) {
+                        jobOrder.setSystem((System) locationArrival);
+                        putExternalContext();
+                        return "/secured/" + returnPage + "?faces-redirect=true";
+                    }
                     initStockAfterSuccessfulMovement();
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success", "Successfully moved " + moved + " " + itemStr ));
                 }
@@ -133,9 +154,20 @@ public class StockListPresenter implements Serializable{
         
         return null;
     }
+    
+    public String cancel() {
+        putExternalContext();
+        
+        return "/secured/" + returnPage + "?faces-redirect=true";
+    }
 
     public void onLocationSelect(SelectEvent event) {
         initPreparedStock();
+    }
+    
+    private void putExternalContext() {
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("jobOrder", jobOrder);
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("activeIndex", activeIndex);
     }
 
     public StockLazyDataModel getLazyStock() {
@@ -180,6 +212,10 @@ public class StockListPresenter implements Serializable{
 
     public void setLocationArrival(Location locationArrival) {
         this.locationArrival = locationArrival;
+    }
+
+    public String getReturnPage() {
+        return returnPage;
     }
     
 }

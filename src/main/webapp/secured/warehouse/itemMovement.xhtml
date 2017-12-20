@@ -52,7 +52,7 @@
                                         <f:facet name="header">
                                             #{msg.warehouse_warehousesStock_tip}
                                         </f:facet>
-                                        <p:ajax event="rowSelect" listener="#{stockListPresenter.onWarehouseStockSelect}" update=":itemMovementForm:preparedStockForMovementTable :itemMovementForm:moveButton" />
+                                        <p:ajax event="rowSelect" listener="#{stockListPresenter.onWarehouseStockSelect}" update=":itemMovementForm:preparedStockForMovementTable :itemMovementForm:moveButton :itemMovementForm:moveButtonAjax" />
                                         <p:column headerText="#{msg.purchasing_supplierItem}" field="item" sortable="false" priority="0">
                                             <h:outputText value="#{stock.purchaseOrderRow.boxedItem.item.code} - #{stock.purchaseOrderRow.boxedItem.item.item.description}" />
                                         </p:column>
@@ -109,7 +109,7 @@
                                     </p:dataTable>
                                 </p:panelGrid>
 
-                                <p:panelGrid columns="3" columnClasses="ui-grid-col-5,ui-grid-col-4,ui-grid-col-3" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                     <p:selectOneMenu id="locationTypesArrival" value="#{stockListPresenter.locationTypeArrival}">
                                         <f:selectItem itemLabel="#{msg.warehouse_locationType_noSelection}" noSelectionOption="true" />
                                         <f:selectItem itemLabel="#{msg.warehouse_warehouse_name}" itemValue="#{LocationType.WAREHOUSE}" />
@@ -127,19 +127,42 @@
                                                         itemLabel="#{locAr.name}"
                                                         itemValue="#{locAr}"
                                                         forceSelection="true">
-                                            <p:ajax event="itemSelect" update="moveButton" />
+                                            <p:ajax event="itemSelect" update="moveButton moveButtonAjax" />
                                             <oou:converter converterId="omnifaces.ListConverter" list="#{locationListPresenter.locations}"/>
                                         </p:autoComplete>
                                         <p:outputLabel for="locationsArrival" value="#{msg.warehouse_locations}"/>
                                         <p:message for="locationsArrival"/>
                                     </h:panelGroup>
+                                </p:panelGrid>
 
-                                    <p:commandButton id="moveButton"
+                                <ui:fragment rendered="#{not empty stockListPresenter.returnPage}" >
+                                    <div class="ui-g">
+                                        <div class="ui-g-1 ui-md-2"></div>
+                                        <div class="ui-g-4 ui-md-3">
+                                            <p:commandButton value="#{msg.cancel}"
+                                                             action="#{stockListPresenter.cancel()}"
+                                                             styleClass="secondary"
+                                                             ajax="false">
+                                            </p:commandButton>
+                                        </div>
+                                        <div class="ui-g-2 ui-md-2"></div>
+                                        <div class="ui-g-4 ui-md-3">
+                                            <p:commandButton id="moveButton"
+                                                             value="#{msg.warehouse_itemMovement_move}"
+                                                             disabled="#{empty stockListPresenter.locationArrival or empty stockListPresenter.preparedStockForMovement}"
+                                                             action="#{stockListPresenter.move()}"
+                                                             ajax="false"/>
+                                        </div>
+                                    </div>
+                                </ui:fragment>
+
+                                <ui:fragment rendered="#{empty stockListPresenter.returnPage}" >
+                                    <p:commandButton id="moveButtonAjax"
                                                      value="#{msg.warehouse_itemMovement_move}"
                                                      disabled="#{empty stockListPresenter.locationArrival or empty stockListPresenter.preparedStockForMovement}"
                                                      action="#{stockListPresenter.move()}"
                                                      update="@form"/>
-                                </p:panelGrid>
+                                </ui:fragment>
                             </div>
                         </div>
                     </div>

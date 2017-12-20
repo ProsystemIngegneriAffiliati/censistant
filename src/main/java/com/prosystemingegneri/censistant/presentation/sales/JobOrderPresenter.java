@@ -160,8 +160,7 @@ public class JobOrderPresenter implements Serializable{
     }
     
     private String prepareToOpenCustomer(CustomerSupplier customer) {
-        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("jobOrder", jobOrder);
-        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("activeIndex", activeIndex);
+        setExternalContext();
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("customerSupplier", customer);
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("isCustomerView", Boolean.TRUE);
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("returnPage", "sales/jobOrder");
@@ -236,17 +235,22 @@ public class JobOrderPresenter implements Serializable{
     }
     
     public String openItemMovement() {
-        //TODO
-        return "";
+        setExternalContext();
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("returnPage", "sales/jobOrder");
+        return "/secured/warehouse/itemMovement?faces-redirect=true";
     }
     
     public String detailDevice(Device device) {
         if (device != null)
             FacesContext.getCurrentInstance().getExternalContext().getFlash().put("device", device);
-        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("jobOrder", jobOrder);
-        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("activeIndex", activeIndex);
+        setExternalContext();
         
         return "/secured/production/device?faces-redirect=true";
+    }
+    
+    private void setExternalContext() {
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("jobOrder", jobOrder);
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("activeIndex", activeIndex);
     }
     
     public void deleteDevice(Device device) {

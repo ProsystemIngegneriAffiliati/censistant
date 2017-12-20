@@ -310,7 +310,7 @@
                                                 </p:column>
                                                 <p:column headerText="#{msg.actions}" style="width:72px; text-align:center" priority="0">
                                                     <p:splitButton value="" icon="ui-icon-edit" action="#{jobOrderPresenter.detailDevice(device)}" ajax="false">
-                                                        <p:menuitem  value="#{msg.delete}" icon="ui-icon-delete" actionListener="#{jobOrderPresenter.deleteDevice(device)}" update="devicesTable">
+                                                        <p:menuitem disabled="#{jobOrderPresenter.calculateDevicePlacedQuantity(device) > 0}"  value="#{msg.delete}" icon="ui-icon-delete" actionListener="#{jobOrderPresenter.deleteDevice(device)}" update="devicesTable">
                                                             <p:confirm header="#{msg.production_devices_delete}" message="#{msg.production_devices_delete_tip}" icon="ui-icon-alert"/>
                                                         </p:menuitem>
                                                     </p:splitButton>
