@@ -114,12 +114,18 @@ public class JobOrderService implements Serializable{
         if (jobOrder.getSiteSurveyReport().getId() == null)
             siteSurveyReportService.saveSiteSurveyReport(jobOrder.getSiteSurveyReport());
         
-        systemService.saveSystem(jobOrder.getSystem());
-        
-        if (jobOrder.getId() == null)
+        if (jobOrder.getId() == null && jobOrder.getSystem().getId() != null) {
             em.persist(jobOrder);
-        else
-            return em.merge(jobOrder);
+            systemService.saveSystem(jobOrder.getSystem());
+        }
+        else {
+            systemService.saveSystem(jobOrder.getSystem());
+
+            if (jobOrder.getId() == null)
+                em.persist(jobOrder);
+            else
+                return em.merge(jobOrder);
+        }
         
         return jobOrder;
     }
