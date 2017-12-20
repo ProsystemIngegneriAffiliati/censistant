@@ -54,9 +54,9 @@ public class StockService implements Serializable {
         return result;
     }
     
-    public List<Stock> listStock(int first, int pageSize, String sortField, Boolean isAscending, Long idLocation, String item) {
+    public List<Stock> listStock(int first, int pageSize, String sortField, Boolean isAscending, Long idLocation, String item, Long idItem) {
         List<Stock> result = new ArrayList<>();
-        Query query = queryListStock(sortField, isAscending, idLocation, item, false);
+        Query query = queryListStock(sortField, isAscending, idLocation, item, idItem, false);
         
         if (pageSize > 0) {
             query.setMaxResults(pageSize);
@@ -74,8 +74,8 @@ public class StockService implements Serializable {
         return result;
     }
     
-    public Long getStockCount(Long idLocation, String item) {
-        Query query = queryListStock(null, null, idLocation, item, true);
+    public Long getStockCount(Long idLocation, String item, Long idItem) {
+        Query query = queryListStock(null, null, idLocation, item, idItem, true);
         
         try {
             return (Long) query.getSingleResult();
@@ -88,17 +88,20 @@ public class StockService implements Serializable {
         }
     }
     
-    public Query queryListStock(String sortField, Boolean isAscending, Long idLocation, String item, boolean isCounting) {
+    public Query queryListStock(String sortField, Boolean isAscending, Long idLocation, String item, Long idItem, boolean isCounting) {
         
         String queryString = "";
         String filterStringSupplier = "";
         String filterStringHandledItem = "";
         
-        if (item != null && !item.isEmpty()) {
+        if ((item != null && !item.isEmpty()) || idItem != null) {
             filterStringSupplier = "JOIN supplieritem ON boxeditem.item_id = supplieritem.id " +
-                "JOIN item ON supplieritem.item_id = item.id " +
-                "WHERE LOWER(supplieritem.code) LIKE '%" + item.toLowerCase() + "%' " +
-                "OR LOWER(item.description) LIKE '%" + item.toLowerCase() +"%' ";
+                    "JOIN item ON supplieritem.item_id = item.id WHERE ";
+            if (item != null && !item.isEmpty())
+                filterStringSupplier += "LOWER(supplieritem.code) LIKE '%" + item.toLowerCase() + "%' " +
+                        "OR LOWER(item.description) LIKE '%" + item.toLowerCase() +"%' ";
+            if (idItem != null)
+                filterStringSupplier += "item.id = " + idItem + " ";
             filterStringHandledItem = "JOIN boxeditem ON purchaseorderrow.boxeditem_id = boxeditem.id " + filterStringSupplier;
         }
         

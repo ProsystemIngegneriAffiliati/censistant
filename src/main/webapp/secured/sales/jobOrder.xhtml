@@ -194,7 +194,7 @@
                                                         <oou:converter converterId="omnifaces.ListConverter" list="#{systemListPresenter.systems}"/>
                                                         <p:ajax event="itemSelect" listener="#{jobOrderPresenter.onSystemSelect}" update="systemData systemDevices areaList" />
                                                     </p:autoComplete>
-                                                    <p:outputLabel for="system" value="#{msg.choose} #{msg.production_system}"/>
+                                                    <p:outputLabel for="system" value="#{msg.sales_jobOrder_chooseSystem}"/>
                                                     <p:message for="system"/>
                                                 </h:panelGroup>
                                             </p:panelGrid>
@@ -302,6 +302,11 @@
                                                 </p:column>
                                                 <p:column headerText="#{msg.production_unitMeasure_symbol}" priority="4">
                                                     <h:outputText value="#{device.item.unitMeasure.symbol}"/>
+                                                </p:column>
+                                                <p:column headerText="#{msg.production_device_placedQuantity}" priority="2">
+                                                    <h:outputText value="#{jobOrderPresenter.calculateDevicePlacedQuantity(device)}">
+                                                        <f:convertNumber integerOnly="true" />
+                                                    </h:outputText>
                                                 </p:column>
                                                 <p:column headerText="#{msg.actions}" style="width:72px; text-align:center" priority="0">
                                                     <p:splitButton value="" icon="ui-icon-edit" action="#{jobOrderPresenter.detailDevice(device)}" ajax="false">

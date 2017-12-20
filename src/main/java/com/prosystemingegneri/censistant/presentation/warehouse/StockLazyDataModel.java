@@ -75,8 +75,8 @@ public class StockLazyDataModel extends LazyDataModel<Stock>{
             }
         }
         
-        List<Stock> result = service.listStock(first, pageSize, sortField, isAscending, idLocation, item);
-        this.setRowCount(service.getStockCount(idLocation, item).intValue());
+        List<Stock> result = service.listStock(first, pageSize, sortField, isAscending, idLocation, item, null);
+        this.setRowCount(service.getStockCount(idLocation, item, null).intValue());
         
         return result;
     }

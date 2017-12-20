@@ -27,6 +27,7 @@ import com.prosystemingegneri.censistant.business.sales.boundary.JobOrderService
 import com.prosystemingegneri.censistant.business.sales.entity.JobOrder;
 import com.prosystemingegneri.censistant.business.siteSurvey.boundary.SiteSurveyReportService;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport;
+import com.prosystemingegneri.censistant.business.warehouse.boundary.StockService;
 import com.prosystemingegneri.censistant.presentation.DocumentAndImageUtils;
 import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
 import java.io.FileInputStream;
@@ -67,6 +68,8 @@ public class JobOrderPresenter implements Serializable{
     CustomerSupplierService customerSupplierService;
     @Inject
     SiteSurveyReportService siteSurveyReportService;
+    @Inject
+    StockService stockService;
     
     private JobOrder jobOrder;
     private Long id;
@@ -249,6 +252,13 @@ public class JobOrderPresenter implements Serializable{
     public void deleteDevice(Device device) {
         if (device != null)
             jobOrder.getSystem().removeDevice(device);
+    }
+    
+    public Long calculateDevicePlacedQuantity(Device device) {
+        if (jobOrder != null && jobOrder.getSystem() != null && device != null)
+            return stockService.getStockCount(jobOrder.getSystem().getId(), null, device.getItem().getId());
+        else
+            return Long.getLong("0");
     }
     
     public JobOrder getJobOrder() {
