@@ -16,6 +16,10 @@
  */
 package com.prosystemingegneri.censistant.business.warehouse.boundary;
 
+import com.prosystemingegneri.censistant.business.production.boundary.DeviceService;
+import com.prosystemingegneri.censistant.business.production.boundary.SystemService;
+import com.prosystemingegneri.censistant.business.production.entity.Device;
+import com.prosystemingegneri.censistant.business.production.entity.System;
 import com.prosystemingegneri.censistant.business.purchasing.entity.PurchaseOrderRow;
 import com.prosystemingegneri.censistant.business.siteSurvey.boundary.WorkerService;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.Worker;
@@ -51,6 +55,10 @@ public class HandledItemService implements Serializable{
     
     @Inject
     WorkerService workerService;
+    @Inject
+    DeviceService deviceService;
+    @Inject
+    SystemService systemService;
     
     public List<HandledItem> createNewHandledItems(List<Stock> stockList, Location locationArrival, UserApp loggedUser) throws NoSuchFieldException {
         List<HandledItem> result = new ArrayList<>();
@@ -66,15 +74,30 @@ public class HandledItemService implements Serializable{
                         newHandledItem.setPurchaseOrderRow(stock.getPurchaseOrderRow());
                         newHandledItem.setToLocation(locationArrival);
                         newHandledItem.setWorker(worker);
-
+                        
+                        Integer quantityMoved;
                         if (stock.getUnitMeasure().equals(stock.getNakedUnitMeasure()))
-                            newHandledItem.setQuantity(stock.getQuantity());
+                            quantityMoved = stock.getQuantity();
                         else
-                            newHandledItem.setQuantity(stock.getQuantity() * stock.getPurchaseOrderRow().getBoxedItem().getBox().getQuantity());
+                            quantityMoved = stock.getQuantity() * stock.getPurchaseOrderRow().getBoxedItem().getBox().getQuantity();
+                        
+                        newHandledItem.setQuantity(quantityMoved);
 
                         em.persist(newHandledItem);
 
                         result.add(newHandledItem);
+                        
+                        if (locationArrival instanceof System) {
+                            System system = (System) locationArrival;
+                            if (deviceService.getDevicesCount(system, stock.getPurchaseOrderRow().getBoxedItem().getItem().getItem()) <= 0) {
+                                Device device = new Device();
+                                device.setItem(stock.getPurchaseOrderRow().getBoxedItem().getItem().getItem());
+                                device.setQuantity(quantityMoved);
+                                system.addDevice(device);
+                                
+                                systemService.saveSystem(system);
+                            }
+                        }
                     }
                 }
             }

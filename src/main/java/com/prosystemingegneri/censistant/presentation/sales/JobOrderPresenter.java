@@ -256,7 +256,7 @@ public class JobOrderPresenter implements Serializable{
     
     public Long calculateDevicePlacedQuantity(Device device) {
         if (jobOrder != null && jobOrder.getSystem() != null && device != null)
-            return stockService.getStockCount(jobOrder.getSystem().getId(), null, device.getItem().getId());
+            return stockService.countPlacedQuantity(jobOrder.getSystem().getId(), device.getItem().getId());
         else
             return Long.getLong("0");
     }

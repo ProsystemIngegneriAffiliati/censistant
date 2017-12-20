@@ -157,4 +157,17 @@ public class StockService implements Serializable {
         
         return query;
     }
+    
+    public Long countPlacedQuantity(Long idLocation, Long idItem) {
+        if (idLocation != null && idItem != null) {
+            List<Stock> stocks = listStock(0, 0, null, Boolean.FALSE, idLocation, null, idItem);
+            Long result = 0L;
+            if (stocks != null && !stocks.isEmpty())
+                for (Stock stock : stocks)
+                    result += stock.getQuantity();
+            return result;
+        }
+        
+        return 0L;
+    }
 }

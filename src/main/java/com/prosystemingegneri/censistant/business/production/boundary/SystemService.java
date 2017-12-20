@@ -47,7 +47,7 @@ public class SystemService implements Serializable{
         else
             return em.merge(system);
         
-        return null;
+        return system;
     }
     
     public System readSystem(Long id) {
