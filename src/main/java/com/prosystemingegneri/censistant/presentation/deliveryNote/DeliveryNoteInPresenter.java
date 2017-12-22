@@ -16,10 +16,61 @@
  */
 package com.prosystemingegneri.censistant.presentation.deliveryNote;
 
+import com.prosystemingegneri.censistant.business.deliveryNote.boundary.DeliveryNoteInService;
+import com.prosystemingegneri.censistant.business.deliveryNote.entity.DeliveryNoteIn;
+import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
+import java.io.Serializable;
+import javax.ejb.EJBException;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+import javax.inject.Inject;
+import javax.inject.Named;
+import org.omnifaces.cdi.ViewScoped;
+
 /**
  *
  * @author Davide Mainardi <ingmainardi@live.com>
  */
-public class DeliveryNoteInPresenter {
+@Named
+@ViewScoped
+public class DeliveryNoteInPresenter implements Serializable{
+    @Inject
+    DeliveryNoteInService service;
     
+    private DeliveryNoteIn deliveryNoteIn;
+    private Long id;
+    
+    public String saveDeliveryNoteIn() {
+        try {
+            service.saveDeliveryNoteIn(deliveryNoteIn);
+        } catch (EJBException e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", ExceptionUtility.unwrap(e.getCausedByException()).getLocalizedMessage()));
+            return null;
+        }
+        
+        return "/secured/deliveryNote/deliveryNoteIns?faces-redirect=true";
+    }
+    
+    public void detailDeliveryNoteIn() {
+        if (id == 0)
+            deliveryNoteIn = service.createNewDeliveryNoteIn();
+        else
+            deliveryNoteIn = service.readDeliveryNoteIn(id);
+    }
+
+    public DeliveryNoteIn getDeliveryNoteIn() {
+        return deliveryNoteIn;
+    }
+
+    public void setDeliveryNoteIn(DeliveryNoteIn deliveryNoteIn) {
+        this.deliveryNoteIn = deliveryNoteIn;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 }

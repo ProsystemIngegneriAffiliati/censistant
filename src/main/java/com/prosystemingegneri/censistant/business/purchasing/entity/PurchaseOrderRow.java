@@ -16,14 +16,18 @@
  */
 package com.prosystemingegneri.censistant.business.purchasing.entity;
 
+import com.prosystemingegneri.censistant.business.deliveryNote.entity.DeliveryNoteRow;
 import com.prosystemingegneri.censistant.business.entity.BaseEntity;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 import javax.persistence.Version;
 import javax.validation.constraints.DecimalMin;
@@ -61,6 +65,9 @@ public class PurchaseOrderRow extends BaseEntity<Long>{
     @ManyToOne(optional = false)
     private BoxedItem boxedItem;
     
+    @OneToMany
+    private final List<DeliveryNoteRow> deliveryNoteRows;
+    
     private String notes;
     
     @Version
@@ -69,6 +76,7 @@ public class PurchaseOrderRow extends BaseEntity<Long>{
     public PurchaseOrderRow() {
         quantity = 1;
         cost = BigDecimal.ZERO;
+        deliveryNoteRows = new ArrayList<>();
     }
     
     public BigDecimal getTotalCost() {
@@ -120,6 +128,24 @@ public class PurchaseOrderRow extends BaseEntity<Long>{
     @Override
     public Long getId() {
         return id;
+    }
+    
+    public void addDeliveryNoteRow(DeliveryNoteRow row) {
+        if (!deliveryNoteRows.contains(row)) {
+            row.setPurchaseOrderRow(this);
+            deliveryNoteRows.add(row);
+        }
+    }
+    
+    public void removeDeliveryNoteRow(DeliveryNoteRow row) {
+        if (deliveryNoteRows.contains(row)) {
+            row.setPurchaseOrderRow(null);
+            deliveryNoteRows.remove(row);
+        }
+    }
+
+    public List<DeliveryNoteRow> getDeliveryNoteRows() {
+        return deliveryNoteRows;
     }
     
 }

@@ -34,6 +34,10 @@ public class DeliveryNoteIn extends DeliveryNoteCommon {
 
     public DeliveryNoteIn() {
     }
+    
+    public DeliveryNoteIn(Integer number) {
+        super(number);
+    }
 
     public String getNumberStr() {
         return numberStr;
