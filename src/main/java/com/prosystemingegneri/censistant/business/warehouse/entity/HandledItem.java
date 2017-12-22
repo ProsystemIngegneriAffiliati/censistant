@@ -18,7 +18,7 @@ package com.prosystemingegneri.censistant.business.warehouse.entity;
 
 import com.prosystemingegneri.censistant.business.deliveryNote.entity.DeliveryNoteRow;
 import com.prosystemingegneri.censistant.business.entity.BaseEntity;
-import com.prosystemingegneri.censistant.business.purchasing.entity.PurchaseOrderRow;
+import com.prosystemingegneri.censistant.business.purchasing.entity.BoxedItem;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.Worker;
 import java.util.Date;
 import javax.persistence.Column;
@@ -63,7 +63,7 @@ public class HandledItem extends BaseEntity<Long>{
     
     @NotNull
     @ManyToOne(optional = false)
-    private PurchaseOrderRow purchaseOrderRow;
+    private BoxedItem boxedItem;
     
     @NotNull
     @ManyToOne(optional = false)
@@ -110,12 +110,12 @@ public class HandledItem extends BaseEntity<Long>{
         this.quantity = quantity;
     }
 
-    public PurchaseOrderRow getPurchaseOrderRow() {
-        return purchaseOrderRow;
+    public BoxedItem getBoxedItem() {
+        return boxedItem;
     }
 
-    public void setPurchaseOrderRow(PurchaseOrderRow purchaseOrderRow) {
-        this.purchaseOrderRow = purchaseOrderRow;
+    public void setBoxedItem(BoxedItem boxedItem) {
+        this.boxedItem = boxedItem;
     }
 
     public Location getFromLocation() {

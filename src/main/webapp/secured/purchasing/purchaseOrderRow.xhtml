@@ -86,36 +86,7 @@
                                         </p:panelGrid>
                                     </p:tab>
                                     <p:tab title="#{msg.warehouse_itemMovement}">
-                                        <p:dataTable id="handledItemsTable"
-                                                     var="hi"
-                                                     value="#{purchaseOrderRowPresenter.listHandledItems()}">
-                                            <p:column headerText="#{msg.warehouse_handledItem_handlingTimestamp}" sortBy="#{hi.handlingTimestamp}" priority="0">
-                                                <h:outputText value="#{hi.handlingTimestamp}">
-                                                    <f:convertDateTime type="both" />
-                                                </h:outputText>
-                                            </p:column>
-                                            <p:column headerText="#{msg.siteSurvey_worker}" sortBy="#{hi.worker.name}" filterBy="#{hi.worker.name}" filterMatchMode="contains" priority="4">
-                                                <h:outputText value="#{hi.worker.name}" />
-                                            </p:column>
-                                            <p:column headerText="#{msg.purchasing_boxedItem}" sortBy="#{hi.purchaseOrderRow.boxedItem.item.code} #{hi.purchaseOrderRow.boxedItem.item.item.description}" filterBy="#{hi.purchaseOrderRow.boxedItem.item.code} #{hi.purchaseOrderRow.boxedItem.item.item.description}" filterMatchMode="contains" priority="4">
-                                                <h:outputText value="#{hi.purchaseOrderRow.boxedItem.item.code} #{hi.purchaseOrderRow.boxedItem.item.item.description}" />
-                                            </p:column>
-                                            <p:column headerText="#{msg.warehouse_handledItem_quantity}" priority="0">
-                                                <h:outputText value="#{hi.quantity}">
-                                                    <f:convertNumber integerOnly="true" />
-                                                </h:outputText>
-                                                <h:outputText value=" #{hi.purchaseOrderRow.boxedItem.item.item.unitMeasure.symbol}" />
-                                            </p:column>
-                                            <p:column headerText="#{msg.purchasing_box_name}" priority="4">
-                                                <h:outputText rendered="#{hi.quantity != hi.quantity / hi.purchaseOrderRow.boxedItem.box.quantity and hi.quantity / hi.purchaseOrderRow.boxedItem.box.quantity >= 1}" value="#{hi.quantity / hi.purchaseOrderRow.boxedItem.box.quantity} #{hi.purchaseOrderRow.boxedItem.box.unitMeasure.name} #{hi.purchaseOrderRow.boxedItem.box.quantity} #{hi.purchaseOrderRow.boxedItem.item.item.unitMeasure.symbol}" />
-                                            </p:column>
-                                            <p:column headerText="#{msg.warehouse_handledItem_fromLocation}" sortBy="#{hi.fromLocation.name}" priority="2">
-                                                <h:outputText value="#{hi.fromLocation.name}" />
-                                            </p:column>
-                                            <p:column headerText="#{msg.warehouse_handledItem_toLocation}" sortBy="#{hi.toLocation.name}" priority="0">
-                                                <h:outputText value="#{hi.toLocation.name}" />
-                                            </p:column>
-                                        </p:dataTable>
+                                        
                                     </p:tab>
                                 </p:tabView>
 

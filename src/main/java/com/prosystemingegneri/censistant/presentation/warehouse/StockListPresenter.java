@@ -102,9 +102,9 @@ public class StockListPresenter implements Serializable{
     
     public void onWarehouseStockSelect(SelectEvent event) {
         Stock tempStock = (Stock) event.getObject();
-        if (!preparedIdStockForMovement.containsKey(tempStock.getLocationIdPurchaseOrderRowId())) {
+        if (!preparedIdStockForMovement.containsKey(tempStock.getLocationIdBoxedItemId())) {
             preparedStockForMovement.add(tempStock);
-            preparedIdStockForMovement.put(tempStock.getLocationIdPurchaseOrderRowId(), 0);
+            preparedIdStockForMovement.put(tempStock.getLocationIdBoxedItemId(), 0);
         }
     }
     

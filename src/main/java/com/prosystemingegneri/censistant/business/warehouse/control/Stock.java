@@ -17,7 +17,7 @@
 package com.prosystemingegneri.censistant.business.warehouse.control;
 
 import com.prosystemingegneri.censistant.business.production.entity.UnitMeasure;
-import com.prosystemingegneri.censistant.business.purchasing.entity.PurchaseOrderRow;
+import com.prosystemingegneri.censistant.business.purchasing.entity.BoxedItem;
 import com.prosystemingegneri.censistant.business.warehouse.entity.Location;
 import java.io.Serializable;
 
@@ -29,7 +29,7 @@ public class Stock implements Serializable {
     public static final String SEPARATOR = "-";
     
     private Location location;
-    private PurchaseOrderRow purchaseOrderRow;
+    private BoxedItem boxedItem;
     
     private Integer quantity;           //quantity chosen by the user for doing the item movement
     private UnitMeasure unitMeasure;   //unit of measure chosen by the user for doing the item movement
@@ -39,29 +39,29 @@ public class Stock implements Serializable {
     private UnitMeasure nakedUnitMeasure;   //item unit of measure
     private UnitMeasure boxedUnitMeasure;   //box unit of measure
 
-    public Stock(Location location, PurchaseOrderRow purchaseOrderRow, Integer quantity) {
+    public Stock(Location location, BoxedItem boxedItem, Integer quantity) {
         this.location = location;
-        this.purchaseOrderRow = purchaseOrderRow;
+        this.boxedItem = boxedItem;
         
         this.quantity = quantity;
-        this.unitMeasure = purchaseOrderRow.getBoxedItem().getItem().getItem().getUnitMeasure();
+        this.unitMeasure = boxedItem.getItem().getItem().getUnitMeasure();
         
         this.nakedQuantity = quantity;
-        this.boxedQuantity = quantity / purchaseOrderRow.getBoxedItem().getBox().getQuantity();
-        this.nakedUnitMeasure = purchaseOrderRow.getBoxedItem().getItem().getItem().getUnitMeasure();
-        this.boxedUnitMeasure = purchaseOrderRow.getBoxedItem().getBox().getUnitMeasure();
+        this.boxedQuantity = quantity / boxedItem.getBox().getQuantity();
+        this.nakedUnitMeasure = boxedItem.getItem().getItem().getUnitMeasure();
+        this.boxedUnitMeasure = boxedItem.getBox().getUnitMeasure();
     }
     
     public String getId() {
-        if (location != null && purchaseOrderRow != null && quantity != null)
-            return location.getId().toString() + SEPARATOR + purchaseOrderRow.getId().toString() + SEPARATOR + quantity.toString();
+        if (location != null && boxedItem != null && quantity != null)
+            return location.getId().toString() + SEPARATOR + boxedItem.getId().toString() + SEPARATOR + quantity.toString();
         
         return "";
     }
     
-    public String getLocationIdPurchaseOrderRowId() {
-        if (location != null && purchaseOrderRow != null)
-            return location.getId().toString() + SEPARATOR + purchaseOrderRow.getId().toString();
+    public String getLocationIdBoxedItemId() {
+        if (location != null && boxedItem != null)
+            return location.getId().toString() + SEPARATOR + boxedItem.getId().toString();
         
         return "";
     }
@@ -74,12 +74,12 @@ public class Stock implements Serializable {
         this.location = location;
     }
 
-    public PurchaseOrderRow getPurchaseOrderRow() {
-        return purchaseOrderRow;
+    public BoxedItem getBoxedItem() {
+        return boxedItem;
     }
 
-    public void setPurchaseOrderRow(PurchaseOrderRow purchaseOrderRow) {
-        this.purchaseOrderRow = purchaseOrderRow;
+    public void setBoxedItem(BoxedItem boxedItem) {
+        this.boxedItem = boxedItem;
     }
 
     public Integer getQuantity() {

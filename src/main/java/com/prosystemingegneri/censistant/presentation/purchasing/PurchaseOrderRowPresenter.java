@@ -22,7 +22,6 @@ import com.prosystemingegneri.censistant.business.purchasing.entity.BoxedItem;
 import com.prosystemingegneri.censistant.business.purchasing.entity.PurchaseOrder;
 import com.prosystemingegneri.censistant.business.purchasing.entity.PurchaseOrderRow;
 import com.prosystemingegneri.censistant.business.warehouse.boundary.HandledItemService;
-import com.prosystemingegneri.censistant.business.warehouse.entity.HandledItem;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -66,10 +65,6 @@ public class PurchaseOrderRowPresenter implements Serializable {
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("purchaseOrder", purchaseOrder);
         
         return "/secured/purchasing/purchaseOrder?faces-redirect=true";
-    }
-    
-    public List<HandledItem> listHandledItems() {
-        return handledItemService.listHandledItems(0, 0, null, Boolean.FALSE, row);
     }
     
     public List<BoxedItem> completeItems(String filter) {

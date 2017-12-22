@@ -20,7 +20,7 @@ import com.prosystemingegneri.censistant.business.production.boundary.DeviceServ
 import com.prosystemingegneri.censistant.business.production.boundary.SystemService;
 import com.prosystemingegneri.censistant.business.production.entity.Device;
 import com.prosystemingegneri.censistant.business.production.entity.System;
-import com.prosystemingegneri.censistant.business.purchasing.entity.PurchaseOrderRow;
+import com.prosystemingegneri.censistant.business.purchasing.entity.BoxedItem;
 import com.prosystemingegneri.censistant.business.siteSurvey.boundary.WorkerService;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.Worker;
 import com.prosystemingegneri.censistant.business.user.entity.UserApp;
@@ -71,7 +71,7 @@ public class HandledItemService implements Serializable{
 
                         newHandledItem.setFromLocation(stock.getLocation());
                         newHandledItem.setHandlingTimestamp(new Date());
-                        newHandledItem.setPurchaseOrderRow(stock.getPurchaseOrderRow());
+                        newHandledItem.setBoxedItem(stock.getBoxedItem());
                         newHandledItem.setToLocation(locationArrival);
                         newHandledItem.setWorker(worker);
                         
@@ -79,7 +79,7 @@ public class HandledItemService implements Serializable{
                         if (stock.getUnitMeasure().equals(stock.getNakedUnitMeasure()))
                             quantityMoved = stock.getQuantity();
                         else
-                            quantityMoved = stock.getQuantity() * stock.getPurchaseOrderRow().getBoxedItem().getBox().getQuantity();
+                            quantityMoved = stock.getQuantity() * stock.getBoxedItem().getBox().getQuantity();
                         
                         newHandledItem.setQuantity(quantityMoved);
 
@@ -89,9 +89,9 @@ public class HandledItemService implements Serializable{
                         
                         if (locationArrival instanceof System) {
                             System system = (System) locationArrival;
-                            if (deviceService.getDevicesCount(system, stock.getPurchaseOrderRow().getBoxedItem().getItem().getItem()) <= 0) {
+                            if (deviceService.getDevicesCount(system, stock.getBoxedItem().getItem().getItem()) <= 0) {
                                 Device device = new Device();
-                                device.setItem(stock.getPurchaseOrderRow().getBoxedItem().getItem().getItem());
+                                device.setItem(stock.getBoxedItem().getItem().getItem());
                                 device.setQuantity(quantityMoved);
                                 system.addDevice(device);
                                 
@@ -123,13 +123,13 @@ public class HandledItemService implements Serializable{
         em.remove(readHandledItem(id));
     }
     
-    public List<HandledItem> listHandledItems(int first, int pageSize, String sortField, Boolean isAscending, PurchaseOrderRow purchaseOrderRow) {
+    public List<HandledItem> listHandledItems(int first, int pageSize, String sortField, Boolean isAscending, BoxedItem boxedItem) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<HandledItem> query = cb.createQuery(HandledItem.class);
         Root<HandledItem> root = query.from(HandledItem.class);
         CriteriaQuery<HandledItem> select = query.select(root).distinct(true);
         
-        List<Predicate> conditions = calculateConditions(cb, root, purchaseOrderRow);
+        List<Predicate> conditions = calculateConditions(cb, root, boxedItem);
 
         if (!conditions.isEmpty())
             query.where(conditions.toArray(new Predicate[conditions.size()]));
@@ -154,35 +154,35 @@ public class HandledItemService implements Serializable{
             typedQuery.setFirstResult(first);
         }
 
-        if (purchaseOrderRow != null)   //we don't want all the handled items!
+        if (boxedItem != null)   //we don't want all the handled items!
             return typedQuery.getResultList();
         else
             return null;
     }
     
-    public Long getLocationsCount(PurchaseOrderRow purchaseOrderRow) {
+    public Long getLocationsCount(BoxedItem boxedItem) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Long> query = cb.createQuery(Long.class);
         Root<HandledItem> root = query.from(HandledItem.class);
         CriteriaQuery<Long> select = query.select(cb.count(root));
 
-        List<Predicate> conditions = calculateConditions(cb, root, purchaseOrderRow);
+        List<Predicate> conditions = calculateConditions(cb, root, boxedItem);
 
         if (!conditions.isEmpty())
             query.where(conditions.toArray(new Predicate[conditions.size()]));
 
-        if (purchaseOrderRow != null)   //we don't want all the handled items!
+        if (boxedItem != null)   //we don't want all the handled items!
             return em.createQuery(select).getSingleResult();
         else
             return Long.valueOf(0);
     }
     
-    private List<Predicate> calculateConditions(CriteriaBuilder cb, Root<HandledItem> root, PurchaseOrderRow purchaseOrderRow) {
+    private List<Predicate> calculateConditions(CriteriaBuilder cb, Root<HandledItem> root, BoxedItem boxedItem) {
         List<Predicate> conditions = new ArrayList<>();
         
-        //Purchase order row
-        if (purchaseOrderRow != null)
-            conditions.add(cb.equal(root.get(HandledItem_.purchaseOrderRow), purchaseOrderRow));
+        //Boxed item
+        if (boxedItem != null)
+            conditions.add(cb.equal(root.get(HandledItem_.boxedItem), boxedItem));
         
         return conditions;
     }

@@ -16,7 +16,7 @@
  */
 package com.prosystemingegneri.censistant.business.warehouse.boundary;
 
-import com.prosystemingegneri.censistant.business.purchasing.entity.PurchaseOrderRow;
+import com.prosystemingegneri.censistant.business.purchasing.entity.BoxedItem;
 import com.prosystemingegneri.censistant.business.warehouse.control.Stock;
 import com.prosystemingegneri.censistant.business.warehouse.entity.Location;
 import java.io.Serializable;
@@ -48,8 +48,8 @@ public class StockService implements Serializable {
         String[] ids = id.split(Stock.SEPARATOR);
         if (ids[0] != null && !ids[0].isEmpty() && ids[1] != null && !ids[1].isEmpty() && ids[2] != null && !ids[2].isEmpty()) {
             Location location = locationService.readLocation(Long.parseLong(ids[0]));
-            PurchaseOrderRow purchaseOrderRow = em.find(PurchaseOrderRow.class, Long.parseLong(ids[1]));
-            result = new Stock(location, purchaseOrderRow, Integer.parseInt(ids[2]));
+            BoxedItem boxedItem = em.find(BoxedItem.class, Long.parseLong(ids[1]));
+            result = new Stock(location, boxedItem, Integer.parseInt(ids[2]));
         }
         return result;
     }
@@ -67,8 +67,8 @@ public class StockService implements Serializable {
         if (rowList != null && !rowList.isEmpty())
             for (Object[] objects : rowList) {
                 Location locationTemp = locationService.readLocation((Long) objects[0]);
-                PurchaseOrderRow purchaseOrderRow = em.find(PurchaseOrderRow.class, (Long) objects[1]);
-                result.add(new Stock(locationTemp, purchaseOrderRow, ((BigDecimal) objects[2]).intValue()));
+                BoxedItem boxedItem = em.find(BoxedItem.class, (Long) objects[1]);
+                result.add(new Stock(locationTemp, boxedItem, ((BigDecimal) objects[2]).intValue()));
             }
         
         return result;
@@ -92,7 +92,6 @@ public class StockService implements Serializable {
         
         String queryString = "";
         String filterStringSupplier = "";
-        String filterStringHandledItem = "";
         
         if ((item != null && !item.isEmpty()) || idItem != null) {
             filterStringSupplier = "JOIN supplieritem ON boxeditem.item_id = supplieritem.id " +
@@ -102,43 +101,42 @@ public class StockService implements Serializable {
                         "OR LOWER(item.description) LIKE '%" + item.toLowerCase() +"%' ";
             if (idItem != null)
                 filterStringSupplier += "item.id = " + idItem + " ";
-            filterStringHandledItem = "JOIN boxeditem ON purchaseorderrow.boxeditem_id = boxeditem.id " + filterStringSupplier;
         }
         
         if (isCounting)
             queryString = "SELECT COUNT(*) FROM (";
         
-        queryString += "SELECT COALESCE(fromSupplier.loc, fromLocation.loc, inLocation.loc) AS loc, COALESCE(fromSupplier.idpurchaseorderrow, fromLocation.idpurchaseorderrow, inLocation.idpurchaseorderrow) AS idpurchaseorderrow, SUM(COALESCE(fromSupplier.qty, 0) - COALESCE(fromLocation.qty, 0) + COALESCE(inLocation.qty, 0)) AS qty " +
+        queryString += "SELECT COALESCE(fromSupplier.loc, fromLocation.loc, inLocation.loc) AS loc, COALESCE(fromSupplier.idboxeditem, fromLocation.idboxeditem, inLocation.idboxeditem) AS idboxeditem, SUM(COALESCE(fromSupplier.qty, 0) - COALESCE(fromLocation.qty, 0) + COALESCE(inLocation.qty, 0)) AS qty " +
                 "FROM " +
                 "( " +
-                    "SELECT supplierlocation.id AS loc, purchaseorderrow.id AS idpurchaseorderrow, SUM(box.quantity*purchaseorderrow.quantity) AS qty " +
+                    "SELECT supplierlocation.id AS loc, boxeditem.id AS idboxeditem, SUM(box.quantity*purchaseorderrow.quantity) AS qty " +
                     "FROM purchaseorderrow " +
                     "JOIN purchaseorder ON purchaseorderrow.purchaseorder_id = purchaseorder.id " +
                     "JOIN supplierlocation ON purchaseorder.supplier_id = supplierlocation.supplier_id " +
                     "JOIN boxeditem ON purchaseorderrow.boxeditem_id = boxeditem.id " +
                     "JOIN box ON boxeditem.box_id = box.id " +
                     filterStringSupplier +
-                    "GROUP BY supplierlocation.id, purchaseorderrow.id " +
+                    "GROUP BY supplierlocation.id, boxeditem.id " +
                 ") AS fromSupplier " +
                 "FULL JOIN " +
                 "( " +
-                    "SELECT hiFrom.fromlocation_id as loc, hiFrom.purchaseorderrow_id as idpurchaseorderrow, SUM(hiFrom.quantity) as qty " +
+                    "SELECT hiFrom.fromlocation_id as loc, hiFrom.boxeditem_id as idboxeditem, SUM(hiFrom.quantity) as qty " +
                     "FROM handleditem hiFrom " +
-                    "JOIN purchaseorderrow ON hiFrom.purchaseorderrow_id = purchaseorderrow.id " +
-                    filterStringHandledItem +
-                    "GROUP BY hiFrom.fromlocation_id, hiFrom.purchaseorderrow_id " +
+                    "JOIN boxeditem ON hiFrom.boxeditem_id = boxeditem.id " +
+                    filterStringSupplier +
+                    "GROUP BY hiFrom.fromlocation_id, hiFrom.boxeditem_id " +
                 ") AS fromLocation " +
-                "ON fromSupplier.loc = fromLocation.loc AND fromSupplier.idpurchaseorderrow = fromLocation.idpurchaseorderrow " +
+                "ON fromSupplier.loc = fromLocation.loc AND fromSupplier.idboxeditem = fromLocation.idboxeditem " +
                 "FULL JOIN " +
                 "( " +
-                    "SELECT hiTo.tolocation_id as loc, hiTo.purchaseorderrow_id as idpurchaseorderrow, SUM(hiTo.quantity) as qty " +
+                    "SELECT hiTo.tolocation_id as loc, hiTo.boxeditem_id as idboxeditem, SUM(hiTo.quantity) as qty " +
                     "FROM handleditem hiTo " +
-                    "JOIN purchaseorderrow ON hiTo.purchaseorderrow_id = purchaseorderrow.id " +
-                    filterStringHandledItem +
-                    "GROUP BY hiTo.tolocation_id, hiTo.purchaseorderrow_id " +
+                    "JOIN boxeditem ON hiTo.boxeditem_id = boxeditem.id " +
+                    filterStringSupplier +
+                    "GROUP BY hiTo.tolocation_id, hiTo.boxeditem_id " +
                 ") AS inLocation " +
-                "ON fromLocation.loc = inLocation.loc AND fromSupplier.loc = inLocation.loc AND fromLocation.idpurchaseorderrow = inLocation.idpurchaseorderrow AND fromSupplier.idpurchaseorderrow = inLocation.idpurchaseorderrow " +
-                "GROUP BY COALESCE(fromSupplier.loc, fromLocation.loc, inLocation.loc), COALESCE(fromSupplier.idpurchaseorderrow, fromLocation.idpurchaseorderrow, inLocation.idpurchaseorderrow) " +
+                "ON fromLocation.loc = inLocation.loc AND fromSupplier.loc = inLocation.loc AND fromLocation.idboxeditem = inLocation.idboxeditem AND fromSupplier.idboxeditem = inLocation.idboxeditem " +
+                "GROUP BY COALESCE(fromSupplier.loc, fromLocation.loc, inLocation.loc), COALESCE(fromSupplier.idboxeditem, fromLocation.idboxeditem, inLocation.idboxeditem) " +
                 "HAVING SUM(COALESCE(fromSupplier.qty, 0) - COALESCE(fromLocation.qty, 0) + COALESCE(inLocation.qty, 0)) > 0 ";
         if (idLocation != null)
             queryString += " AND COALESCE(fromSupplier.loc, fromLocation.loc, inLocation.loc) = " + idLocation + " ";

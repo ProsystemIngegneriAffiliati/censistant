@@ -16,7 +16,7 @@
  */
 package com.prosystemingegneri.censistant.business.warehouse.entity;
 
-import com.prosystemingegneri.censistant.business.purchasing.entity.PurchaseOrderRow;
+import com.prosystemingegneri.censistant.business.purchasing.entity.BoxedItem;
 import java.util.Date;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
@@ -28,7 +28,7 @@ import javax.persistence.metamodel.StaticMetamodel;
 @StaticMetamodel(HandledItem.class)
 public class HandledItem_ {
     public static volatile SingularAttribute<HandledItem, Date> handlingTimestamp;
-    public static volatile SingularAttribute<HandledItem, PurchaseOrderRow> purchaseOrderRow;
+    public static volatile SingularAttribute<HandledItem, BoxedItem> boxedItem;
     public static volatile SingularAttribute<HandledItem, Location> fromLocation;
     public static volatile SingularAttribute<HandledItem, Location> toLocation;
 }

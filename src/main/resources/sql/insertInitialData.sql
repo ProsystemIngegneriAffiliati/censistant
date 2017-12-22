@@ -133,16 +133,16 @@ INSERT INTO warehouse(id, name, description) VALUES(3, 'Centrale', 'Magazzino ce
 INSERT INTO location(dtype, version) VALUES(0, 0)
 INSERT INTO warehouse(id, name, description) VALUES(4, 'Secondario', null)
 
-INSERT INTO handleditem(purchaseorderrow_id, worker_id, handlingtimestamp, quantity, fromlocation_id, tolocation_id, version) VALUES(1, 1, '2017-10-30 08:00:00', 1, 2, 3, 0)
-INSERT INTO handleditem(purchaseorderrow_id, worker_id, handlingtimestamp, quantity, fromlocation_id, tolocation_id, version) VALUES(3, 1, '2017-10-30 08:00:01', 3, 2, 3, 0)
-INSERT INTO handleditem(purchaseorderrow_id, worker_id, handlingtimestamp, quantity, fromlocation_id, tolocation_id, version) VALUES(3, 1, '2017-10-30 08:30:00', 2, 3, 4, 0)
-INSERT INTO handleditem(purchaseorderrow_id, worker_id, handlingtimestamp, quantity, fromlocation_id, tolocation_id, version) VALUES(3, 1, '2017-10-30 08:30:30', 1, 3, 2, 0)
-INSERT INTO handleditem(purchaseorderrow_id, worker_id, handlingtimestamp, quantity, fromlocation_id, tolocation_id, version) VALUES(4, 1, '2017-11-01 08:30:30', 2, 1, 3, 0)
-INSERT INTO handleditem(purchaseorderrow_id, worker_id, handlingtimestamp, quantity, fromlocation_id, tolocation_id, version) VALUES(4, 1, '2017-11-02 08:30:30', 1, 3, 1, 0)
-INSERT INTO handleditem(purchaseorderrow_id, worker_id, handlingtimestamp, quantity, fromlocation_id, tolocation_id, version) VALUES(4, 1, '2017-11-02 08:35:30', 1, 3, 4, 0)
-INSERT INTO handleditem(purchaseorderrow_id, worker_id, handlingtimestamp, quantity, fromlocation_id, tolocation_id, version) VALUES(6, 1, '2017-11-03 08:30:30', 10, 1, 4, 0)
-INSERT INTO handleditem(purchaseorderrow_id, worker_id, handlingtimestamp, quantity, fromlocation_id, tolocation_id, version) VALUES(6, 1, '2017-11-03 08:30:30', 5, 4, 3, 0)
-INSERT INTO handleditem(purchaseorderrow_id, worker_id, handlingtimestamp, quantity, fromlocation_id, tolocation_id, version) VALUES(2, 1, '2017-11-04 08:00:00', 3, 2, 4, 0)
+INSERT INTO handleditem(boxeditem_id, worker_id, handlingtimestamp, quantity, fromlocation_id, tolocation_id, version) VALUES(1, 1, '2017-10-30 08:00:00', 1, 2, 3, 0)
+INSERT INTO handleditem(boxeditem_id, worker_id, handlingtimestamp, quantity, fromlocation_id, tolocation_id, version) VALUES(3, 1, '2017-10-30 08:00:01', 3, 2, 3, 0)
+INSERT INTO handleditem(boxeditem_id, worker_id, handlingtimestamp, quantity, fromlocation_id, tolocation_id, version) VALUES(3, 1, '2017-10-30 08:30:00', 2, 3, 4, 0)
+INSERT INTO handleditem(boxeditem_id, worker_id, handlingtimestamp, quantity, fromlocation_id, tolocation_id, version) VALUES(3, 1, '2017-10-30 08:30:30', 1, 3, 2, 0)
+INSERT INTO handleditem(boxeditem_id, worker_id, handlingtimestamp, quantity, fromlocation_id, tolocation_id, version) VALUES(6, 1, '2017-11-01 08:30:30', 2, 1, 3, 0)
+INSERT INTO handleditem(boxeditem_id, worker_id, handlingtimestamp, quantity, fromlocation_id, tolocation_id, version) VALUES(6, 1, '2017-11-02 08:30:30', 1, 3, 1, 0)
+INSERT INTO handleditem(boxeditem_id, worker_id, handlingtimestamp, quantity, fromlocation_id, tolocation_id, version) VALUES(9, 1, '2017-11-02 08:35:30', 1, 3, 4, 0)
+INSERT INTO handleditem(boxeditem_id, worker_id, handlingtimestamp, quantity, fromlocation_id, tolocation_id, version) VALUES(9, 1, '2017-11-03 08:30:30', 10, 1, 4, 0)
+INSERT INTO handleditem(boxeditem_id, worker_id, handlingtimestamp, quantity, fromlocation_id, tolocation_id, version) VALUES(9, 1, '2017-11-03 08:30:30', 5, 4, 3, 0)
+INSERT INTO handleditem(boxeditem_id, worker_id, handlingtimestamp, quantity, fromlocation_id, tolocation_id, version) VALUES(2, 1, '2017-11-04 08:00:00', 3, 2, 4, 0)
 
 INSERT INTO carrier(name, version) VALUES('TNT', 0)
 INSERT INTO carrier(name, version) VALUES('SDA', 0)
@@ -183,4 +183,4 @@ INSERT INTO device(system_id, item_id, quantity, devices_order, version) VALUES(
 
 INSERT INTO joborder(creation, number, description, sitesurveyreport_id, placetype_id, system_id, version) VALUES('2017-12-20', 1, 'Commessa di prova', 1, 2, 5, 0)
 
-INSERT INTO handleditem(purchaseorderrow_id, worker_id, handlingtimestamp, quantity, fromlocation_id, tolocation_id, version) VALUES(1, 1, '2017-12-20 11:14:00', 1, 3, 5, 0)
+INSERT INTO handleditem(boxeditem_id, worker_id, handlingtimestamp, quantity, fromlocation_id, tolocation_id, version) VALUES(1, 1, '2017-12-20 11:14:00', 1, 3, 5, 0)
