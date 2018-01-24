@@ -2,43 +2,46 @@
 
 readonly APP_ID=1
 readonly APP_NAME=censistant
-readonly DB_IP_ADDRESS=192.168.2.251
-readonly DB_EXTERNAL_SSH_PORT=22
+readonly DB_IP_ADDRESS=192.168.2.250
 readonly DB_NAME=${APP_NAME}${APP_ID}
 readonly DB_USER_NAME=${APP_NAME}${APP_ID}
-readonly DB_USER_PASSWORD=PNpKjM19byxa6JBIKxFU
 readonly POSTGRESQL_JDBC_DRIVER=postgresql-42.2.0.jar
-readonly AS_IP_ADDRESS=192.168.2.252
+readonly AS_IP_ADDRESS=192.168.2.249
 readonly AS_EXTERNAL_SSH_PORT=22
-readonly AS_ROOT_DIR=/payara41
+readonly AS_INSTALL_DIR=/opt
+readonly AS_ROOT_DIR=${AS_INSTALL_DIR}/payara41
 readonly AS_BIN=${AS_ROOT_DIR}/bin
+readonly AS_VERSION=4.1.2.174
+readonly AS_DOMAIN_NAME=payaradomain
+readonly AS_PASSWORD_ALIAS_NAME=${APP_NAME}-dbuser-alias
+
+echo 'Password per application server'
+scp -P ${AS_EXTERNAL_SSH_PORT} dbUserPassword root@${AS_IP_ADDRESS}:/root/
 
 echo 'Password per application server'
 ssh root@${AS_IP_ADDRESS} -p ${AS_EXTERNAL_SSH_PORT} '\
-sh '${AS_BIN}'/asadmin undeploy '${APP_NAME}'; \
-rm -r ${HOME}/'${APP_NAME}'/; \
-sh '${AS_BIN}'/asadmin delete-auth-realm '${APP_NAME}'Realm; \
-sh '${AS_BIN}'/asadmin delete-jdbc-resource jdbc/postgres_'${APP_NAME}'; \
-sh '${AS_BIN}'/asadmin delete-jdbc-connection-pool postgres_'${APP_NAME}'_pool; \
-rm '${AS_ROOT_DIR}'/glassfish/domains/domain1/lib/ext/'${POSTGRESQL_JDBC_DRIVER}'; \
-rm -r '${AS_ROOT_DIR}'/glassfish/domains/domain1/generated/*; \
-sh '${AS_BIN}'/asadmin stop-domain'
-
-echo 'Password per database server'
-ssh root@${DB_IP_ADDRESS} -p ${DB_EXTERNAL_SSH_PORT} '\
-dropdb '${DB_NAME}'; \
-createdb --owner='${DB_USER_NAME}' --encoding=UTF8 '${DB_NAME}''
-
-echo 'Password per application server'
-scp -P ${AS_EXTERNAL_SSH_PORT} ~/NetBeansProjects/${APP_NAME}/target/${APP_NAME}.war root@${AS_IP_ADDRESS}:/root/
-
-echo 'Password per application server'
-ssh root@${AS_IP_ADDRESS} -p ${AS_EXTERNAL_SSH_PORT} '\
+echo "deb http://ppa.launchpad.net/webupd8team/java/ubuntu xenial main" | tee /etc/apt/sources.list.d/webupd8team-java.list; \
+echo "deb-src http://ppa.launchpad.net/webupd8team/java/ubuntu xenial main" | tee -a /etc/apt/sources.list.d/webupd8team-java.list; \
+apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys EEA14886; \
+apt-get update; \
+echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections; \
+apt-get -y install oracle-java8-installer; \
+\
+cd '${AS_INSTALL_DIR}'; \
+wget https://s3-eu-west-1.amazonaws.com/payara.fish/Payara+Downloads/Payara+'${AS_VERSION}'/payara-'${AS_VERSION}'.zip; \
+unzip payara-'${AS_VERSION}'.zip; \
+rm payara-'${AS_VERSION}'.zip; \
+\
+wget -P '${AS_ROOT_DIR}'/ https://jdbc.postgresql.org/download/'${POSTGRESQL_JDBC_DRIVER}'; \
+\
 mkdir ${HOME}/'${APP_NAME}'; \
 mkdir ${HOME}/'${APP_NAME}'/images; \
 mkdir ${HOME}/'${APP_NAME}'/documents; \
-wget -P '${AS_ROOT_DIR}'/glassfish/domains/domain1/lib/ext/ https://jdbc.postgresql.org/download/'${POSTGRESQL_JDBC_DRIVER}'; \
-sh '${AS_BIN}'/asadmin start-domain; \
+\
+sh '${AS_BIN}'/asadmin start-domain '${AS_DOMAIN_NAME}'; \
+\
+sh '${AS_BIN}'/asadmin --passwordfile ${HOME}/dbUserPassword create-password-alias '${AS_PASSWORD_ALIAS_NAME}'; \
+\
 sh '${AS_BIN}'/asadmin create-jdbc-connection-pool \
 --datasourceclassname=org.postgresql.ds.PGSimpleDataSource \
 --restype=javax.sql.DataSource \
@@ -47,13 +50,15 @@ sh '${AS_BIN}'/asadmin create-jdbc-connection-pool \
 --nontransactionalconnections=false \
 --driverclassname=org.postgresql.Driver \
 --property user='${DB_USER_NAME}':\
-password='${DB_USER_PASSWORD}':\
+password=${alias='${AS_PASSWORD_ALIAS_NAME}'}:\
 databaseName='${DB_NAME}':\
 serverName='${DB_IP_ADDRESS}':\
 portNumber=5432:\
 url=jdbc\\:postgresql\\://'${DB_IP_ADDRESS}'\\:5432/'${DB_NAME}' \
 postgres_'${APP_NAME}'_pool; \
+\
 sh '${AS_BIN}'/asadmin create-jdbc-resource --connectionpoolid postgres_'${APP_NAME}'_pool jdbc/postgres_'${APP_NAME}'; \
+\
 sh '${AS_BIN}'/asadmin create-auth-realm \
 --classname com.sun.enterprise.security.auth.realm.jdbc.JDBCRealm \
 --property \
@@ -69,6 +74,5 @@ digestrealm-password-enc-algorithm=AES:\
 encoding=base64:\
 charset=UTF-8 \
 '${APP_NAME}'Realm; \
-sh '${AS_BIN}'/asadmin stop-domain; \
-sh '${AS_BIN}'/asadmin start-domain; \
-sh '${AS_BIN}'/asadmin deploy /root/'${APP_NAME}'.war'
+\
+sh '${AS_BIN}'/asadmin restart-domain '${AS_DOMAIN_NAME}''
