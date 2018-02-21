@@ -53,16 +53,19 @@
                                             #{msg.warehouse_warehousesStock_tip}
                                         </f:facet>
                                         <p:ajax event="rowSelect" listener="#{stockListPresenter.onWarehouseStockSelect}" update=":itemMovementForm:preparedStockForMovementTable :itemMovementForm:moveButton :itemMovementForm:moveButtonAjax" />
+                                        <p:column headerText="#{msg.warehouse_location}" field="location" filterable="false" priority="4">
+                                            <h:outputText value="#{stock.location.name}" />
+                                        </p:column>
                                         <p:column headerText="#{msg.purchasing_supplierItem}" field="item" sortable="false" priority="0">
                                             <h:outputText value="#{stock.boxedItem.item.code} - #{stock.boxedItem.item.item.description}" />
                                         </p:column>
-                                        <p:column headerText="#{msg.purchasing_purchaseOrderRow_quantity}" priority="0">
+                                        <p:column headerText="#{msg.purchasing_purchaseOrderRow_quantity}" style="width:64px" priority="0">
                                             <h:outputText value="#{stock.quantity}">
                                                 <f:convertNumber integerOnly="true" />
                                             </h:outputText>
                                             <h:outputText value=" #{stock.boxedItem.item.item.unitMeasure.symbol}" />
                                         </p:column>
-                                        <p:column headerText="#{msg.purchasing_box_name}" priority="4">
+                                        <p:column headerText="#{msg.purchasing_box_name}" style="width:128px" priority="4">
                                             <h:outputText rendered="#{stock.quantity != stock.quantity / stock.boxedItem.box.quantity and stock.quantity / stock.boxedItem.box.quantity >= 1}" value="#{stock.quantity / stock.boxedItem.box.quantity} #{stock.boxedItem.box.unitMeasure.name} #{stock.boxedItem.box.quantity} #{stock.boxedItem.item.item.unitMeasure.symbol}" />
                                         </p:column>
                                     </p:dataTable>

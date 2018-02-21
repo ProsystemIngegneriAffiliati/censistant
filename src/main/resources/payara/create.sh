@@ -1,7 +1,7 @@
 #!/bin/sh
 
-readonly IP_ADDRESS=192.168.2.116
-readonly POSTGRESQL_JDBC_DRIVER=postgresql-42.2.0.jar
+readonly IP_ADDRESS=192.168.2.170
+readonly POSTGRESQL_JDBC_DRIVER=postgresql-42.2.1.jar
 
 mkdir $HOME/censistant
 mkdir $HOME/censistant/images
