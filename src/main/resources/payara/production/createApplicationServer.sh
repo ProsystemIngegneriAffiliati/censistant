@@ -2,16 +2,16 @@
 
 readonly APP_ID=1
 readonly APP_NAME=censistant
-readonly DB_IP_ADDRESS=192.168.2.250
+readonly DB_IP_ADDRESS=192.168.2.251
 readonly DB_NAME=${APP_NAME}${APP_ID}
 readonly DB_USER_NAME=${APP_NAME}${APP_ID}
-readonly POSTGRESQL_JDBC_DRIVER=postgresql-42.2.0.jar
-readonly AS_IP_ADDRESS=192.168.2.249
+readonly POSTGRESQL_JDBC_DRIVER=postgresql-42.2.1.jar
+readonly AS_IP_ADDRESS=192.168.2.252
 readonly AS_EXTERNAL_SSH_PORT=22
 readonly AS_INSTALL_DIR=/opt
 readonly AS_ROOT_DIR=${AS_INSTALL_DIR}/payara41
 readonly AS_BIN=${AS_ROOT_DIR}/bin
-readonly AS_VERSION=4.1.2.174
+readonly AS_VERSION=4.1.2.181
 readonly AS_DOMAIN_NAME=payaradomain
 readonly AS_PASSWORD_ALIAS_NAME=${APP_NAME}-dbuser-alias
 
@@ -32,7 +32,7 @@ wget https://s3-eu-west-1.amazonaws.com/payara.fish/Payara+Downloads/Payara+'${A
 unzip payara-'${AS_VERSION}'.zip; \
 rm payara-'${AS_VERSION}'.zip; \
 \
-wget -P '${AS_ROOT_DIR}'/ https://jdbc.postgresql.org/download/'${POSTGRESQL_JDBC_DRIVER}'; \
+wget -P '${AS_ROOT_DIR}'/glassfish/domains/'${AS_DOMAIN_NAME}'/lib/ext/ https://jdbc.postgresql.org/download/'${POSTGRESQL_JDBC_DRIVER}'; \
 \
 mkdir ${HOME}/'${APP_NAME}'; \
 mkdir ${HOME}/'${APP_NAME}'/images; \
@@ -50,7 +50,7 @@ sh '${AS_BIN}'/asadmin create-jdbc-connection-pool \
 --nontransactionalconnections=false \
 --driverclassname=org.postgresql.Driver \
 --property user='${DB_USER_NAME}':\
-password=${alias='${AS_PASSWORD_ALIAS_NAME}'}:\
+password=\$\{ALIAS='${AS_PASSWORD_ALIAS_NAME}'\}:\
 databaseName='${DB_NAME}':\
 serverName='${DB_IP_ADDRESS}':\
 portNumber=5432:\
@@ -74,5 +74,7 @@ digestrealm-password-enc-algorithm=AES:\
 encoding=base64:\
 charset=UTF-8 \
 '${APP_NAME}'Realm; \
+\
+rm ${HOME}/dbUserPassword
 \
 sh '${AS_BIN}'/asadmin restart-domain '${AS_DOMAIN_NAME}''

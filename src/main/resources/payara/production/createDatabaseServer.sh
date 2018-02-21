@@ -2,7 +2,7 @@
 
 readonly APP_ID=1
 readonly APP_NAME=censistant
-readonly DB_IP_ADDRESS=192.168.2.250
+readonly DB_IP_ADDRESS=192.168.2.251
 readonly DB_EXTERNAL_SSH_PORT=22
 readonly DB_NAME=${APP_NAME}${APP_ID}
 readonly DB_USER_NAME=${APP_NAME}${APP_ID}
