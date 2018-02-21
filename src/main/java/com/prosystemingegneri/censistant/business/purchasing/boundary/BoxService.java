@@ -76,7 +76,7 @@ public class BoxService implements Serializable{
         if (isAscending != null && sortField != null && !sortField.isEmpty()) {
             Path<?> path;
             switch (sortField) {
-                case "unitMeasure":
+                case "unitMeasureName":
                     path = root.get(Box_.unitMeasure).get(UnitMeasure_.name);
                     break;
                 default:
