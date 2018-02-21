@@ -12,15 +12,14 @@ readonly DB_INITIAL_FILENAME_COMPRESSED=${DB_INITIAL_FILENAME}.gz
 echo 'Password per database server'
 scp -P ${DB_EXTERNAL_SSH_PORT} ${DB_INITIAL_FILENAME_COMPRESSED} root@${DB_IP_ADDRESS}:/root/
 
-echo 'Password per database server'
-scp -P ${DB_EXTERNAL_SSH_PORT} backupDb.sh root@${DB_IP_ADDRESS}:/root/
+echo 'Password dell'\''utente '${DB_USER_NAME}''
+ssh ${DB_USER_NAME}@${DB_IP_ADDRESS} -p ${DB_EXTERNAL_SSH_PORT} '\
+psql postgres -c "ALTER DATABASE '${DB_NAME}' CONNECTION LIMIT 1"; \
+psql postgres -c "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = '\'''${DB_NAME}''\''"; \
+psql postgres -c "DROP DATABASE '${DB_NAME}'"'
 
 echo 'Password per database server'
 ssh root@${DB_IP_ADDRESS} -p ${DB_EXTERNAL_SSH_PORT} '\
-chmod +x backupDb.sh; \
-useradd -M -g postgres -G users '${DB_USER_NAME}'; \
-passwd '${DB_USER_NAME}'; \
-createuser --createdb --pwprompt --echo '${DB_USER_NAME}'; \
 createdb --owner='${DB_USER_NAME}' --encoding=UTF8 '${DB_NAME}'; \
 gzip --uncompress '${DB_INITIAL_FILENAME_COMPRESSED}'; \
 pg_restore -d '${DB_NAME}' '${DB_INITIAL_FILENAME}'; \
