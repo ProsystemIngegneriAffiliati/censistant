@@ -16,7 +16,7 @@
  */
 package com.prosystemingegneri.censistant.business.production.entity;
 
-import com.prosystemingegneri.censistant.business.sales.entity.JobOrder;
+import com.prosystemingegneri.censistant.business.sales.entity.Offer;
 import com.prosystemingegneri.censistant.business.warehouse.entity.Location;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +52,7 @@ public class System extends Location {
     private final List<Area> areas;
     
     @OneToMany(mappedBy = "system")
-    private final List<JobOrder> jobOrders;
+    private final List<Offer> offers;
     
     private String userCode;
     
@@ -65,7 +65,7 @@ public class System extends Location {
     private String notes;
 
     public System() {
-        jobOrders = new ArrayList<>();
+        offers = new ArrayList<>();
         devices = new ArrayList<>();
         systemAttachments = new ArrayList<>();
         areas = new ArrayList<>();
@@ -119,22 +119,22 @@ public class System extends Location {
         this.notes = notes;
     }
     
-    public void addJobOrder(JobOrder jobOrder) {
-        if (!jobOrders.contains(jobOrder)) {
-            jobOrder.setSystem(this);
-            jobOrders.add(jobOrder);
+    public void addOffer(Offer offer) {
+        if (!offers.contains(offer)) {
+            offer.setSystem(this);
+            offers.add(offer);
         }
     }
     
-    public void removeJobOrder(JobOrder jobOrder) {
-        if (jobOrders.contains(jobOrder)) {
-            jobOrder.setSystem(null);
-            jobOrders.remove(jobOrder);
+    public void removeOffer(Offer offer) {
+        if (offers.contains(offer)) {
+            offer.setSystem(null);
+            offers.remove(offer);
         }
     }
-    
-    public List<JobOrder> getJobOrders() {
-        return jobOrders;
+
+    public List<Offer> getOffers() {
+        return offers;
     }
     
     public void addDevice(Device device) {
@@ -194,15 +194,15 @@ public class System extends Location {
     @Override
     public String getName() {
         String delimiter = " - ";
-        String jobOrderNumber = "";
+        String offerNumber = "";
         String customerName = "";
         
-        if (jobOrders != null && !jobOrders.isEmpty()) {
-            jobOrderNumber = jobOrders.get(jobOrders.size() - 1).getNumber().toString() + delimiter;
-            customerName = jobOrders.get(jobOrders.size() - 1).getSiteSurveyReport().getPlant().getCustomerSupplier().getName() + delimiter;
+        if (offers != null && !offers.isEmpty()) {
+            offerNumber = offers.get(offers.size() - 1).getNumber().toString() + delimiter;
+            customerName = offers.get(offers.size() - 1).getSiteSurveyReport().getPlant().getCustomerSupplier().getName() + delimiter;
         }
         
-        return customerName + jobOrderNumber + description;
+        return customerName + offerNumber + description;
     }
     
 }

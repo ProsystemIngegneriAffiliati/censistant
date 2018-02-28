@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Prosystem Ingegneri Affiliati
+ * Copyright (C) 2018 Prosystem Ingegneri Affiliati
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -17,6 +17,8 @@
 package com.prosystemingegneri.censistant.business.sales.entity;
 
 import com.prosystemingegneri.censistant.business.entity.BaseEntity;
+import com.prosystemingegneri.censistant.business.production.entity.System;
+import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -33,10 +35,10 @@ import javax.validation.constraints.NotNull;
 
 /**
  *
- * @author Davide Mainardi <ingmainardi@live.com>
+ * @author Davide Mainardi <ingmainardi at live.com>
  */
 @Entity
-public class JobOrder extends BaseEntity<Long> {
+public class Offer extends BaseEntity<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -53,24 +55,25 @@ public class JobOrder extends BaseEntity<Long> {
     
     @NotNull
     @OneToOne(optional = false)
-    private Offer offer;
-    
-    private String customerOrderNumber;
+    private SiteSurveyReport siteSurveyReport;
     
     @NotNull
     @ManyToOne(optional = false)
-    private PlaceType placeType;
+    private System system;
+    
+    @OneToOne(mappedBy = "offer")
+    private JobOrder jobOrder;
     
     private String notes;
     
     @Version
     private int version;
 
-    public JobOrder() {
+    public Offer() {
         creation = new Date();
     }
 
-    public JobOrder(Integer number) {
+    public Offer(Integer number) {
         this();
         this.number = number;
     }
@@ -91,20 +94,21 @@ public class JobOrder extends BaseEntity<Long> {
         this.number = number;
     }
 
-    public String getCustomerOrderNumber() {
-        return customerOrderNumber;
+    public SiteSurveyReport getSiteSurveyReport() {
+        return siteSurveyReport;
     }
 
-    public void setCustomerOrderNumber(String customerOrderNumber) {
-        this.customerOrderNumber = customerOrderNumber;
+    public void addSiteSurveyReport(SiteSurveyReport siteSurveyReport) {
+        siteSurveyReport.setOffer(this);
+        this.siteSurveyReport = siteSurveyReport;
     }
 
-    public PlaceType getPlaceType() {
-        return placeType;
+    public System getSystem() {
+        return system;
     }
 
-    public void setPlaceType(PlaceType placeType) {
-        this.placeType = placeType;
+    public void setSystem(System system) {
+        this.system = system;
     }
 
     public String getNotes() {
@@ -120,13 +124,12 @@ public class JobOrder extends BaseEntity<Long> {
         return id;
     }
 
-    public Offer getOffer() {
-        return offer;
+    public JobOrder getJobOrder() {
+        return jobOrder;
     }
 
-    public void addOffer(Offer offer) {
-        offer.setJobOrder(this);
-        this.offer = offer;
+    public void setJobOrder(JobOrder jobOrder) {
+        this.jobOrder = jobOrder;
     }
     
 }

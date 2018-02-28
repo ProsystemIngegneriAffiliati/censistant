@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Prosystem Ingegneri Affiliati
+ * Copyright (C) 2018 Prosystem Ingegneri Affiliati
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -16,19 +16,20 @@
  */
 package com.prosystemingegneri.censistant.business.sales.entity;
 
+import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport;
 import java.util.Date;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
 /**
  *
- * @author Davide Mainardi <ingmainardi@live.com>
+ * @author Davide Mainardi <ingmainardi at live.com>
  */
-@StaticMetamodel(JobOrder.class)
-public class JobOrder_ {
-    public static volatile SingularAttribute<JobOrder, Date> creation;
-    public static volatile SingularAttribute<JobOrder, Integer> number;
-    public static volatile SingularAttribute<JobOrder, String> customerOrderNumber;
-    public static volatile SingularAttribute<JobOrder, PlaceType> placeType;
-    public static volatile SingularAttribute<JobOrder, Offer> offer;
+@StaticMetamodel(Offer.class)
+public class Offer_ {
+    public static volatile SingularAttribute<Offer, Date> creation;
+    public static volatile SingularAttribute<Offer, Integer> number;
+    public static volatile SingularAttribute<Offer, SiteSurveyReport> siteSurveyReport;
+    public static volatile SingularAttribute<Offer, System> system;
+    public static volatile SingularAttribute<Offer, JobOrder> jobOrder;
 }

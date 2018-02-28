@@ -24,6 +24,8 @@ import com.prosystemingegneri.censistant.business.production.entity.System;
 import com.prosystemingegneri.censistant.business.production.entity.System_;
 import com.prosystemingegneri.censistant.business.sales.entity.JobOrder;
 import com.prosystemingegneri.censistant.business.sales.entity.JobOrder_;
+import com.prosystemingegneri.censistant.business.sales.entity.Offer;
+import com.prosystemingegneri.censistant.business.sales.entity.Offer_;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport_;
 import com.prosystemingegneri.censistant.business.warehouse.control.LocationType;
@@ -121,7 +123,8 @@ public class LocationService implements Serializable {
             Root<SupplierLocation> supplierLocationRoot = cb.treat(root, SupplierLocation.class);
             Root<System> systemRoot = cb.treat(root, System.class);
             Join<System, JobOrder> jobOrdersRoot = systemRoot.join(System_.jobOrders, JoinType.LEFT);
-            Join<JobOrder, SiteSurveyReport> siteSurveyReportRoot = jobOrdersRoot.join(JobOrder_.siteSurveyReport);
+            Join<JobOrder, Offer> offerRoot = jobOrdersRoot.join(JobOrder_.offer);
+            Join<Offer, SiteSurveyReport> siteSurveyReportRoot = offerRoot.join(Offer_.siteSurveyReport);
             Join<SiteSurveyReport, Plant> plantRoot = siteSurveyReportRoot.join(SiteSurveyReport_.plant);
             Join<Plant, CustomerSupplier> customerRoot = plantRoot.join(Plant_.customerSupplier);
             Join<SupplierLocation, CustomerSupplier> supplierRoot = supplierLocationRoot.join(SupplierLocation_.supplier, JoinType.LEFT);

@@ -18,7 +18,7 @@ package com.prosystemingegneri.censistant.business.siteSurvey.entity;
 
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
 import com.prosystemingegneri.censistant.business.entity.BaseEntity;
-import com.prosystemingegneri.censistant.business.sales.entity.JobOrder;
+import com.prosystemingegneri.censistant.business.sales.entity.Offer;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -69,7 +69,7 @@ public class SiteSurveyReport extends BaseEntity<Long>{
     private Worker seller;
     
     @OneToOne(mappedBy = "siteSurveyReport")
-    private JobOrder jobOrder;
+    private Offer offer;
     
     private String notes;
     
@@ -146,12 +146,12 @@ public class SiteSurveyReport extends BaseEntity<Long>{
         this.request = request;
     }
 
-    public JobOrder getJobOrder() {
-        return jobOrder;
+    public Offer getOffer() {
+        return offer;
     }
 
-    public void setJobOrder(JobOrder jobOrder) {
-        this.jobOrder = jobOrder;
+    public void setOffer(Offer offer) {
+        this.offer = offer;
     }
     
 }

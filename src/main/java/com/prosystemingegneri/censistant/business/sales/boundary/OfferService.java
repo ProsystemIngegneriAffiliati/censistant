@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Prosystem Ingegneri Affiliati
+ * Copyright (C) 2018 Prosystem Ingegneri Affiliati
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -21,10 +21,10 @@ import com.prosystemingegneri.censistant.business.customerSupplier.entity.Custom
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant_;
 import com.prosystemingegneri.censistant.business.production.boundary.SystemService;
-import com.prosystemingegneri.censistant.business.sales.entity.JobOrder;
-import com.prosystemingegneri.censistant.business.sales.entity.JobOrder_;
+import com.prosystemingegneri.censistant.business.production.entity.System;
 import com.prosystemingegneri.censistant.business.sales.entity.Offer;
 import com.prosystemingegneri.censistant.business.sales.entity.Offer_;
+import com.prosystemingegneri.censistant.business.siteSurvey.boundary.SiteSurveyReportService;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport_;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyRequest;
@@ -53,39 +53,44 @@ import javax.persistence.criteria.Root;
 
 /**
  *
- * @author Davide Mainardi <ingmainardi@live.com>
+ * @author Davide Mainardi <ingmainardi at live.com>
  */
 @Stateless
-public class JobOrderService implements Serializable{
+public class OfferService implements Serializable{
     @PersistenceContext
     EntityManager em;
     
     @Inject
-    OfferService offerService;
+    SiteSurveyReportService siteSurveyReportService;
     
     @Inject
     SystemService systemService;
     
-    public JobOrder createNewJobOrder() {
-        JobOrder jobOrder = new JobOrder(getNextNumber());
-        Offer offer = offerService.createNewOffer();
-        jobOrder.addOffer(offer);
+    public Offer createNewOffer() {
+        Offer offer = new Offer(getNextNumber());
+        SiteSurveyReport siteSurveyReport = siteSurveyReportService.createNewSiteSurveyReport();
+        siteSurveyReport.setActual(new Date());
+        siteSurveyReport.setExpected(new Date());
+        offer.addSiteSurveyReport(siteSurveyReport);
         
-        return jobOrder;
+        System system = new System();
+        system.addOffer(offer);
+        
+        return offer;
     }
     
     private Integer getNextNumber() {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Integer> query = cb.createQuery(Integer.class);
-        Root<JobOrder> root = query.from(JobOrder.class);
-        query.select(cb.greatest(root.get(JobOrder_.number)));
+        Root<Offer> root = query.from(Offer.class);
+        query.select(cb.greatest(root.get(Offer_.number)));
         
         List<Predicate> conditions = new ArrayList<>();
         
         GregorianCalendar dateStart = new GregorianCalendar(new GregorianCalendar().get(Calendar.YEAR), 0, 01);
         GregorianCalendar dateEnd = new GregorianCalendar(new GregorianCalendar().get(Calendar.YEAR), 11, 31);
         
-        conditions.add(cb.between(root.<Date>get(JobOrder_.creation), dateStart.getTime(), dateEnd.getTime()));
+        conditions.add(cb.between(root.<Date>get(Offer_.creation), dateStart.getTime(), dateEnd.getTime()));
 
         if (!conditions.isEmpty()) {
             query.where(conditions.toArray(new Predicate[conditions.size()]));
@@ -105,63 +110,63 @@ public class JobOrderService implements Serializable{
 	return result;
     }
     
-    public JobOrder saveJobOrder(JobOrder jobOrder) {
-        if (jobOrder.getOffer().getId() == null)
-            offerService.saveOffer(jobOrder.getOffer());
+    public Offer saveOffer(Offer offer) {
+        if (offer.getSiteSurveyReport().getId() == null)
+            siteSurveyReportService.saveSiteSurveyReport(offer.getSiteSurveyReport());
         
-        if (jobOrder.getId() == null && jobOrder.getOffer().getSystem().getId() != null) {
-            em.persist(jobOrder);
-            systemService.saveSystem(jobOrder.getOffer().getSystem());
+        if (offer.getId() == null && offer.getSystem().getId() != null) {
+            em.persist(offer);
+            systemService.saveSystem(offer.getSystem());
         }
         else {
-            systemService.saveSystem(jobOrder.getOffer().getSystem());
+            systemService.saveSystem(offer.getSystem());
 
-            if (jobOrder.getId() == null)
-                em.persist(jobOrder);
+            if (offer.getId() == null)
+                em.persist(offer);
             else
-                return em.merge(jobOrder);
+                return em.merge(offer);
         }
         
-        return jobOrder;
+        return offer;
     }
     
-    public JobOrder readJobOrder(Long id) {
-        return em.find(JobOrder.class, id);
+    public Offer readOffer(Long id) {
+        return em.find(Offer.class, id);
     }
     
-    public void deleteJobOrder(Long id) {
-        em.remove(readJobOrder(id));
+    public void deleteOffer(Long id) {
+        em.remove(readOffer(id));
     }
 
-    public List<JobOrder> listJobOrders(int first, int pageSize, String sortField, Boolean isAscending, Integer number, String customerName, String plantAddress, String systemType) {
+    public List<Offer> listOffers(int first, int pageSize, String sortField, Boolean isAscending, Integer number, String customerName, String plantAddress, String systemType) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<JobOrder> query = cb.createQuery(JobOrder.class);
-        Root<JobOrder> root = query.from(JobOrder.class);
-        CriteriaQuery<JobOrder> select = query.select(root).distinct(true);
+        CriteriaQuery<Offer> query = cb.createQuery(Offer.class);
+        Root<Offer> root = query.from(Offer.class);
+        CriteriaQuery<Offer> select = query.select(root).distinct(true);
         
         List<Predicate> conditions = calculateConditions(cb, root, number, customerName, plantAddress, systemType);
 
         if (!conditions.isEmpty())
             query.where(conditions.toArray(new Predicate[conditions.size()]));
         
-        Order order = cb.desc(root.get(JobOrder_.creation));
+        Order order = cb.desc(root.get(Offer_.creation));
         if (isAscending != null && sortField != null && !sortField.isEmpty()) {
             Path<?> path;
             switch (sortField) {
                 case "creation":
-                    path = root.get(JobOrder_.creation);
+                    path = root.get(Offer_.creation);
                     break;
                 case "number":
-                    path = root.get(JobOrder_.number);
+                    path = root.get(Offer_.number);
                     break;
                 case "customerName":
-                    path = root.get(JobOrder_.offer).get(Offer_.siteSurveyReport).get(SiteSurveyReport_.plant).get(Plant_.customerSupplier).get(CustomerSupplier_.name);
+                    path = root.get(Offer_.siteSurveyReport).get(SiteSurveyReport_.plant).get(Plant_.customerSupplier).get(CustomerSupplier_.name);
                     break;
                 case "plantAddress":
-                    path = root.get(JobOrder_.offer).get(Offer_.siteSurveyReport).get(SiteSurveyReport_.plant).get(Plant_.address);
+                    path = root.get(Offer_.siteSurveyReport).get(SiteSurveyReport_.plant).get(Plant_.address);
                     break;
                 case "systemType":
-                    path = root.get(JobOrder_.offer).get(Offer_.siteSurveyReport).get(SiteSurveyReport_.request).get(SiteSurveyRequest_.systemType).get(SystemType_.name);
+                    path = root.get(Offer_.siteSurveyReport).get(SiteSurveyReport_.request).get(SiteSurveyRequest_.systemType).get(SystemType_.name);
                     break;
                 default:
                     path = root.get(sortField);
@@ -173,7 +178,7 @@ public class JobOrderService implements Serializable{
         }
         query.orderBy(order);
         
-        TypedQuery<JobOrder> typedQuery = em.createQuery(select);
+        TypedQuery<Offer> typedQuery = em.createQuery(select);
         if (pageSize > 0) {
             typedQuery.setMaxResults(pageSize);
             typedQuery.setFirstResult(first);
@@ -182,10 +187,10 @@ public class JobOrderService implements Serializable{
         return typedQuery.getResultList();
     }
     
-    public Long getJobOrdersCount(Integer number, String customerName, String plantAddress, String systemType) {
+    public Long getOffersCount(Integer number, String customerName, String plantAddress, String systemType) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Long> query = cb.createQuery(Long.class);
-        Root<JobOrder> root = query.from(JobOrder.class);
+        Root<Offer> root = query.from(Offer.class);
         CriteriaQuery<Long> select = query.select(cb.count(root));
 
         List<Predicate> conditions = calculateConditions(cb, root, number, customerName, plantAddress, systemType);
@@ -196,17 +201,16 @@ public class JobOrderService implements Serializable{
         return em.createQuery(select).getSingleResult();
     }
     
-    private List<Predicate> calculateConditions(CriteriaBuilder cb, Root<JobOrder> root, Integer number, String customerName, String plantAddress, String systemType) {
+    private List<Predicate> calculateConditions(CriteriaBuilder cb, Root<Offer> root, Integer number, String customerName, String plantAddress, String systemType) {
         List<Predicate> conditions = new ArrayList<>();
 
         //number
         if (number != null)
-            conditions.add(cb.equal(root.get(JobOrder_.number), number));
+            conditions.add(cb.equal(root.get(Offer_.number), number));
         
         //customer's name
         if (customerName != null && !customerName.isEmpty()) {
-            Join<JobOrder, Offer> offerRoot = root.join(JobOrder_.offer);
-            Join<Offer, SiteSurveyReport> siteSurveyReportRoot = offerRoot.join(Offer_.siteSurveyReport);
+            Join<Offer, SiteSurveyReport> siteSurveyReportRoot = root.join(Offer_.siteSurveyReport);
             Join<SiteSurveyReport, Plant> plantRoot = siteSurveyReportRoot.join(SiteSurveyReport_.plant);
             Join<Plant, CustomerSupplier> customerRoot = plantRoot.join(Plant_.customerSupplier);
             
@@ -215,8 +219,7 @@ public class JobOrderService implements Serializable{
         
         //plant's address
         if (plantAddress != null && !plantAddress.isEmpty()) {
-            Join<JobOrder, Offer> offerRoot = root.join(JobOrder_.offer);
-            Join<Offer, SiteSurveyReport> siteSurveyReportRoot = offerRoot.join(Offer_.siteSurveyReport);
+            Join<Offer, SiteSurveyReport> siteSurveyReportRoot = root.join(Offer_.siteSurveyReport);
             Join<SiteSurveyReport, Plant> plantRoot = siteSurveyReportRoot.join(SiteSurveyReport_.plant);
             
             conditions.add(cb.like(cb.lower(plantRoot.get(Plant_.address)), "%" + plantAddress.toLowerCase() + "%"));
@@ -224,8 +227,7 @@ public class JobOrderService implements Serializable{
         
         //system type's name
         if (systemType != null && !systemType.isEmpty()) {
-            Join<JobOrder, Offer> offerRoot = root.join(JobOrder_.offer);
-            Join<Offer, SiteSurveyReport> siteSurveyReportRoot = offerRoot.join(Offer_.siteSurveyReport);
+            Join<Offer, SiteSurveyReport> siteSurveyReportRoot = root.join(Offer_.siteSurveyReport);
             Join<SiteSurveyReport, SiteSurveyRequest> siteSurveyRequestRoot = siteSurveyReportRoot.join(SiteSurveyReport_.request);
             Join<SiteSurveyRequest, SystemType> systemTypeRoot = siteSurveyRequestRoot.join(SiteSurveyRequest_.systemType);
             
