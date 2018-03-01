@@ -52,8 +52,7 @@ public class Area extends BaseEntity<Long>{
     @ManyToOne
     private SupplierItem supplierItem;
     
-    @ManyToOne
-    private DeviceProgrammingType deviceProgrammingType;
+    private String deviceProgrammingTypeStr;
     
     private String field;
     
@@ -70,7 +69,7 @@ public class Area extends BaseEntity<Long>{
         
         final String append = " copied";
         
-        newArea.setDeviceProgrammingType(deviceProgrammingType);
+        newArea.setDeviceProgrammingTypeStr(deviceProgrammingTypeStr);
         newArea.setName(name);
         newArea.setNumber(number + append);
         newArea.setSupplierItem(supplierItem);
@@ -112,12 +111,12 @@ public class Area extends BaseEntity<Long>{
         this.supplierItem = supplierItem;
     }
 
-    public DeviceProgrammingType getDeviceProgrammingType() {
-        return deviceProgrammingType;
+    public String getDeviceProgrammingTypeStr() {
+        return deviceProgrammingTypeStr;
     }
 
-    public void setDeviceProgrammingType(DeviceProgrammingType deviceProgrammingType) {
-        this.deviceProgrammingType = deviceProgrammingType;
+    public void setDeviceProgrammingTypeStr(String deviceProgrammingTypeStr) {
+        this.deviceProgrammingTypeStr = deviceProgrammingTypeStr;
     }
 
     @Override

@@ -20,6 +20,7 @@ import com.prosystemingegneri.censistant.business.production.boundary.DeviceProg
 import com.prosystemingegneri.censistant.business.production.entity.DeviceProgrammingType;
 import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJBException;
@@ -64,6 +65,16 @@ public class DeviceProgrammingTypeListPresenter implements Serializable{
     
     public List<DeviceProgrammingType> completeDeviceProgrammingTypes(String name) {
         return service.listDeviceProgrammingTypes(name);
+    }
+    
+    public List<String> completeDeviceProgrammingTypesStr(String name) {
+        List<String> result = new ArrayList<>();
+        List<DeviceProgrammingType> foundDeviceProgrammingTypes = service.listDeviceProgrammingTypes(name);
+        if (foundDeviceProgrammingTypes != null)
+            for (DeviceProgrammingType deviceProgrammingType : foundDeviceProgrammingTypes)
+                result.add(deviceProgrammingType.getName());
+        
+        return result;
     }
 
     public List<DeviceProgrammingType> getDeviceProgrammingTypes() {

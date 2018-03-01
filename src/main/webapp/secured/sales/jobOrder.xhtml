@@ -374,17 +374,11 @@
                                                 </p:column>
                                                 <p:column headerText="#{msg.production_deviceProgrammingType_name}" filterBy="#{area.deviceProgrammingType.name}" filterMatchMode="contains" priority="6">
                                                     <p:cellEditor>
-                                                        <f:facet name="output"><h:outputText value="#{area.deviceProgrammingType.name}" /></f:facet>
+                                                        <f:facet name="output"><h:outputText value="#{area.deviceProgrammingTypeStr}" /></f:facet>
                                                         <f:facet name="input">
                                                             <p:autoComplete id="deviceProgrammingType"
-                                                                            dropdown="true"
-                                                                            value="#{area.deviceProgrammingType}"
-                                                                            completeMethod="#{deviceProgrammingTypeListPresenter.completeDeviceProgrammingTypes}"
-                                                                            var="deviceProgrammingType"
-                                                                            itemLabel="#{deviceProgrammingType.name}"
-                                                                            itemValue="#{deviceProgrammingType}"
-                                                                            forceSelection="true">
-                                                                <oou:converter converterId="omnifaces.ListConverter" list="#{deviceProgrammingTypeListPresenter.deviceProgrammingTypes}"/>
+                                                                            value="#{area.deviceProgrammingTypeStr}"
+                                                                            completeMethod="#{deviceProgrammingTypeListPresenter.completeDeviceProgrammingTypesStr}">
                                                             </p:autoComplete>
                                                         </f:facet>
                                                     </p:cellEditor>
