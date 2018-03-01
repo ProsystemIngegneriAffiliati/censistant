@@ -158,11 +158,6 @@ public class OfferPresenter implements Serializable{
         return "/secured/customerSupplier/customer?faces-redirect=true";
     }
     
-    public String chooseSystem() {
-        //TODO
-        return "";
-    }
-    
     public void handleSystemAttachmentUpload(FileUploadEvent event) {
         String idMessageWidget = "addSystemAttachmentMessage";
         try {

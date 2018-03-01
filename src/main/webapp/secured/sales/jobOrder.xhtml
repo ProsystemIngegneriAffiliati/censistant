@@ -22,7 +22,7 @@
                             <div class="card card-w-title">
                                 <h1>#{msg.sales_jobOrder}</h1>
                                 <p>#{msg.sales_jobOrder_tip}</p>
-                                <p:panelGrid columns="3" columnClasses="ui-grid-col-2,ui-grid-col-3,ui-grid-col-7" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputNumber id="number" value="#{jobOrderPresenter.jobOrder.number}" decimalPlaces="0" />
                                         <p:outputLabel for="number" value="#{msg.sales_jobOrder_number}" />
@@ -34,42 +34,55 @@
                                         <p:outputLabel for="creation" value="#{msg.sales_jobOrder_creation}"/>
                                         <p:message for="creation"/>
                                     </h:panelGroup>
-
-                                    <h:panelGroup styleClass="md-inputfield">
-                                        <p:inputText id="description" value="#{jobOrderPresenter.jobOrder.description}">
-                                            <p:ajax event="blur" listener="#{jobOrderPresenter.copyJobOrderDescriptionIntoSystemDescription}" />
-                                        </p:inputText>
-                                        <p:outputLabel for="description" value="#{msg.sales_jobOrder_description}"/>
-                                        <p:message for="description"/>
-                                    </h:panelGroup>
                                 </p:panelGrid>
 
                                 <p:tabView id="jobOrderTabs" dynamic="true" activeIndex="#{jobOrderPresenter.activeIndex}">
                                     <p:tab title="#{msg.sales_jobOrder_customerData}">
-                                        <p:panel header="#{msg.siteSurvey_siteSurveyReport}" style="margin-bottom: 25px">
-                                            <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group" rendered="#{jobOrderPresenter.jobOrder.siteSurveyReport.id == null}">
-                                                <h:panelGroup styleClass="md-inputfield">
-                                                    <p:autoComplete id="report"
-                                                                    dropdown="true"
-                                                                    value="#{jobOrderPresenter.selectedReport}"
-                                                                    completeMethod="#{siteSurveyReportListPresenter.completeReportsNotAssociatedToJobOrder}"
-                                                                    var="rep"
-                                                                    itemLabel="#{of:formatDate(rep.expected, 'dd/MM/yyyy')} - #{rep.plant.customerSupplier.name}"
-                                                                    itemValue="#{rep}"
-                                                                    forceSelection="true"
-                                                                    >
-                                                        <oou:converter converterId="omnifaces.ListConverter" list="#{siteSurveyReportListPresenter.reportsNotAssociatedToJobOrder}"/>
-                                                        <p:ajax event="itemSelect" listener="#{jobOrderPresenter.onSiteSurveyReportSelect}" update="reportData" />
-                                                    </p:autoComplete>
-                                                    <p:outputLabel for="report" value="#{msg.siteSurvey_siteSurveyReports}"/>
-                                                    <p:message for="report"/>
+                                        <p:panel header="#{msg.sales_offer} #{msg.or_conjunction} #{msg.siteSurvey_siteSurveyReport}" style="margin-bottom: 25px">
+                                            <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group" rendered="#{jobOrderPresenter.jobOrder.offer.id == null}">
+                                                <h:panelGroup id="offerPanelGroup">
+                                                    <h:panelGroup styleClass="md-inputfield" rendered="#{jobOrderPresenter.dummyReport == null}">
+                                                        <p:autoComplete id="offer"
+                                                                        dropdown="true"
+                                                                        value="#{jobOrderPresenter.dummyOffer}"
+                                                                        completeMethod="#{offerListPresenter.completeOffersNotAssociatedToJobOrder}"
+                                                                        var="off"
+                                                                        itemLabel="#{off.siteSurveyReport.plant.customerSupplier.name} - #{of:formatDate(off.creation, 'dd/MM/yyyy')} - #{off.siteSurveyReport.request.systemType.name}"
+                                                                        itemValue="#{off}"
+                                                                        forceSelection="true"
+                                                                        >
+                                                            <oou:converter converterId="omnifaces.ListConverter" list="#{offerListPresenter.offersNotAssociatedToJobOrder}"/>
+                                                            <p:ajax event="itemSelect" listener="#{jobOrderPresenter.onOfferSelect}" update="reportPanelGroup offerAndReportData" />
+                                                        </p:autoComplete>
+                                                        <p:outputLabel for="offer" value="#{msg.sales_offers}"/>
+                                                        <p:message for="offer"/>
+                                                    </h:panelGroup>
+                                                </h:panelGroup>
+                                                
+                                                <h:panelGroup id="reportPanelGroup">
+                                                    <h:panelGroup styleClass="md-inputfield" rendered="#{jobOrderPresenter.dummyOffer == null}">
+                                                        <p:autoComplete id="report"
+                                                                        dropdown="true"
+                                                                        value="#{jobOrderPresenter.dummyReport}"
+                                                                        completeMethod="#{siteSurveyReportListPresenter.completeReportsNotAssociatedToOffer}"
+                                                                        var="rep"
+                                                                        itemLabel="#{rep.plant.customerSupplier.name} - #{of:formatDate(rep.expected, 'dd/MM/yyyy')} - #{rep.request.systemType.name}"
+                                                                        itemValue="#{rep}"
+                                                                        forceSelection="true"
+                                                                        >
+                                                            <oou:converter converterId="omnifaces.ListConverter" list="#{siteSurveyReportListPresenter.reportsNotAssociatedToOffer}"/>
+                                                            <p:ajax event="itemSelect" listener="#{jobOrderPresenter.onSiteSurveyReportSelect}" update="offerPanelGroup offerAndReportData" />
+                                                        </p:autoComplete>
+                                                        <p:outputLabel for="report" value="#{msg.siteSurvey_siteSurveyReports}"/>
+                                                        <p:message for="report"/>
+                                                    </h:panelGroup>
                                                 </h:panelGroup>
                                             </p:panelGrid>
 
-                                            <p:panelGrid id="reportData" columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                            <p:panelGrid id="offerAndReportData" columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                                 <h:panelGroup styleClass="md-inputfield">
                                                     <h:panelGroup id="newCustomer">
-                                                        <p:commandButton rendered="#{jobOrderPresenter.jobOrder.siteSurveyReport.request.customer == null}"
+                                                        <p:commandButton rendered="#{jobOrderPresenter.jobOrder.offer.siteSurveyReport.request.customer == null}"
                                                                          action="#{jobOrderPresenter.createCustomer()}"
                                                                          title="#{msg.new} #{msg.customerSupplier_customer}"
                                                                          icon="ui-icon-create"
@@ -79,13 +92,13 @@
                                                     </h:panelGroup>
                                                     <p:autoComplete id="requestCustomer"
                                                                     dropdown="true"
-                                                                    value="#{jobOrderPresenter.jobOrder.siteSurveyReport.request.customer}"
+                                                                    value="#{jobOrderPresenter.jobOrder.offer.siteSurveyReport.request.customer}"
                                                                     completeMethod="#{customerSupplierListPresenter.completeCustomer}"
                                                                     var="cust"
                                                                     itemLabel="#{cust.name}"
                                                                     itemValue="#{cust}"
                                                                     forceSelection="true"
-                                                                    disabled="#{jobOrderPresenter.jobOrder.siteSurveyReport.request.id != null}">
+                                                                    disabled="#{jobOrderPresenter.jobOrder.offer.siteSurveyReport.request.id != null}">
                                                         <oou:converter converterId="omnifaces.ListConverter" list="#{customerSupplierListPresenter.customers}"/>
                                                         <p:ajax event="itemSelect" listener="#{jobOrderPresenter.onRequestCustomerSelect}" update="newCustomer openCustomer plant" />
                                                     </p:autoComplete>
@@ -95,7 +108,7 @@
 
                                                 <h:panelGroup styleClass="md-inputfield">
                                                     <h:panelGroup id="openCustomer">
-                                                        <p:commandButton rendered="#{jobOrderPresenter.jobOrder.siteSurveyReport.plant == null}"
+                                                        <p:commandButton rendered="#{jobOrderPresenter.jobOrder.offer.siteSurveyReport.plant == null}"
                                                                          action="#{jobOrderPresenter.openCustomer()}"
                                                                          title="#{msg.new} #{msg.siteSurvey_siteSurveyReport_constructionSite}"
                                                                          icon="ui-icon-create"
@@ -105,7 +118,7 @@
                                                     </h:panelGroup>
                                                     <p:autoComplete id="plant"
                                                                     dropdown="true"
-                                                                    value="#{jobOrderPresenter.jobOrder.siteSurveyReport.plant}"
+                                                                    value="#{jobOrderPresenter.jobOrder.offer.siteSurveyReport.plant}"
                                                                     completeMethod="#{jobOrderPresenter.completePlant}"
                                                                     var="plant"
                                                                     itemLabel="#{plant.address}"
@@ -121,13 +134,13 @@
                                                 <h:panelGroup styleClass="md-inputfield">
                                                     <p:autoComplete id="requestSystemType"
                                                                     dropdown="true"
-                                                                    value="#{jobOrderPresenter.jobOrder.siteSurveyReport.request.systemType}"
+                                                                    value="#{jobOrderPresenter.jobOrder.offer.siteSurveyReport.request.systemType}"
                                                                     completeMethod="#{systemTypeListPresenter.completeSystemTypes}"
                                                                     var="syst"
                                                                     itemLabel="#{syst.name}"
                                                                     itemValue="#{syst}"
                                                                     forceSelection="true"
-                                                                    disabled="#{jobOrderPresenter.jobOrder.siteSurveyReport.request.id != null}">
+                                                                    disabled="#{jobOrderPresenter.jobOrder.offer.siteSurveyReport.request.id != null}">
                                                         <oou:converter converterId="omnifaces.ListConverter" list="#{systemTypeListPresenter.systemTypes}"/>
                                                     </p:autoComplete>
                                                     <p:outputLabel for="requestSystemType" value="#{msg.siteSurvey_systemType_name}"/>
@@ -137,7 +150,7 @@
                                                 <h:panelGroup styleClass="md-inputfield">
                                                     <p:autoComplete id="seller"
                                                                     dropdown="true"
-                                                                    value="#{jobOrderPresenter.jobOrder.siteSurveyReport.seller}"
+                                                                    value="#{jobOrderPresenter.jobOrder.offer.siteSurveyReport.seller}"
                                                                     completeMethod="#{workerListPresenter.completeWorkers}"
                                                                     var="worker"
                                                                     itemLabel="#{worker.name}"
@@ -177,7 +190,7 @@
                                         <h:panelGroup id="systemData">
                                             <p:panelGrid columns="2" columnClasses="ui-grid-col-8,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                                 <h:panelGroup styleClass="md-inputfield">
-                                                    <p:inputText id="systemDescription" value="#{jobOrderPresenter.jobOrder.system.description}"/>
+                                                    <p:inputText id="systemDescription" value="#{jobOrderPresenter.jobOrder.offer.system.description}"/>
                                                     <p:outputLabel for="systemDescription" value="#{msg.production_system_description}"/>
                                                     <p:message for="systemDescription"/>
                                                 </h:panelGroup>
@@ -218,25 +231,25 @@
                                             <p:panelGrid columns="2" columnClasses="ui-grid-col-7,ui-grid-col-5" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                                 <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                                     <h:panelGroup styleClass="md-inputfield">
-                                                        <p:inputText id="systemUserCode" value="#{jobOrderPresenter.jobOrder.system.userCode}"/>
+                                                        <p:inputText id="systemUserCode" value="#{jobOrderPresenter.jobOrder.offer.system.userCode}"/>
                                                         <p:outputLabel for="systemUserCode" value="#{msg.production_system_userCode}"/>
                                                         <p:message for="systemUserCode"/>
                                                     </h:panelGroup>
 
                                                     <h:panelGroup styleClass="md-inputfield">
-                                                        <p:inputText id="systemControlPanelPhoneNumber" value="#{jobOrderPresenter.jobOrder.system.controlPanelPhoneNumber}"/>
+                                                        <p:inputText id="systemControlPanelPhoneNumber" value="#{jobOrderPresenter.jobOrder.offer.system.controlPanelPhoneNumber}"/>
                                                         <p:outputLabel for="systemControlPanelPhoneNumber" value="#{msg.production_system_controlPanelPhoneNumber}"/>
                                                         <p:message for="systemControlPanelPhoneNumber"/>
                                                     </h:panelGroup>
 
                                                     <h:panelGroup styleClass="md-inputfield">
-                                                        <p:inputText id="systemControlPanelPosition" value="#{jobOrderPresenter.jobOrder.system.controlPanelPosition}"/>
+                                                        <p:inputText id="systemControlPanelPosition" value="#{jobOrderPresenter.jobOrder.offer.system.controlPanelPosition}"/>
                                                         <p:outputLabel for="systemControlPanelPosition" value="#{msg.production_system_controlPanelPosition}"/>
                                                         <p:message for="systemControlPanelPosition"/>
                                                     </h:panelGroup>
 
                                                     <h:panelGroup styleClass="md-inputfield">
-                                                        <p:inputText id="systemPowerSource" value="#{jobOrderPresenter.jobOrder.system.powerSource}"/>
+                                                        <p:inputText id="systemPowerSource" value="#{jobOrderPresenter.jobOrder.offer.system.powerSource}"/>
                                                         <p:outputLabel for="systemPowerSource" value="#{msg.production_system_powerSource}"/>
                                                         <p:message for="systemPowerSource"/>
                                                     </h:panelGroup>
@@ -244,7 +257,7 @@
 
                                                 <p:dataTable id="systemAttachmentsTable"
                                                              var="systemAttachment"
-                                                             value="#{jobOrderPresenter.jobOrder.system.systemAttachments}">
+                                                             value="#{jobOrderPresenter.jobOrder.offer.system.systemAttachments}">
                                                     <f:facet name="header">
                                                         <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
                                                             #{msg.production_systemAttachments}
@@ -257,7 +270,7 @@
                                                     <p:column headerText="#{msg.actions}" style="width:72px; text-align:center">
                                                         <p:splitButton value="" icon="ui-icon-file-download" ajax="false">
                                                             <p:fileDownload value="#{jobOrderPresenter.downloadSystemAttachment(systemAttachment)}" />
-                                                            <p:menuitem  value="#{msg.delete}" icon="ui-icon-delete" actionListener="#{jobOrderPresenter.jobOrder.system.removeSystemAttachment(systemAttachment)}" update="systemAttachmentsTable">
+                                                            <p:menuitem  value="#{msg.delete}" icon="ui-icon-delete" actionListener="#{jobOrderPresenter.jobOrder.offer.system.removeSystemAttachment(systemAttachment)}" update="systemAttachmentsTable">
                                                                 <p:confirm header="#{msg.production_systemAttachments_delete}" message="#{msg.production_systemAttachments_delete_tip}" icon="ui-icon-alert"/>
                                                             </p:menuitem>
                                                         </p:splitButton>
@@ -267,7 +280,7 @@
 
                                             <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                                 <h:panelGroup styleClass="md-inputfield">
-                                                    <p:inputTextarea id="systemNotes" value="#{jobOrderPresenter.jobOrder.system.notes}"/>
+                                                    <p:inputTextarea id="systemNotes" value="#{jobOrderPresenter.jobOrder.offer.system.notes}"/>
                                                     <p:outputLabel for="systemNotes" value="#{msg.production_system_notes}"/>
                                                     <p:message for="systemNotes"/>
                                                 </h:panelGroup>
@@ -278,7 +291,7 @@
                                         <h:panelGroup id="systemDevices">
                                             <p:dataTable id="devicesTable"
                                                          var="device"
-                                                         value="#{jobOrderPresenter.jobOrder.system.devices}">
+                                                         value="#{jobOrderPresenter.jobOrder.offer.system.devices}">
                                                 <f:facet name="header">
                                                     <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
                                                         #{msg.production_devices}
@@ -322,7 +335,7 @@
                                         <h:panelGroup id="areaList">
                                             <p:dataTable id="areasTable"
                                                          var="area"
-                                                         value="#{jobOrderPresenter.jobOrder.system.areas}"
+                                                         value="#{jobOrderPresenter.jobOrder.offer.system.areas}"
                                                          editable="true" editMode="cell">
                                                 <f:facet name="header">
                                                     <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">

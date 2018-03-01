@@ -40,16 +40,13 @@
                                 <h:outputText value="#{jobOrder.number}"/>
                             </p:column>
                             <p:column headerText="#{msg.customerSupplier_customer}" field="customerName" priority="4">
-                                <h:outputText value="#{jobOrder.siteSurveyReport.plant.customerSupplier.name}"/>
+                                <h:outputText value="#{jobOrder.offer.siteSurveyReport.plant.customerSupplier.name}"/>
                             </p:column>
                             <p:column headerText="#{msg.customerSupplier_plant_address}" field="plantAddress" priority="5">
-                                <h:outputText value="#{jobOrder.siteSurveyReport.plant.address}"/>
-                            </p:column>
-                            <p:column headerText="#{msg.sales_jobOrder_description}" field="description" priority="3">
-                                <h:outputText value="#{jobOrder.description}"/>
+                                <h:outputText value="#{jobOrder.offer.siteSurveyReport.plant.address}"/>
                             </p:column>
                             <p:column headerText="#{msg.siteSurvey_systemType_name}" field="systemType" priority="2">
-                                <h:outputText value="#{jobOrder.siteSurveyReport.request.systemType.name}"/>
+                                <h:outputText value="#{jobOrder.offer.siteSurveyReport.request.systemType.name}"/>
                             </p:column>
                             <p:column headerText="#{msg.actions}" style="width:64px; text-align:center" priority="0" exportable="false">
                                 <p:button title="#{msg.edit}" icon="ui-icon-edit" styleClass="AquaButton" outcome="/secured/sales/jobOrder">

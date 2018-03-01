@@ -161,7 +161,7 @@
                                                                     itemLabel="#{system.description}"
                                                                     itemValue="#{system}"
                                                                     forceSelection="true">
-                                                        <oou:converter converterId="omnifaces.ListConverter" list="#{systemListPresenter.systems}"/>
+                                                        <oou:converter converterId="omnifaces.ListConverter" list="#{systemListPresenter.systems}" />
                                                         <p:ajax event="itemSelect" listener="#{offerPresenter.onSystemSelect}" update="systemData systemDevices" />
                                                     </p:autoComplete>
                                                     <p:outputLabel for="system" value="#{msg.sales_offer_chooseSystem}"/>

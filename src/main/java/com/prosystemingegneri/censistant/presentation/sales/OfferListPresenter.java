@@ -42,6 +42,8 @@ public class OfferListPresenter implements Serializable{
     private OfferLazyDataModel lazyOffers;
     private List<Offer> selectedOffers;
     
+    private List<Offer> offersNotAssociatedToJobOrder;
+    
     @PostConstruct
     public void init() {
         lazyOffers = new OfferLazyDataModel(service);
@@ -60,6 +62,10 @@ public class OfferListPresenter implements Serializable{
         else
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Missing selection", "Select a row before deleting"));
     }
+    
+    public List<Offer> completeOffersNotAssociatedToJobOrder(String name) {
+        return service.listOffers(0, 10, null, Boolean.FALSE, null, name, null, null, Boolean.FALSE);
+    }
 
     public OfferLazyDataModel getLazyOffers() {
         return lazyOffers;
@@ -76,4 +82,11 @@ public class OfferListPresenter implements Serializable{
     public void setSelectedOffers(List<Offer> selectedOffer) {
         this.selectedOffers = selectedOffer;
     }
+
+    public List<Offer> getOffersNotAssociatedToJobOrder() {
+        if (offersNotAssociatedToJobOrder == null || offersNotAssociatedToJobOrder.isEmpty())
+            offersNotAssociatedToJobOrder = service.listOffers(0, 0, null, Boolean.FALSE, null, null, null, null, Boolean.FALSE);
+        return offersNotAssociatedToJobOrder;
+    }
+    
 }

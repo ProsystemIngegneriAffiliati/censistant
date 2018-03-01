@@ -24,7 +24,9 @@ import com.prosystemingegneri.censistant.business.production.entity.Device;
 import com.prosystemingegneri.censistant.business.production.entity.System;
 import com.prosystemingegneri.censistant.business.production.entity.SystemAttachment;
 import com.prosystemingegneri.censistant.business.sales.boundary.JobOrderService;
+import com.prosystemingegneri.censistant.business.sales.boundary.OfferService;
 import com.prosystemingegneri.censistant.business.sales.entity.JobOrder;
+import com.prosystemingegneri.censistant.business.sales.entity.Offer;
 import com.prosystemingegneri.censistant.business.siteSurvey.boundary.SiteSurveyReportService;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport;
 import com.prosystemingegneri.censistant.business.warehouse.boundary.StockService;
@@ -44,7 +46,6 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJBException;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.event.AjaxBehaviorEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.apache.commons.io.FilenameUtils;
@@ -69,12 +70,15 @@ public class JobOrderPresenter implements Serializable{
     @Inject
     SiteSurveyReportService siteSurveyReportService;
     @Inject
+    OfferService offerService;
+    @Inject
     StockService stockService;
     
     private JobOrder jobOrder;
     private Long id;
     
-    private SiteSurveyReport selectedReport;
+    private Offer dummyOffer;
+    private SiteSurveyReport dummyReport;
     
     private List<Plant> plants;
     
@@ -132,6 +136,10 @@ public class JobOrderPresenter implements Serializable{
         jobOrder.getOffer().addSiteSurveyReport((SiteSurveyReport) event.getObject());
     }
     
+    public void onOfferSelect(SelectEvent event) {
+        jobOrder.addOffer((Offer) event.getObject());
+    }
+    
     public void onRequestCustomerSelect(SelectEvent event) {
         jobOrder.getOffer().getSiteSurveyReport().setPlant(null);
     }
@@ -161,11 +169,6 @@ public class JobOrderPresenter implements Serializable{
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("returnPage", "sales/jobOrder");
         
         return "/secured/customerSupplier/customer?faces-redirect=true";
-    }
-    
-    public String chooseSystem() {
-        //TODO
-        return "";
     }
     
     public void handleSystemAttachmentUpload(FileUploadEvent event) {
@@ -276,14 +279,6 @@ public class JobOrderPresenter implements Serializable{
         this.id = id;
     }
 
-    public SiteSurveyReport getSelectedReport() {
-        return selectedReport;
-    }
-
-    public void setSelectedReport(SiteSurveyReport selectedReport) {
-        this.selectedReport = selectedReport;
-    }
-
     public System getSystem() {
         return system;
     }
@@ -298,6 +293,22 @@ public class JobOrderPresenter implements Serializable{
 
     public void setActiveIndex(Integer activeIndex) {
         this.activeIndex = activeIndex;
+    }
+
+    public Offer getDummyOffer() {
+        return dummyOffer;
+    }
+
+    public void setDummyOffer(Offer dummyOffer) {
+        this.dummyOffer = dummyOffer;
+    }
+
+    public SiteSurveyReport getDummyReport() {
+        return dummyReport;
+    }
+
+    public void setDummyReport(SiteSurveyReport dummyReport) {
+        this.dummyReport = dummyReport;
     }
     
 }

@@ -77,8 +77,8 @@ public class OfferLazyDataModel extends LazyDataModel<Offer>{
             }
         }
         
-        List<Offer> result = service.listOffers(first, pageSize, sortField, isAscending, number, customerName, plantAddress, systemType);
-        this.setRowCount(service.getOffersCount(number, customerName, plantAddress, systemType).intValue());
+        List<Offer> result = service.listOffers(first, pageSize, sortField, isAscending, number, customerName, plantAddress, systemType, null);
+        this.setRowCount(service.getOffersCount(number, customerName, plantAddress, systemType, null).intValue());
         
         return result;
     }
