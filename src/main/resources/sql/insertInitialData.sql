@@ -181,6 +181,8 @@ INSERT INTO system(id, description) VALUES(5, 'Impianto di prova')
 INSERT INTO device(system_id, item_id, quantity, devices_order, version) VALUES(5, 4, 10, 0, 0)
 INSERT INTO device(system_id, item_id, quantity, devices_order, version) VALUES(5, 6, 3, 1, 0)
 
-INSERT INTO joborder(creation, number, description, sitesurveyreport_id, placetype_id, system_id, version) VALUES('2017-12-20', 1, 'Commessa di prova', 1, 2, 5, 0)
+INSERT INTO offer(creation, number, sitesurveyreport_id, system_id, version) VALUES('2017-12-20', 1, 1, 5, 0)
+
+INSERT INTO joborder(creation, number, placetype_id, offer_id, version) VALUES('2017-12-21', 1, 2, 1, 0)
 
 INSERT INTO handleditem(boxeditem_id, worker_id, handlingtimestamp, quantity, fromlocation_id, tolocation_id, version) VALUES(1, 1, '2017-12-20 11:14:00', 1, 3, 5, 0)

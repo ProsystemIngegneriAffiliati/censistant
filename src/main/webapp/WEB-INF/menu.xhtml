@@ -28,6 +28,7 @@
                             </p:submenu>
                         </p:submenu>
                         <p:submenu id="salesMenu" label="#{msg.sales}" icon="&#xE227;">
+                            <p:menuitem id="offersMenu" value="#{msg.sales_offers}" icon="&#xE8F8;" outcome="/secured/sales/offers"/>
                             <p:menuitem id="jobOrdersMenu" value="#{msg.sales_jobOrders}" icon="&#xE8F8;" outcome="/secured/sales/jobOrders"/>
                             <p:submenu id="salesUtils" label="#{msg.utils}" icon="&#xE149;">
                                 <p:menuitem id="placeTypesMenu" value="#{msg.sales_placeTypes}" icon="&#xE3EC;" outcome="/secured/sales/placeTypes"/>

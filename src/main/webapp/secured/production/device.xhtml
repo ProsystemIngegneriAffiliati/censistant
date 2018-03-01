@@ -32,7 +32,7 @@
                                     </h:panelGroup>
 
                                     <h:panelGroup styleClass="md-inputfield">
-                                        <p:inputNumber id="quantity" decimalPlaces="0" value="#{devicePresenter.device.quantity}" />
+                                        <p:inputNumber id="quantity" decimalPlaces="0" minValue="1" value="#{devicePresenter.device.quantity}" />
                                         <p:outputLabel for="quantity" value="#{msg.production_device_quantity}"/>
                                         <p:message for="quantity"/>
                                     </h:panelGroup>

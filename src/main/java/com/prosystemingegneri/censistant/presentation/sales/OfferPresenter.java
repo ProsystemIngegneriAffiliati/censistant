@@ -19,6 +19,7 @@ package com.prosystemingegneri.censistant.presentation.sales;
 import com.prosystemingegneri.censistant.business.customerSupplier.boundary.CustomerSupplierService;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
+import com.prosystemingegneri.censistant.business.production.entity.Device;
 import com.prosystemingegneri.censistant.business.production.entity.System;
 import com.prosystemingegneri.censistant.business.production.entity.SystemAttachment;
 import com.prosystemingegneri.censistant.business.sales.boundary.OfferService;
@@ -213,6 +214,19 @@ public class OfferPresenter implements Serializable{
     private void setExternalContext() {
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("offer", offer);
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("activeIndex", activeIndex);
+    }
+    
+    public void createNewDevice() {
+        offer.getSystem().addDevice(new Device());
+    }
+    
+    public void duplicateDevice(Device device) {
+        offer.getSystem().addDevice(device.duplicate());
+    }
+    
+    public void deleteDevice(Device device) {
+        if (device != null)
+            offer.getSystem().removeDevice(device);
     }
     
     public Offer getOffer() {

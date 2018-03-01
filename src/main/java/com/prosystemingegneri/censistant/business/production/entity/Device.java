@@ -55,6 +55,15 @@ public class Device extends BaseEntity<Long> {
 
     public Device() {
     }
+    
+    public Device duplicate() {
+        Device newDevice = new Device();
+        
+        newDevice.setItem(item);
+        newDevice.setQuantity(quantity);
+        
+        return newDevice;
+    }
 
     public System getSystem() {
         return system;

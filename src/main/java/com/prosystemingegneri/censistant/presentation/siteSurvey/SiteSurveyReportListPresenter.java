@@ -43,7 +43,7 @@ public class SiteSurveyReportListPresenter implements Serializable{
     private SiteSurveyReportLazyDataModel lazySiteSurveyReports;
     private List<SiteSurveyReport> selectedSiteSurveyReports;
     
-    private List<SiteSurveyReport> reportsNotAssociatedToJobOrder;
+    private List<SiteSurveyReport> reportsNotAssociatedToOffer;
     
     @PostConstruct
     public void init() {
@@ -64,14 +64,14 @@ public class SiteSurveyReportListPresenter implements Serializable{
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Missing selection", "Select a row before deleting"));
     }
     
-    public List<SiteSurveyReport> completeReportsNotAssociatedToJobOrder(String name) {
+    public List<SiteSurveyReport> completeReportsNotAssociatedToOffer(String name) {
         return service.listSiteSurveyReports(0, 10, "expected", Boolean.FALSE, null, null, null, name, null, null, null, Boolean.FALSE);
     }
 
-    public List<SiteSurveyReport> getReportsNotAssociatedToJobOrder() {
-        if (reportsNotAssociatedToJobOrder == null || reportsNotAssociatedToJobOrder.isEmpty())
-            reportsNotAssociatedToJobOrder = service.listSiteSurveyReports(0, 0, null, Boolean.FALSE, null, null, null, null, null, null, null, Boolean.FALSE);
-        return reportsNotAssociatedToJobOrder;
+    public List<SiteSurveyReport> getReportsNotAssociatedToOffer() {
+        if (reportsNotAssociatedToOffer == null || reportsNotAssociatedToOffer.isEmpty())
+            reportsNotAssociatedToOffer = service.listSiteSurveyReports(0, 0, null, Boolean.FALSE, null, null, null, null, null, null, null, Boolean.FALSE);
+        return reportsNotAssociatedToOffer;
     }
 
     public SiteSurveyReportLazyDataModel getLazySiteSurveyReports() {
