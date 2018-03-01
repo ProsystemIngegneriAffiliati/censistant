@@ -43,7 +43,7 @@
                                                 <h:panelGroup styleClass="md-inputfield">
                                                     <p:autoComplete id="report"
                                                                     dropdown="true"
-                                                                    value="#{offerPresenter.selectedReport}"
+                                                                    value="#{offerPresenter.dummyReport}"
                                                                     completeMethod="#{siteSurveyReportListPresenter.completeReportsNotAssociatedToOffer}"
                                                                     var="rep"
                                                                     itemLabel="#{of:formatDate(rep.expected, 'dd/MM/yyyy')} - #{rep.plant.customerSupplier.name}"

@@ -389,11 +389,21 @@
                                                         </f:facet>
                                                     </p:cellEditor>
                                                 </p:column>
+                                                <p:column headerText="#{msg.production_area_field}" filterBy="#{area.field}" filterMatchMode="contains" priority="6">
+                                                    <p:cellEditor>
+                                                        <f:facet name="output"><h:outputText value="#{area.field}" /></f:facet>
+                                                        <f:facet name="input"><p:inputText value="#{area.field}" /></f:facet>
+                                                    </p:cellEditor>
+                                                </p:column>
+                                                <p:column headerText="#{msg.production_area_notes}" filterBy="#{area.notes}" filterMatchMode="contains" priority="7">
+                                                    <p:cellEditor>
+                                                        <f:facet name="output"><h:outputText value="#{area.notes}" /></f:facet>
+                                                        <f:facet name="input"><p:inputText value="#{area.notes}" /></f:facet>
+                                                    </p:cellEditor>
+                                                </p:column>
                                                 <p:column headerText="#{msg.actions}" style="width:72px; text-align:center" priority="0">
                                                     <p:splitButton value="#{msg.duplicate}" icon="ui-icon-control-point-duplicate" action="#{jobOrderPresenter.duplicateArea(area)}" update="areasTable">
-                                                        <p:menuitem  value="#{msg.delete}" icon="ui-icon-delete" actionListener="#{jobOrderPresenter.deleteArea(area)}" update="areasTable">
-                                                            <p:confirm header="#{msg.production_areas_delete}" message="#{msg.production_areas_delete_tip}" icon="ui-icon-alert"/>
-                                                        </p:menuitem>
+                                                        <p:menuitem  value="#{msg.delete}" icon="ui-icon-delete" actionListener="#{jobOrderPresenter.deleteArea(area)}" update="areasTable" />
                                                     </p:splitButton>
                                                 </p:column>
                                             </p:dataTable>

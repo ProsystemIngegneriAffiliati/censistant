@@ -69,7 +69,7 @@ public class OfferPresenter implements Serializable{
     private Offer offer;
     private Long id;
     
-    private SiteSurveyReport selectedReport;
+    private SiteSurveyReport dummyReport;
     
     private List<Plant> plants;
     
@@ -240,14 +240,6 @@ public class OfferPresenter implements Serializable{
         this.id = id;
     }
 
-    public SiteSurveyReport getSelectedReport() {
-        return selectedReport;
-    }
-
-    public void setSelectedReport(SiteSurveyReport selectedReport) {
-        this.selectedReport = selectedReport;
-    }
-
     public System getSystem() {
         return system;
     }
@@ -262,6 +254,14 @@ public class OfferPresenter implements Serializable{
 
     public void setActiveIndex(Integer activeIndex) {
         this.activeIndex = activeIndex;
+    }
+
+    public SiteSurveyReport getDummyReport() {
+        return dummyReport;
+    }
+
+    public void setDummyReport(SiteSurveyReport dummyReport) {
+        this.dummyReport = dummyReport;
     }
     
 }

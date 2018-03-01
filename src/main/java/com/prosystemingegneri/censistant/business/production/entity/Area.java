@@ -49,13 +49,15 @@ public class Area extends BaseEntity<Long>{
     @Column(nullable = false)
     private String name;
     
-    @NotNull
-    @ManyToOne(optional = false)
+    @ManyToOne
     private SupplierItem supplierItem;
     
-    @NotNull
-    @ManyToOne(optional = false)
+    @ManyToOne
     private DeviceProgrammingType deviceProgrammingType;
+    
+    private String field;
+    
+    private String notes;
     
     @Version
     private int version;
@@ -72,6 +74,8 @@ public class Area extends BaseEntity<Long>{
         newArea.setName(name);
         newArea.setNumber(number + append);
         newArea.setSupplierItem(supplierItem);
+        newArea.setField(field);
+        newArea.setNotes(notes);
         
         return newArea;
     }
@@ -119,6 +123,22 @@ public class Area extends BaseEntity<Long>{
     @Override
     public Long getId() {
         return id;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    public String getField() {
+        return field;
+    }
+
+    public void setField(String field) {
+        this.field = field;
     }
     
 }
