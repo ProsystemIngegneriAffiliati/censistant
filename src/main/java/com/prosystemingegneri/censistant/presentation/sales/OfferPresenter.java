@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Prosystem Ingegneri Affiliati
+ * Copyright (C) 2018 Prosystem Ingegneri Affiliati
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -19,15 +19,12 @@ package com.prosystemingegneri.censistant.presentation.sales;
 import com.prosystemingegneri.censistant.business.customerSupplier.boundary.CustomerSupplierService;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
-import com.prosystemingegneri.censistant.business.production.entity.Area;
-import com.prosystemingegneri.censistant.business.production.entity.Device;
 import com.prosystemingegneri.censistant.business.production.entity.System;
 import com.prosystemingegneri.censistant.business.production.entity.SystemAttachment;
-import com.prosystemingegneri.censistant.business.sales.boundary.JobOrderService;
-import com.prosystemingegneri.censistant.business.sales.entity.JobOrder;
+import com.prosystemingegneri.censistant.business.sales.boundary.OfferService;
+import com.prosystemingegneri.censistant.business.sales.entity.Offer;
 import com.prosystemingegneri.censistant.business.siteSurvey.boundary.SiteSurveyReportService;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport;
-import com.prosystemingegneri.censistant.business.warehouse.boundary.StockService;
 import com.prosystemingegneri.censistant.presentation.DocumentAndImageUtils;
 import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
 import java.io.FileInputStream;
@@ -44,7 +41,6 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJBException;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.event.AjaxBehaviorEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.apache.commons.io.FilenameUtils;
@@ -57,21 +53,19 @@ import org.primefaces.model.UploadedFile;
 
 /**
  *
- * @author Davide Mainardi <ingmainardi@live.com>
+ * @author Davide Mainardi <ingmainardi at live.com>
  */
 @Named
 @ViewScoped
-public class JobOrderPresenter implements Serializable{
+public class OfferPresenter implements Serializable{
     @Inject
-    JobOrderService service;
+    OfferService service;
     @Inject
     CustomerSupplierService customerSupplierService;
     @Inject
     SiteSurveyReportService siteSurveyReportService;
-    @Inject
-    StockService stockService;
     
-    private JobOrder jobOrder;
+    private Offer offer;
     private Long id;
     
     private SiteSurveyReport selectedReport;
@@ -84,65 +78,65 @@ public class JobOrderPresenter implements Serializable{
     
     @PostConstruct
     public void init() {
-        jobOrder = (JobOrder) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("jobOrder");
+        offer = (Offer) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("offer");
         activeIndex = (Integer) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("activeIndex");
         
         if (activeIndex == null)
             activeIndex = 0;
         
-        if (jobOrder != null) {
+        if (offer != null) {
             Long idCustomer = (Long) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("idCustomer");
             if (idCustomer != null && idCustomer > 0) {
                 CustomerSupplier customer = customerSupplierService.readCustomerSupplier(idCustomer);
-                jobOrder.getOffer().getSiteSurveyReport().getRequest().setCustomer(customer);
+                offer.getSiteSurveyReport().getRequest().setCustomer(customer);
                 if (!customer.getPlants().isEmpty()) {
                     Plant mostRecentPlant = customer.getPlants().get(0);
                     for (Plant plant : customer.getPlants())
                         if (plant.getId() != null && plant.getId() > mostRecentPlant.getId())
                             mostRecentPlant = plant;
                     
-                    jobOrder.getOffer().getSiteSurveyReport().setPlant(mostRecentPlant);
+                    offer.getSiteSurveyReport().setPlant(mostRecentPlant);
                 }
             }
-            system = jobOrder.getOffer().getSystem();
+            system = offer.getSystem();
         }
     }
     
-    public String saveJobOrder() {
+    public String saveOffer() {
         try {
-            service.saveJobOrder(jobOrder);
+            service.saveOffer(offer);
         } catch (EJBException e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", ExceptionUtility.unwrap(e.getCausedByException()).getLocalizedMessage()));
             return null;
         }
         
-        return "/secured/sales/jobOrders?faces-redirect=true";
+        return "/secured/sales/offers?faces-redirect=true";
     }
     
-    public void detailJobOrder() {
-        if (jobOrder == null && id != null) {
+    public void detailOffer() {
+        if (offer == null && id != null) {
             if (id == 0)
-                jobOrder = service.createNewJobOrder();
+                offer = service.createNewOffer();
             else
-                jobOrder = service.readJobOrder(id);
+                offer = service.readOffer(id);
         }
     }
     
     public void onSiteSurveyReportSelect(SelectEvent event) {
-        jobOrder.getOffer().addSiteSurveyReport((SiteSurveyReport) event.getObject());
+        offer.addSiteSurveyReport((SiteSurveyReport) event.getObject());
     }
     
     public void onRequestCustomerSelect(SelectEvent event) {
-        jobOrder.getOffer().getSiteSurveyReport().setPlant(null);
+        offer.getSiteSurveyReport().setPlant(null);
     }
 
     public void onSystemSelect(SelectEvent event) {
         if (event.getObject() != null) {
-            System oldSystem = jobOrder.getOffer().getSystem();
-            oldSystem.removeOffer(jobOrder.getOffer());
+            System oldSystem = offer.getSystem();
+            oldSystem.removeOffer(offer);
             
             System selectedSystem = (System) event.getObject();
-            selectedSystem.addOffer(jobOrder.getOffer());
+            selectedSystem.addOffer(offer);
         }
     }
     
@@ -151,14 +145,14 @@ public class JobOrderPresenter implements Serializable{
     }
     
     public String openCustomer() {
-        return prepareToOpenCustomer(jobOrder.getOffer().getSiteSurveyReport().getRequest().getCustomer());
+        return prepareToOpenCustomer(offer.getSiteSurveyReport().getRequest().getCustomer());
     }
     
     private String prepareToOpenCustomer(CustomerSupplier customer) {
         setExternalContext();
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("customerSupplier", customer);
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("isCustomerView", Boolean.TRUE);
-        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("returnPage", "sales/jobOrder");
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("returnPage", "sales/offer");
         
         return "/secured/customerSupplier/customer?faces-redirect=true";
     }
@@ -185,7 +179,7 @@ public class JobOrderPresenter implements Serializable{
             SystemAttachment attachment = new SystemAttachment();
             attachment.setName(filename);
             attachment.setAttachmentFilename(FilenameUtils.getName(file.toString()));
-            jobOrder.getOffer().getSystem().addSystemAttachment(attachment);
+            offer.getSystem().addSystemAttachment(attachment);
         } catch (IOException ex) {
             FacesContext.getCurrentInstance().addMessage(idMessageWidget, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Error during file uploading" + 
                     java.lang.System.lineSeparator() +
@@ -207,65 +201,26 @@ public class JobOrderPresenter implements Serializable{
     }
     
     public List<Plant> completePlant(String value) {
-        return customerSupplierService.listPlants(0, 10, "address", Boolean.TRUE, jobOrder.getOffer().getSiteSurveyReport().getRequest().getCustomer(), value);
+        return customerSupplierService.listPlants(0, 10, "address", Boolean.TRUE, offer.getSiteSurveyReport().getRequest().getCustomer(), value);
     }
     
     public List<Plant> getPlants() {
         if (plants == null || plants.isEmpty())
-            plants = customerSupplierService.listPlants(0, 0, null, null, jobOrder.getOffer().getSiteSurveyReport().getRequest().getCustomer(), null);
+            plants = customerSupplierService.listPlants(0, 0, null, null, offer.getSiteSurveyReport().getRequest().getCustomer(), null);
         return plants;
     }
     
-    public void createNewArea() {
-        jobOrder.getOffer().getSystem().addArea(new Area());
-    }
-    
-    public void duplicateArea(Area area) {
-        jobOrder.getOffer().getSystem().addArea(area.duplicate());
-    }
-    
-    public void deleteArea(Area area) {
-        if (area != null)
-            jobOrder.getOffer().getSystem().removeArea(area);
-    }
-    
-    public String openItemMovement() {
-        setExternalContext();
-        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("returnPage", "sales/jobOrder");
-        return "/secured/warehouse/itemMovement?faces-redirect=true";
-    }
-    
-    public String detailDevice(Device device) {
-        if (device != null)
-            FacesContext.getCurrentInstance().getExternalContext().getFlash().put("device", device);
-        setExternalContext();
-        
-        return "/secured/production/device?faces-redirect=true";
-    }
-    
     private void setExternalContext() {
-        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("jobOrder", jobOrder);
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("offer", offer);
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("activeIndex", activeIndex);
     }
     
-    public void deleteDevice(Device device) {
-        if (device != null)
-            jobOrder.getOffer().getSystem().removeDevice(device);
-    }
-    
-    public Long calculateDevicePlacedQuantity(Device device) {
-        if (jobOrder != null && jobOrder.getOffer().getSystem() != null && device != null)
-            return stockService.countPlacedQuantity(jobOrder.getOffer().getSystem().getId(), device.getItem().getId());
-        else
-            return Long.getLong("0");
-    }
-    
-    public JobOrder getJobOrder() {
-        return jobOrder;
+    public Offer getOffer() {
+        return offer;
     }
 
-    public void setJobOrder(JobOrder jobOrder) {
-        this.jobOrder = jobOrder;
+    public void setOffer(Offer offer) {
+        this.offer = offer;
     }
 
     public Long getId() {

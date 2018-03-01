@@ -81,7 +81,7 @@ public class StockListPresenter implements Serializable{
         
         if (jobOrder != null) {
             locationTypeArrival = LocationType.SYSTEM;
-            locationArrival = jobOrder.getSystem();
+            locationArrival = jobOrder.getOffer().getSystem();
         }
         
         initPreparedStock();
@@ -136,7 +136,7 @@ public class StockListPresenter implements Serializable{
                     if (moved > 1)
                         itemStr += "s";
                     if (returnPage != null && !returnPage.isEmpty()) {
-                        jobOrder.setSystem((System) locationArrival);
+                        jobOrder.getOffer().setSystem((System) locationArrival);
                         putExternalContext();
                         return "/secured/" + returnPage + "?faces-redirect=true";
                     }

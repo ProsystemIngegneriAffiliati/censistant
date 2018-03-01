@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Prosystem Ingegneri Affiliati
+ * Copyright (C) 2018 Prosystem Ingegneri Affiliati
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -16,8 +16,8 @@
  */
 package com.prosystemingegneri.censistant.presentation.sales;
 
-import com.prosystemingegneri.censistant.business.sales.boundary.JobOrderService;
-import com.prosystemingegneri.censistant.business.sales.entity.JobOrder;
+import com.prosystemingegneri.censistant.business.sales.boundary.OfferService;
+import com.prosystemingegneri.censistant.business.sales.entity.Offer;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -28,22 +28,22 @@ import static org.primefaces.model.SortOrder.DESCENDING;
 
 /**
  *
- * @author Davide Mainardi <ingmainardi@live.com>
+ * @author Davide Mainardi <ingmainardi at live.com>
  */
-public class JobOrderLazyDataModel extends LazyDataModel<JobOrder>{
-    private final JobOrderService service;
+public class OfferLazyDataModel extends LazyDataModel<Offer>{
+    private final OfferService service;
 
-    public JobOrderLazyDataModel(JobOrderService service) {
+    public OfferLazyDataModel(OfferService service) {
         this.service = service;
     }
     
     @Override
-    public Object getRowKey(JobOrder object) {
+    public Object getRowKey(Offer object) {
         return object.getId();
     }
     
     @Override
-    public List<JobOrder> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
+    public List<Offer> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
         Boolean isAscending = null;
         Integer number = null;
         String customerName = null;
@@ -77,16 +77,16 @@ public class JobOrderLazyDataModel extends LazyDataModel<JobOrder>{
             }
         }
         
-        List<JobOrder> result = service.listJobOrders(first, pageSize, sortField, isAscending, number, customerName, plantAddress, systemType);
-        this.setRowCount(service.getJobOrdersCount(number, customerName, plantAddress, systemType).intValue());
+        List<Offer> result = service.listOffers(first, pageSize, sortField, isAscending, number, customerName, plantAddress, systemType);
+        this.setRowCount(service.getOffersCount(number, customerName, plantAddress, systemType).intValue());
         
         return result;
     }
 
     @Override
-    public JobOrder getRowData(String rowKey) {
+    public Offer getRowData(String rowKey) {
         try {
-            return service.readJobOrder(Long.parseLong(rowKey));
+            return service.readOffer(Long.parseLong(rowKey));
         } catch (NumberFormatException e) {
             return null;
         }

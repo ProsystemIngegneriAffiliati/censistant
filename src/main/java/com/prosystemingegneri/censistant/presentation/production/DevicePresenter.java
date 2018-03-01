@@ -46,7 +46,7 @@ public class DevicePresenter implements Serializable {
     
     public String saveDevice() {
         if (device.getSystem() == null)
-            jobOrder.getSystem().addDevice(device);
+            jobOrder.getOffer().getSystem().addDevice(device);
         
         putExternalContext();
         
