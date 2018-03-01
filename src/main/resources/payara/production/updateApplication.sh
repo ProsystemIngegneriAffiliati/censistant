@@ -1,6 +1,6 @@
 #!/bin/sh
 
-readonly APP_ID=1
+readonly APP_ID=
 readonly APP_NAME=censistant
 readonly AS_IP_ADDRESS=192.168.2.252
 readonly AS_EXTERNAL_SSH_PORT=22

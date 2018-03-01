@@ -1,6 +1,6 @@
 #!/bin/bash
 
-readonly APP_ID=1
+readonly APP_ID=
 readonly APP_NAME=censistant
 readonly DB_IP_ADDRESS=192.168.2.251
 readonly DB_EXTERNAL_SSH_PORT=22

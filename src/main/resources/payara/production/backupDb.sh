@@ -1,6 +1,6 @@
 #!/bin/bash
 
-readonly APP_ID=1
+readonly APP_ID=
 readonly APP_NAME=censistant
 readonly EMAIL="mainardi@prosystemingegneri.com"
 
