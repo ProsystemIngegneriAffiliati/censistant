@@ -38,7 +38,7 @@
                                         <p:outputLabel for="quantity" value="#{msg.production_device_quantity}"/>
                                         <p:message for="quantity"/>
                                     </h:panelGroup>
-                                    
+
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputText id="unitMeasure" readonly="true" value="#{devicePresenter.device.item.unitMeasure.name}" />
                                         <p:outputLabel for="unitMeasure" value="#{msg.production_unitMeasure_symbol}"/>
@@ -48,24 +48,26 @@
 
                                 <p:dataTable id="deviceMovementsTable"
                                              var="handledItem"
-                                             value="#{devicePresenter.deviceMovements}">
+                                             value="#{devicePresenter.deviceMovements}"
+                                             rowStyleClass="#{handledItemPresenter.checkIfMovementIsFromOrTo(handledItem, devicePresenter.device.system)}">
                                     <f:facet name="header">
                                         <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
                                             #{msg.production_devices_itemMovements}
-                                            <p:commandButton title="#{msg.warehouse_itemMovement}" icon="ui-icon-card-travel" action="#{devicePresenter.openItemMovement()}" ajax="false">
-                                                <oou:ignoreValidationFailed />
-                                            </p:commandButton>
+                                            <p:outputPanel style="display: inline-block">
+                                                #{msg.production_device_placedQuantity}: #{devicePresenter.calculateDevicePlacedQuantity()}
+                                            </p:outputPanel>
                                         </p:panelGrid>
                                     </f:facet>
-                                    <p:column headerText="#{msg.warehouse_location}" priority="2">
-                                        <h:outputText value="#{devicePresenter.device.system.equals(handledItem.fromLocation) ? handledItem.toLocation.name : handledItem.fromLocation.name}" />
+                                    <p:column headerText="#{msg.warehouse_location}" priority="4">
+                                        <h:outputText rendered="#{devicePresenter.device.system.equals(handledItem.toLocation)}" value="#{handledItem.fromLocation.name} --> #{msg.production_system}" />
+                                        <h:outputText rendered="#{devicePresenter.device.system.equals(handledItem.fromLocation)}" value="#{msg.production_system} --> #{handledItem.toLocation.name}" />
                                     </p:column>
                                     <p:column headerText="#{msg.purchasing_supplierItem_code}" priority="2">
                                         <h:outputText value="#{handledItem.boxedItem.item.code}" />
                                     </p:column>
                                     <p:column headerText="#{msg.warehouse_handledItem_handlingTimestamp}" priority="0">
                                         <h:outputText value="#{handledItem.handlingTimestamp}">
-                                            <f:convertDateTime type="both" />
+                                            <f:convertDateTime type="both" dateStyle="short" timeStyle="short" />
                                         </h:outputText>
                                     </p:column>
                                     <p:column headerText="#{msg.siteSurvey_worker_name}" filterBy="#{handledItem.worker.initials}" filterMatchMode="contains" priority="3">

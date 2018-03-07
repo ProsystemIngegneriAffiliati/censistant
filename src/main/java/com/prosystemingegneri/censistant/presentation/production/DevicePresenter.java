@@ -19,6 +19,7 @@ package com.prosystemingegneri.censistant.presentation.production;
 import com.prosystemingegneri.censistant.business.production.entity.Device;
 import com.prosystemingegneri.censistant.business.sales.entity.JobOrder;
 import com.prosystemingegneri.censistant.business.warehouse.boundary.HandledItemService;
+import com.prosystemingegneri.censistant.business.warehouse.boundary.StockService;
 import com.prosystemingegneri.censistant.business.warehouse.entity.HandledItem;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -38,6 +39,8 @@ import org.omnifaces.cdi.ViewScoped;
 public class DevicePresenter implements Serializable {
     @Inject
     HandledItemService handledItemService;
+    @Inject
+    StockService stockService;
     
     private Device device;
     private JobOrder jobOrder;
@@ -81,11 +84,11 @@ public class DevicePresenter implements Serializable {
         return result;
     }
     
-    public String openItemMovement() {
-        putExternalContext();
-        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("device", device);
-        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("returnPage", "production/device");
-        return "/secured/warehouse/itemMovement?faces-redirect=true";
+    public Long calculateDevicePlacedQuantity() {
+        if (device != null)
+            return stockService.countPlacedQuantity(device.getSystem().getId(), device.getItem().getId());
+        else
+            return Long.getLong("0");
     }
 
     public Device getDevice() {

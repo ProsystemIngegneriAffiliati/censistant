@@ -16,6 +16,8 @@
  */
 package com.prosystemingegneri.censistant.presentation.warehouse;
 
+import com.prosystemingegneri.censistant.business.warehouse.entity.HandledItem;
+import com.prosystemingegneri.censistant.business.warehouse.entity.Location;
 import java.io.Serializable;
 import javax.inject.Named;
 import org.omnifaces.cdi.ViewScoped;
@@ -28,4 +30,15 @@ import org.omnifaces.cdi.ViewScoped;
 @ViewScoped
 public class HandledItemPresenter implements Serializable{
     
+    public String checkIfMovementIsFromOrTo(HandledItem handledItem, Location location) {
+        
+        if (handledItem != null && location != null) {
+            if (location.equals(handledItem.getFromLocation()))
+                return "movementFrom-row";
+            else
+                return "movementInto-row";
+        }
+        
+        return "";
+    }
 }
