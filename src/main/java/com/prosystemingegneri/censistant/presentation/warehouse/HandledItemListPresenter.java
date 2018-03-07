@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Prosystem Ingegneri Affiliati
+ * Copyright (C) 2018 Prosystem Ingegneri Affiliati
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -14,10 +14,10 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.prosystemingegneri.censistant.presentation.purchasing;
+package com.prosystemingegneri.censistant.presentation.warehouse;
 
-import com.prosystemingegneri.censistant.business.purchasing.boundary.BoxService;
-import com.prosystemingegneri.censistant.business.purchasing.entity.Box;
+import com.prosystemingegneri.censistant.business.warehouse.boundary.HandledItemService;
+import com.prosystemingegneri.censistant.business.warehouse.entity.HandledItem;
 import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
 import java.io.Serializable;
 import java.util.List;
@@ -31,29 +31,27 @@ import org.omnifaces.cdi.ViewScoped;
 
 /**
  *
- * @author Davide Mainardi <ingmainardi@live.com>
+ * @author Davide Mainardi <ingmainardi at live.com>
  */
 @Named
 @ViewScoped
-public class BoxListPresenter implements Serializable{
+public class HandledItemListPresenter implements Serializable{
     @Inject
-    BoxService service;
+    HandledItemService service;
     
-    private BoxLazyDataModel lazyBoxes;
-    private List<Box> selectedBoxes;
-    
-    private List<Box> boxes;
+    private HandledItemLazyDataModel lazyHandledItems;
+    private List<HandledItem> selectedHandledItems;
     
     @PostConstruct
     public void init() {
-        lazyBoxes = new BoxLazyDataModel(service);
+        lazyHandledItems = new HandledItemLazyDataModel(service);
     }
     
-    public void deleteBox() {
-        if (selectedBoxes != null && !selectedBoxes.isEmpty()) {
-            for (Box boxTemp : selectedBoxes) {
+    public void deleteHandledItem() {
+        if (selectedHandledItems != null && !selectedHandledItems.isEmpty()) {
+            for (HandledItem handledItemTemp : selectedHandledItems) {
                 try {
-                    service.deleteBox(boxTemp.getId());
+                    service.deleteHandledItem(handledItemTemp.getId());
                 } catch (EJBException e) {
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", ExceptionUtility.unwrap(e.getCausedByException()).getLocalizedMessage()));
                 }
@@ -62,30 +60,21 @@ public class BoxListPresenter implements Serializable{
         else
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Missing selection", "Select a row before deleting"));
     }
+
+    public HandledItemLazyDataModel getLazyHandledItems() {
+        return lazyHandledItems;
+    }
+
+    public void setLazyHandledItems(HandledItemLazyDataModel lazyHandledItems) {
+        this.lazyHandledItems = lazyHandledItems;
+    }
+
+    public List<HandledItem> getSelectedHandledItems() {
+        return selectedHandledItems;
+    }
+
+    public void setSelectedHandledItems(List<HandledItem> selectedHandledItems) {
+        this.selectedHandledItems = selectedHandledItems;
+    }
     
-    public List<Box> completeBoxes(String value) {
-        return service.listBoxes(0, 10, null, null, value);
-    }
-
-    public List<Box> getBoxes() {
-        if (boxes == null || boxes.isEmpty())
-            boxes = service.listBoxes(0, 0, null, null, null);
-        return boxes;
-    }
-
-    public BoxLazyDataModel getLazyBoxes() {
-        return lazyBoxes;
-    }
-
-    public void setLazyBoxes(BoxLazyDataModel lazyBoxes) {
-        this.lazyBoxes = lazyBoxes;
-    }
-
-    public List<Box> getSelectedBoxes() {
-        return selectedBoxes;
-    }
-
-    public void setSelectedBoxes(List<Box> selectedBox) {
-        this.selectedBoxes = selectedBox;
-    }
 }

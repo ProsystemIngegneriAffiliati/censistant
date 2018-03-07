@@ -26,6 +26,7 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -35,6 +36,9 @@ import javax.validation.constraints.NotNull;
 @Entity
 @DiscriminatorValue(value = "2")
 public class System extends Location {
+    
+    @Transient
+    private String name;    //useful only to entity metadata
     
     @NotNull
     @Column(nullable = false)

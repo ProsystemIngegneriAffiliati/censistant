@@ -27,6 +27,7 @@ import javax.persistence.metamodel.StaticMetamodel;
  */
 @StaticMetamodel(System.class)
 public class System_ {
+    public static volatile SingularAttribute<System, String> name;
     public static volatile SingularAttribute<System, String> description;
     public static volatile ListAttribute<System, JobOrder> jobOrders;
 }

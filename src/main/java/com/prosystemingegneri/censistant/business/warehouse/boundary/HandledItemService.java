@@ -16,22 +16,39 @@
  */
 package com.prosystemingegneri.censistant.business.warehouse.boundary;
 
+import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
+import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier_;
+import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
+import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant_;
 import com.prosystemingegneri.censistant.business.production.boundary.DeviceService;
 import com.prosystemingegneri.censistant.business.production.boundary.SystemService;
 import com.prosystemingegneri.censistant.business.production.entity.Device;
 import com.prosystemingegneri.censistant.business.production.entity.Item;
 import com.prosystemingegneri.censistant.business.production.entity.System;
+import com.prosystemingegneri.censistant.business.production.entity.System_;
 import com.prosystemingegneri.censistant.business.purchasing.entity.BoxedItem;
 import com.prosystemingegneri.censistant.business.purchasing.entity.BoxedItem_;
 import com.prosystemingegneri.censistant.business.purchasing.entity.SupplierItem;
 import com.prosystemingegneri.censistant.business.purchasing.entity.SupplierItem_;
+import com.prosystemingegneri.censistant.business.sales.entity.JobOrder;
+import com.prosystemingegneri.censistant.business.sales.entity.JobOrder_;
+import com.prosystemingegneri.censistant.business.sales.entity.Offer;
+import com.prosystemingegneri.censistant.business.sales.entity.Offer_;
 import com.prosystemingegneri.censistant.business.siteSurvey.boundary.WorkerService;
+import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport;
+import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport_;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.Worker;
+import com.prosystemingegneri.censistant.business.siteSurvey.entity.Worker_;
 import com.prosystemingegneri.censistant.business.user.entity.UserApp;
 import com.prosystemingegneri.censistant.business.warehouse.control.Stock;
 import com.prosystemingegneri.censistant.business.warehouse.entity.HandledItem;
 import com.prosystemingegneri.censistant.business.warehouse.entity.HandledItem_;
 import com.prosystemingegneri.censistant.business.warehouse.entity.Location;
+import com.prosystemingegneri.censistant.business.warehouse.entity.Location_;
+import com.prosystemingegneri.censistant.business.warehouse.entity.SupplierLocation;
+import com.prosystemingegneri.censistant.business.warehouse.entity.SupplierLocation_;
+import com.prosystemingegneri.censistant.business.warehouse.entity.Warehouse;
+import com.prosystemingegneri.censistant.business.warehouse.entity.Warehouse_;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -46,6 +63,7 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
@@ -130,21 +148,57 @@ public class HandledItemService implements Serializable{
         em.remove(readHandledItem(id));
     }
     
-    public List<HandledItem> listHandledItems(int first, int pageSize, String sortField, Boolean isAscending, BoxedItem boxedItem, Location fromOrToLocation, Item item) {
+    public List<HandledItem> listHandledItems(int first, int pageSize, String sortField, Boolean isAscending, String workerName, String supplierItemCode, String fromLocationName, String toLocationName, BoxedItem boxedItem, Location fromOrToLocation, Item item) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<HandledItem> query = cb.createQuery(HandledItem.class);
         Root<HandledItem> root = query.from(HandledItem.class);
         CriteriaQuery<HandledItem> select = query.select(root).distinct(true);
         
-        List<Predicate> conditions = calculateConditions(cb, root, boxedItem, fromOrToLocation, item);
+        List<Predicate> conditions = calculateConditions(cb, root, workerName, supplierItemCode, fromLocationName, toLocationName, boxedItem, fromOrToLocation, item);
 
         if (!conditions.isEmpty())
             query.where(conditions.toArray(new Predicate[conditions.size()]));
         
         Order order = cb.desc(root.get(HandledItem_.handlingTimestamp));
         if (isAscending != null && sortField != null && !sortField.isEmpty()) {
-            Path<?> path;
+            Path<?> path = null;
+            Path<Warehouse> warehousePath;
+            Path<SupplierLocation> supplierLocationPath;
+            Path<System> systemPath;
             switch (sortField) {
+                case "handlingTimestamp":
+                    path = root.get(HandledItem_.handlingTimestamp);
+                    break;
+                case "workerName":
+                    path = root.get(HandledItem_.worker).get(Worker_.name);
+                    break;
+                case "supplierItemCode":
+                    path = root.get(HandledItem_.boxedItem).get(BoxedItem_.item).get(SupplierItem_.code);
+                    break;
+                case "fromLocationName":
+                    warehousePath = cb.treat(root.get(HandledItem_.fromLocation), Warehouse.class);
+                    supplierLocationPath = cb.treat(root.get(HandledItem_.fromLocation), SupplierLocation.class);
+                    systemPath = cb.treat(root.get(HandledItem_.fromLocation), System.class);
+                    
+                    if (warehousePath != null)
+                        path = warehousePath.get(Warehouse_.name);
+                    else if (supplierLocationPath != null)
+                        path = supplierLocationPath.get(SupplierLocation_.supplier).get(CustomerSupplier_.name);
+                    else if (systemPath != null)
+                        path = systemPath.get(System_.name);
+                    break;
+                case "toLocationName":
+                    warehousePath = cb.treat(root.get(HandledItem_.toLocation), Warehouse.class);
+                    supplierLocationPath = cb.treat(root.get(HandledItem_.toLocation), SupplierLocation.class);
+                    systemPath = cb.treat(root.get(HandledItem_.toLocation), System.class);
+                    
+                    if (warehousePath != null)
+                        path = warehousePath.get(Warehouse_.name);
+                    else if (supplierLocationPath != null)
+                        path = supplierLocationPath.get(SupplierLocation_.supplier).get(CustomerSupplier_.name);
+                    else if (systemPath != null)
+                        path = systemPath.get(System_.name);
+                    break;
                 default:
                     path = root.get(sortField);
             }
@@ -169,13 +223,13 @@ public class HandledItemService implements Serializable{
         }
     }
     
-    public Long getHandledItemsCount(BoxedItem boxedItem, Location fromOrToLocation, Item item) {
+    public Long getHandledItemsCount(String workerName, String supplierItemCode, String fromLocationName, String toLocationName, BoxedItem boxedItem, Location fromOrToLocation, Item item) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Long> query = cb.createQuery(Long.class);
         Root<HandledItem> root = query.from(HandledItem.class);
         CriteriaQuery<Long> select = query.select(cb.count(root));
 
-        List<Predicate> conditions = calculateConditions(cb, root, boxedItem, fromOrToLocation, item);
+        List<Predicate> conditions = calculateConditions(cb, root, workerName, supplierItemCode, fromLocationName, toLocationName, boxedItem, fromOrToLocation, item);
 
         if (!conditions.isEmpty())
             query.where(conditions.toArray(new Predicate[conditions.size()]));
@@ -190,8 +244,65 @@ public class HandledItemService implements Serializable{
         }
     }
     
-    private List<Predicate> calculateConditions(CriteriaBuilder cb, Root<HandledItem> root, BoxedItem boxedItem, Location fromOrToLocation, Item item) {
+    private List<Predicate> calculateConditions(CriteriaBuilder cb, Root<HandledItem> root, String workerName, String supplierItemCode, String fromLocationName, String toLocationName, BoxedItem boxedItem, Location fromOrToLocation, Item item) {
         List<Predicate> conditions = new ArrayList<>();
+        
+        //Worker's name
+        if (workerName != null && !workerName.isEmpty()) {
+            Join<HandledItem, Worker> workerRoot = root.join(HandledItem_.worker);
+            conditions.add(cb.like(cb.lower(workerRoot.get(Worker_.name)), "%" + workerName.toLowerCase() + "%"));
+        }
+        
+        //Supplier's item code
+        if (supplierItemCode != null && !supplierItemCode.isEmpty()) {
+            Join<HandledItem, BoxedItem> boxedItemRoot = root.join(HandledItem_.boxedItem);
+            Join<BoxedItem, SupplierItem> supplierItemRoot = boxedItemRoot.join(BoxedItem_.item);
+            conditions.add(cb.like(cb.lower(supplierItemRoot.get(SupplierItem_.code)), "%" + supplierItemCode.toLowerCase() + "%"));
+        }
+        
+        //From location's name
+        if (fromLocationName != null && !fromLocationName.isEmpty()) {
+            Join<HandledItem, Location> fromLocationRoot = root.join(HandledItem_.fromLocation);
+            
+            Join<HandledItem, Warehouse> warehouseRoot = cb.treat(fromLocationRoot, Warehouse.class);
+            Join<HandledItem, SupplierLocation> supplierLocationRoot = cb.treat(fromLocationRoot, SupplierLocation.class);
+            Join<HandledItem, System> systemRoot = cb.treat(fromLocationRoot, System.class);
+            
+            Join<System, JobOrder> jobOrdersRoot = systemRoot.join(System_.jobOrders, JoinType.LEFT);
+            Join<JobOrder, Offer> offerRoot = jobOrdersRoot.join(JobOrder_.offer);
+            Join<Offer, SiteSurveyReport> siteSurveyReportRoot = offerRoot.join(Offer_.siteSurveyReport);
+            Join<SiteSurveyReport, Plant> plantRoot = siteSurveyReportRoot.join(SiteSurveyReport_.plant);
+            Join<Plant, CustomerSupplier> customerRoot = plantRoot.join(Plant_.customerSupplier);
+            Join<SupplierLocation, CustomerSupplier> supplierRoot = supplierLocationRoot.join(SupplierLocation_.supplier, JoinType.LEFT);
+            
+            conditions.add(cb.or(
+                    cb.like(cb.lower(warehouseRoot.get(Warehouse_.name)), "%" + fromLocationName.toLowerCase() + "%"),
+                    cb.like(cb.lower(supplierRoot.get(CustomerSupplier_.name)), "%" + fromLocationName.toLowerCase() + "%"),
+                    cb.like(cb.lower(systemRoot.get(System_.description)), "%" + fromLocationName.toLowerCase() + "%"),
+                    cb.like(cb.lower(customerRoot.get(CustomerSupplier_.name)), "%" + fromLocationName.toLowerCase() + "%")));
+        }
+        
+        //To location's name
+        if (toLocationName != null && !toLocationName.isEmpty()) {
+            Join<HandledItem, Location> toLocationRoot = root.join(HandledItem_.toLocation);
+            
+            Join<HandledItem, Warehouse> warehouseRoot = cb.treat(toLocationRoot, Warehouse.class);
+            Join<HandledItem, SupplierLocation> supplierLocationRoot = cb.treat(toLocationRoot, SupplierLocation.class);
+            Join<HandledItem, System> systemRoot = cb.treat(toLocationRoot, System.class);
+            
+            Join<System, JobOrder> jobOrdersRoot = systemRoot.join(System_.jobOrders, JoinType.LEFT);
+            Join<JobOrder, Offer> offerRoot = jobOrdersRoot.join(JobOrder_.offer);
+            Join<Offer, SiteSurveyReport> siteSurveyReportRoot = offerRoot.join(Offer_.siteSurveyReport);
+            Join<SiteSurveyReport, Plant> plantRoot = siteSurveyReportRoot.join(SiteSurveyReport_.plant);
+            Join<Plant, CustomerSupplier> customerRoot = plantRoot.join(Plant_.customerSupplier);
+            Join<SupplierLocation, CustomerSupplier> supplierRoot = supplierLocationRoot.join(SupplierLocation_.supplier, JoinType.LEFT);
+            
+            conditions.add(cb.or(
+                    cb.like(cb.lower(warehouseRoot.get(Warehouse_.name)), "%" + toLocationName.toLowerCase() + "%"),
+                    cb.like(cb.lower(supplierRoot.get(CustomerSupplier_.name)), "%" + toLocationName.toLowerCase() + "%"),
+                    cb.like(cb.lower(systemRoot.get(System_.description)), "%" + toLocationName.toLowerCase() + "%"),
+                    cb.like(cb.lower(customerRoot.get(CustomerSupplier_.name)), "%" + toLocationName.toLowerCase() + "%")));
+        }
         
         //Boxed item
         if (boxedItem != null)

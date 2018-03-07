@@ -1,0 +1,57 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:define name="content">
+        <h:form id="handledItemsForm">
+            <div class="ui-g">
+                <div class="ui-g-12">
+                    <div class="card card-w-title">
+                        <h1>#{msg.warehouse_handledItems}</h1>
+                        <p:dataTable id="handledItemsTable" widgetVar="handledItemsTable" var="handledItem" value="#{handledItemListPresenter.lazyHandledItems}"
+                                     selectionMode="multiple" selection="#{handledItemListPresenter.selectedHandledItems}" rowKey="#{handledItem.id}"
+                                     paginator="true" rows="10"
+                                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     rowsPerPageTemplate="10,25,50" lazy="true">
+                            <f:facet name="header">
+                                <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
+                                    #{msg.warehouse_handledItems_tip}
+                                    <p:commandButton title="#{msg.delete}" icon="ui-icon-delete" actionListener="#{handledItemListPresenter.deleteHandledItem()}" update="handledItemsTable">
+                                        <p:confirm header="#{msg.warehouse_handledItems_delete}" message="#{msg.warehouse_handledItems_delete_tip}" icon="ui-icon-alert"/>
+                                    </p:commandButton>
+                                </p:panelGrid>
+                            </f:facet>
+                            <p:column headerText="#{msg.warehouse_handledItem_fromLocation}" field="fromLocationName" priority="3">
+                                <h:outputText value="#{handledItem.fromLocation.name}"/>
+                            </p:column>
+                            <p:column headerText="#{msg.warehouse_handledItem_handlingTimestamp}" field="handlingTimestamp" filterable="false" priority="0">
+                                <h:outputText value="#{handledItem.handlingTimestamp}">
+                                    <f:convertDateTime type="both" dateStyle="medium" timeStyle="short" />
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="#{msg.siteSurvey_worker_name}" field="workerName" priority="4">
+                                <h:outputText value="#{handledItem.worker.name}"/>
+                            </p:column>
+                            <p:column headerText="#{msg.purchasing_supplierItem_code}" field="supplierItemCode" priority="0">
+                                <h:outputText value="#{handledItem.boxedItem.item.code}"/>
+                            </p:column>
+                            <p:column headerText="#{msg.warehouse_handledItem_quantity}" priority="0">
+                                <h:outputText value="#{handledItem.quantity}">
+                                    <f:convertNumber integerOnly="true" />
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="#{msg.production_unitMeasure_symbol}" priority="4">
+                                <h:outputText value="#{handledItem.boxedItem.item.item.unitMeasure.symbol}"/>
+                            </p:column>
+                            <p:column headerText="#{msg.warehouse_handledItem_toLocation}" field="toLocationName" priority="0">
+                                <h:outputText value="#{handledItem.toLocation.name}"/>
+                            </p:column>
+                        </p:dataTable>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>
