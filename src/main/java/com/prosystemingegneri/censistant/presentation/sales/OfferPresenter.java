@@ -22,7 +22,9 @@ import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
 import com.prosystemingegneri.censistant.business.production.entity.Device;
 import com.prosystemingegneri.censistant.business.production.entity.System;
 import com.prosystemingegneri.censistant.business.production.entity.SystemAttachment;
+import com.prosystemingegneri.censistant.business.sales.boundary.JobOrderService;
 import com.prosystemingegneri.censistant.business.sales.boundary.OfferService;
+import com.prosystemingegneri.censistant.business.sales.entity.JobOrder;
 import com.prosystemingegneri.censistant.business.sales.entity.Offer;
 import com.prosystemingegneri.censistant.business.siteSurvey.boundary.SiteSurveyReportService;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport;
@@ -39,11 +41,15 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import javax.ejb.EJBException;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
+import javax.validation.groups.Default;
 import org.apache.commons.io.FilenameUtils;
 import org.omnifaces.cdi.ViewScoped;
 import org.primefaces.event.FileUploadEvent;
@@ -65,6 +71,8 @@ public class OfferPresenter implements Serializable{
     CustomerSupplierService customerSupplierService;
     @Inject
     SiteSurveyReportService siteSurveyReportService;
+    @Inject
+    JobOrderService jobOrderService;
     
     private Offer offer;
     private Long id;
@@ -76,6 +84,9 @@ public class OfferPresenter implements Serializable{
     private System system;
     
     private Integer activeIndex;    //useful for keep tab opened when reloading a page
+    
+    @Resource
+    Validator validator;
     
     @PostConstruct
     public void init() {
@@ -103,15 +114,30 @@ public class OfferPresenter implements Serializable{
         }
     }
     
-    public String saveOffer() {
+    private int validateAndSaveOffer() {
+        boolean isValidated = true;
+        for (ConstraintViolation<Offer> constraintViolation : validator.validate(offer, Default.class)) {
+            isValidated = false;
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", constraintViolation.getMessage()));
+        }
+        if (!isValidated)
+            return -1;
+        
         try {
             service.saveOffer(offer);
         } catch (EJBException e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", ExceptionUtility.unwrap(e.getCausedByException()).getLocalizedMessage()));
-            return null;
+            return -1;
         }
         
-        return "/secured/sales/offers?faces-redirect=true";
+        return 0;
+    }
+    
+    public String saveOffer() {
+        if (validateAndSaveOffer() == 0)
+            return "/secured/sales/offers?faces-redirect=true";
+        else
+            return null;
     }
     
     public void detailOffer() {
@@ -193,6 +219,20 @@ public class OfferPresenter implements Serializable{
                     java.lang.System.lineSeparator() +
                     java.lang.System.lineSeparator() + ex.getLocalizedMessage()));
         }
+        return null;
+    }
+    
+    public String createJobOrder() {
+        if (offer.getJobOrder() == null) {
+            if (validateAndSaveOffer() == 0) {
+                JobOrder newJobOrder = jobOrderService.createNewJobOrder(offer);
+
+                FacesContext.getCurrentInstance().getExternalContext().getFlash().put("jobOrder", newJobOrder);
+
+                return "/secured/sales/jobOrder?faces-redirect=true";
+            }
+        }
+        
         return null;
     }
     

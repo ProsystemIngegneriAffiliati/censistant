@@ -66,9 +66,10 @@ public class JobOrderService implements Serializable{
     @Inject
     SystemService systemService;
     
-    public JobOrder createNewJobOrder() {
+    public JobOrder createNewJobOrder(Offer offer) {
         JobOrder jobOrder = new JobOrder(getNextNumber());
-        Offer offer = offerService.createNewOffer();
+        if (offer == null)
+            offer = offerService.createNewOffer();
         jobOrder.addOffer(offer);
         
         return jobOrder;

@@ -126,7 +126,7 @@ public class JobOrderPresenter implements Serializable{
     public void detailJobOrder() {
         if (jobOrder == null && id != null) {
             if (id == 0)
-                jobOrder = service.createNewJobOrder();
+                jobOrder = service.createNewJobOrder(null);
             else
                 jobOrder = service.readJobOrder(id);
         }

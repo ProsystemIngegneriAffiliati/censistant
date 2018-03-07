@@ -22,7 +22,7 @@
                             <div class="card card-w-title">
                                 <h1>#{msg.sales_offer}</h1>
                                 <p>#{msg.sales_offer_tip}</p>
-                                <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                <p:panelGrid columns="3" columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputNumber id="number" value="#{offerPresenter.offer.number}" decimalPlaces="0" />
                                         <p:outputLabel for="number" value="#{msg.sales_offer_number}" />
@@ -34,6 +34,21 @@
                                         <p:outputLabel for="creation" value="#{msg.sales_offer_creation}"/>
                                         <p:message for="creation"/>
                                     </h:panelGroup>
+
+                                    <h:panelGroup>
+                                        <p:commandButton rendered="#{offerPresenter.offer.jobOrder == null}"
+                                                         value="#{msg.sales_offer_createJobOrder}"
+                                                         title="#{msg.sales_offer_createJobOrder_tip}"
+                                                         action="#{offerPresenter.createJobOrder()}"
+                                                         ajax="false" />
+                                        <p:button rendered="#{offerPresenter.offer.jobOrder != null}"
+                                                  value="#{msg.sales_jobOrder} #{offerPresenter.offer.jobOrder.number}"
+                                                  icon="ui-icon-edit"
+                                                  styleClass="AquaButton"
+                                                  outcome="/secured/sales/jobOrder">
+                                            <f:param name="id" value="#{offerPresenter.offer.jobOrder.id}" />
+                                        </p:button>
+                                    </h:panelGroup>                                    
                                 </p:panelGrid>
 
                                 <p:tabView id="offerTabs" dynamic="true" activeIndex="#{offerPresenter.activeIndex}">
