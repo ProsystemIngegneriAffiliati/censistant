@@ -16,6 +16,7 @@
  */
 package com.prosystemingegneri.censistant.presentation.warehouse;
 
+import com.prosystemingegneri.censistant.business.production.entity.Device;
 import com.prosystemingegneri.censistant.business.production.entity.System;
 import com.prosystemingegneri.censistant.business.production.entity.UnitMeasure;
 import com.prosystemingegneri.censistant.business.sales.entity.JobOrder;
@@ -70,6 +71,8 @@ public class StockListPresenter implements Serializable{
     private JobOrder jobOrder;
     private Integer activeIndex;
     
+    private Device device;
+    
     private String returnPage;
     
     @PostConstruct
@@ -77,6 +80,7 @@ public class StockListPresenter implements Serializable{
         lazyStock = new StockLazyDataModel(service);
         jobOrder = (JobOrder) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("jobOrder");
         activeIndex = (Integer) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("activeIndex");
+        device = (Device) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("device");
         returnPage = (String) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("returnPage");
         
         if (jobOrder != null) {
@@ -168,6 +172,7 @@ public class StockListPresenter implements Serializable{
     private void putExternalContext() {
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("jobOrder", jobOrder);
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("activeIndex", activeIndex);
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("device", device);
     }
 
     public StockLazyDataModel getLazyStock() {

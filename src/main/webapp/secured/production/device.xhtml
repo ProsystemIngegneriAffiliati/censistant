@@ -4,7 +4,8 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:oou="http://omnifaces.org/ui">
+      xmlns:oou="http://omnifaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:composition template="/WEB-INF/template.xhtml">
         <ui:define name="content">
             <oou:form id="deviceForm">
@@ -15,7 +16,7 @@
                                 <h1>#{msg.production_device}</h1>
                                 <p>#{msg.production_device_tip}</p>
 
-                                <p:panelGrid columns="3" columnClasses="ui-grid-col-7,ui-grid-col-5" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                <p:panelGrid columns="3" columnClasses="ui-grid-col-6,ui-grid-col-3,ui-grid-col-3" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:autoComplete id="item"
                                                         dropdown="true"
@@ -26,6 +27,7 @@
                                                         itemValue="#{item}"
                                                         forceSelection="true">
                                             <oou:converter converterId="omnifaces.ListConverter" list="#{itemListPresenter.items}"/>
+                                            <p:ajax event="itemSelect" update="unitMeasure" />
                                         </p:autoComplete>
                                         <p:outputLabel for="item" value="#{msg.production_item}"/>
                                         <p:message for="item"/>
@@ -36,7 +38,45 @@
                                         <p:outputLabel for="quantity" value="#{msg.production_device_quantity}"/>
                                         <p:message for="quantity"/>
                                     </h:panelGroup>
+                                    
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="unitMeasure" readonly="true" value="#{devicePresenter.device.item.unitMeasure.name}" />
+                                        <p:outputLabel for="unitMeasure" value="#{msg.production_unitMeasure_symbol}"/>
+                                        <p:message for="unitMeasure"/>
+                                    </h:panelGroup>
                                 </p:panelGrid>
+
+                                <p:dataTable id="deviceMovementsTable"
+                                             var="handledItem"
+                                             value="#{devicePresenter.deviceMovements}">
+                                    <f:facet name="header">
+                                        <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
+                                            #{msg.production_devices_itemMovements}
+                                            <p:commandButton title="#{msg.warehouse_itemMovement}" icon="ui-icon-card-travel" action="#{devicePresenter.openItemMovement()}" ajax="false">
+                                                <oou:ignoreValidationFailed />
+                                            </p:commandButton>
+                                        </p:panelGrid>
+                                    </f:facet>
+                                    <p:column headerText="#{msg.warehouse_location}" priority="2">
+                                        <h:outputText value="#{devicePresenter.device.system.equals(handledItem.fromLocation) ? handledItem.toLocation.name : handledItem.fromLocation.name}" />
+                                    </p:column>
+                                    <p:column headerText="#{msg.purchasing_supplierItem_code}" priority="2">
+                                        <h:outputText value="#{handledItem.boxedItem.item.code}" />
+                                    </p:column>
+                                    <p:column headerText="#{msg.warehouse_handledItem_handlingTimestamp}" priority="0">
+                                        <h:outputText value="#{handledItem.handlingTimestamp}">
+                                            <f:convertDateTime type="both" />
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column headerText="#{msg.siteSurvey_worker_name}" filterBy="#{handledItem.worker.initials}" filterMatchMode="contains" priority="3">
+                                        <h:outputText value="#{handledItem.worker.initials}" />
+                                    </p:column>
+                                    <p:column headerText="#{msg.production_device_quantity}" priority="0">
+                                        <h:outputText value="#{handledItem.quantity}">
+                                            <f:convertNumber integerOnly="true" />
+                                        </h:outputText>
+                                    </p:column>
+                                </p:dataTable>
 
                                 <div class="ui-g">
                                     <div class="ui-g-1 ui-md-2"></div>

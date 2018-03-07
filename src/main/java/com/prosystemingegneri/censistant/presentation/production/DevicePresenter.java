@@ -18,9 +18,14 @@ package com.prosystemingegneri.censistant.presentation.production;
 
 import com.prosystemingegneri.censistant.business.production.entity.Device;
 import com.prosystemingegneri.censistant.business.sales.entity.JobOrder;
+import com.prosystemingegneri.censistant.business.warehouse.boundary.HandledItemService;
+import com.prosystemingegneri.censistant.business.warehouse.entity.HandledItem;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import javax.inject.Named;
 import org.omnifaces.cdi.ViewScoped;
 
@@ -31,6 +36,9 @@ import org.omnifaces.cdi.ViewScoped;
 @Named
 @ViewScoped
 public class DevicePresenter implements Serializable {
+    @Inject
+    HandledItemService handledItemService;
+    
     private Device device;
     private JobOrder jobOrder;
     private Integer activeIndex;
@@ -62,6 +70,22 @@ public class DevicePresenter implements Serializable {
     private void putExternalContext() {
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("jobOrder", jobOrder);
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("activeIndex", activeIndex);
+    }
+    
+    public List<HandledItem> getDeviceMovements() {
+        List<HandledItem> result = new ArrayList<>();
+        
+        if (device.getSystem() != null && device.getItem() != null)
+            result = handledItemService.listHandledItems(0, 0, null, null, null, device.getSystem(), device.getItem());
+        
+        return result;
+    }
+    
+    public String openItemMovement() {
+        putExternalContext();
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("device", device);
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("returnPage", "production/device");
+        return "/secured/warehouse/itemMovement?faces-redirect=true";
     }
 
     public Device getDevice() {
