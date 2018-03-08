@@ -44,7 +44,6 @@ import com.prosystemingegneri.censistant.business.warehouse.control.Stock;
 import com.prosystemingegneri.censistant.business.warehouse.entity.HandledItem;
 import com.prosystemingegneri.censistant.business.warehouse.entity.HandledItem_;
 import com.prosystemingegneri.censistant.business.warehouse.entity.Location;
-import com.prosystemingegneri.censistant.business.warehouse.entity.Location_;
 import com.prosystemingegneri.censistant.business.warehouse.entity.SupplierLocation;
 import com.prosystemingegneri.censistant.business.warehouse.entity.SupplierLocation_;
 import com.prosystemingegneri.censistant.business.warehouse.entity.Warehouse;
@@ -161,10 +160,7 @@ public class HandledItemService implements Serializable{
         
         Order order = cb.desc(root.get(HandledItem_.handlingTimestamp));
         if (isAscending != null && sortField != null && !sortField.isEmpty()) {
-            Path<?> path = null;
-            Path<Warehouse> warehousePath;
-            Path<SupplierLocation> supplierLocationPath;
-            Path<System> systemPath;
+            Path<?> path;
             switch (sortField) {
                 case "handlingTimestamp":
                     path = root.get(HandledItem_.handlingTimestamp);
@@ -174,30 +170,6 @@ public class HandledItemService implements Serializable{
                     break;
                 case "supplierItemCode":
                     path = root.get(HandledItem_.boxedItem).get(BoxedItem_.item).get(SupplierItem_.code);
-                    break;
-                case "fromLocationName":
-                    warehousePath = cb.treat(root.get(HandledItem_.fromLocation), Warehouse.class);
-                    supplierLocationPath = cb.treat(root.get(HandledItem_.fromLocation), SupplierLocation.class);
-                    systemPath = cb.treat(root.get(HandledItem_.fromLocation), System.class);
-                    
-                    if (warehousePath != null)
-                        path = warehousePath.get(Warehouse_.name);
-                    else if (supplierLocationPath != null)
-                        path = supplierLocationPath.get(SupplierLocation_.supplier).get(CustomerSupplier_.name);
-                    else if (systemPath != null)
-                        path = systemPath.get(System_.name);
-                    break;
-                case "toLocationName":
-                    warehousePath = cb.treat(root.get(HandledItem_.toLocation), Warehouse.class);
-                    supplierLocationPath = cb.treat(root.get(HandledItem_.toLocation), SupplierLocation.class);
-                    systemPath = cb.treat(root.get(HandledItem_.toLocation), System.class);
-                    
-                    if (warehousePath != null)
-                        path = warehousePath.get(Warehouse_.name);
-                    else if (supplierLocationPath != null)
-                        path = supplierLocationPath.get(SupplierLocation_.supplier).get(CustomerSupplier_.name);
-                    else if (systemPath != null)
-                        path = systemPath.get(System_.name);
                     break;
                 default:
                     path = root.get(sortField);
@@ -262,46 +234,14 @@ public class HandledItemService implements Serializable{
         
         //From location's name
         if (fromLocationName != null && !fromLocationName.isEmpty()) {
-            Join<HandledItem, Location> fromLocationRoot = root.join(HandledItem_.fromLocation);
-            
-            Join<HandledItem, Warehouse> warehouseRoot = cb.treat(fromLocationRoot, Warehouse.class);
-            Join<HandledItem, SupplierLocation> supplierLocationRoot = cb.treat(fromLocationRoot, SupplierLocation.class);
-            Join<HandledItem, System> systemRoot = cb.treat(fromLocationRoot, System.class);
-            
-            Join<System, JobOrder> jobOrdersRoot = systemRoot.join(System_.jobOrders, JoinType.LEFT);
-            Join<JobOrder, Offer> offerRoot = jobOrdersRoot.join(JobOrder_.offer);
-            Join<Offer, SiteSurveyReport> siteSurveyReportRoot = offerRoot.join(Offer_.siteSurveyReport);
-            Join<SiteSurveyReport, Plant> plantRoot = siteSurveyReportRoot.join(SiteSurveyReport_.plant);
-            Join<Plant, CustomerSupplier> customerRoot = plantRoot.join(Plant_.customerSupplier);
-            Join<SupplierLocation, CustomerSupplier> supplierRoot = supplierLocationRoot.join(SupplierLocation_.supplier, JoinType.LEFT);
-            
-            conditions.add(cb.or(
-                    cb.like(cb.lower(warehouseRoot.get(Warehouse_.name)), "%" + fromLocationName.toLowerCase() + "%"),
-                    cb.like(cb.lower(supplierRoot.get(CustomerSupplier_.name)), "%" + fromLocationName.toLowerCase() + "%"),
-                    cb.like(cb.lower(systemRoot.get(System_.description)), "%" + fromLocationName.toLowerCase() + "%"),
-                    cb.like(cb.lower(customerRoot.get(CustomerSupplier_.name)), "%" + fromLocationName.toLowerCase() + "%")));
+            List<Predicate> locationConditions = calculateLocationConditions(cb, root.join(HandledItem_.fromLocation), fromLocationName);
+            conditions.add(cb.or(locationConditions.toArray(new Predicate[locationConditions.size()])));
         }
         
         //To location's name
         if (toLocationName != null && !toLocationName.isEmpty()) {
-            Join<HandledItem, Location> toLocationRoot = root.join(HandledItem_.toLocation);
-            
-            Join<HandledItem, Warehouse> warehouseRoot = cb.treat(toLocationRoot, Warehouse.class);
-            Join<HandledItem, SupplierLocation> supplierLocationRoot = cb.treat(toLocationRoot, SupplierLocation.class);
-            Join<HandledItem, System> systemRoot = cb.treat(toLocationRoot, System.class);
-            
-            Join<System, JobOrder> jobOrdersRoot = systemRoot.join(System_.jobOrders, JoinType.LEFT);
-            Join<JobOrder, Offer> offerRoot = jobOrdersRoot.join(JobOrder_.offer);
-            Join<Offer, SiteSurveyReport> siteSurveyReportRoot = offerRoot.join(Offer_.siteSurveyReport);
-            Join<SiteSurveyReport, Plant> plantRoot = siteSurveyReportRoot.join(SiteSurveyReport_.plant);
-            Join<Plant, CustomerSupplier> customerRoot = plantRoot.join(Plant_.customerSupplier);
-            Join<SupplierLocation, CustomerSupplier> supplierRoot = supplierLocationRoot.join(SupplierLocation_.supplier, JoinType.LEFT);
-            
-            conditions.add(cb.or(
-                    cb.like(cb.lower(warehouseRoot.get(Warehouse_.name)), "%" + toLocationName.toLowerCase() + "%"),
-                    cb.like(cb.lower(supplierRoot.get(CustomerSupplier_.name)), "%" + toLocationName.toLowerCase() + "%"),
-                    cb.like(cb.lower(systemRoot.get(System_.description)), "%" + toLocationName.toLowerCase() + "%"),
-                    cb.like(cb.lower(customerRoot.get(CustomerSupplier_.name)), "%" + toLocationName.toLowerCase() + "%")));
+            List<Predicate> locationConditions = calculateLocationConditions(cb, root.join(HandledItem_.toLocation), toLocationName);
+            conditions.add(cb.or(locationConditions.toArray(new Predicate[locationConditions.size()])));
         }
         
         //Boxed item
@@ -322,5 +262,31 @@ public class HandledItemService implements Serializable{
         }
         
         return conditions;
+    }
+    
+    private List<Predicate> calculateLocationConditions(CriteriaBuilder cb, Join<HandledItem, Location> locationRoot, String locationName) {
+        List<Predicate> locationConditions = new ArrayList<>();
+        
+        Join<HandledItem, Warehouse> warehouseRoot = cb.treat(locationRoot, Warehouse.class);
+        if (warehouseRoot != null)
+            locationConditions.add(cb.like(cb.lower(warehouseRoot.get(Warehouse_.name)), "%" + locationName.toLowerCase() + "%"));
+
+        Join<HandledItem, SupplierLocation> supplierLocationRoot = cb.treat(locationRoot, SupplierLocation.class);
+        if (supplierLocationRoot != null) {
+            Join<SupplierLocation, CustomerSupplier> supplierRoot = supplierLocationRoot.join(SupplierLocation_.supplier, JoinType.LEFT);
+            locationConditions.add(cb.like(cb.lower(supplierRoot.get(CustomerSupplier_.name)), "%" + locationName.toLowerCase() + "%"));
+        }
+
+        Join<HandledItem, System> systemRoot = cb.treat(locationRoot, System.class);
+        if (systemRoot != null) {
+            Join<System, Offer> offersRoot = systemRoot.join(System_.offers, JoinType.LEFT);
+            Join<Offer, SiteSurveyReport> siteSurveyReportRoot = offersRoot.join(Offer_.siteSurveyReport, JoinType.LEFT);
+            Join<SiteSurveyReport, Plant> plantRoot = siteSurveyReportRoot.join(SiteSurveyReport_.plant, JoinType.LEFT);
+            Join<Plant, CustomerSupplier> customerRoot = plantRoot.join(Plant_.customerSupplier, JoinType.LEFT);
+            locationConditions.add(cb.like(cb.lower(customerRoot.get(CustomerSupplier_.name)), "%" + locationName.toLowerCase() + "%"));
+            locationConditions.add(cb.like(cb.lower(systemRoot.get(System_.description)), "%" + locationName.toLowerCase() + "%"));
+        }
+        
+        return locationConditions;
     }
 }

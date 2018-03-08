@@ -16,7 +16,7 @@
  */
 package com.prosystemingegneri.censistant.business.production.entity;
 
-import com.prosystemingegneri.censistant.business.sales.entity.JobOrder;
+import com.prosystemingegneri.censistant.business.sales.entity.Offer;
 import javax.persistence.metamodel.ListAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
@@ -29,5 +29,5 @@ import javax.persistence.metamodel.StaticMetamodel;
 public class System_ {
     public static volatile SingularAttribute<System, String> name;
     public static volatile SingularAttribute<System, String> description;
-    public static volatile ListAttribute<System, JobOrder> jobOrders;
+    public static volatile ListAttribute<System, Offer> offers;
 }

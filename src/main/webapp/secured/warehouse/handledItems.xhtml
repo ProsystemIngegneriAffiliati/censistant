@@ -23,7 +23,7 @@
                                     </p:commandButton>
                                 </p:panelGrid>
                             </f:facet>
-                            <p:column headerText="#{msg.warehouse_handledItem_fromLocation}" field="fromLocationName" priority="3">
+                            <p:column headerText="#{msg.warehouse_handledItem_fromLocation}" field="fromLocationName" sortable="false" priority="3">
                                 <h:outputText value="#{handledItem.fromLocation.name}"/>
                             </p:column>
                             <p:column headerText="#{msg.warehouse_handledItem_handlingTimestamp}" field="handlingTimestamp" filterable="false" priority="0">
@@ -45,7 +45,7 @@
                             <p:column headerText="#{msg.production_unitMeasure_symbol}" priority="4">
                                 <h:outputText value="#{handledItem.boxedItem.item.item.unitMeasure.symbol}"/>
                             </p:column>
-                            <p:column headerText="#{msg.warehouse_handledItem_toLocation}" field="toLocationName" priority="0">
+                            <p:column headerText="#{msg.warehouse_handledItem_toLocation}" field="toLocationName" sortable="false" priority="0">
                                 <h:outputText value="#{handledItem.toLocation.name}"/>
                             </p:column>
                         </p:dataTable>
