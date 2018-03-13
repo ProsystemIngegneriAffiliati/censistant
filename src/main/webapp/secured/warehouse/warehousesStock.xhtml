@@ -32,7 +32,7 @@
                                 <h:outputText value=" #{stock.boxedItem.item.item.unitMeasure.symbol}" />
                             </p:column>
                             <p:column headerText="#{msg.purchasing_box_name}" priority="4">
-                                <h:outputText rendered="#{stock.quantity != stock.quantity / stock.boxedItem.box.quantity and stock.quantity / stock.boxedItem.box.quantity >= 1}" value="#{stock.quantity / stock.boxedItem.box.quantity} #{stock.boxedItem.box.unitMeasure.name} #{stock.boxedItem.box.quantity} #{stock.boxedItem.item.item.unitMeasure.symbol}" />
+                                <h:outputText rendered="#{stock.isBoxed()}" value="#{stock.fullBoxedQuantityStr}" />
                             </p:column>
                         </p:dataTable>
                     </div>

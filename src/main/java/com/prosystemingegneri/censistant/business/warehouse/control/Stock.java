@@ -20,6 +20,7 @@ import com.prosystemingegneri.censistant.business.production.entity.UnitMeasure;
 import com.prosystemingegneri.censistant.business.purchasing.entity.BoxedItem;
 import com.prosystemingegneri.censistant.business.warehouse.entity.Location;
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
  *
@@ -64,6 +65,29 @@ public class Stock implements Serializable {
             return location.getId().toString() + SEPARATOR + boxedItem.getId().toString();
         
         return "";
+    }
+    
+    public boolean isBoxed() {
+        return quantity != quantity / boxedItem.getBox().getQuantity() && quantity / boxedItem.getBox().getQuantity() >= 1;
+    }
+    
+    public String getFullBoxedQuantityStr() {
+        StringBuilder result = new StringBuilder();
+        
+        BigDecimal[] maina = (new BigDecimal(quantity)).divideAndRemainder(new BigDecimal(boxedItem.getBox().getQuantity()));
+        
+        result = result.append(maina[0]).append(" ")
+                .append(boxedItem.getBox().getUnitMeasure().getName()).append(" ")
+                .append(boxedItem.getBox().getQuantity()).append(" ")
+                .append(boxedItem.getItem().getItem().getUnitMeasure().getSymbol());
+        
+        if (!BigDecimal.ZERO.equals(maina[1]))
+            result = result.append(" + ")
+                    .append(maina[1].toPlainString()).append(" ")
+                    .append(boxedItem.getItem().getItem().getUnitMeasure().getSymbol());
+
+        
+        return result.toString();
     }
 
     public Location getLocation() {
