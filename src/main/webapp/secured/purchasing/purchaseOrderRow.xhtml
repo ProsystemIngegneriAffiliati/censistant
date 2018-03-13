@@ -42,7 +42,7 @@
                                                                 value="#{purchaseOrderRowPresenter.row.boxedItem}"
                                                                 completeMethod="#{purchaseOrderRowPresenter.completeItems}"
                                                                 var="boxedItem"
-                                                                itemLabel="#{boxedItem.item.code} #{boxedItem.item.item.description} #{boxedItem.box.unitMeasure.name} #{boxedItem.box.quantity} #{boxedItem.item.item.unitMeasure.symbol}"
+                                                                itemLabel="#{boxedItem.item.code} #{boxedItem.item.description} #{boxedItem.box.unitMeasure.name} #{boxedItem.box.quantity} #{boxedItem.item.item.unitMeasure.symbol}"
                                                                 itemValue="#{boxedItem}"
                                                                 forceSelection="true">
                                                     <oou:converter converterId="omnifaces.ListConverter" list="#{purchaseOrderRowPresenter.items}"/>

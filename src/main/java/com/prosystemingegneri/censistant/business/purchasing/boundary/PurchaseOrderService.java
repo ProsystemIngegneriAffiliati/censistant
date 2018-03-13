@@ -18,8 +18,7 @@ package com.prosystemingegneri.censistant.business.purchasing.boundary;
 
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier_;
-import com.prosystemingegneri.censistant.business.production.entity.Item;
-import com.prosystemingegneri.censistant.business.production.entity.Item_;
+import com.prosystemingegneri.censistant.business.purchasing.entity.BoxedItem;
 import com.prosystemingegneri.censistant.business.purchasing.entity.BoxedItem_;
 import com.prosystemingegneri.censistant.business.purchasing.entity.PurchaseOrder;
 import com.prosystemingegneri.censistant.business.purchasing.entity.PurchaseOrderRow_;
@@ -106,13 +105,13 @@ public class PurchaseOrderService implements Serializable{
         em.remove(readPurchaseOrder(id));
     }
 
-    public List<PurchaseOrder> listPurchaseOrders(int first, int pageSize, String sortField, Boolean isAscending, Integer number, String supplier, String item) {
+    public List<PurchaseOrder> listPurchaseOrders(int first, int pageSize, String sortField, Boolean isAscending, Integer number, String supplier, String supplierItemDescription) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<PurchaseOrder> query = cb.createQuery(PurchaseOrder.class);
         Root<PurchaseOrder> root = query.from(PurchaseOrder.class);
         CriteriaQuery<PurchaseOrder> select = query.select(root).distinct(true);
         
-        List<Predicate> conditions = calculateConditions(cb, root, number, supplier, item);
+        List<Predicate> conditions = calculateConditions(cb, root, number, supplier, supplierItemDescription);
 
         if (!conditions.isEmpty())
             query.where(conditions.toArray(new Predicate[conditions.size()]));
@@ -149,13 +148,13 @@ public class PurchaseOrderService implements Serializable{
         return typedQuery.getResultList();
     }
     
-    public Long getPurchaseOrdersCount(Integer number, String supplier, String item) {
+    public Long getPurchaseOrdersCount(Integer number, String supplier, String supplierItemDescription) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Long> query = cb.createQuery(Long.class);
         Root<PurchaseOrder> root = query.from(PurchaseOrder.class);
         CriteriaQuery<Long> select = query.select(cb.count(root));
 
-        List<Predicate> conditions = calculateConditions(cb, root, number, supplier, item);
+        List<Predicate> conditions = calculateConditions(cb, root, number, supplier, supplierItemDescription);
 
         if (!conditions.isEmpty())
             query.where(conditions.toArray(new Predicate[conditions.size()]));
@@ -163,7 +162,7 @@ public class PurchaseOrderService implements Serializable{
         return em.createQuery(select).getSingleResult();
     }
     
-    private List<Predicate> calculateConditions(CriteriaBuilder cb, Root<PurchaseOrder> root, Integer number, String supplier, String item) {
+    private List<Predicate> calculateConditions(CriteriaBuilder cb, Root<PurchaseOrder> root, Integer number, String supplier, String supplierItemDescription) {
         List<Predicate> conditions = new ArrayList<>();
 
         //number
@@ -176,13 +175,14 @@ public class PurchaseOrderService implements Serializable{
             conditions.add(cb.like(cb.lower(supplierRoot.get(CustomerSupplier_.name)), "%" + supplier.toLowerCase() + "%"));
         }
         
-        //item's description
-        if (item != null && !item.isEmpty()) {
-            Join<SupplierItem, Item> itemRoot = root.join(PurchaseOrder_.rows)
+        //supplier item's description
+        if (supplierItemDescription != null && !supplierItemDescription.isEmpty()) {
+            
+            
+            Join<BoxedItem, SupplierItem> supplierItemRoot = root.join(PurchaseOrder_.rows)
                     .join(PurchaseOrderRow_.boxedItem)
-                    .join(BoxedItem_.item)
-                    .join(SupplierItem_.item);
-            conditions.add(cb.like(cb.lower(itemRoot.get(Item_.description)), "%" + item.toLowerCase() + "%"));
+                    .join(BoxedItem_.item);
+            conditions.add(cb.like(cb.lower(supplierItemRoot.get(SupplierItem_.description)), "%" + supplierItemDescription.toLowerCase() + "%"));
         }
         
         return conditions;

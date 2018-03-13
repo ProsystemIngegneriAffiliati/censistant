@@ -46,8 +46,9 @@ public class SupplierItemLazyDataModel extends LazyDataModel<SupplierItem>{
     public List<SupplierItem> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
         Boolean isAscending = null;
         String code = null;
+        String description = null;
         String supplier = null;
-        String item = null;
+        String itemDescription = null;
         
         switch (sortOrder) {
             case ASCENDING:
@@ -66,16 +67,18 @@ public class SupplierItemLazyDataModel extends LazyDataModel<SupplierItem>{
                 if (!filterProperty.isEmpty()) {
                     if (filterProperty.equalsIgnoreCase("code"))
                         code = String.valueOf(filters.get(filterProperty));
+                    if (filterProperty.equalsIgnoreCase("description"))
+                        description = String.valueOf(filters.get(filterProperty));
                     if (filterProperty.equalsIgnoreCase("supplier"))
                         supplier = String.valueOf(filters.get(filterProperty));
                     if (filterProperty.equalsIgnoreCase("item"))
-                        item = String.valueOf(filters.get(filterProperty));
+                        itemDescription = String.valueOf(filters.get(filterProperty));
                 }
             }
         }
         
-        List<SupplierItem> result = service.listSupplierItems(first, pageSize, sortField, isAscending, code, supplier, item);
-        this.setRowCount(service.getSupplierItemsCount(code, supplier, item).intValue());
+        List<SupplierItem> result = service.listSupplierItems(first, pageSize, sortField, isAscending, code, description, supplier, itemDescription);
+        this.setRowCount(service.getSupplierItemsCount(code, description, supplier, itemDescription).intValue());
         
         return result;
     }

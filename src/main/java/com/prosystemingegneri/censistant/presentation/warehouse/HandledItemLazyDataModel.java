@@ -47,6 +47,7 @@ public class HandledItemLazyDataModel extends LazyDataModel<HandledItem>{
         Boolean isAscending = null;
         String workerName = null;
         String supplierItemCode = null;
+        String supplierItemDescription = null;
         String fromLocationName = null;
         String toLocationName = null;
         
@@ -69,6 +70,8 @@ public class HandledItemLazyDataModel extends LazyDataModel<HandledItem>{
                         workerName = String.valueOf(filters.get(filterProperty));
                     if (filterProperty.equalsIgnoreCase("supplierItemCode"))
                         supplierItemCode = String.valueOf(filters.get(filterProperty));
+                    if (filterProperty.equalsIgnoreCase("supplierItemDescription"))
+                        supplierItemDescription = String.valueOf(filters.get(filterProperty));
                     if (filterProperty.equalsIgnoreCase("fromLocationName"))
                         fromLocationName = String.valueOf(filters.get(filterProperty));
                     if (filterProperty.equalsIgnoreCase("toLocationName"))
@@ -77,8 +80,8 @@ public class HandledItemLazyDataModel extends LazyDataModel<HandledItem>{
             }
         }
         
-        List<HandledItem> result = service.listHandledItems(first, pageSize, sortField, isAscending, workerName, supplierItemCode, fromLocationName, toLocationName, null, null, null);
-        this.setRowCount(service.getHandledItemsCount(workerName, supplierItemCode, fromLocationName, toLocationName, null, null, null).intValue());
+        List<HandledItem> result = service.listHandledItems(first, pageSize, sortField, isAscending, workerName, supplierItemCode, supplierItemDescription, fromLocationName, toLocationName, null, null, null);
+        this.setRowCount(service.getHandledItemsCount(workerName, supplierItemCode, supplierItemDescription, fromLocationName, toLocationName, null, null, null).intValue());
         
         return result;
     }

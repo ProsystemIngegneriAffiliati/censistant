@@ -147,13 +147,13 @@ public class HandledItemService implements Serializable{
         em.remove(readHandledItem(id));
     }
     
-    public List<HandledItem> listHandledItems(int first, int pageSize, String sortField, Boolean isAscending, String workerName, String supplierItemCode, String fromLocationName, String toLocationName, BoxedItem boxedItem, Location fromOrToLocation, Item item) {
+    public List<HandledItem> listHandledItems(int first, int pageSize, String sortField, Boolean isAscending, String workerName, String supplierItemCode, String supplierItemDescription, String fromLocationName, String toLocationName, BoxedItem boxedItem, Location fromOrToLocation, Item item) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<HandledItem> query = cb.createQuery(HandledItem.class);
         Root<HandledItem> root = query.from(HandledItem.class);
         CriteriaQuery<HandledItem> select = query.select(root).distinct(true);
         
-        List<Predicate> conditions = calculateConditions(cb, root, workerName, supplierItemCode, fromLocationName, toLocationName, boxedItem, fromOrToLocation, item);
+        List<Predicate> conditions = calculateConditions(cb, root, workerName, supplierItemCode, supplierItemDescription, fromLocationName, toLocationName, boxedItem, fromOrToLocation, item);
 
         if (!conditions.isEmpty())
             query.where(conditions.toArray(new Predicate[conditions.size()]));
@@ -170,6 +170,9 @@ public class HandledItemService implements Serializable{
                     break;
                 case "supplierItemCode":
                     path = root.get(HandledItem_.boxedItem).get(BoxedItem_.item).get(SupplierItem_.code);
+                    break;
+                case "supplierItemDescription":
+                    path = root.get(HandledItem_.boxedItem).get(BoxedItem_.item).get(SupplierItem_.description);
                     break;
                 default:
                     path = root.get(sortField);
@@ -195,13 +198,13 @@ public class HandledItemService implements Serializable{
         }
     }
     
-    public Long getHandledItemsCount(String workerName, String supplierItemCode, String fromLocationName, String toLocationName, BoxedItem boxedItem, Location fromOrToLocation, Item item) {
+    public Long getHandledItemsCount(String workerName, String supplierItemCode, String supplierItemDescription, String fromLocationName, String toLocationName, BoxedItem boxedItem, Location fromOrToLocation, Item item) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Long> query = cb.createQuery(Long.class);
         Root<HandledItem> root = query.from(HandledItem.class);
         CriteriaQuery<Long> select = query.select(cb.count(root));
 
-        List<Predicate> conditions = calculateConditions(cb, root, workerName, supplierItemCode, fromLocationName, toLocationName, boxedItem, fromOrToLocation, item);
+        List<Predicate> conditions = calculateConditions(cb, root, workerName, supplierItemCode, supplierItemDescription, fromLocationName, toLocationName, boxedItem, fromOrToLocation, item);
 
         if (!conditions.isEmpty())
             query.where(conditions.toArray(new Predicate[conditions.size()]));
@@ -216,7 +219,7 @@ public class HandledItemService implements Serializable{
         }
     }
     
-    private List<Predicate> calculateConditions(CriteriaBuilder cb, Root<HandledItem> root, String workerName, String supplierItemCode, String fromLocationName, String toLocationName, BoxedItem boxedItem, Location fromOrToLocation, Item item) {
+    private List<Predicate> calculateConditions(CriteriaBuilder cb, Root<HandledItem> root, String workerName, String supplierItemCode, String supplierItemDescription, String fromLocationName, String toLocationName, BoxedItem boxedItem, Location fromOrToLocation, Item item) {
         List<Predicate> conditions = new ArrayList<>();
         
         //Worker's name
@@ -230,6 +233,13 @@ public class HandledItemService implements Serializable{
             Join<HandledItem, BoxedItem> boxedItemRoot = root.join(HandledItem_.boxedItem);
             Join<BoxedItem, SupplierItem> supplierItemRoot = boxedItemRoot.join(BoxedItem_.item);
             conditions.add(cb.like(cb.lower(supplierItemRoot.get(SupplierItem_.code)), "%" + supplierItemCode.toLowerCase() + "%"));
+        }
+        
+        //Supplier's item description
+        if (supplierItemDescription != null && !supplierItemDescription.isEmpty()) {
+            Join<HandledItem, BoxedItem> boxedItemRoot = root.join(HandledItem_.boxedItem);
+            Join<BoxedItem, SupplierItem> supplierItemRoot = boxedItemRoot.join(BoxedItem_.item);
+            conditions.add(cb.like(cb.lower(supplierItemRoot.get(SupplierItem_.description)), "%" + supplierItemDescription.toLowerCase() + "%"));
         }
         
         //From location's name

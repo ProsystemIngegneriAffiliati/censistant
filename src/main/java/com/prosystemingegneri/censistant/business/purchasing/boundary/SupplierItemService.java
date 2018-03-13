@@ -72,7 +72,7 @@ public class SupplierItemService implements Serializable{
         if (search != null && !search.isEmpty())
             query.where(cb.or(
                     cb.like(cb.lower(root.get(SupplierItem_.code)), "%" + search.toLowerCase() + "%"),
-                    cb.like(cb.lower(root.join(SupplierItem_.item).get(Item_.description)), "%" + search.toLowerCase() + "%")));
+                    cb.like(cb.lower(root.get(SupplierItem_.description)), "%" + search.toLowerCase() + "%")));
         
         query.orderBy(cb.asc(root.get(SupplierItem_.code)));
         
@@ -85,13 +85,13 @@ public class SupplierItemService implements Serializable{
         return typedQuery.getResultList();
     }
 
-    public List<SupplierItem> listSupplierItems(int first, int pageSize, String sortField, Boolean isAscending, String code, String supplier, String item) {
+    public List<SupplierItem> listSupplierItems(int first, int pageSize, String sortField, Boolean isAscending, String code, String description, String supplier, String itemDescription) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<SupplierItem> query = cb.createQuery(SupplierItem.class);
         Root<SupplierItem> root = query.from(SupplierItem.class);
         CriteriaQuery<SupplierItem> select = query.select(root).distinct(true);
         
-        List<Predicate> conditions = calculateConditions(cb, root, code, supplier, item);
+        List<Predicate> conditions = calculateConditions(cb, root, code, description, supplier, itemDescription);
 
         if (!conditions.isEmpty())
             query.where(conditions.toArray(new Predicate[conditions.size()]));
@@ -103,10 +103,13 @@ public class SupplierItemService implements Serializable{
                 case "code":
                     path = root.get(SupplierItem_.code);
                     break;
+                case "description":
+                    path = root.get(SupplierItem_.description);
+                    break;
                 case "supplier":
                     path = root.get(SupplierItem_.supplier).get(CustomerSupplier_.name);
                     break;
-                case "item":
+                case "itemDescription":
                     path = root.get(SupplierItem_.item).get(Item_.description);
                     break;
                 default:
@@ -128,13 +131,13 @@ public class SupplierItemService implements Serializable{
         return typedQuery.getResultList();
     }
     
-    public Long getSupplierItemsCount(String code, String supplier, String item) {
+    public Long getSupplierItemsCount(String code, String description, String supplier, String itemDescription) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Long> query = cb.createQuery(Long.class);
         Root<SupplierItem> root = query.from(SupplierItem.class);
         CriteriaQuery<Long> select = query.select(cb.count(root));
 
-        List<Predicate> conditions = calculateConditions(cb, root, code, supplier, item);
+        List<Predicate> conditions = calculateConditions(cb, root, code, description, supplier, itemDescription);
 
         if (!conditions.isEmpty())
             query.where(conditions.toArray(new Predicate[conditions.size()]));
@@ -142,12 +145,16 @@ public class SupplierItemService implements Serializable{
         return em.createQuery(select).getSingleResult();
     }
     
-    private List<Predicate> calculateConditions(CriteriaBuilder cb, Root<SupplierItem> root, String code, String supplier, String item) {
+    private List<Predicate> calculateConditions(CriteriaBuilder cb, Root<SupplierItem> root, String code, String description, String supplier, String itemDescription) {
         List<Predicate> conditions = new ArrayList<>();
 
         //code
         if (code != null && !code.isEmpty())
             conditions.add(cb.like(cb.lower(root.get(SupplierItem_.code)), "%" + code.toLowerCase() + "%"));
+        
+        //description
+        if (description != null && !description.isEmpty())
+            conditions.add(cb.like(cb.lower(root.get(SupplierItem_.description)), "%" + description.toLowerCase() + "%"));
         
         //supplier's name
         if (supplier != null && !supplier.isEmpty()) {
@@ -156,9 +163,9 @@ public class SupplierItemService implements Serializable{
         }
         
         //item's description
-        if (item != null && !item.isEmpty()) {
+        if (itemDescription != null && !itemDescription.isEmpty()) {
             Join<SupplierItem, Item> itemRoot = root.join(SupplierItem_.item);
-            conditions.add(cb.like(cb.lower(itemRoot.get(Item_.description)), "%" + item.toLowerCase() + "%"));
+            conditions.add(cb.like(cb.lower(itemRoot.get(Item_.description)), "%" + itemDescription.toLowerCase() + "%"));
         }
         
         return conditions;

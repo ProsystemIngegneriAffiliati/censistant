@@ -215,19 +215,18 @@ public class CustomerSupplierService implements Serializable{
             conditions.add(cb.equal(supplierItemRoot.get(SupplierItem_.supplier), supplier));
         }
         
-        //Filter for supplierItem's code or item's description
+        //Filter for supplierItem's code or supplierItem's description
         if (filter != null && !filter.isEmpty()) {
             Join<BoxedItem, SupplierItem> supplierItemRoot = root.join(BoxedItem_.item);
-            Join<SupplierItem, Item> itemRoot = supplierItemRoot.join(SupplierItem_.item);
             conditions.add(cb.or(
-                    cb.like(cb.lower(supplierItemRoot.get(SupplierItem_.code)), "%" + String.valueOf(filter).toLowerCase() + "%"), 
-                    cb.like(cb.lower(itemRoot.get(Item_.description)), "%" + String.valueOf(filter).toLowerCase() + "%")));
+                    cb.like(cb.lower(supplierItemRoot.get(SupplierItem_.code)), "%" + filter.toLowerCase() + "%"), 
+                    cb.like(cb.lower(supplierItemRoot.get(SupplierItem_.description)), "%" + filter.toLowerCase() + "%")));
         }
 
         if (!conditions.isEmpty())
             query.where(conditions.toArray(new Predicate[conditions.size()]));
         
-        query.orderBy(cb.asc(root.get(BoxedItem_.item).get(SupplierItem_.item).get(Item_.description)));
+        query.orderBy(cb.asc(root.get(BoxedItem_.item).get(SupplierItem_.description)));
         
         TypedQuery<BoxedItem> typedQuery = em.createQuery(select);
         if (pageSize > 0) {

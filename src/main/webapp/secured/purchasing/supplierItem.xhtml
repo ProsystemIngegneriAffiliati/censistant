@@ -22,13 +22,20 @@
                             <div class="card card-w-title">
                                 <h1>#{msg.purchasing_supplierItem}</h1>
                                 <p>#{msg.purchasing_supplierItem_tip}</p>
-                                <p:panelGrid columns="3" columnClasses="ui-grid-col-4,ui-grid-col-4,,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                <p:panelGrid columns="2" columnClasses="ui-grid-col-5,ui-grid-col-7" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputText id="code" value="#{supplierItemPresenter.supplierItem.code}"/>
                                         <p:outputLabel for="code" value="#{msg.purchasing_supplierItem_code}"/>
                                         <p:message for="code"/>
                                     </h:panelGroup>
-
+                                    
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="description" value="#{supplierItemPresenter.supplierItem.description}"/>
+                                        <p:outputLabel for="description" value="#{msg.purchasing_supplierItem_description}"/>
+                                        <p:message for="description"/>
+                                    </h:panelGroup>
+                                </p:panelGrid>
+                                <p:panelGrid columns="3" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:autoComplete id="item"
                                                         dropdown="true"

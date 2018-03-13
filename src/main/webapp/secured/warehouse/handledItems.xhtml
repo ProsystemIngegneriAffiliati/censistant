@@ -37,6 +37,9 @@
                             <p:column headerText="#{msg.purchasing_supplierItem_code}" field="supplierItemCode" priority="0">
                                 <h:outputText value="#{handledItem.boxedItem.item.code}"/>
                             </p:column>
+                            <p:column headerText="#{msg.purchasing_supplierItem_description}" field="supplierItemDescription" priority="4">
+                                <h:outputText value="#{handledItem.boxedItem.item.description}"/>
+                            </p:column>
                             <p:column headerText="#{msg.warehouse_handledItem_quantity}" priority="0">
                                 <h:outputText value="#{handledItem.quantity}">
                                     <f:convertNumber integerOnly="true" />

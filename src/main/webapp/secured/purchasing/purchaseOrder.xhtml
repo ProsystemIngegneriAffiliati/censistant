@@ -70,8 +70,8 @@
                                         <p:column headerText="#{msg.purchasing_supplierItem_code}" sortBy="#{purchaseOrderRow.boxedItem.item.code}" filterBy="#{purchaseOrderRow.boxedItem.item.code}" filterMatchMode="contains" priority="0">
                                             <h:outputText value="#{purchaseOrderRow.boxedItem.item.code}" />
                                         </p:column>
-                                        <p:column headerText="#{msg.production_item_description}" sortBy="#{purchaseOrderRow.boxedItem.item.item.description}" filterBy="#{purchaseOrderRow.boxedItem.item.item.description}" filterMatchMode="contains" priority="2">
-                                            <h:outputText value="#{purchaseOrderRow.boxedItem.item.item.description}" />
+                                        <p:column headerText="#{msg.purchasing_supplierItem_description}" sortBy="#{purchaseOrderRow.boxedItem.item.description}" filterBy="#{purchaseOrderRow.boxedItem.item.description}" filterMatchMode="contains" priority="2">
+                                            <h:outputText value="#{purchaseOrderRow.boxedItem.item.description}" />
                                         </p:column>
                                         <p:column headerText="#{msg.purchasing_purchaseOrderRow_quantity}" sortBy="#{purchaseOrderRow.quantity}" priority="4">
                                             <h:outputText value="#{purchaseOrderRow.quantity}">

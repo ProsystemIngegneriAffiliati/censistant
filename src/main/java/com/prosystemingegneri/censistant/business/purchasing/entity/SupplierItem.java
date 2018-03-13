@@ -47,6 +47,10 @@ public class SupplierItem extends BaseEntity<Long>{
     private String code;
     
     @NotNull
+    @Column(nullable = false)
+    private String description;
+    
+    @NotNull
     @ManyToOne(optional = false)
     private CustomerSupplier supplier;
     
@@ -123,6 +127,14 @@ public class SupplierItem extends BaseEntity<Long>{
 
     public List<BoxedItem> getBoxedItems() {
         return boxedItems;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
     
 }

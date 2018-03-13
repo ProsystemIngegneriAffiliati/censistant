@@ -47,7 +47,7 @@ public class PurchaseOrderLazyDataModel extends LazyDataModel<PurchaseOrder>{
         Boolean isAscending = null;
         Integer number = null;
         String supplier = null;
-        String item = null;
+        String supplierItemDescription = null;
         
         switch (sortOrder) {
             case ASCENDING:
@@ -68,14 +68,14 @@ public class PurchaseOrderLazyDataModel extends LazyDataModel<PurchaseOrder>{
                         number = Integer.parseInt(String.valueOf(filters.get(filterProperty)));
                     if (filterProperty.equalsIgnoreCase("supplier"))
                         supplier = String.valueOf(filters.get(filterProperty));
-                    if (filterProperty.equalsIgnoreCase("item"))
-                        item = String.valueOf(filters.get(filterProperty));
+                    if (filterProperty.equalsIgnoreCase("supplierItemDescription"))
+                        supplierItemDescription = String.valueOf(filters.get(filterProperty));
                 }
             }
         }
         
-        List<PurchaseOrder> result = service.listPurchaseOrders(first, pageSize, sortField, isAscending, number, supplier, item);
-        this.setRowCount(service.getPurchaseOrdersCount(number, supplier, item).intValue());
+        List<PurchaseOrder> result = service.listPurchaseOrders(first, pageSize, sortField, isAscending, number, supplier, supplierItemDescription);
+        this.setRowCount(service.getPurchaseOrdersCount(number, supplier, supplierItemDescription).intValue());
         
         return result;
     }

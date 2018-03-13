@@ -79,7 +79,7 @@ public class DevicePresenter implements Serializable {
         List<HandledItem> result = new ArrayList<>();
         
         if (device.getSystem() != null && device.getItem() != null)
-            result = handledItemService.listHandledItems(0, 0, null, null, null, null, null, null, null, device.getSystem(), device.getItem());
+            result = handledItemService.listHandledItems(0, 0, null, null, null, null, null, null, null, null, device.getSystem(), device.getItem());
         
         return result;
     }
