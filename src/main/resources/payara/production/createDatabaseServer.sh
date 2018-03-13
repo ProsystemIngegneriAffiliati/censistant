@@ -17,7 +17,10 @@ scp -P ${DB_EXTERNAL_SSH_PORT} backupDb.sh root@${DB_IP_ADDRESS}:/root/
 
 echo 'Password per database server'
 ssh root@${DB_IP_ADDRESS} -p ${DB_EXTERNAL_SSH_PORT} '\
+apt-get -qy update; \
+apt-get -qy install libsasl2-modules mutt; \
 chmod +x backupDb.sh; \
+(crontab -l && echo "15 1 * * 0 /root/backupDb.sh >/dev/null 2>&1") | crontab -; \
 useradd -M -g postgres -G users '${DB_USER_NAME}'; \
 passwd '${DB_USER_NAME}'; \
 createuser --createdb --pwprompt --echo '${DB_USER_NAME}'; \
