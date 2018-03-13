@@ -16,7 +16,7 @@
  */
 package com.prosystemingegneri.censistant.business.warehouse.entity;
 
-import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
+import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -29,25 +29,25 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @DiscriminatorValue(value = "1")
-public class SupplierLocation extends Location {
+public class SupplierPlantLocation extends Location {
     
     @NotNull
     @OneToOne(fetch = FetchType.LAZY, optional = false)
-    private CustomerSupplier supplier;
+    private Plant plant;
 
-    public SupplierLocation() {
+    public SupplierPlantLocation() {
     }
 
-    public CustomerSupplier getSupplier() {
-        return supplier;
+    public Plant getPlant() {
+        return plant;
     }
 
-    public void setSupplier(CustomerSupplier supplier) {
-        this.supplier = supplier;
+    public void setPlant(Plant plant) {
+        this.plant = plant;
     }
 
     @Override
     public String getName() {
-        return this.supplier.getName();
+        return (new StringBuilder()).append(plant.getCustomerSupplier().getName()).append(" (").append(plant.getName()).append(")").toString();
     }
 }

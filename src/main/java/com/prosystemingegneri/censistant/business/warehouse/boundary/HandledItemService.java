@@ -44,8 +44,8 @@ import com.prosystemingegneri.censistant.business.warehouse.control.Stock;
 import com.prosystemingegneri.censistant.business.warehouse.entity.HandledItem;
 import com.prosystemingegneri.censistant.business.warehouse.entity.HandledItem_;
 import com.prosystemingegneri.censistant.business.warehouse.entity.Location;
-import com.prosystemingegneri.censistant.business.warehouse.entity.SupplierLocation;
-import com.prosystemingegneri.censistant.business.warehouse.entity.SupplierLocation_;
+import com.prosystemingegneri.censistant.business.warehouse.entity.SupplierPlantLocation;
+import com.prosystemingegneri.censistant.business.warehouse.entity.SupplierPlantLocation_;
 import com.prosystemingegneri.censistant.business.warehouse.entity.Warehouse;
 import com.prosystemingegneri.censistant.business.warehouse.entity.Warehouse_;
 import java.io.Serializable;
@@ -281,9 +281,10 @@ public class HandledItemService implements Serializable{
         if (warehouseRoot != null)
             locationConditions.add(cb.like(cb.lower(warehouseRoot.get(Warehouse_.name)), "%" + locationName.toLowerCase() + "%"));
 
-        Join<HandledItem, SupplierLocation> supplierLocationRoot = cb.treat(locationRoot, SupplierLocation.class);
+        Join<HandledItem, SupplierPlantLocation> supplierLocationRoot = cb.treat(locationRoot, SupplierPlantLocation.class);
         if (supplierLocationRoot != null) {
-            Join<SupplierLocation, CustomerSupplier> supplierRoot = supplierLocationRoot.join(SupplierLocation_.supplier, JoinType.LEFT);
+            Join<SupplierPlantLocation, Plant> supplierPlantRoot = supplierLocationRoot.join(SupplierPlantLocation_.plant, JoinType.LEFT);
+            Join<Plant, CustomerSupplier> supplierRoot = supplierPlantRoot.join(Plant_.customerSupplier, JoinType.LEFT);
             locationConditions.add(cb.like(cb.lower(supplierRoot.get(CustomerSupplier_.name)), "%" + locationName.toLowerCase() + "%"));
         }
 

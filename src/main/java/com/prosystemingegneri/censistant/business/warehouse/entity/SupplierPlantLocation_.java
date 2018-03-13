@@ -16,7 +16,7 @@
  */
 package com.prosystemingegneri.censistant.business.warehouse.entity;
 
-import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
+import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
@@ -24,7 +24,7 @@ import javax.persistence.metamodel.StaticMetamodel;
  *
  * @author Davide Mainardi <ingmainardi@live.com>
  */
-@StaticMetamodel(SupplierLocation.class)
-public class SupplierLocation_ {
-    public static volatile SingularAttribute<SupplierLocation, CustomerSupplier> supplier;
+@StaticMetamodel(SupplierPlantLocation.class)
+public class SupplierPlantLocation_ {
+    public static volatile SingularAttribute<SupplierPlantLocation, Plant> plant;
 }

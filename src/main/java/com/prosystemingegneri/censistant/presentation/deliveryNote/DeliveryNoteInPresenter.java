@@ -20,7 +20,7 @@ import com.prosystemingegneri.censistant.business.customerSupplier.entity.Custom
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
 import com.prosystemingegneri.censistant.business.deliveryNote.boundary.DeliveryNoteInService;
 import com.prosystemingegneri.censistant.business.deliveryNote.entity.DeliveryNoteIn;
-import com.prosystemingegneri.censistant.business.warehouse.entity.SupplierLocation;
+import com.prosystemingegneri.censistant.business.warehouse.entity.SupplierPlantLocation;
 import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
 import java.io.Serializable;
 import javax.ejb.EJBException;
@@ -69,8 +69,8 @@ public class DeliveryNoteInPresenter implements Serializable{
     private void populateCustomerSupplierAndPlant() {
         /*if (
                 !deliveryNoteIn.getRows().isEmpty() &&
-                deliveryNoteIn.getRows().get(0).getHandledItem().getFromLocation() instanceof SupplierLocation) {
-            plantTemp = ((SupplierLocation)deliveryNoteIn.getRows().get(0).getHandledItem().getFromLocation()).getSupplier()
+                deliveryNoteIn.getRows().get(0).getHandledItem().getFromLocation() instanSupplierPlantLocationation) {
+            planSupplierPlantLocationerLocation)deliveryNoteIn.getRows().get(0).getHandledItem().getFromLocation()).getSupplier()
         }*/
     }
 

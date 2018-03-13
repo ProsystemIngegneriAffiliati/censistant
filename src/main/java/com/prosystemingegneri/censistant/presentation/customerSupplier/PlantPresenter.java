@@ -16,6 +16,7 @@
  */
 package com.prosystemingegneri.censistant.presentation.customerSupplier;
 
+import com.prosystemingegneri.censistant.business.customerSupplier.controller.PlantCreation;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
 import com.prosystemingegneri.censistant.business.sales.entity.JobOrder;
@@ -59,8 +60,12 @@ public class PlantPresenter implements Serializable {
         jobOrder = (JobOrder) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("jobOrder");
         
         plant = (Plant) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("plant");
-        if (plant == null)
-            plant = new Plant();
+        if (plant == null) {
+            if (isCustomerView)
+                plant = PlantCreation.createCustomerPlant();
+            else
+                plant = PlantCreation.createSupplierPlant();
+        }
     }
     
     public String savePlant() {

@@ -29,8 +29,8 @@ import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyRe
 import com.prosystemingegneri.censistant.business.warehouse.control.LocationType;
 import com.prosystemingegneri.censistant.business.warehouse.entity.Location;
 import com.prosystemingegneri.censistant.business.warehouse.entity.Location_;
-import com.prosystemingegneri.censistant.business.warehouse.entity.SupplierLocation;
-import com.prosystemingegneri.censistant.business.warehouse.entity.SupplierLocation_;
+import com.prosystemingegneri.censistant.business.warehouse.entity.SupplierPlantLocation;
+import com.prosystemingegneri.censistant.business.warehouse.entity.SupplierPlantLocation_;
 import com.prosystemingegneri.censistant.business.warehouse.entity.Warehouse;
 import com.prosystemingegneri.censistant.business.warehouse.entity.Warehouse_;
 import java.io.Serializable;
@@ -118,13 +118,14 @@ public class LocationService implements Serializable {
         //name
         if (name != null && !name.isEmpty()) {
             Root<Warehouse> warehouseRoot = cb.treat(root, Warehouse.class);
-            Root<SupplierLocation> supplierLocationRoot = cb.treat(root, SupplierLocation.class);
+            Root<SupplierPlantLocation> supplierLocationRoot = cb.treat(root, SupplierPlantLocation.class);
             Root<System> systemRoot = cb.treat(root, System.class);
             Join<System, Offer> offersRoot = systemRoot.join(System_.offers, JoinType.LEFT);
             Join<Offer, SiteSurveyReport> siteSurveyReportRoot = offersRoot.join(Offer_.siteSurveyReport, JoinType.LEFT);
             Join<SiteSurveyReport, Plant> plantRoot = siteSurveyReportRoot.join(SiteSurveyReport_.plant, JoinType.LEFT);
             Join<Plant, CustomerSupplier> customerRoot = plantRoot.join(Plant_.customerSupplier, JoinType.LEFT);
-            Join<SupplierLocation, CustomerSupplier> supplierRoot = supplierLocationRoot.join(SupplierLocation_.supplier, JoinType.LEFT);
+            Join<SupplierPlantLocation, Plant> supplierPlantRoot = supplierLocationRoot.join(SupplierPlantLocation_.plant, JoinType.LEFT);
+            Join<Plant, CustomerSupplier> supplierRoot = supplierPlantRoot.join(Plant_.customerSupplier, JoinType.LEFT);
             
             conditions.add(cb.or(
                     cb.like(cb.lower(warehouseRoot.get(Warehouse_.name)), "%" + name.toLowerCase() + "%"),

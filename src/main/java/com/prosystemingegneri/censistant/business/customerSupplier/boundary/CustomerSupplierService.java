@@ -20,13 +20,10 @@ import com.prosystemingegneri.censistant.business.customerSupplier.entity.Custom
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier_;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant_;
-import com.prosystemingegneri.censistant.business.production.entity.Item;
-import com.prosystemingegneri.censistant.business.production.entity.Item_;
 import com.prosystemingegneri.censistant.business.purchasing.entity.BoxedItem;
 import com.prosystemingegneri.censistant.business.purchasing.entity.BoxedItem_;
 import com.prosystemingegneri.censistant.business.purchasing.entity.SupplierItem;
 import com.prosystemingegneri.censistant.business.purchasing.entity.SupplierItem_;
-import com.prosystemingegneri.censistant.business.warehouse.entity.SupplierLocation;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,27 +57,20 @@ public class CustomerSupplierService implements Serializable{
     
     public CustomerSupplier createSupplier() {
         CustomerSupplier supplier = new CustomerSupplier(Boolean.FALSE, Boolean.FALSE, Boolean.TRUE);
-        supplier.setLocation(new SupplierLocation());
         
         return supplier;
     }
     
     public CustomerSupplier saveCustomerSupplier(CustomerSupplier customerSupplier) {
-        checkSupplierLocation(customerSupplier);
+        for (Plant plant : customerSupplier.getPlants())
+            plant.checkSupplierPlantLocation();
+
         if (customerSupplier.getId() == null)
             em.persist(customerSupplier);
         else
             return em.merge(customerSupplier);
         
         return customerSupplier;
-    }
-    
-    private void checkSupplierLocation(CustomerSupplier customerSupplier) {
-        if (customerSupplier.getIsSupplier() && customerSupplier.getLocation() == null)
-            customerSupplier.setLocation(new SupplierLocation());
-
-        if (!customerSupplier.getIsSupplier() && customerSupplier.getLocation() != null)
-            customerSupplier.removeLocation();
     }
     
     public CustomerSupplier readCustomerSupplier(Long id) {
