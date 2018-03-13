@@ -16,8 +16,11 @@
  */
 package com.prosystemingegneri.censistant.presentation.deliveryNote;
 
+import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
+import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
 import com.prosystemingegneri.censistant.business.deliveryNote.boundary.DeliveryNoteInService;
 import com.prosystemingegneri.censistant.business.deliveryNote.entity.DeliveryNoteIn;
+import com.prosystemingegneri.censistant.business.warehouse.entity.SupplierLocation;
 import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
 import java.io.Serializable;
 import javax.ejb.EJBException;
@@ -40,6 +43,9 @@ public class DeliveryNoteInPresenter implements Serializable{
     private DeliveryNoteIn deliveryNoteIn;
     private Long id;
     
+    CustomerSupplier customerSupplierTemp;
+    Plant plantTemp;
+    
     public String saveDeliveryNoteIn() {
         try {
             service.saveDeliveryNoteIn(deliveryNoteIn);
@@ -56,6 +62,16 @@ public class DeliveryNoteInPresenter implements Serializable{
             deliveryNoteIn = service.createNewDeliveryNoteIn();
         else
             deliveryNoteIn = service.readDeliveryNoteIn(id);
+        
+        populateCustomerSupplierAndPlant();
+    }
+    
+    private void populateCustomerSupplierAndPlant() {
+        /*if (
+                !deliveryNoteIn.getRows().isEmpty() &&
+                deliveryNoteIn.getRows().get(0).getHandledItem().getFromLocation() instanceof SupplierLocation) {
+            plantTemp = ((SupplierLocation)deliveryNoteIn.getRows().get(0).getHandledItem().getFromLocation()).getSupplier()
+        }*/
     }
 
     public DeliveryNoteIn getDeliveryNoteIn() {
@@ -73,4 +89,21 @@ public class DeliveryNoteInPresenter implements Serializable{
     public void setId(Long id) {
         this.id = id;
     }
+
+    public CustomerSupplier getCustomerSupplierTemp() {
+        return customerSupplierTemp;
+    }
+
+    public void setCustomerSupplierTemp(CustomerSupplier customerSupplierTemp) {
+        this.customerSupplierTemp = customerSupplierTemp;
+    }
+
+    public Plant getPlantTemp() {
+        return plantTemp;
+    }
+
+    public void setPlantTemp(Plant plantTemp) {
+        this.plantTemp = plantTemp;
+    }
+    
 }
