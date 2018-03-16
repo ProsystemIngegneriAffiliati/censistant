@@ -4,18 +4,17 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:oou="http://omnifaces.org/ui">
     <f:metadata>
         <f:viewParam name="id"
                      value="#{deliveryNoteInPresenter.id}"
-                     converter="javax.faces.Long"
-                     required="true"
-                     requiredMessage="Must provide an ID"/>
+                     converter="javax.faces.Long"/>
         <f:viewAction action="#{deliveryNoteInPresenter.detailDeliveryNoteIn()}"/>
     </f:metadata>
     <ui:composition template="/WEB-INF/template.xhtml">
         <ui:define name="content">
-            <h:form id="deliveryNoteInForm">
+            <oou:form id="deliveryNoteInForm">
                 <div class="ui-fluid">
                     <div class="ui-g">
                         <div class="ui-g-12">
@@ -28,7 +27,7 @@
                                         <p:outputLabel for="numberStr" value="#{msg.deliveryNote_deliveryNote_numberStr}" />
                                         <p:message for="numberStr"/>
                                     </h:panelGroup>
-                                    
+
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputNumber id="number" value="#{deliveryNoteInPresenter.deliveryNoteIn.number}" decimalPlaces="0" />
                                         <p:outputLabel for="number" value="#{msg.deliveryNote_deliveryNote_number}" />
@@ -39,6 +38,58 @@
                                         <p:calendar id="creation" value="#{deliveryNoteInPresenter.deliveryNoteIn.creation}"/>
                                         <p:outputLabel for="creation" value="#{msg.deliveryNote_deliveryNote_creation}"/>
                                         <p:message for="creation"/>
+                                    </h:panelGroup>
+                                </p:panelGrid>
+
+                                <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <h:panelGroup id="newSupplier">
+                                            <p:commandButton rendered="#{empty deliveryNoteInPresenter.supplierTemp}"
+                                                             action="#{deliveryNoteInPresenter.createNewSupplier()}"
+                                                             title="#{msg.new} #{msg.customerSupplier_supplier}"
+                                                             icon="ui-icon-create"
+                                                             ajax="false">
+                                                <oou:ignoreValidationFailed />
+                                            </p:commandButton>
+                                        </h:panelGroup>
+                                        <p:autoComplete id="suppliers"
+                                                        dropdown="true"
+                                                        value="#{deliveryNoteInPresenter.supplierTemp}"
+                                                        completeMethod="#{customerSupplierListPresenter.completeSupplier}"
+                                                        var="supplier"
+                                                        itemLabel="#{supplier.name}"
+                                                        itemValue="#{supplier}"
+                                                        forceSelection="true">
+                                            <oou:converter converterId="omnifaces.ListConverter" list="#{customerSupplierListPresenter.suppliers}"/>
+                                            <p:ajax event="itemSelect" listener="#{deliveryNoteInPresenter.onSupplierSelect}" update="plant newSupplier openSupplier" />
+                                        </p:autoComplete>
+                                        <p:outputLabel for="suppliers" value="#{msg.customerSupplier_supplier}"/>
+                                        <p:message for="suppliers"/>
+                                    </h:panelGroup>
+
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <h:panelGroup id="openSupplier">
+                                            <p:commandButton rendered="#{not empty deliveryNoteInPresenter.supplierTemp and empty deliveryNoteInPresenter.plantTemp}"
+                                                             action="#{deliveryNoteInPresenter.openSupplier()}"
+                                                             title="#{msg.open} #{msg.customerSupplier_supplier}, #{msg.new} #{msg.customerSupplier_plant}"
+                                                             icon="ui-icon-create"
+                                                             ajax="false">
+                                                <oou:ignoreValidationFailed />
+                                            </p:commandButton>
+                                        </h:panelGroup>
+                                        <p:autoComplete id="plant"
+                                                        dropdown="true"
+                                                        value="#{deliveryNoteInPresenter.plantTemp}"
+                                                        completeMethod="#{deliveryNoteInPresenter.completePlant}"
+                                                        var="plant"
+                                                        itemLabel="#{plant.name}"
+                                                        itemValue="#{plant}"
+                                                        forceSelection="true">
+                                            <oou:converter converterId="omnifaces.ListConverter" list="#{deliveryNoteInPresenter.supplierTemp.plants}"/>
+                                            <p:ajax event="itemSelect" update="openSupplier" />
+                                        </p:autoComplete>
+                                        <p:outputLabel for="plant" value="#{msg.customerSupplier_plant}"/>
+                                        <p:message for="plant"/>
                                     </h:panelGroup>
                                 </p:panelGrid>
 
@@ -58,7 +109,7 @@
                         </div>
                     </div>
                 </div>
-            </h:form>
+            </oou:form>
         </ui:define>
     </ui:composition>
 

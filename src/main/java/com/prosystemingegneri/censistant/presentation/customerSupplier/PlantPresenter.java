@@ -19,6 +19,7 @@ package com.prosystemingegneri.censistant.presentation.customerSupplier;
 import com.prosystemingegneri.censistant.business.customerSupplier.controller.PlantCreation;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
+import com.prosystemingegneri.censistant.business.deliveryNote.entity.DeliveryNoteIn;
 import com.prosystemingegneri.censistant.business.sales.entity.JobOrder;
 import com.prosystemingegneri.censistant.business.sales.entity.Offer;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport;
@@ -47,6 +48,8 @@ public class PlantPresenter implements Serializable {
     private Offer offer;
     private JobOrder jobOrder;
     
+    private DeliveryNoteIn deliveryNoteIn;
+    
     @PostConstruct
     public void init() {
         customerSupplier = (CustomerSupplier) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("customerSupplier");
@@ -58,6 +61,8 @@ public class PlantPresenter implements Serializable {
         
         offer = (Offer) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("offer");
         jobOrder = (JobOrder) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("jobOrder");
+        
+        deliveryNoteIn = (DeliveryNoteIn) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("deliveryNoteIn");
         
         plant = (Plant) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("plant");
         if (plant == null) {
@@ -101,6 +106,7 @@ public class PlantPresenter implements Serializable {
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("siteSurveyReport", siteSurveyReport);
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("offer", offer);
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("jobOrder", jobOrder);
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("deliveryNoteIn", deliveryNoteIn);
     }
 
     public Plant getPlant() {

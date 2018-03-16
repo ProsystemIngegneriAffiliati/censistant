@@ -16,6 +16,7 @@
  */
 package com.prosystemingegneri.censistant.presentation.deliveryNote;
 
+import com.prosystemingegneri.censistant.business.customerSupplier.boundary.CustomerSupplierService;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
 import com.prosystemingegneri.censistant.business.deliveryNote.boundary.DeliveryNoteInService;
@@ -23,12 +24,16 @@ import com.prosystemingegneri.censistant.business.deliveryNote.entity.DeliveryNo
 import com.prosystemingegneri.censistant.business.warehouse.entity.SupplierPlantLocation;
 import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJBException;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.omnifaces.cdi.ViewScoped;
+import org.primefaces.event.SelectEvent;
 
 /**
  *
@@ -39,12 +44,21 @@ import org.omnifaces.cdi.ViewScoped;
 public class DeliveryNoteInPresenter implements Serializable{
     @Inject
     DeliveryNoteInService service;
+    @Inject
+    CustomerSupplierService customerSupplierService;
     
     private DeliveryNoteIn deliveryNoteIn;
     private Long id;
     
-    CustomerSupplier customerSupplierTemp;
-    Plant plantTemp;
+    private CustomerSupplier supplierTemp;
+    private Plant plantTemp;
+    
+    @PostConstruct
+    public void init() {
+        deliveryNoteIn = (DeliveryNoteIn) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("deliveryNoteIn");
+        
+        populateCustomerSupplierAndPlant();
+    }
     
     public String saveDeliveryNoteIn() {
         try {
@@ -58,20 +72,62 @@ public class DeliveryNoteInPresenter implements Serializable{
     }
     
     public void detailDeliveryNoteIn() {
-        if (id == 0)
-            deliveryNoteIn = service.createNewDeliveryNoteIn();
-        else
-            deliveryNoteIn = service.readDeliveryNoteIn(id);
-        
-        populateCustomerSupplierAndPlant();
+        if (deliveryNoteIn == null && id != null) {
+            if (id == 0)
+                deliveryNoteIn = service.createNewDeliveryNoteIn();
+            else {
+                deliveryNoteIn = service.readDeliveryNoteIn(id);
+                populateCustomerSupplierAndPlant();
+            }
+        }
     }
     
     private void populateCustomerSupplierAndPlant() {
-        /*if (
-                !deliveryNoteIn.getRows().isEmpty() &&
-                deliveryNoteIn.getRows().get(0).getHandledItem().getFromLocation() instanSupplierPlantLocationation) {
-            planSupplierPlantLocationerLocation)deliveryNoteIn.getRows().get(0).getHandledItem().getFromLocation()).getSupplier()
-        }*/
+        supplierTemp = (CustomerSupplier) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("customerSupplier");
+        if (supplierTemp != null)
+            plantTemp = supplierTemp.getPlants().get(supplierTemp.getPlants().size() - 1);
+        else
+            if (deliveryNoteIn != null && !deliveryNoteIn.getRows().isEmpty() && deliveryNoteIn.getRows().get(0).getHandledItem().getFromLocation() instanceof SupplierPlantLocation) {
+                plantTemp = ((SupplierPlantLocation) deliveryNoteIn.getRows().get(0).getHandledItem().getFromLocation()).getPlant();
+                supplierTemp = plantTemp.getCustomerSupplier();
+            }
+    }
+    
+    public String createNewSupplier() {
+        return prepareForOpeningSupplier(customerSupplierService.createSupplier());
+    }
+    
+    public String openSupplier() {
+        return prepareForOpeningSupplier(supplierTemp);
+    }
+    
+    private String prepareForOpeningSupplier(CustomerSupplier supplier) {
+        putExternalContext();
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("customerSupplier", supplier);
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("isCustomerView", Boolean.FALSE);
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("returnPage", "deliveryNote/deliveryNoteIn");
+        
+        return "/secured/customerSupplier/supplier?faces-redirect=true";
+    }
+    
+    private void putExternalContext() {
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("deliveryNoteIn", deliveryNoteIn);
+    }
+    
+    public void onSupplierSelect(SelectEvent event) {
+        if (event != null && event.getObject() != null)
+            plantTemp = ((CustomerSupplier) event.getObject()).getHeadOffice();
+    }
+    
+    public List<Plant> completePlant(String value) {
+        List<Plant> result = new ArrayList<>();
+        
+        if (supplierTemp != null)
+            for (Plant plant : supplierTemp.getPlants())
+                if (plant.getName().toLowerCase().contains(value.toLowerCase()))
+                    result.add(plant);
+        
+        return result;
     }
 
     public DeliveryNoteIn getDeliveryNoteIn() {
@@ -90,12 +146,12 @@ public class DeliveryNoteInPresenter implements Serializable{
         this.id = id;
     }
 
-    public CustomerSupplier getCustomerSupplierTemp() {
-        return customerSupplierTemp;
+    public CustomerSupplier getSupplierTemp() {
+        return supplierTemp;
     }
 
-    public void setCustomerSupplierTemp(CustomerSupplier customerSupplierTemp) {
-        this.customerSupplierTemp = customerSupplierTemp;
+    public void setSupplierTemp(CustomerSupplier supplierTemp) {
+        this.supplierTemp = supplierTemp;
     }
 
     public Plant getPlantTemp() {
