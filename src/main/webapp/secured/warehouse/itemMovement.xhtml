@@ -23,7 +23,7 @@
                                     <p:selectOneMenu id="locationTypes" value="#{locationListPresenter.locationType}">
                                         <f:selectItem itemLabel="#{msg.warehouse_locationType_noSelection}" noSelectionOption="true" />
                                         <f:selectItem itemLabel="#{msg.warehouse_warehouse_name}" itemValue="#{LocationType.WAREHOUSE}" />
-                                        <f:selectItem itemLabel="#{msg.customerSupplier_supplier}" itemValue="#{LocationType.SUPPLIER}" />
+                                        <f:selectItem itemLabel="#{msg.customerSupplier_supplier}" itemValue="#{LocationType.SUPPLIER_PLANT}" />
                                         <f:selectItem itemLabel="#{msg.production_system}" itemValue="#{LocationType.SYSTEM}" />
                                         <p:ajax event="itemSelect" update="locations" />
                                     </p:selectOneMenu>
@@ -116,7 +116,7 @@
                                     <p:selectOneMenu id="locationTypesArrival" value="#{stockListPresenter.locationTypeArrival}">
                                         <f:selectItem itemLabel="#{msg.warehouse_locationType_noSelection}" noSelectionOption="true" />
                                         <f:selectItem itemLabel="#{msg.warehouse_warehouse_name}" itemValue="#{LocationType.WAREHOUSE}" />
-                                        <f:selectItem itemLabel="#{msg.customerSupplier_supplier}" itemValue="#{LocationType.SUPPLIER}" />
+                                        <f:selectItem itemLabel="#{msg.customerSupplier_supplier}" itemValue="#{LocationType.SUPPLIER_PLANT}" />
                                         <f:selectItem itemLabel="#{msg.production_system}" itemValue="#{LocationType.SYSTEM}" />
                                         <p:ajax event="itemSelect" update="locationsArrival" />
                                     </p:selectOneMenu>

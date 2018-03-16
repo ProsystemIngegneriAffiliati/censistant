@@ -25,6 +25,7 @@ import javax.persistence.metamodel.StaticMetamodel;
  */
 @StaticMetamodel(Plant.class)
 public class Plant_ {
+    public static volatile SingularAttribute<Plant, String> name;
     public static volatile SingularAttribute<Plant, String> address;
     public static volatile SingularAttribute<Plant, CustomerSupplier> customerSupplier;
 }

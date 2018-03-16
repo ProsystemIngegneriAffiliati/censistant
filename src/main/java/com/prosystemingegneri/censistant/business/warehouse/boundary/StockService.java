@@ -109,14 +109,14 @@ public class StockService implements Serializable {
         queryString += "SELECT COALESCE(fromSupplier.loc, fromLocation.loc, inLocation.loc) AS loc, COALESCE(fromSupplier.idboxeditem, fromLocation.idboxeditem, inLocation.idboxeditem) AS idboxeditem, SUM(COALESCE(fromSupplier.qty, 0) - COALESCE(fromLocation.qty, 0) + COALESCE(inLocation.qty, 0)) AS qty " +
                 "FROM " +
                 "( " +
-                    "SELECT supplierlocation.id AS loc, boxeditem.id AS idboxeditem, SUM(box.quantity*purchaseorderrow.quantity) AS qty " +
+                    "SELECT supplierplantlocation.id AS loc, boxeditem.id AS idboxeditem, SUM(box.quantity*purchaseorderrow.quantity) AS qty " +
                     "FROM purchaseorderrow " +
                     "JOIN purchaseorder ON purchaseorderrow.purchaseorder_id = purchaseorder.id " +
-                    "JOIN supplierlocation ON purchaseorder.supplier_id = supplierlocation.supplier_id " +
+                    "JOIN supplierplantlocation ON purchaseorder.plant_id = supplierplantlocation.plant_id " +
                     "JOIN boxeditem ON purchaseorderrow.boxeditem_id = boxeditem.id " +
                     "JOIN box ON boxeditem.box_id = box.id " +
                     filterStringSupplier +
-                    "GROUP BY supplierlocation.id, boxeditem.id " +
+                    "GROUP BY supplierplantlocation.id, boxeditem.id " +
                 ") AS fromSupplier " +
                 "FULL JOIN " +
                 "( " +

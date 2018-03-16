@@ -281,9 +281,10 @@ public class HandledItemService implements Serializable{
         if (warehouseRoot != null)
             locationConditions.add(cb.like(cb.lower(warehouseRoot.get(Warehouse_.name)), "%" + locationName.toLowerCase() + "%"));
 
-        Join<HandledItem, SupplierPlantLocation> supplierLocationRoot = cb.treat(locationRoot, SupplierPlantLocation.class);
-        if (supplierLocationRoot != null) {
-            Join<SupplierPlantLocation, Plant> supplierPlantRoot = supplierLocationRoot.join(SupplierPlantLocation_.plant, JoinType.LEFT);
+        Join<HandledItem, SupplierPlantLocation> supplierPlantLocationRoot = cb.treat(locationRoot, SupplierPlantLocation.class);
+        if (supplierPlantLocationRoot != null) {
+            Join<SupplierPlantLocation, Plant> supplierPlantRoot = supplierPlantLocationRoot.join(SupplierPlantLocation_.plant, JoinType.LEFT);
+            locationConditions.add(cb.like(cb.lower(supplierPlantRoot.get(Plant_.name)), "%" + locationName.toLowerCase() + "%"));
             Join<Plant, CustomerSupplier> supplierRoot = supplierPlantRoot.join(Plant_.customerSupplier, JoinType.LEFT);
             locationConditions.add(cb.like(cb.lower(supplierRoot.get(CustomerSupplier_.name)), "%" + locationName.toLowerCase() + "%"));
         }
