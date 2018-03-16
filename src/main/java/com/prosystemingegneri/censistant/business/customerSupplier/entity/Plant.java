@@ -71,9 +71,18 @@ public class Plant extends BaseEntity<Long>{
 
     public Plant() {
     }
+
+    public Plant(Boolean isHeadOffice, String name, String address) {
+        this.isHeadOffice = isHeadOffice;
+        this.name = name;
+        this.address = address;
+    }
     
-    public String getNameAddress() {
-        return name + System.lineSeparator() + address;
+    public String getNameAddress(boolean isNewLine) {
+        if (isNewLine)
+            return name + System.lineSeparator() + address;
+        else
+            return name + " - " + address;
     }
 
     public Boolean getIsHeadOffice() {

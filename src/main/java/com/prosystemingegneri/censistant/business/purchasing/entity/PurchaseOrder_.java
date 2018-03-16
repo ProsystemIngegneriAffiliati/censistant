@@ -16,7 +16,7 @@
  */
 package com.prosystemingegneri.censistant.business.purchasing.entity;
 
-import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
+import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
 import java.util.Date;
 import javax.persistence.metamodel.ListAttribute;
 import javax.persistence.metamodel.SingularAttribute;
@@ -30,6 +30,6 @@ import javax.persistence.metamodel.StaticMetamodel;
 public class PurchaseOrder_ {
     public static volatile SingularAttribute<PurchaseOrder, Date> creation;
     public static volatile SingularAttribute<PurchaseOrder, Integer> number;
-    public static volatile SingularAttribute<PurchaseOrder, CustomerSupplier> supplier;
+    public static volatile SingularAttribute<PurchaseOrder, Plant> plant;
     public static volatile ListAttribute<PurchaseOrder, PurchaseOrderRow> rows;
 }

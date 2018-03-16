@@ -22,7 +22,7 @@
                             <div class="card card-w-title">
                                 <h1>#{msg.purchasing_purchaseOrder}</h1>
                                 <p>#{msg.purchasing_purchaseOrder_tip}</p>
-                                <p:panelGrid columns="3" columnClasses="ui-grid-col-2,ui-grid-col-3,ui-grid-col-7" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputNumber id="number" value="#{purchaseOrderPresenter.purchaseOrder.number}" decimalPlaces="0" />
                                         <p:outputLabel for="number" value="#{msg.purchasing_purchaseOrder_number}" />
@@ -38,16 +38,33 @@
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:autoComplete id="supplier"
                                                         dropdown="true"
-                                                        value="#{purchaseOrderPresenter.purchaseOrder.supplier}"
+                                                        value="#{purchaseOrderPresenter.supplier}"
                                                         completeMethod="#{customerSupplierListPresenter.completeSupplier}"
                                                         var="supplier"
                                                         itemLabel="#{supplier.name}"
                                                         itemValue="#{supplier}"
                                                         forceSelection="true">
                                             <oou:converter converterId="omnifaces.ListConverter" list="#{customerSupplierListPresenter.suppliers}"/>
+                                            <p:ajax event="itemSelect" listener="#{purchaseOrderPresenter.onSupplierSelect}" update="plant" />
                                         </p:autoComplete>
                                         <p:outputLabel for="supplier" value="#{msg.customerSupplier_supplier}"/>
                                         <p:message for="supplier"/>
+                                    </h:panelGroup>
+                                    
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:autoComplete id="plant"
+                                                        readonly="#{empty purchaseOrderPresenter.supplier}"
+                                                        dropdown="true"
+                                                        value="#{purchaseOrderPresenter.purchaseOrder.plant}"
+                                                        completeMethod="#{purchaseOrderPresenter.completeSupplerPlant}"
+                                                        var="plant"
+                                                        itemLabel="#{plant.getNameAddress(false)}"
+                                                        itemValue="#{plant}"
+                                                        forceSelection="true">
+                                            <oou:converter converterId="omnifaces.ListConverter" list="#{purchaseOrderPresenter.supplier.plants}"/>
+                                        </p:autoComplete>
+                                        <p:outputLabel for="plant" value="#{msg.customerSupplier_plant}"/>
+                                        <p:message for="plant"/>
                                     </h:panelGroup>
                                 </p:panelGrid>
 

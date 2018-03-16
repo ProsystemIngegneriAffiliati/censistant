@@ -55,7 +55,7 @@ public class PurchaseOrderRowPresenter implements Serializable {
         row = (PurchaseOrderRow) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("purchaseOrderRow");
         if (row == null)
             row = new PurchaseOrderRow();
-        supplier = purchaseOrder.getSupplier();
+        supplier = purchaseOrder.getPlant().getCustomerSupplier();
     }
     
     public String savePurchaseOrderRow() {

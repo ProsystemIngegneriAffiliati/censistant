@@ -16,11 +16,15 @@
  */
 package com.prosystemingegneri.censistant.presentation.purchasing;
 
+import com.prosystemingegneri.censistant.business.customerSupplier.boundary.CustomerSupplierService;
+import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
+import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
 import com.prosystemingegneri.censistant.business.purchasing.boundary.PurchaseOrderService;
 import com.prosystemingegneri.censistant.business.purchasing.entity.PurchaseOrder;
 import com.prosystemingegneri.censistant.business.purchasing.entity.PurchaseOrderRow;
 import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
 import java.io.Serializable;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJBException;
 import javax.faces.application.FacesMessage;
@@ -28,6 +32,7 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.omnifaces.cdi.ViewScoped;
+import org.primefaces.event.SelectEvent;
 
 /**
  *
@@ -38,13 +43,18 @@ import org.omnifaces.cdi.ViewScoped;
 public class PurchaseOrderPresenter implements Serializable{
     @Inject
     PurchaseOrderService service;
+    @Inject
+    CustomerSupplierService customerSupplierService;
     
     private PurchaseOrder purchaseOrder;
     private Long id;
     
+    private CustomerSupplier supplier;
+    
     @PostConstruct
     public void init() {
         purchaseOrder = (PurchaseOrder) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("purchaseOrder");
+        populateSupplier();
     }
     
     public String savePurchaseOrder() {
@@ -62,9 +72,16 @@ public class PurchaseOrderPresenter implements Serializable{
         if (purchaseOrder == null && id != null) {
             if (id == 0)
                 purchaseOrder = service.createNewPurchaseOrder();
-            else
+            else {
                 purchaseOrder = service.readPurchaseOrder(id);
+                populateSupplier();
+            }
         }
+    }
+    
+    private void populateSupplier() {
+        if (purchaseOrder != null && purchaseOrder.getPlant() != null)
+            supplier = purchaseOrder.getPlant().getCustomerSupplier();
     }
     
     public String detailRow(PurchaseOrderRow row) {
@@ -78,6 +95,17 @@ public class PurchaseOrderPresenter implements Serializable{
     public void deleteRow(PurchaseOrderRow row) {
         if (row != null)
             purchaseOrder.removeRow(row);
+    }
+    
+    public List<Plant> completeSupplerPlant(String value) {
+        return customerSupplierService.listPlants(0, 10, null, null, supplier, value);
+    }
+    
+    public void onSupplierSelect(SelectEvent event) {
+        if (event != null && event.getObject() != null) {
+            CustomerSupplier tempSupplier = (CustomerSupplier) event.getObject();
+            purchaseOrder.setPlant(tempSupplier.getHeadOffice());
+        }
     }
     
     public PurchaseOrder getPurchaseOrder() {
@@ -95,4 +123,13 @@ public class PurchaseOrderPresenter implements Serializable{
     public void setId(Long id) {
         this.id = id;
     }
+
+    public CustomerSupplier getSupplier() {
+        return supplier;
+    }
+
+    public void setSupplier(CustomerSupplier supplier) {
+        this.supplier = supplier;
+    }
+    
 }

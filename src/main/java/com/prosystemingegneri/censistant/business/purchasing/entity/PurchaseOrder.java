@@ -17,7 +17,9 @@
 package com.prosystemingegneri.censistant.business.purchasing.entity;
 
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
+import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
 import com.prosystemingegneri.censistant.business.entity.BaseEntity;
+import static com.prosystemingegneri.censistant.business.purchasing.entity.SupplierItem_.supplier;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -58,7 +60,7 @@ public class PurchaseOrder extends BaseEntity<Long>{
     
     @NotNull
     @ManyToOne(optional = false)
-    private CustomerSupplier supplier;
+    private Plant plant;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "purchaseOrder", orphanRemoval = true)
     private final List<PurchaseOrderRow> rows;
@@ -94,12 +96,12 @@ public class PurchaseOrder extends BaseEntity<Long>{
         this.number = number;
     }
 
-    public CustomerSupplier getSupplier() {
-        return supplier;
+    public Plant getPlant() {
+        return plant;
     }
 
-    public void setSupplier(CustomerSupplier supplier) {
-        this.supplier = supplier;
+    public void setPlant(Plant plant) {
+        this.plant = plant;
     }
 
     public String getNotes() {

@@ -41,7 +41,7 @@
                                 <h:outputText value="#{purchaseOrder.number}"/>
                             </p:column>
                             <p:column headerText="#{msg.customerSupplier_supplier}" field="supplier" priority="4">
-                                <h:outputText value="#{purchaseOrder.supplier.name}"/>
+                                <h:outputText value="#{purchaseOrder.plant.customerSupplier.name}"/>
                             </p:column>
                             <p:column headerText="#{msg.purchasing_purchaseOrder_cost_total}" priority="2">
                                 <h:outputText value="#{purchaseOrder.totalCost}">

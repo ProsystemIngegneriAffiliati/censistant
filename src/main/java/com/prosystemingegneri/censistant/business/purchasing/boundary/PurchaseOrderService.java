@@ -18,6 +18,8 @@ package com.prosystemingegneri.censistant.business.purchasing.boundary;
 
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier_;
+import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
+import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant_;
 import com.prosystemingegneri.censistant.business.purchasing.entity.BoxedItem;
 import com.prosystemingegneri.censistant.business.purchasing.entity.BoxedItem_;
 import com.prosystemingegneri.censistant.business.purchasing.entity.PurchaseOrder;
@@ -124,7 +126,7 @@ public class PurchaseOrderService implements Serializable{
                     path = root.get(PurchaseOrder_.number);
                     break;
                 case "supplier":
-                    path = root.get(PurchaseOrder_.supplier).get(CustomerSupplier_.name);
+                    path = root.get(PurchaseOrder_.plant).get(Plant_.customerSupplier).get(CustomerSupplier_.name);
                     break;
                 case "creation":
                     path = root.get(PurchaseOrder_.creation);
@@ -171,7 +173,8 @@ public class PurchaseOrderService implements Serializable{
         
         //supplier's name
         if (supplier != null && !supplier.isEmpty()) {
-            Join<PurchaseOrder, CustomerSupplier> supplierRoot = root.join(PurchaseOrder_.supplier);
+            Join<PurchaseOrder, Plant> plantRoot = root.join(PurchaseOrder_.plant);
+            Join<Plant, CustomerSupplier> supplierRoot = plantRoot.join(Plant_.customerSupplier);
             conditions.add(cb.like(cb.lower(supplierRoot.get(CustomerSupplier_.name)), "%" + supplier.toLowerCase() + "%"));
         }
         
