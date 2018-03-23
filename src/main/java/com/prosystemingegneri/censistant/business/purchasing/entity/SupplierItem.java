@@ -137,4 +137,7 @@ public class SupplierItem extends BaseEntity<Long>{
         this.description = description;
     }
     
+    public String getCodeAndDescription() {
+        return code + ": " + description;
+    }
 }

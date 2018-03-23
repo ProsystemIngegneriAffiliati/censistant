@@ -23,7 +23,7 @@
                                 <h:outputText value="#{stock.location.name}" />
                             </p:column>
                             <p:column headerText="#{msg.purchasing_supplierItem}" field="item" sortable="false" priority="0">
-                                <h:outputText value="#{stock.boxedItem.item.code} - #{stock.boxedItem.item.description}" />
+                                <h:outputText value="#{stock.boxedItem.item.codeAndDescription}" />
                             </p:column>
                             <p:column headerText="#{msg.purchasing_purchaseOrderRow_quantity}" priority="0">
                                 <h:outputText value="#{stock.quantity}">

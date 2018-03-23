@@ -21,6 +21,7 @@ import com.prosystemingegneri.censistant.business.customerSupplier.entity.Custom
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
 import com.prosystemingegneri.censistant.business.deliveryNote.boundary.DeliveryNoteInService;
 import com.prosystemingegneri.censistant.business.deliveryNote.entity.DeliveryNoteIn;
+import com.prosystemingegneri.censistant.business.deliveryNote.entity.DeliveryNoteRow;
 import com.prosystemingegneri.censistant.business.warehouse.entity.SupplierPlantLocation;
 import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
 import java.io.Serializable;
@@ -128,6 +129,19 @@ public class DeliveryNoteInPresenter implements Serializable{
                     result.add(plant);
         
         return result;
+    }
+    
+    public String detailRow(DeliveryNoteRow row) {
+        if (row != null)
+            FacesContext.getCurrentInstance().getExternalContext().getFlash().put("deliveryNoteRow", row);
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("deliveryNote", deliveryNoteIn);
+        
+        return "/secured/deliveryNote/deliveryNoteInRow?faces-redirect=true";
+    }
+    
+    public void deleteRow(DeliveryNoteRow row) {
+        if (row != null)
+            deliveryNoteIn.removeRow(row);
     }
 
     public DeliveryNoteIn getDeliveryNoteIn() {

@@ -68,10 +68,18 @@ public class Stock implements Serializable {
     }
     
     public boolean isBoxed() {
-        return quantity != quantity / boxedItem.getBox().getQuantity() && quantity / boxedItem.getBox().getQuantity() >= 1;
+        return isBoxed(quantity, boxedItem.getBox().getQuantity());
+    }
+    
+    public static boolean isBoxed(Integer quantity, Integer boxCapacity) {
+        return quantity != quantity / boxCapacity && quantity / boxCapacity >= 1;
     }
     
     public String getFullBoxedQuantityStr() {
+        return getFullBoxedQuantityStr(quantity, boxedItem);
+    }
+    
+    public static String getFullBoxedQuantityStr(Integer quantity, BoxedItem boxedItem) {
         StringBuilder result = new StringBuilder();
         
         BigDecimal[] maina = (new BigDecimal(quantity)).divideAndRemainder(new BigDecimal(boxedItem.getBox().getQuantity()));
