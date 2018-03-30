@@ -20,6 +20,7 @@ import com.prosystemingegneri.censistant.business.customerSupplier.entity.Custom
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier_;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant_;
+import com.prosystemingegneri.censistant.business.deliveryNote.entity.DeliveryNoteRow;
 import com.prosystemingegneri.censistant.business.production.boundary.DeviceService;
 import com.prosystemingegneri.censistant.business.production.boundary.SystemService;
 import com.prosystemingegneri.censistant.business.production.entity.Device;
@@ -30,8 +31,6 @@ import com.prosystemingegneri.censistant.business.purchasing.entity.BoxedItem;
 import com.prosystemingegneri.censistant.business.purchasing.entity.BoxedItem_;
 import com.prosystemingegneri.censistant.business.purchasing.entity.SupplierItem;
 import com.prosystemingegneri.censistant.business.purchasing.entity.SupplierItem_;
-import com.prosystemingegneri.censistant.business.sales.entity.JobOrder;
-import com.prosystemingegneri.censistant.business.sales.entity.JobOrder_;
 import com.prosystemingegneri.censistant.business.sales.entity.Offer;
 import com.prosystemingegneri.censistant.business.sales.entity.Offer_;
 import com.prosystemingegneri.censistant.business.siteSurvey.boundary.WorkerService;
@@ -147,13 +146,13 @@ public class HandledItemService implements Serializable{
         em.remove(readHandledItem(id));
     }
     
-    public List<HandledItem> listHandledItems(int first, int pageSize, String sortField, Boolean isAscending, String workerName, String supplierItemCode, String supplierItemDescription, String fromLocationName, String toLocationName, BoxedItem boxedItem, Location fromOrToLocation, Item item) {
+    public List<HandledItem> listHandledItems(int first, int pageSize, String sortField, Boolean isAscending, String workerName, String supplierItemCode, String supplierItemDescription, Location fromLocation, String fromLocationName, Location toLocation, String toLocationName, BoxedItem boxedItem, Location fromOrToLocation, Item item, Boolean isAssociatedToDeliveryNoteRow) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<HandledItem> query = cb.createQuery(HandledItem.class);
         Root<HandledItem> root = query.from(HandledItem.class);
         CriteriaQuery<HandledItem> select = query.select(root).distinct(true);
         
-        List<Predicate> conditions = calculateConditions(cb, root, workerName, supplierItemCode, supplierItemDescription, fromLocationName, toLocationName, boxedItem, fromOrToLocation, item);
+        List<Predicate> conditions = calculateConditions(cb, root, workerName, supplierItemCode, supplierItemDescription, fromLocation, fromLocationName, toLocation, toLocationName, boxedItem, fromOrToLocation, item, isAssociatedToDeliveryNoteRow);
 
         if (!conditions.isEmpty())
             query.where(conditions.toArray(new Predicate[conditions.size()]));
@@ -198,13 +197,13 @@ public class HandledItemService implements Serializable{
         }
     }
     
-    public Long getHandledItemsCount(String workerName, String supplierItemCode, String supplierItemDescription, String fromLocationName, String toLocationName, BoxedItem boxedItem, Location fromOrToLocation, Item item) {
+    public Long getHandledItemsCount(String workerName, String supplierItemCode, String supplierItemDescription,Location fromLocation, String fromLocationName, Location toLocation, String toLocationName, BoxedItem boxedItem, Location fromOrToLocation, Item item, Boolean isAssociatedToDeliveryNoteRow) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Long> query = cb.createQuery(Long.class);
         Root<HandledItem> root = query.from(HandledItem.class);
         CriteriaQuery<Long> select = query.select(cb.count(root));
 
-        List<Predicate> conditions = calculateConditions(cb, root, workerName, supplierItemCode, supplierItemDescription, fromLocationName, toLocationName, boxedItem, fromOrToLocation, item);
+        List<Predicate> conditions = calculateConditions(cb, root, workerName, supplierItemCode, supplierItemDescription, fromLocation, fromLocationName, toLocation, toLocationName, boxedItem, fromOrToLocation, item, isAssociatedToDeliveryNoteRow);
 
         if (!conditions.isEmpty())
             query.where(conditions.toArray(new Predicate[conditions.size()]));
@@ -219,7 +218,7 @@ public class HandledItemService implements Serializable{
         }
     }
     
-    private List<Predicate> calculateConditions(CriteriaBuilder cb, Root<HandledItem> root, String workerName, String supplierItemCode, String supplierItemDescription, String fromLocationName, String toLocationName, BoxedItem boxedItem, Location fromOrToLocation, Item item) {
+    private List<Predicate> calculateConditions(CriteriaBuilder cb, Root<HandledItem> root, String workerName, String supplierItemCode, String supplierItemDescription, Location fromLocation, String fromLocationName, Location toLocation, String toLocationName, BoxedItem boxedItem, Location fromOrToLocation, Item item, Boolean isAssociatedToDeliveryNoteRow) {
         List<Predicate> conditions = new ArrayList<>();
         
         //Worker's name
@@ -242,6 +241,10 @@ public class HandledItemService implements Serializable{
             conditions.add(cb.like(cb.lower(supplierItemRoot.get(SupplierItem_.description)), "%" + supplierItemDescription.toLowerCase() + "%"));
         }
         
+        //From location
+        if (fromLocation != null)
+            conditions.add(cb.equal(root.get(HandledItem_.fromLocation), fromLocation));
+        
         //From location's name
         if (fromLocationName != null && !fromLocationName.isEmpty()) {
             List<Predicate> locationConditions = calculateLocationConditions(cb, root.join(HandledItem_.fromLocation), fromLocationName);
@@ -253,6 +256,10 @@ public class HandledItemService implements Serializable{
             List<Predicate> locationConditions = calculateLocationConditions(cb, root.join(HandledItem_.toLocation), toLocationName);
             conditions.add(cb.or(locationConditions.toArray(new Predicate[locationConditions.size()])));
         }
+        
+        //To location
+        if (toLocation != null)
+            conditions.add(cb.equal(root.get(HandledItem_.toLocation), toLocation));
         
         //Boxed item
         if (boxedItem != null)
@@ -269,6 +276,15 @@ public class HandledItemService implements Serializable{
             Join<HandledItem, BoxedItem> boxedItemRoot = root.join(HandledItem_.boxedItem);
             Join<BoxedItem, SupplierItem> supplierItemRoot = boxedItemRoot.join(BoxedItem_.item);
             conditions.add(cb.equal(supplierItemRoot.get(SupplierItem_.item), item));
+        }
+        
+        //Is linked to delivery note's row
+        if (isAssociatedToDeliveryNoteRow != null) {
+            Join<HandledItem, DeliveryNoteRow> deliveryNoteRowRoot = root.join(HandledItem_.deliveryNoteRow, JoinType.LEFT);
+            if (isAssociatedToDeliveryNoteRow)
+                conditions.add(cb.isNotNull(deliveryNoteRowRoot));
+            else
+                conditions.add(cb.isNull(deliveryNoteRowRoot));
         }
         
         return conditions;

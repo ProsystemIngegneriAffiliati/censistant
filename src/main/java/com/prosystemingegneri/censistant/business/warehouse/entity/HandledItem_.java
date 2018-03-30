@@ -16,6 +16,7 @@
  */
 package com.prosystemingegneri.censistant.business.warehouse.entity;
 
+import com.prosystemingegneri.censistant.business.deliveryNote.entity.DeliveryNoteRow;
 import com.prosystemingegneri.censistant.business.purchasing.entity.BoxedItem;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.Worker;
 import java.util.Date;
@@ -33,4 +34,5 @@ public class HandledItem_ {
     public static volatile SingularAttribute<HandledItem, Location> fromLocation;
     public static volatile SingularAttribute<HandledItem, Location> toLocation;
     public static volatile SingularAttribute<HandledItem, Worker> worker;
+    public static volatile SingularAttribute<HandledItem, DeliveryNoteRow> deliveryNoteRow;
 }

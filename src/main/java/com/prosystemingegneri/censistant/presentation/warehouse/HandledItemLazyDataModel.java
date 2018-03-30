@@ -18,6 +18,7 @@ package com.prosystemingegneri.censistant.presentation.warehouse;
 
 import com.prosystemingegneri.censistant.business.warehouse.boundary.HandledItemService;
 import com.prosystemingegneri.censistant.business.warehouse.entity.HandledItem;
+import com.prosystemingegneri.censistant.business.warehouse.entity.Location;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -32,9 +33,20 @@ import static org.primefaces.model.SortOrder.DESCENDING;
  */
 public class HandledItemLazyDataModel extends LazyDataModel<HandledItem>{
     private final HandledItemService service;
+    
+    private Location fromLocation;
+    private Location toLocation;
+    private Boolean isAssociatedToDeliveryNoteRow;
 
     public HandledItemLazyDataModel(HandledItemService service) {
         this.service = service;
+    }
+
+    public HandledItemLazyDataModel(HandledItemService service, Location fromLocation, Location toLocation, Boolean isLinkedToDeliveryNoteRow) {
+        this.service = service;
+        this.fromLocation = fromLocation;
+        this.toLocation = toLocation;
+        this.isAssociatedToDeliveryNoteRow = isLinkedToDeliveryNoteRow;
     }
     
     @Override
@@ -80,8 +92,8 @@ public class HandledItemLazyDataModel extends LazyDataModel<HandledItem>{
             }
         }
         
-        List<HandledItem> result = service.listHandledItems(first, pageSize, sortField, isAscending, workerName, supplierItemCode, supplierItemDescription, fromLocationName, toLocationName, null, null, null);
-        this.setRowCount(service.getHandledItemsCount(workerName, supplierItemCode, supplierItemDescription, fromLocationName, toLocationName, null, null, null).intValue());
+        List<HandledItem> result = service.listHandledItems(first, pageSize, sortField, isAscending, workerName, supplierItemCode, supplierItemDescription, fromLocation, fromLocationName, toLocation, toLocationName, null, null, null, isAssociatedToDeliveryNoteRow);
+        this.setRowCount(service.getHandledItemsCount(workerName, supplierItemCode, supplierItemDescription, fromLocation, fromLocationName, toLocation, toLocationName, null, null, null, isAssociatedToDeliveryNoteRow).intValue());
         
         return result;
     }
@@ -94,4 +106,29 @@ public class HandledItemLazyDataModel extends LazyDataModel<HandledItem>{
             return null;
         }
     }
+
+    public Location getFromLocation() {
+        return fromLocation;
+    }
+
+    public void setFromLocation(Location fromLocation) {
+        this.fromLocation = fromLocation;
+    }
+
+    public Location getToLocation() {
+        return toLocation;
+    }
+
+    public void setToLocation(Location toLocation) {
+        this.toLocation = toLocation;
+    }
+
+    public Boolean getIsAssociatedToDeliveryNoteRow() {
+        return isAssociatedToDeliveryNoteRow;
+    }
+
+    public void setIsAssociatedToDeliveryNoteRow(Boolean isAssociatedToDeliveryNoteRow) {
+        this.isAssociatedToDeliveryNoteRow = isAssociatedToDeliveryNoteRow;
+    }
+    
 }

@@ -131,10 +131,20 @@ public class DeliveryNoteInPresenter implements Serializable{
         return result;
     }
     
+    public String creteNewRow() {
+        if (plantTemp != null) {
+            FacesContext.getCurrentInstance().getExternalContext().getFlash().put("deliveryNoteIn", deliveryNoteIn);
+            FacesContext.getCurrentInstance().getExternalContext().getFlash().put("plant", plantTemp);
+            return "/secured/deliveryNote/deliveryNoteInRowCreation?faces-redirect=true";
+        }
+        
+        return null;
+    }
+    
     public String detailRow(DeliveryNoteRow row) {
         if (row != null)
             FacesContext.getCurrentInstance().getExternalContext().getFlash().put("deliveryNoteRow", row);
-        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("deliveryNote", deliveryNoteIn);
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("deliveryNoteIn", deliveryNoteIn);
         
         return "/secured/deliveryNote/deliveryNoteInRow?faces-redirect=true";
     }

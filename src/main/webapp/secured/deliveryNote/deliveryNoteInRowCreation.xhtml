@@ -18,18 +18,13 @@
 
                                 <p:tabView id="deliveryNoteInTabs" dynamic="true">
                                     <p:tab title="#{msg.warehouse_handledItems}">
-                                        <p:dataTable id="handledItemsTable" widgetVar="handledItemsTable" var="handledItem" value="#{handledItemListPresenter.lazyHandledItems}"
-                                                     selectionMode="multiple" selection="#{handledItemListPresenter.selectedHandledItems}" rowKey="#{handledItem.id}"
+                                        <p:dataTable id="handledItemsTable" widgetVar="handledItemsTable" var="handledItem" value="#{deliveryNoteInRowCreationPresenter.lazyHandledItems}"
+                                                     selectionMode="multiple" selection="#{deliveryNoteInRowCreationPresenter.selectedHandledItems}" rowKey="#{handledItem.id}"
                                                      paginator="true" rows="10"
                                                      paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                                      rowsPerPageTemplate="10,25,50" lazy="true">
                                             <f:facet name="header">
-                                                <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
-                                                    #{msg.warehouse_handledItems_tip}
-                                                    <p:commandButton title="#{msg.delete}" icon="ui-icon-delete" actionListener="#{handledItemListPresenter.deleteHandledItem()}" update="handledItemsTable">
-                                                        <p:confirm header="#{msg.warehouse_handledItems_delete}" message="#{msg.warehouse_handledItems_delete_tip}" icon="ui-icon-alert"/>
-                                                    </p:commandButton>
-                                                </p:panelGrid>
+                                                #{msg.warehouse_handledItems_tip}
                                             </f:facet>
                                             <p:column headerText="#{msg.warehouse_handledItem_fromLocation}" field="fromLocationName" sortable="false" priority="3">
                                                 <h:outputText value="#{handledItem.fromLocation.name}"/>
@@ -67,7 +62,7 @@
                                     <div class="ui-g-1 ui-md-2"></div>
                                     <div class="ui-g-4 ui-md-3">
                                         <p:commandButton value="#{msg.cancel}"
-                                                         action="#{deliveryNoteInRowPresenter.cancel()}"
+                                                         action="#{deliveryNoteInRowCreationPresenter.cancel()}"
                                                          styleClass="secondary"
                                                          ajax="false">
                                             <oou:ignoreValidationFailed />
@@ -76,7 +71,7 @@
                                     <div class="ui-g-2 ui-md-2"></div>
                                     <div class="ui-g-4 ui-md-3">
                                         <p:commandButton value="#{msg.save}"
-                                                         action="#{deliveryNoteInRowPresenter.saveDeliveryNoteInRow()}"
+                                                         action="#{deliveryNoteInRowCreationPresenter.createDeliveryNoteInRow()}"
                                                          ajax="false"/>
                                     </div>
                                 </div>

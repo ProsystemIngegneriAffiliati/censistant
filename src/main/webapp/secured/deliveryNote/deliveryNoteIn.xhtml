@@ -62,7 +62,7 @@
                                                         itemValue="#{supplier}"
                                                         forceSelection="true">
                                             <oou:converter converterId="omnifaces.ListConverter" list="#{customerSupplierListPresenter.suppliers}"/>
-                                            <p:ajax event="itemSelect" listener="#{deliveryNoteInPresenter.onSupplierSelect}" update="plant newSupplier openSupplier" />
+                                            <p:ajax event="itemSelect" listener="#{deliveryNoteInPresenter.onSupplierSelect}" update="plant newSupplier openSupplier deliveryNoteInRowsTable:createNewRowButton" />
                                         </p:autoComplete>
                                         <p:outputLabel for="suppliers" value="#{msg.customerSupplier_supplier}"/>
                                         <p:message for="suppliers"/>
@@ -87,7 +87,7 @@
                                                         itemValue="#{plant}"
                                                         forceSelection="true">
                                             <oou:converter converterId="omnifaces.ListConverter" list="#{deliveryNoteInPresenter.supplierTemp.plants}"/>
-                                            <p:ajax event="itemSelect" update="openSupplier" />
+                                            <p:ajax event="itemSelect" update="openSupplier deliveryNoteInRowsTable:createNewRowButton" />
                                         </p:autoComplete>
                                         <p:outputLabel for="plant" value="#{msg.customerSupplier_plant}"/>
                                         <p:message for="plant"/>
@@ -101,7 +101,7 @@
                                         <f:facet name="header">
                                             <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
                                                 #{msg.deliveryNote_deliveryNoteRows}
-                                                <p:commandButton title="#{msg.new}" icon="ui-icon-create" action="#{deliveryNoteInPresenter.detailRow(null)}" ajax="false" />
+                                                <p:commandButton id="createNewRowButton" title="#{msg.new}" icon="ui-icon-create" disabled="#{empty deliveryNoteInPresenter.plantTemp}" action="#{deliveryNoteInPresenter.creteNewRow()}" ajax="false" />
                                             </p:panelGrid>
                                         </f:facet>
                                         <p:column headerText="#{msg.purchasing_supplierItem_codeAndDescription}" sortBy="#{row.handledItem.boxedItem.item.codeAndDescription}" filterBy="#{row.handledItem.boxedItem.item.codeAndDescription}" filterMatchMode="contains" priority="0">
@@ -117,8 +117,8 @@
                                             <h:outputText rendered="#{stk:isBoxed(row.handledItem.quantity, row.handledItem.boxedItem.box.quantity)}" value="#{stk:getFullBoxedQuantityStr(row.handledItem.quantity, row.handledItem.boxedItem)}" />
                                         </p:column>
                                         <p:column headerText="#{msg.actions}" style="width:72px; text-align:center" priority="0">
-                                            <p:splitButton value="" icon="ui-icon-edit" action="#{deliveryNoteInPresenter.detailRow(deliveryNoteRow)}" ajax="false">
-                                                <p:menuitem  value="#{msg.remove}" icon="ui-icon-delete" actionListener="#{deliveryNoteInPresenter.deleteRow(deliveryNoteRow)}" update="deliveryNoteInRowsTable" />
+                                            <p:splitButton value="" icon="ui-icon-edit" action="#{deliveryNoteInPresenter.detailRow(row)}" ajax="false">
+                                                <p:menuitem  value="#{msg.remove}" icon="ui-icon-delete" actionListener="#{deliveryNoteInPresenter.deleteRow(row)}" update="deliveryNoteInRowsTable" />
                                             </p:splitButton>
                                         </p:column>
                                     </p:dataTable>
