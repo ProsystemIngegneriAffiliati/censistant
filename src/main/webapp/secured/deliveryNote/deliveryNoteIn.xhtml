@@ -104,6 +104,9 @@
                                                 <p:commandButton id="createNewRowButton" title="#{msg.new}" icon="ui-icon-create" disabled="#{empty deliveryNoteInPresenter.plantTemp}" action="#{deliveryNoteInPresenter.creteNewRow()}" ajax="false" />
                                             </p:panelGrid>
                                         </f:facet>
+                                        <p:column headerText="#{msg.purchasing_purchaseOrder}" sortBy="#{row.purchaseOrderRow.purchaseOrder.numberAndCreation}" filterBy="#{row.purchaseOrderRow.purchaseOrder.numberAndCreation}" filterMatchMode="contains" priority="0">
+                                            <h:outputText rendered="#{not empty row.purchaseOrderRow}" value="#{row.purchaseOrderRow.purchaseOrder.numberAndCreation}" />
+                                        </p:column>
                                         <p:column headerText="#{msg.purchasing_supplierItem_codeAndDescription}" sortBy="#{row.handledItem.boxedItem.item.codeAndDescription}" filterBy="#{row.handledItem.boxedItem.item.codeAndDescription}" filterMatchMode="contains" priority="0">
                                             <h:outputText value="#{row.handledItem.boxedItem.item.codeAndDescription}" />
                                         </p:column>
@@ -115,6 +118,9 @@
                                         </p:column>
                                         <p:column headerText="#{msg.purchasing_box_name}" priority="4">
                                             <h:outputText rendered="#{stk:isBoxed(row.handledItem.quantity, row.handledItem.boxedItem.box.quantity)}" value="#{stk:getFullBoxedQuantityStr(row.handledItem.quantity, row.handledItem.boxedItem)}" />
+                                        </p:column>
+                                        <p:column headerText="#{msg.warehouse_handledItem_toLocation}" sortBy="#{row.handledItem.toLocation.name}" filterBy="#{row.handledItem.toLocation.name}" filterMatchMode="contains" priority="4">
+                                            <h:outputText value="#{row.handledItem.toLocation.name}" />
                                         </p:column>
                                         <p:column headerText="#{msg.actions}" style="width:72px; text-align:center" priority="0">
                                             <p:splitButton value="" icon="ui-icon-edit" action="#{deliveryNoteInPresenter.detailRow(row)}" ajax="false">

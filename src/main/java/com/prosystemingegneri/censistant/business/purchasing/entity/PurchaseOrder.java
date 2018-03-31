@@ -16,11 +16,10 @@
  */
 package com.prosystemingegneri.censistant.business.purchasing.entity;
 
-import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
 import com.prosystemingegneri.censistant.business.entity.BaseEntity;
-import static com.prosystemingegneri.censistant.business.purchasing.entity.SupplierItem_.supplier;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -78,6 +77,10 @@ public class PurchaseOrder extends BaseEntity<Long>{
     public PurchaseOrder(Integer number) {
         this();
         this.number = number;
+    }
+    
+    public String getNumberAndCreation() {
+        return number + " - " + new SimpleDateFormat("dd/MM/yyyy").format(creation);
     }
 
     public Date getCreation() {

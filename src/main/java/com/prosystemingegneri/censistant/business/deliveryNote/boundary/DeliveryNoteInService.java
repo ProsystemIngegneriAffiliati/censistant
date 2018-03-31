@@ -92,8 +92,8 @@ public class DeliveryNoteInService implements Serializable{
     }
     
     public DeliveryNoteIn saveDeliveryNoteIn(DeliveryNoteIn deliveryNoteIn) {
-        checkAndEvetuallySavePurchaseOrder(deliveryNoteIn);
-        checkAndEvetuallySaveHandledItems(deliveryNoteIn);
+        updatePurchaseOrders(deliveryNoteIn);
+        updateHandledItems(deliveryNoteIn);
         if (deliveryNoteIn.getId() == null)
             em.persist(deliveryNoteIn);
         else
@@ -189,18 +189,19 @@ public class DeliveryNoteInService implements Serializable{
     *
     * Purchase order has been created at the same moment of delivery note's row, so it must be saved first
     */
-    private void checkAndEvetuallySavePurchaseOrder(@NotNull DeliveryNoteIn deliveryNoteIn) {
-        if (!deliveryNoteIn.getRows().isEmpty() && deliveryNoteIn.getRows().get(0).getPurchaseOrderRow().getPurchaseOrder().getId() == null)
-            purchaseOrderService.savePurchaseOrder(deliveryNoteIn.getRows().get(0).getPurchaseOrderRow().getPurchaseOrder());
+    private void updatePurchaseOrders(@NotNull DeliveryNoteIn deliveryNoteIn) {
+        for (DeliveryNoteRow row : deliveryNoteIn.getRows()) {
+            if (row.getPurchaseOrderRow() != null)
+                purchaseOrderService.savePurchaseOrder(row.getPurchaseOrderRow().getPurchaseOrder());
+        }
     }
 
     /**
     *
     * Handled items have been created at the same moment of delivery note's rows, so they must be saved first
     */
-    private void checkAndEvetuallySaveHandledItems(@NotNull DeliveryNoteIn deliveryNoteIn) {
+    private void updateHandledItems(@NotNull DeliveryNoteIn deliveryNoteIn) {
         for (DeliveryNoteRow row : deliveryNoteIn.getRows())
-            if (row.getHandledItem().getId() == null)
-                handledItemService.saveHandledItem(row.getHandledItem());
+            handledItemService.saveHandledItem(row.getHandledItem());
     }
 }

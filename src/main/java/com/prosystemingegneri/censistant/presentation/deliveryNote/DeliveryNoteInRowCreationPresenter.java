@@ -96,7 +96,7 @@ public class DeliveryNoteInRowCreationPresenter implements Serializable {
                     HandledItem handledItem = new HandledItem();
                     handledItem.setBoxedItem(selectedPurchaseOrderRow.getBoxedItem());
                     handledItem.setFromLocation(plant.getLocation());
-                    handledItem.setQuantity(preparedQuantities.getOrDefault(selectedPurchaseOrderRow.getId(), 0));
+                    handledItem.setQuantity(preparedQuantities.getOrDefault(selectedPurchaseOrderRow.getId(), selectedPurchaseOrderRow.getQuantityToBeDelivered()));
                     handledItem.setToLocation(locationDestination);
                     handledItem.setWorker(workerService.findWorker(null, false, authenticator.getLoggedUser()));
 

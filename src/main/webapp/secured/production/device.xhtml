@@ -63,7 +63,7 @@
                                         <h:outputText rendered="#{devicePresenter.device.system.equals(handledItem.fromLocation)}" value="#{msg.production_system} --> #{handledItem.toLocation.name}" />
                                     </p:column>
                                     <p:column headerText="#{msg.purchasing_supplierItem_code} - #{msg.purchasing_supplierItem_description}" priority="2">
-                                        <h:outputText value="#{handledItem.boxedItem.item.code} - #{handledItem.boxedItem.item.description}" />
+                                        <h:outputText value="#{handledItem.boxedItem.item.codeAndDescription}" />
                                     </p:column>
                                     <p:column headerText="#{msg.warehouse_handledItem_handlingTimestamp}" priority="0">
                                         <h:outputText value="#{handledItem.handlingTimestamp}">
