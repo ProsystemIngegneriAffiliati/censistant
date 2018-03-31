@@ -16,7 +16,9 @@
  */
 package com.prosystemingegneri.censistant.business.purchasing.entity;
 
+import com.prosystemingegneri.censistant.business.deliveryNote.entity.DeliveryNoteRow;
 import java.math.BigDecimal;
+import javax.persistence.metamodel.ListAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
@@ -31,4 +33,5 @@ public class PurchaseOrderRow_ {
     public static volatile SingularAttribute<PurchaseOrderRow, BigDecimal> cost;
     public static volatile SingularAttribute<PurchaseOrderRow, BoxedItem> boxedItem;
     public static volatile SingularAttribute<PurchaseOrderRow, PurchaseOrder> purchaseOrder;
+    public static volatile ListAttribute<PurchaseOrderRow, DeliveryNoteRow> deliveryNoteRows;
 }

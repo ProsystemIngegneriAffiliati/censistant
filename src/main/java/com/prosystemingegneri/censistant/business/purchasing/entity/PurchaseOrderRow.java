@@ -57,6 +57,12 @@ public class PurchaseOrderRow extends BaseEntity<Long>{
     @Column(nullable = false)    
     private Integer quantity;
     
+    @Transient
+    private Integer quantityToBeDelivered;  //quantity still in supplier's warehouse
+    
+    @Transient
+    private Integer quantityPrepared;
+    
     @NotNull
     @DecimalMin("0")
     @Column(nullable = false, scale = SCALE_COST, precision = PRECISION_COST)
@@ -75,6 +81,8 @@ public class PurchaseOrderRow extends BaseEntity<Long>{
 
     public PurchaseOrderRow() {
         quantity = 1;
+        quantityPrepared = 0;
+        quantityToBeDelivered = 0;
         cost = BigDecimal.ZERO;
         deliveryNoteRows = new ArrayList<>();
     }
@@ -146,6 +154,24 @@ public class PurchaseOrderRow extends BaseEntity<Long>{
 
     public List<DeliveryNoteRow> getDeliveryNoteRows() {
         return deliveryNoteRows;
+    }
+
+    public Integer getQuantityToBeDelivered() {
+        return quantityToBeDelivered;
+    }
+
+    public void setQuantityToBeDelivered(Integer quantityToBeDelivered) {
+        this.quantityToBeDelivered = quantityToBeDelivered;
+    }
+
+    public Integer getQuantityPrepared() {
+        if ((quantityPrepared == null || quantityPrepared <= 0) && quantity > 0)
+            quantityPrepared = quantity;
+        return quantityPrepared;
+    }
+
+    public void setQuantityPrepared(Integer quantityPrepared) {
+        this.quantityPrepared = quantityPrepared;
     }
     
 }

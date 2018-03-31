@@ -8,6 +8,7 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:composition template="/WEB-INF/template.xhtml">
         <ui:define name="content">
+            <oou:importConstants type="com.prosystemingegneri.censistant.business.warehouse.control.LocationType"/>
             <oou:form id="deliveryNoteInRowForm">
                 <div class="ui-fluid">
                     <div class="ui-g">
@@ -17,8 +18,9 @@
                                 <p>#{msg.deliveryNote_deliveryNoteRow_tip}</p>
 
                                 <p:tabView id="deliveryNoteInTabs" dynamic="true">
+                                    <p:ajax event="tabChange" listener="#{deliveryNoteInRowCreationPresenter.onTabChange}" update="handledItemsTable purchaseOrderRowsTable"/>
                                     <p:tab title="#{msg.warehouse_handledItems}">
-                                        <p:dataTable id="handledItemsTable" widgetVar="handledItemsTable" var="handledItem" value="#{deliveryNoteInRowCreationPresenter.lazyHandledItems}"
+                                        <p:dataTable id="handledItemsTable" var="handledItem" value="#{deliveryNoteInRowCreationPresenter.lazyHandledItems}"
                                                      selectionMode="multiple" selection="#{deliveryNoteInRowCreationPresenter.selectedHandledItems}" rowKey="#{handledItem.id}"
                                                      paginator="true" rows="10"
                                                      paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -53,6 +55,65 @@
                                             </p:column>
                                             <p:column headerText="#{msg.warehouse_handledItem_toLocation}" field="toLocationName" sortable="false" priority="0">
                                                 <h:outputText value="#{handledItem.toLocation.name}"/>
+                                            </p:column>
+                                        </p:dataTable>
+                                    </p:tab>
+                                    <p:tab title="#{msg.purchasing_purchaseOrderRows}">
+                                        <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                            <p:selectOneMenu id="locationTypes" value="#{locationListPresenter.locationType}">
+                                                <f:selectItem itemLabel="#{msg.warehouse_locationType_noSelection}" noSelectionOption="true" />
+                                                <f:selectItem itemLabel="#{msg.warehouse_warehouse_name}" itemValue="#{LocationType.WAREHOUSE}" />
+                                                <f:selectItem itemLabel="#{msg.customerSupplier_supplier}" itemValue="#{LocationType.SUPPLIER_PLANT}" />
+                                                <f:selectItem itemLabel="#{msg.production_system}" itemValue="#{LocationType.SYSTEM}" />
+                                                <p:ajax event="itemSelect" update="locations" />
+                                            </p:selectOneMenu>
+
+                                            <h:panelGroup styleClass="md-inputfield">
+                                                <p:autoComplete id="locations"
+                                                                dropdown="true"
+                                                                value="#{deliveryNoteInRowCreationPresenter.locationDestination}"
+                                                                completeMethod="#{locationListPresenter.completeLocations}"
+                                                                var="loc"
+                                                                itemLabel="#{loc.name}"
+                                                                itemValue="#{loc}"
+                                                                forceSelection="true">
+                                                    <oou:converter converterId="omnifaces.ListConverter" list="#{locationListPresenter.locations}"/>
+                                                </p:autoComplete>
+                                                <p:outputLabel for="locations" value="#{msg.warehouse_locations}"/>
+                                                <p:message for="locations"/>
+                                            </h:panelGroup>
+                                        </p:panelGrid>
+
+                                        <p:dataTable id="purchaseOrderRowsTable" var="purchaseOrderRow" value="#{deliveryNoteInRowCreationPresenter.lazyPurchaseOrderRows}"
+                                                     selectionMode="multiple" selection="#{deliveryNoteInRowCreationPresenter.selectedPurchaseOrderRows}" rowKey="#{purchaseOrderRow.id}"
+                                                     paginator="true" rows="10"
+                                                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                                     rowsPerPageTemplate="10,25,50" lazy="true"
+                                                     editable="true" editMode="cell">
+                                            <f:facet name="header">
+                                                #{msg.purchasing_purchaseOrderRows}
+                                            </f:facet>
+                                            <p:ajax event="cellEdit" listener="#{deliveryNoteInRowCreationPresenter.onPurchaseOrderRowsCellEdit}" />
+                                            <p:column headerText="#{msg.purchasing_supplierItem_code}" field="itemCode" priority="0">
+                                                <h:outputText value="#{purchaseOrderRow.boxedItem.item.code}" />
+                                            </p:column>
+                                            <p:column headerText="#{msg.purchasing_supplierItem_description}" field="itemDescription" priority="2">
+                                                <h:outputText value="#{purchaseOrderRow.boxedItem.item.description}" />
+                                            </p:column>
+                                            <p:column headerText="#{msg.purchasing_purchaseOrderRow_quantity}" priority="4">
+                                                <p:cellEditor>
+                                                    <f:facet name="output">
+                                                        <h:outputText value="#{purchaseOrderRow.quantityPrepared}">
+                                                            <f:convertNumber integerOnly="true" />
+                                                        </h:outputText>
+                                                    </f:facet>
+                                                    <f:facet name="input">
+                                                        <p:inputNumber value="#{purchaseOrderRow.quantityPrepared}" decimalPlaces="0" minValue="1" maxValue="#{purchaseOrderRow.quantity}" />
+                                                    </f:facet>
+                                                </p:cellEditor>
+                                            </p:column>
+                                            <p:column headerText="#{msg.production_unitMeasure_symbol}" priority="5">
+                                                <h:outputText value="#{purchaseOrderRow.boxedItem.box.unitMeasure.name} #{purchaseOrderRow.boxedItem.box.quantity} #{purchaseOrderRow.boxedItem.item.item.unitMeasure.symbol}" />
                                             </p:column>
                                         </p:dataTable>
                                     </p:tab>

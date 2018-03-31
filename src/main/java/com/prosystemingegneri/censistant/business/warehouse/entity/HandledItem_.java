@@ -30,9 +30,10 @@ import javax.persistence.metamodel.StaticMetamodel;
 @StaticMetamodel(HandledItem.class)
 public class HandledItem_ {
     public static volatile SingularAttribute<HandledItem, Date> handlingTimestamp;
+    public static volatile SingularAttribute<HandledItem, Worker> worker;
+    public static volatile SingularAttribute<HandledItem, Integer> quantity;
     public static volatile SingularAttribute<HandledItem, BoxedItem> boxedItem;
     public static volatile SingularAttribute<HandledItem, Location> fromLocation;
     public static volatile SingularAttribute<HandledItem, Location> toLocation;
-    public static volatile SingularAttribute<HandledItem, Worker> worker;
     public static volatile SingularAttribute<HandledItem, DeliveryNoteRow> deliveryNoteRow;
 }

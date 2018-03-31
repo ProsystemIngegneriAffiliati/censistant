@@ -19,6 +19,9 @@ package com.prosystemingegneri.censistant.business.deliveryNote.boundary;
 import com.prosystemingegneri.censistant.business.deliveryNote.entity.DeliveryNoteCommon_;
 import com.prosystemingegneri.censistant.business.deliveryNote.entity.DeliveryNoteIn;
 import com.prosystemingegneri.censistant.business.deliveryNote.entity.DeliveryNoteIn_;
+import com.prosystemingegneri.censistant.business.deliveryNote.entity.DeliveryNoteRow;
+import com.prosystemingegneri.censistant.business.purchasing.boundary.PurchaseOrderService;
+import com.prosystemingegneri.censistant.business.warehouse.boundary.HandledItemService;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -26,6 +29,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -36,6 +40,7 @@ import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -45,6 +50,11 @@ import javax.persistence.criteria.Root;
 public class DeliveryNoteInService implements Serializable{
     @PersistenceContext
     EntityManager em;
+    
+    @Inject
+    PurchaseOrderService purchaseOrderService;
+    @Inject
+    HandledItemService handledItemService;
     
     public DeliveryNoteIn createNewDeliveryNoteIn() {
         return new DeliveryNoteIn(getNextNumber());
@@ -81,7 +91,9 @@ public class DeliveryNoteInService implements Serializable{
 	return result;
     }
     
-    public DeliveryNoteIn saveDeliveryNoteIn(DeliveryNoteIn deliveryNoteIn) {        
+    public DeliveryNoteIn saveDeliveryNoteIn(DeliveryNoteIn deliveryNoteIn) {
+        checkAndEvetuallySavePurchaseOrder(deliveryNoteIn);
+        checkAndEvetuallySaveHandledItems(deliveryNoteIn);
         if (deliveryNoteIn.getId() == null)
             em.persist(deliveryNoteIn);
         else
@@ -171,5 +183,24 @@ public class DeliveryNoteInService implements Serializable{
             conditions.add(cb.like(cb.lower(root.get(DeliveryNoteIn_.numberStr)), "%" + String.valueOf(numberStr).toLowerCase() + "%"));
         
         return conditions;
+    }
+
+    /**
+    *
+    * Purchase order has been created at the same moment of delivery note's row, so it must be saved first
+    */
+    private void checkAndEvetuallySavePurchaseOrder(@NotNull DeliveryNoteIn deliveryNoteIn) {
+        if (!deliveryNoteIn.getRows().isEmpty() && deliveryNoteIn.getRows().get(0).getPurchaseOrderRow().getPurchaseOrder().getId() == null)
+            purchaseOrderService.savePurchaseOrder(deliveryNoteIn.getRows().get(0).getPurchaseOrderRow().getPurchaseOrder());
+    }
+
+    /**
+    *
+    * Handled items have been created at the same moment of delivery note's rows, so they must be saved first
+    */
+    private void checkAndEvetuallySaveHandledItems(@NotNull DeliveryNoteIn deliveryNoteIn) {
+        for (DeliveryNoteRow row : deliveryNoteIn.getRows())
+            if (row.getHandledItem().getId() == null)
+                handledItemService.saveHandledItem(row.getHandledItem());
     }
 }

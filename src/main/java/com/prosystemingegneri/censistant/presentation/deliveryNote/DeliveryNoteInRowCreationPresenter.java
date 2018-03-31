@@ -19,16 +19,27 @@ package com.prosystemingegneri.censistant.presentation.deliveryNote;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
 import com.prosystemingegneri.censistant.business.deliveryNote.entity.DeliveryNoteIn;
 import com.prosystemingegneri.censistant.business.deliveryNote.entity.DeliveryNoteRow;
+import com.prosystemingegneri.censistant.business.purchasing.boundary.PurchaseOrderRowService;
+import com.prosystemingegneri.censistant.business.purchasing.entity.PurchaseOrderRow;
+import com.prosystemingegneri.censistant.business.siteSurvey.boundary.WorkerService;
 import com.prosystemingegneri.censistant.business.warehouse.boundary.HandledItemService;
 import com.prosystemingegneri.censistant.business.warehouse.entity.HandledItem;
+import com.prosystemingegneri.censistant.business.warehouse.entity.Location;
+import com.prosystemingegneri.censistant.presentation.Authenticator;
+import com.prosystemingegneri.censistant.presentation.purchasing.PurchaseOrderRowLazyDataModel;
 import com.prosystemingegneri.censistant.presentation.warehouse.HandledItemLazyDataModel;
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.omnifaces.cdi.ViewScoped;
+import org.primefaces.event.CellEditEvent;
+import org.primefaces.event.TabChangeEvent;
 
 /**
  *
@@ -42,16 +53,32 @@ public class DeliveryNoteInRowCreationPresenter implements Serializable {
     private Plant plant;
     
     @Inject
-    HandledItemService service;
+    HandledItemService handledItemService;
     
     private HandledItemLazyDataModel lazyHandledItems;
     private List<HandledItem> selectedHandledItems;
+    
+    @Inject
+    PurchaseOrderRowService purchaseOrderRowService;
+    
+    private PurchaseOrderRowLazyDataModel lazyPurchaseOrderRows;
+    private List<PurchaseOrderRow> selectedPurchaseOrderRows;
+    private Map<Long, Integer> preparedQuantities;
+    
+    private Location locationDestination;
+    
+    @Inject
+    Authenticator authenticator;
+    @Inject
+    WorkerService workerService;
     
     @PostConstruct
     public void init() {
         deliveryNote = (DeliveryNoteIn) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("deliveryNoteIn");
         plant = (Plant) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("plant");
-        lazyHandledItems = new HandledItemLazyDataModel(service, plant.getLocation(), null, Boolean.FALSE);
+        lazyHandledItems = new HandledItemLazyDataModel(handledItemService, plant.getLocation(), null, Boolean.FALSE);
+        lazyPurchaseOrderRows = new PurchaseOrderRowLazyDataModel(purchaseOrderRowService, plant, Boolean.TRUE);
+        preparedQuantities = new HashMap<>();
     }
     
     public String createDeliveryNoteInRow() {
@@ -60,6 +87,30 @@ public class DeliveryNoteInRowCreationPresenter implements Serializable {
                 DeliveryNoteRow row = new DeliveryNoteRow();
                 row.addHandledItem(selectedHandledItem);
                 deliveryNote.addRow(row);
+            }
+        }
+        
+        if (selectedPurchaseOrderRows != null && !selectedPurchaseOrderRows.isEmpty()) {
+            if (locationDestination != null) {
+                for (PurchaseOrderRow selectedPurchaseOrderRow : selectedPurchaseOrderRows) {
+                    HandledItem handledItem = new HandledItem();
+                    handledItem.setBoxedItem(selectedPurchaseOrderRow.getBoxedItem());
+                    handledItem.setFromLocation(plant.getLocation());
+                    handledItem.setQuantity(preparedQuantities.getOrDefault(selectedPurchaseOrderRow.getId(), 0));
+                    handledItem.setToLocation(locationDestination);
+                    handledItem.setWorker(workerService.findWorker(null, false, authenticator.getLoggedUser()));
+
+                    DeliveryNoteRow row = new DeliveryNoteRow();
+                    row.addHandledItem(handledItem);
+
+                    selectedPurchaseOrderRow.addDeliveryNoteRow(row);
+                    
+                    deliveryNote.addRow(row);
+                }
+            }
+            else {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Select a destination"));
+                return null;
             }
         }
         
@@ -76,7 +127,18 @@ public class DeliveryNoteInRowCreationPresenter implements Serializable {
         
         return "/secured/deliveryNote/deliveryNoteIn?faces-redirect=true";
     }
+    
+    public void onTabChange(TabChangeEvent event) {
+        if (selectedHandledItems != null)
+            selectedHandledItems.clear();
+        if (selectedPurchaseOrderRows != null)
+            selectedPurchaseOrderRows.clear();
+    }
 
+    public void onPurchaseOrderRowsCellEdit(CellEditEvent event) {
+        preparedQuantities.put(Long.parseLong(event.getRowKey()), (Integer) event.getNewValue());
+    }
+    
     public DeliveryNoteIn getDeliveryNote() {
         return deliveryNote;
     }
@@ -99,6 +161,30 @@ public class DeliveryNoteInRowCreationPresenter implements Serializable {
 
     public void setSelectedHandledItems(List<HandledItem> selectedHandledItems) {
         this.selectedHandledItems = selectedHandledItems;
+    }
+
+    public PurchaseOrderRowLazyDataModel getLazyPurchaseOrderRows() {
+        return lazyPurchaseOrderRows;
+    }
+
+    public void setLazyPurchaseOrderRows(PurchaseOrderRowLazyDataModel lazyPurchaseOrderRows) {
+        this.lazyPurchaseOrderRows = lazyPurchaseOrderRows;
+    }
+
+    public List<PurchaseOrderRow> getSelectedPurchaseOrderRows() {
+        return selectedPurchaseOrderRows;
+    }
+
+    public void setSelectedPurchaseOrderRows(List<PurchaseOrderRow> selectedPurchaseOrderRows) {
+        this.selectedPurchaseOrderRows = selectedPurchaseOrderRows;
+    }
+
+    public Location getLocationDestination() {
+        return locationDestination;
+    }
+
+    public void setLocationDestination(Location locationDestination) {
+        this.locationDestination = locationDestination;
     }
     
 }

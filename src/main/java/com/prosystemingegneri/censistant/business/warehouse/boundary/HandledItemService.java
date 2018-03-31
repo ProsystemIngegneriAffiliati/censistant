@@ -131,11 +131,13 @@ public class HandledItemService implements Serializable{
         return result;
     }
     
-    public HandledItem updateHandledItem(HandledItem handledItem) {        
-        if (handledItem.getId() != null)
+    public HandledItem saveHandledItem(HandledItem handledItem) {        
+        if (handledItem.getId() == null)
+            em.persist(handledItem);
+        else
             return em.merge(handledItem);
         
-        return null;
+        return handledItem;
     }
     
     public HandledItem readHandledItem(Long id) {
