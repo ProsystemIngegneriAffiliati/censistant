@@ -111,12 +111,12 @@ public class SiteSurveyReportPresenter implements Serializable{
     }
     
     public List<Plant> completePlant(String value) {
-        return customerSupplierService.listPlants(0, 10, "address", Boolean.TRUE, siteSurveyReport.getRequest().getCustomer(), value);
+        return customerSupplierService.listPlants(0, 10, "address", Boolean.TRUE, siteSurveyReport.getRequest().getCustomer(), null, value);
     }
 
     public List<Plant> getPlants() {
         if (plants == null || plants.isEmpty())
-            plants = customerSupplierService.listPlants(0, 0, "address", Boolean.TRUE, siteSurveyReport.getRequest().getCustomer(), null);
+            plants = customerSupplierService.listPlants(0, 0, "address", Boolean.TRUE, siteSurveyReport.getRequest().getCustomer(), null, null);
         return plants;
     }
 

@@ -53,13 +53,15 @@
                                         </h:panelGroup>
 
                                         <h:panelGroup styleClass="md-inputfield">
-                                            <p:commandButton rendered="#{siteSurveyReportPresenter.siteSurveyReport.request.customer == null}"
-                                                             action="#{siteSurveyReportPresenter.createPotentialCustomer()}"
-                                                             title="#{msg.new} #{msg.customerSupplier_customer}"
-                                                             icon="ui-icon-create"
-                                                             ajax="false">
-                                                <oou:ignoreValidationFailed />
-                                            </p:commandButton>
+                                            <h:panelGroup id="newCustomer">
+                                                <p:commandButton rendered="#{siteSurveyReportPresenter.siteSurveyReport.request.customer == null}"
+                                                                 action="#{siteSurveyReportPresenter.createPotentialCustomer()}"
+                                                                 title="#{msg.new} #{msg.customerSupplier_customer}"
+                                                                 icon="ui-icon-create"
+                                                                 ajax="false">
+                                                    <oou:ignoreValidationFailed />
+                                                </p:commandButton>
+                                            </h:panelGroup>
                                             <p:autoComplete id="requestCustomer"
                                                             dropdown="true"
                                                             value="#{siteSurveyReportPresenter.siteSurveyReport.request.customer}"
@@ -70,7 +72,7 @@
                                                             forceSelection="true"
                                                             disabled="#{siteSurveyReportPresenter.siteSurveyReport.request.id != null}">
                                                 <oou:converter converterId="omnifaces.ListConverter" list="#{customerSupplierListPresenter.customers}"/>
-                                                <p:ajax event="itemSelect" update="siteSurveyReportPanel" />
+                                                <p:ajax event="itemSelect" update="newCustomer siteSurveyReportPanel" />
                                             </p:autoComplete>
                                             <p:outputLabel for="requestCustomer" value="#{msg.customerSupplier_customer}"/>
                                             <p:message for="requestCustomer"/>
@@ -119,22 +121,25 @@
 
                                         <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                             <h:panelGroup styleClass="md-inputfield">
-                                                <p:commandButton rendered="#{siteSurveyReportPresenter.siteSurveyReport.plant == null}"
-                                                                 action="#{siteSurveyReportPresenter.openCustomer()}"
-                                                                 title="#{msg.new} #{msg.siteSurvey_siteSurveyReport_constructionSite}"
-                                                                 icon="ui-icon-create"
-                                                                 ajax="false">
-                                                    <oou:ignoreValidationFailed />
-                                                </p:commandButton>
+                                                <h:panelGroup id="newPlant">
+                                                    <p:commandButton rendered="#{siteSurveyReportPresenter.siteSurveyReport.plant == null}"
+                                                                     action="#{siteSurveyReportPresenter.openCustomer()}"
+                                                                     title="#{msg.new} #{msg.siteSurvey_siteSurveyReport_constructionSite}"
+                                                                     icon="ui-icon-create"
+                                                                     ajax="false">
+                                                        <oou:ignoreValidationFailed />
+                                                    </p:commandButton>
+                                                </h:panelGroup>
                                                 <p:autoComplete id="plant"
                                                                 dropdown="true"
                                                                 value="#{siteSurveyReportPresenter.siteSurveyReport.plant}"
                                                                 completeMethod="#{siteSurveyReportPresenter.completePlant}"
                                                                 var="plant"
-                                                                itemLabel="#{plant.address}"
+                                                                itemLabel="#{plant.getNameAddress(false)}"
                                                                 itemValue="#{plant}"
                                                                 forceSelection="true">
                                                     <oou:converter converterId="omnifaces.ListConverter" list="#{siteSurveyReportPresenter.plants}"/>
+                                                    <p:ajax event="itemSelect" update="newPlant" />
                                                 </p:autoComplete>
                                                 <p:outputLabel for="plant" value="#{msg.siteSurvey_siteSurveyReport_constructionSite}"/>
                                                 <p:message for="plant"/>

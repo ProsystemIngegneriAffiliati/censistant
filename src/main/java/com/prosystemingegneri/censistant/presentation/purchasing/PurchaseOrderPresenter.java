@@ -97,8 +97,8 @@ public class PurchaseOrderPresenter implements Serializable{
             purchaseOrder.removeRow(row);
     }
     
-    public List<Plant> completeSupplerPlant(String value) {
-        return customerSupplierService.listPlants(0, 10, null, null, supplier, value);
+    public List<Plant> completeSupplierPlant(String value) {
+        return customerSupplierService.listPlants(0, 10, null, null, supplier, value, null);
     }
     
     public void onSupplierSelect(SelectEvent event) {

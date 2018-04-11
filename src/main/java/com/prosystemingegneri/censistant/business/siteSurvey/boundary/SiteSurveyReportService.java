@@ -120,13 +120,13 @@ public class SiteSurveyReportService implements Serializable{
         em.remove(readSiteSurveyReport(id));
     }
 
-    public List<SiteSurveyReport> listSiteSurveyReports(int first, int pageSize, String sortField, Boolean isAscending, Integer number, Date start, Date end, String customer, String systemType, String seller, String plant, Boolean isAssociatedToOffer) {
+    public List<SiteSurveyReport> listSiteSurveyReports(int first, int pageSize, String sortField, Boolean isAscending, Integer number, Date start, Date end, String customer, String systemType, String seller, String nameAddressPlant, Boolean isAssociatedToOffer) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<SiteSurveyReport> query = cb.createQuery(SiteSurveyReport.class);
         Root<SiteSurveyReport> root = query.from(SiteSurveyReport.class);
         CriteriaQuery<SiteSurveyReport> select = query.select(root).distinct(true);
         
-        List<Predicate> conditions = calculateConditions(cb, root, number, start, end, customer, systemType, seller, plant, isAssociatedToOffer);
+        List<Predicate> conditions = calculateConditions(cb, root, number, start, end, customer, systemType, seller, nameAddressPlant, isAssociatedToOffer);
 
         if (!conditions.isEmpty())
             query.where(conditions.toArray(new Predicate[conditions.size()]));
@@ -145,7 +145,7 @@ public class SiteSurveyReportService implements Serializable{
                 case "seller":
                     path = root.get(SiteSurveyReport_.seller).get(Worker_.name);
                     break;
-                case "plant":
+                case "nameAddressPlant":
                     path = root.get(SiteSurveyReport_.plant).get(Plant_.address);
                     break;
                 default:
@@ -167,13 +167,13 @@ public class SiteSurveyReportService implements Serializable{
         return typedQuery.getResultList();
     }
     
-    public Long getSiteSurveyReportsCount(Integer number, Date start, Date end, String customer, String systemType, String seller, String plant, Boolean isAssociatedToOffer) {
+    public Long getSiteSurveyReportsCount(Integer number, Date start, Date end, String customer, String systemType, String seller, String nameAddressPlant, Boolean isAssociatedToOffer) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Long> query = cb.createQuery(Long.class);
         Root<SiteSurveyReport> root = query.from(SiteSurveyReport.class);
         CriteriaQuery<Long> select = query.select(cb.count(root));
 
-        List<Predicate> conditions = calculateConditions(cb, root, number, start, end, customer, systemType, seller, plant, isAssociatedToOffer);
+        List<Predicate> conditions = calculateConditions(cb, root, number, start, end, customer, systemType, seller, nameAddressPlant, isAssociatedToOffer);
 
         if (!conditions.isEmpty())
             query.where(conditions.toArray(new Predicate[conditions.size()]));
@@ -181,7 +181,7 @@ public class SiteSurveyReportService implements Serializable{
         return em.createQuery(select).getSingleResult();
     }
     
-    private List<Predicate> calculateConditions(CriteriaBuilder cb, Root<SiteSurveyReport> root, Integer number, Date start, Date end, String customer, String systemType, String seller, String plant, Boolean isAssociatedToOffer) {
+    private List<Predicate> calculateConditions(CriteriaBuilder cb, Root<SiteSurveyReport> root, Integer number, Date start, Date end, String customer, String systemType, String seller, String nameAddressPlant, Boolean isAssociatedToOffer) {
         List<Predicate> conditions = new ArrayList<>();
 
         //number
@@ -212,10 +212,13 @@ public class SiteSurveyReportService implements Serializable{
             conditions.add(cb.like(cb.lower(workerRoot.get(Worker_.name)), "%" + seller.toLowerCase() + "%"));
         }
         
-        //plant's address
-        if (plant != null && !plant.isEmpty()) {
+        //plant's address and name
+        if (nameAddressPlant != null && !nameAddressPlant.isEmpty()) {
             Join<SiteSurveyReport, Plant> plantRoot = root.join(SiteSurveyReport_.plant);
-            conditions.add(cb.like(cb.lower(plantRoot.get(Plant_.address)), "%" + String.valueOf(plant).toLowerCase() + "%"));
+            conditions.add(
+                    cb.or(
+                            cb.like(cb.lower(plantRoot.get(Plant_.address)), "%" + String.valueOf(nameAddressPlant).toLowerCase() + "%"),
+                            cb.like(cb.lower(plantRoot.get(Plant_.name)), "%" + String.valueOf(nameAddressPlant).toLowerCase() + "%")));
         }
         
         //is associated to offer

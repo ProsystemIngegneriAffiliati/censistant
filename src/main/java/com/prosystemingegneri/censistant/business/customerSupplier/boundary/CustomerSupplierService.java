@@ -157,7 +157,7 @@ public class CustomerSupplierService implements Serializable{
         return conditions;
     }
     
-    public List<Plant> listPlants(int first, int pageSize, String sortField, Boolean isAscending, CustomerSupplier customerSupplier, String address) {
+    public List<Plant> listPlants(int first, int pageSize, String sortField, Boolean isAscending, CustomerSupplier customerSupplier, String address, String nameAddress) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Plant> query = cb.createQuery(Plant.class);
         Root<Plant> root = query.from(Plant.class);
@@ -172,6 +172,13 @@ public class CustomerSupplierService implements Serializable{
         //Address
         if (address != null)
             conditions.add(cb.like(cb.lower(root.get(Plant_.address)), "%" + String.valueOf(address).toLowerCase() + "%"));
+        
+        //Name or address
+        if (nameAddress != null)
+            conditions.add(
+                    cb.or(
+                            cb.like(cb.lower(root.get(Plant_.address)), "%" + String.valueOf(nameAddress).toLowerCase() + "%"),
+                            cb.like(cb.lower(root.get(Plant_.name)), "%" + String.valueOf(nameAddress).toLowerCase() + "%")));
 
         if (!conditions.isEmpty())
             query.where(conditions.toArray(new Predicate[conditions.size()]));
