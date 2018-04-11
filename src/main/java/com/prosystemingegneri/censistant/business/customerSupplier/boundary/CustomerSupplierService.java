@@ -65,6 +65,8 @@ public class CustomerSupplierService implements Serializable{
     public CustomerSupplier saveCustomerSupplier(CustomerSupplier customerSupplier) {
         for (Plant plant : customerSupplier.getPlants())
             plant.checkSupplierPlantLocation();
+        
+        customerSupplier.checkHeadOfficeOfPotentialCustomer();
 
         if (customerSupplier.getId() == null)
             em.persist(customerSupplier);
