@@ -17,34 +17,15 @@
 package com.prosystemingegneri.censistant.business.purchasing.boundary;
 
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
-import com.prosystemingegneri.censistant.business.deliveryNote.entity.DeliveryNoteRow_;
-import com.prosystemingegneri.censistant.business.purchasing.entity.BoxedItem;
-import com.prosystemingegneri.censistant.business.purchasing.entity.BoxedItem_;
-import com.prosystemingegneri.censistant.business.purchasing.entity.PurchaseOrder;
 import com.prosystemingegneri.censistant.business.purchasing.entity.PurchaseOrderRow;
-import com.prosystemingegneri.censistant.business.purchasing.entity.PurchaseOrderRow_;
-import com.prosystemingegneri.censistant.business.purchasing.entity.PurchaseOrder_;
-import com.prosystemingegneri.censistant.business.purchasing.entity.SupplierItem;
-import com.prosystemingegneri.censistant.business.purchasing.entity.SupplierItem_;
-import com.prosystemingegneri.censistant.business.warehouse.entity.HandledItem_;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Expression;
-import javax.persistence.criteria.Join;
-import javax.persistence.criteria.JoinType;
-import javax.persistence.criteria.Order;
-import javax.persistence.criteria.Path;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.Query;
 
 /**
  *
@@ -58,8 +39,123 @@ public class PurchaseOrderRowService implements Serializable{
     public PurchaseOrderRow readPurchaseOrderRow(Long id) {
         return em.find(PurchaseOrderRow.class, id);
     }
-
+    
     public List<PurchaseOrderRow> listPurchaseOrderRows(int first, int pageSize, String sortField, Boolean isAscending, String supplierItemCode, String supplierItemDescription, Plant plant, Boolean isToBeDelivered) {
+        Query query = queryPurchaseOrderRows(false, sortField, isAscending, supplierItemCode, supplierItemDescription, plant, isToBeDelivered);
+        
+        if (pageSize > 0) {
+            query.setMaxResults(pageSize);
+            query.setFirstResult(first);
+        }
+        
+        return query.getResultList();
+    }
+    
+    public Long getPurchaseOrderRowsCount(String supplierItemCode, String supplierItemDescription, Plant plant, Boolean isToBeDelivered) {
+        Query query = queryPurchaseOrderRows(true, null, null, supplierItemCode, supplierItemDescription, plant, isToBeDelivered);
+        
+        try {
+            return (Long) query.getSingleResult();
+        } catch (NoResultException e) {
+            return 0L;
+        } catch (NonUniqueResultException e) {
+            Long result = 0L;
+            for (Object individualResult : query.getResultList()) {
+                result += (Long) individualResult;
+            }
+            return result;
+            //return em.createQuery(select).getResultList().stream().mapToLong(Long::sum);  //Does not compile
+        }
+    }
+    
+    public Query queryPurchaseOrderRows(boolean isCount, String sortField, Boolean isAscending, String supplierItemCode, String supplierItemDescription, Plant plant, Boolean isToBeDelivered) {
+        boolean filterAdded = false;
+        
+        StringBuilder queryString = new StringBuilder("SELECT ");
+        if (isCount)
+            queryString.append("COUNT(por) ");
+        else
+            queryString.append("por ");
+        
+        queryString.append("FROM PurchaseOrderRow por ");
+        
+        //JOIN PART
+        //Supplier's item code or item description
+        if ((supplierItemCode != null && !supplierItemCode.isEmpty()) || (supplierItemDescription != null && !supplierItemDescription.isEmpty()))
+            queryString.append("JOIN por.boxedItem bi ")
+                    .append("JOIN bi.item si ");
+        //Supplier's plant
+        if (plant != null)
+            queryString.append("JOIN por.purchaseOrder po ");
+        //Is the entire row to be delivered yet?
+        if (isToBeDelivered != null)
+            queryString.append("LEFT JOIN por.deliveryNoteRows dnr ")
+                    .append("LEFT JOIN dnr.handledItem hi ");
+        
+        //WHERE PART
+        if ((supplierItemCode != null && !supplierItemCode.isEmpty()) || (supplierItemDescription != null && !supplierItemDescription.isEmpty()) || plant != null)
+            queryString.append("WHERE ");
+        //Supplier's item code
+        if (supplierItemCode != null && !supplierItemCode.isEmpty()) {
+            if (filterAdded)
+                queryString.append("AND ");
+            else
+                filterAdded = true;
+            queryString.append("LOWER(si.code) LIKE '%").append(supplierItemCode.toLowerCase()).append("%' ");
+        }
+        //Supplier's item description
+        if (supplierItemDescription != null && !supplierItemDescription.isEmpty()) {
+            if (filterAdded)
+                queryString.append("AND ");
+            else
+                filterAdded = true;
+            queryString.append("LOWER(si.description) LIKE '%").append(supplierItemDescription.toLowerCase()).append("%' ");
+        }
+        //Supplier's plant
+        if (plant != null) {
+            if (filterAdded)
+                queryString.append("AND ");
+            else
+                filterAdded = true;
+            queryString.append("po.plant.id = ").append(plant.getId()).append(" ");
+        }
+        
+        //AGGREGATION PART
+        //Is the entire row to be delivered yet?
+        if (isToBeDelivered != null) {
+            queryString.append("GROUP BY por ")
+                    .append("HAVING sum(coalesce(hi.quantity, 0))");
+            if (isToBeDelivered)
+                queryString.append(" < ");
+            else
+                queryString.append(" >= ");
+            queryString.append("por.quantity ");
+        }
+        
+        //SORTING PART
+        if (isAscending != null && sortField != null && !sortField.isEmpty()) {
+            queryString.append("ORDER BY ");
+            switch (sortField) {
+                case "supplierItemCode":
+                    queryString.append("si.code ");
+                    break;
+                case "supplierItemDescription":
+                    queryString.append("si.description ");
+                    break;
+                case "quantity":
+                    queryString.append("por.quantity ");
+                    break;
+                default:
+                    queryString.append("por.id ");
+            }
+            if (!isAscending)
+                queryString.append("DESC ");
+        }
+        
+        return em.createQuery(queryString.toString());
+    }
+
+    /*public List<PurchaseOrderRow> listPurchaseOrderRows(int first, int pageSize, String sortField, Boolean isAscending, String supplierItemCode, String supplierItemDescription, Plant plant, Boolean isToBeDelivered) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<PurchaseOrderRow> query = cb.createQuery(PurchaseOrderRow.class);
         Root<PurchaseOrderRow> root = query.from(PurchaseOrderRow.class);
@@ -168,5 +264,5 @@ public class PurchaseOrderRowService implements Serializable{
         }
         
         return conditions;
-    }
+    }*/
 }
