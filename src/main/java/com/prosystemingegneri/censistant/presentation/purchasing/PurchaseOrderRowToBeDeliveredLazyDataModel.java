@@ -18,7 +18,7 @@ package com.prosystemingegneri.censistant.presentation.purchasing;
 
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
 import com.prosystemingegneri.censistant.business.purchasing.boundary.PurchaseOrderRowService;
-import com.prosystemingegneri.censistant.business.purchasing.entity.PurchaseOrderRow;
+import com.prosystemingegneri.censistant.business.purchasing.control.PurchaseOrderRowToBeDelivered;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -31,29 +31,29 @@ import static org.primefaces.model.SortOrder.DESCENDING;
  *
  * @author Davide Mainardi <ingmainardi at live.com>
  */
-public class PurchaseOrderRowLazyDataModel extends LazyDataModel<PurchaseOrderRow>{
+public class PurchaseOrderRowToBeDeliveredLazyDataModel extends LazyDataModel<PurchaseOrderRowToBeDelivered>{
     private final PurchaseOrderRowService service;
     
     private Plant plant;
     private Boolean isToBeDelivered;
 
-    public PurchaseOrderRowLazyDataModel(PurchaseOrderRowService service) {
+    public PurchaseOrderRowToBeDeliveredLazyDataModel(PurchaseOrderRowService service) {
         this.service = service;
     }
 
-    public PurchaseOrderRowLazyDataModel(PurchaseOrderRowService service, Plant plant, Boolean isToBeDelivered) {
+    public PurchaseOrderRowToBeDeliveredLazyDataModel(PurchaseOrderRowService service, Plant plant, Boolean isToBeDelivered) {
         this.service = service;
         this.plant = plant;
         this.isToBeDelivered = isToBeDelivered;
     }
     
     @Override
-    public Object getRowKey(PurchaseOrderRow object) {
+    public Object getRowKey(PurchaseOrderRowToBeDelivered object) {
         return object.getId();
     }
     
     @Override
-    public List<PurchaseOrderRow> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
+    public List<PurchaseOrderRowToBeDelivered> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
         Boolean isAscending = null;
         String supplierItemCode = null;
         String supplierItemDescription = null;
@@ -81,16 +81,16 @@ public class PurchaseOrderRowLazyDataModel extends LazyDataModel<PurchaseOrderRo
             }
         }
         
-        List<PurchaseOrderRow> result = service.listPurchaseOrderRows(first, pageSize, sortField, isAscending, supplierItemCode, supplierItemDescription, plant, isToBeDelivered);
-        this.setRowCount(service.getPurchaseOrderRowsCount(supplierItemCode, supplierItemDescription, plant, isToBeDelivered).intValue());
+        List<PurchaseOrderRowToBeDelivered> result = service.listPurchaseOrderRowsToBeDelivered(first, pageSize, sortField, isAscending, supplierItemCode, supplierItemDescription, plant, isToBeDelivered, null);
+        this.setRowCount(service.getPurchaseOrderRowsToBeDeliveredCount(supplierItemCode, supplierItemDescription, plant, isToBeDelivered).intValue());
         
         return result;
     }
 
     @Override
-    public PurchaseOrderRow getRowData(String rowKey) {
+    public PurchaseOrderRowToBeDelivered getRowData(String rowKey) {
         try {
-            return service.readPurchaseOrderRow(Long.parseLong(rowKey));
+            return service.listPurchaseOrderRowsToBeDelivered(0, 0, null, false, null, null, null, true, Long.parseLong(rowKey)).get(0);
         } catch (NumberFormatException e) {
             return null;
         }

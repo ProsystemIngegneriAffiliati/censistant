@@ -20,13 +20,14 @@ import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
 import com.prosystemingegneri.censistant.business.deliveryNote.entity.DeliveryNoteIn;
 import com.prosystemingegneri.censistant.business.deliveryNote.entity.DeliveryNoteRow;
 import com.prosystemingegneri.censistant.business.purchasing.boundary.PurchaseOrderRowService;
+import com.prosystemingegneri.censistant.business.purchasing.control.PurchaseOrderRowToBeDelivered;
 import com.prosystemingegneri.censistant.business.purchasing.entity.PurchaseOrderRow;
 import com.prosystemingegneri.censistant.business.siteSurvey.boundary.WorkerService;
 import com.prosystemingegneri.censistant.business.warehouse.boundary.HandledItemService;
 import com.prosystemingegneri.censistant.business.warehouse.entity.HandledItem;
 import com.prosystemingegneri.censistant.business.warehouse.entity.Location;
 import com.prosystemingegneri.censistant.presentation.Authenticator;
-import com.prosystemingegneri.censistant.presentation.purchasing.PurchaseOrderRowLazyDataModel;
+import com.prosystemingegneri.censistant.presentation.purchasing.PurchaseOrderRowToBeDeliveredLazyDataModel;
 import com.prosystemingegneri.censistant.presentation.warehouse.HandledItemLazyDataModel;
 import java.io.Serializable;
 import java.util.HashMap;
@@ -61,8 +62,8 @@ public class DeliveryNoteInRowCreationPresenter implements Serializable {
     @Inject
     PurchaseOrderRowService purchaseOrderRowService;
     
-    private PurchaseOrderRowLazyDataModel lazyPurchaseOrderRows;
-    private List<PurchaseOrderRow> selectedPurchaseOrderRows;
+    private PurchaseOrderRowToBeDeliveredLazyDataModel lazyPurchaseOrderRowsToBeDelivered;
+    private List<PurchaseOrderRowToBeDelivered> selectedPurchaseOrderRows;
     private Map<Long, Integer> preparedQuantities;
     
     private Location locationDestination;
@@ -77,7 +78,7 @@ public class DeliveryNoteInRowCreationPresenter implements Serializable {
         deliveryNote = (DeliveryNoteIn) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("deliveryNoteIn");
         plant = (Plant) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("plant");
         lazyHandledItems = new HandledItemLazyDataModel(handledItemService, plant.getLocation(), null, Boolean.FALSE);
-        lazyPurchaseOrderRows = new PurchaseOrderRowLazyDataModel(purchaseOrderRowService, plant, Boolean.TRUE);
+        lazyPurchaseOrderRowsToBeDelivered = new PurchaseOrderRowToBeDeliveredLazyDataModel(purchaseOrderRowService, plant, Boolean.TRUE);
         preparedQuantities = new HashMap<>();
     }
     
@@ -92,18 +93,19 @@ public class DeliveryNoteInRowCreationPresenter implements Serializable {
         
         if (selectedPurchaseOrderRows != null && !selectedPurchaseOrderRows.isEmpty()) {
             if (locationDestination != null) {
-                for (PurchaseOrderRow selectedPurchaseOrderRow : selectedPurchaseOrderRows) {
+                for (PurchaseOrderRowToBeDelivered selectedPurchaseOrderRow : selectedPurchaseOrderRows) {
                     HandledItem handledItem = new HandledItem();
-                    handledItem.setBoxedItem(selectedPurchaseOrderRow.getBoxedItem());
+                    PurchaseOrderRow purchaseOrderRow = purchaseOrderRowService.readPurchaseOrderRow(selectedPurchaseOrderRow.getId());
+                    handledItem.setBoxedItem(purchaseOrderRow.getBoxedItem());
                     handledItem.setFromLocation(plant.getLocation());
-                    handledItem.setQuantity(preparedQuantities.getOrDefault(selectedPurchaseOrderRow.getId(), selectedPurchaseOrderRow.getQuantityToBeDelivered()));
+                    handledItem.setQuantity(preparedQuantities.getOrDefault(selectedPurchaseOrderRow.getId(), selectedPurchaseOrderRow.getQuantityToBeDelivered().intValue()));
                     handledItem.setToLocation(locationDestination);
                     handledItem.setWorker(workerService.findWorker(null, false, authenticator.getLoggedUser()));
 
                     DeliveryNoteRow row = new DeliveryNoteRow();
                     row.addHandledItem(handledItem);
-
-                    selectedPurchaseOrderRow.addDeliveryNoteRow(row);
+                    
+                    purchaseOrderRow.addDeliveryNoteRow(row);
                     
                     deliveryNote.addRow(row);
                 }
@@ -136,7 +138,7 @@ public class DeliveryNoteInRowCreationPresenter implements Serializable {
     }
 
     public void onPurchaseOrderRowsCellEdit(CellEditEvent event) {
-        preparedQuantities.put(Long.parseLong(event.getRowKey()), (Integer) event.getNewValue());
+        preparedQuantities.put(Long.parseLong(event.getRowKey()), ((Long) event.getNewValue()).intValue());
     }
     
     public DeliveryNoteIn getDeliveryNote() {
@@ -163,19 +165,19 @@ public class DeliveryNoteInRowCreationPresenter implements Serializable {
         this.selectedHandledItems = selectedHandledItems;
     }
 
-    public PurchaseOrderRowLazyDataModel getLazyPurchaseOrderRows() {
-        return lazyPurchaseOrderRows;
+    public PurchaseOrderRowToBeDeliveredLazyDataModel getLazyPurchaseOrderRowsToBeDelivered() {
+        return lazyPurchaseOrderRowsToBeDelivered;
     }
 
-    public void setLazyPurchaseOrderRows(PurchaseOrderRowLazyDataModel lazyPurchaseOrderRows) {
-        this.lazyPurchaseOrderRows = lazyPurchaseOrderRows;
+    public void setLazyPurchaseOrderRowsToBeDelivered(PurchaseOrderRowToBeDeliveredLazyDataModel lazyPurchaseOrderRowsToBeDelivered) {
+        this.lazyPurchaseOrderRowsToBeDelivered = lazyPurchaseOrderRowsToBeDelivered;
     }
 
-    public List<PurchaseOrderRow> getSelectedPurchaseOrderRows() {
+    public List<PurchaseOrderRowToBeDelivered> getSelectedPurchaseOrderRows() {
         return selectedPurchaseOrderRows;
     }
 
-    public void setSelectedPurchaseOrderRows(List<PurchaseOrderRow> selectedPurchaseOrderRows) {
+    public void setSelectedPurchaseOrderRows(List<PurchaseOrderRowToBeDelivered> selectedPurchaseOrderRows) {
         this.selectedPurchaseOrderRows = selectedPurchaseOrderRows;
     }
 

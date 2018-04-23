@@ -84,7 +84,7 @@
                                             </h:panelGroup>
                                         </p:panelGrid>
 
-                                        <p:dataTable id="purchaseOrderRowsTable" var="purchaseOrderRow" value="#{deliveryNoteInRowCreationPresenter.lazyPurchaseOrderRows}"
+                                        <p:dataTable id="purchaseOrderRowsTable" var="purchaseOrderRowToBeDelivered" value="#{deliveryNoteInRowCreationPresenter.lazyPurchaseOrderRowsToBeDelivered}"
                                                      selectionMode="multiple" selection="#{deliveryNoteInRowCreationPresenter.selectedPurchaseOrderRows}" rowKey="#{purchaseOrderRow.id}"
                                                      paginator="true" rows="10"
                                                      paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -95,28 +95,28 @@
                                             </f:facet>
                                             <p:ajax event="cellEdit" listener="#{deliveryNoteInRowCreationPresenter.onPurchaseOrderRowsCellEdit}" />
                                             <p:column headerText="#{msg.purchasing_purchaseOrder}" priority="0">
-                                                <h:outputText value="#{purchaseOrderRow.purchaseOrder.numberAndCreation}" />
+                                                <h:outputText value="#{purchaseOrderRowToBeDelivered.purchaseOrderNumberAndCreation}" />
                                             </p:column>
                                             <p:column headerText="#{msg.purchasing_supplierItem_code}" field="supplierItemCode" priority="0">
-                                                <h:outputText value="#{purchaseOrderRow.boxedItem.item.code}" />
+                                                <h:outputText value="#{purchaseOrderRowToBeDelivered.supplierItemCode}" />
                                             </p:column>
                                             <p:column headerText="#{msg.purchasing_supplierItem_description}" field="supplierItemDescription" priority="2">
-                                                <h:outputText value="#{purchaseOrderRow.boxedItem.item.description}" />
+                                                <h:outputText value="#{purchaseOrderRowToBeDelivered.supplierItemDescription}" />
                                             </p:column>
                                             <p:column headerText="#{msg.purchasing_purchaseOrderRow_quantity}" priority="4">
                                                 <p:cellEditor>
                                                     <f:facet name="output">
-                                                        <h:outputText value="#{purchaseOrderRow.quantityPrepared}">
+                                                        <h:outputText value="#{purchaseOrderRowToBeDelivered.quantityPrepared}">
                                                             <f:convertNumber integerOnly="true" />
                                                         </h:outputText>
                                                     </f:facet>
                                                     <f:facet name="input">
-                                                        <p:inputNumber value="#{purchaseOrderRow.quantityPrepared}" decimalPlaces="0" minValue="1" maxValue="#{purchaseOrderRow.quantityToBeDelivered}" />
+                                                        <p:inputNumber value="#{purchaseOrderRowToBeDelivered.quantityPrepared}" decimalPlaces="0" minValue="1" maxValue="#{purchaseOrderRowToBeDelivered.quantityToBeDelivered}" />
                                                     </f:facet>
                                                 </p:cellEditor>
                                             </p:column>
                                             <p:column headerText="#{msg.production_unitMeasure_symbol}" priority="5">
-                                                <h:outputText value="#{purchaseOrderRow.boxedItem.box.unitMeasure.name} #{purchaseOrderRow.boxedItem.box.quantity} #{purchaseOrderRow.boxedItem.item.item.unitMeasure.symbol}" />
+                                                <h:outputText value="#{purchaseOrderRowToBeDelivered.fullUnitMeasure}" />
                                             </p:column>
                                         </p:dataTable>
                                     </p:tab>
