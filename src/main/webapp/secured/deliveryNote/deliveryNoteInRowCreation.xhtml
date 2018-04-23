@@ -9,6 +9,7 @@
     <ui:composition template="/WEB-INF/template.xhtml">
         <ui:define name="content">
             <oou:importConstants type="com.prosystemingegneri.censistant.business.warehouse.control.LocationType"/>
+            <oou:importConstants type="com.prosystemingegneri.censistant.business.purchasing.entity.PurchaseOrderRow"/>
             <oou:form id="deliveryNoteInRowForm">
                 <div class="ui-fluid">
                     <div class="ui-g">
@@ -117,6 +118,82 @@
                                             </p:column>
                                             <p:column headerText="#{msg.production_unitMeasure_symbol}" priority="5">
                                                 <h:outputText value="#{purchaseOrderRowToBeDelivered.fullUnitMeasure}" />
+                                            </p:column>
+                                        </p:dataTable>
+                                    </p:tab>
+                                    <p:tab title="#{msg.purchasing_boxedItems}">
+                                        <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                            <p:selectOneMenu id="locationTypesForBoxedItems" value="#{locationListPresenter.locationType}">
+                                                <f:selectItem itemLabel="#{msg.warehouse_locationType_noSelection}" noSelectionOption="true" />
+                                                <f:selectItem itemLabel="#{msg.warehouse_warehouse_name}" itemValue="#{LocationType.WAREHOUSE}" />
+                                                <f:selectItem itemLabel="#{msg.customerSupplier_supplier}" itemValue="#{LocationType.SUPPLIER_PLANT}" />
+                                                <f:selectItem itemLabel="#{msg.production_system}" itemValue="#{LocationType.SYSTEM}" />
+                                                <p:ajax event="itemSelect" update="locationsForBoxedItems" />
+                                            </p:selectOneMenu>
+
+                                            <h:panelGroup styleClass="md-inputfield">
+                                                <p:autoComplete id="locationsForBoxedItems"
+                                                                dropdown="true"
+                                                                value="#{deliveryNoteInRowCreationPresenter.locationDestination}"
+                                                                completeMethod="#{locationListPresenter.completeLocations}"
+                                                                var="loc"
+                                                                itemLabel="#{loc.name}"
+                                                                itemValue="#{loc}"
+                                                                forceSelection="true">
+                                                    <oou:converter converterId="omnifaces.ListConverter" list="#{locationListPresenter.locations}"/>
+                                                </p:autoComplete>
+                                                <p:outputLabel for="locations" value="#{msg.warehouse_locations}"/>
+                                                <p:message for="locations"/>
+                                            </h:panelGroup>
+                                        </p:panelGrid>
+
+                                        <p:dataTable id="boxedItemsTable"
+                                                     widgetVar="boItTa"
+                                                     var="boxedItem"
+                                                     value="#{deliveryNoteInRowCreationPresenter.tempPurchaseOrderRows}"
+                                                     editable="true" editMode="cell">
+                                            <f:facet name="header">
+                                                <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
+                                                    #{msg.deliveryNote_deliveryNoteRow_creation_fromBoxedItem_tip}
+                                                    <p:outputPanel style="display: inline-block">
+                                                        <p:commandButton title="#{msg.add}" icon="ui-icon-add" actionListener="#{deliveryNoteInRowCreationPresenter.createNewPurchaseOrderRow()}" oncomplete="PF('boItTa').addRow()" process="@this"/>
+                                                    </p:outputPanel>
+                                                </p:panelGrid>
+                                            </f:facet>
+                                            <f:facet name="footer">
+                                                #{msg.purchasing_purchaseOrder_cost_total}:
+                                                <h:outputText value="#{deliveryNoteInRowCreationPresenter.tempPurchaseOrderRowsTotalCost}">
+                                                    <f:convertNumber currencySymbol="€" minFractionDigits="#{PurchaseOrderRow.SCALE_COST}" type="currency" />
+                                                </h:outputText>
+                                            </f:facet>
+                                            <p:column headerText="#{msg.purchasing_supplierItem_code}" priority="0">
+                                                <h:outputText value="#{boxedItem.boxedItem.item.code}" />
+                                            </p:column>
+                                            <p:column headerText="#{msg.purchasing_supplierItem_description}" priority="2">
+                                                <h:outputText value="#{boxedItem.boxedItem.item.description}" />
+                                            </p:column>
+                                            <p:column headerText="#{msg.purchasing_purchaseOrderRow_quantity}" priority="4">
+                                                <h:outputText value="#{boxedItem.quantity}">
+                                                    <f:convertNumber integerOnly="true" />
+                                                </h:outputText>
+                                            </p:column>
+                                            <p:column headerText="#{msg.production_unitMeasure_symbol}" priority="5">
+                                                <h:outputText value="#{boxedItem.boxedItem.box.unitMeasure.name} #{boxedItem.boxedItem.box.quantity} #{boxedItem.boxedItem.item.item.unitMeasure.symbol}" />
+                                            </p:column>
+                                            <p:column headerText="#{msg.purchasing_purchaseOrderRow_cost}" priority="4">
+                                                <h:outputText value="#{boxedItem.cost}">
+                                                    <f:convertNumber currencySymbol="€" minFractionDigits="#{PurchaseOrderRow.SCALE_COST}" type="currency" />
+                                                </h:outputText>
+                                            </p:column>
+                                            <p:column headerText="#{msg.purchasing_purchaseOrderRow_cost_total}" priority="2">
+                                                <h:outputText value="#{boxedItem.totalCost}">
+                                                    <f:convertNumber currencySymbol="€" minFractionDigits="#{PurchaseOrderRow.SCALE_COST}" type="currency" />
+                                                </h:outputText>
+                                            </p:column>
+                                            <p:column headerText="#{msg.actions}" style="width:72px; text-align:center" exportable="false">
+                                                <p:commandButton title="#{msg.remove}" icon="ui-icon-delete" actionListener="#{deliveryNoteInRowCreationPresenter.tempPurchaseOrderRows.remove(boxedItem)}" update="boxedItemsTable">
+                                                    <oou:ignoreValidationFailed />
+                                                </p:commandButton>
                                             </p:column>
                                         </p:dataTable>
                                     </p:tab>

@@ -156,8 +156,8 @@ public class PurchaseOrderRowService implements Serializable{
         return em.createQuery(queryString.toString());
     }
     
-    public List<PurchaseOrderRowToBeDelivered> listPurchaseOrderRowsToBeDelivered(int first, int pageSize, String sortField, Boolean isAscending, String supplierItemCode, String supplierItemDescription, Plant plant, boolean isToBeDelivered, Long id) {
-        Query query = queryPurchaseOrderRowsToBeDelivered(false, sortField, isAscending, supplierItemCode, supplierItemDescription, plant, isToBeDelivered, id);
+    public List<PurchaseOrderRowToBeDelivered> listPurchaseOrderRowsToBeDelivered(int first, int pageSize, String sortField, Boolean isAscending, String supplierItemCode, String supplierItemDescription, Plant plant, boolean isToBeDelivered, Long idPurchaseOrderRow) {
+        Query query = queryPurchaseOrderRowsToBeDelivered(false, sortField, isAscending, supplierItemCode, supplierItemDescription, plant, isToBeDelivered, idPurchaseOrderRow);
         
         if (pageSize > 0) {
             query.setMaxResults(pageSize);
@@ -184,7 +184,7 @@ public class PurchaseOrderRowService implements Serializable{
         }
     }
     
-    private Query queryPurchaseOrderRowsToBeDelivered(boolean isCount, String sortField, Boolean isAscending, String supplierItemCode, String supplierItemDescription, Plant plant, boolean isToBeDelivered, Long id) {
+    private Query queryPurchaseOrderRowsToBeDelivered(boolean isCount, String sortField, Boolean isAscending, String supplierItemCode, String supplierItemDescription, Plant plant, boolean isToBeDelivered, Long idPurchaseOrderRow) {
         boolean filterAdded = false;
         
         StringBuilder queryString = new StringBuilder("SELECT ");
@@ -200,7 +200,7 @@ public class PurchaseOrderRowService implements Serializable{
                     .append("por.quantity - sum(coalesce(hi.quantity, 0)), ")
                     .append("bum.name, ")
                     .append("b.quantity, ")
-                    .append("ium.symbol) ");  //#{purchaseOrderRow.boxedItem.box.unitMeasure.name} #{purchaseOrderRow.boxedItem.box.quantity} #{purchaseOrderRow.boxedItem.item.item.unitMeasure.symbol}
+                    .append("ium.symbol) ");
         }
         
         queryString.append("FROM PurchaseOrderRow por ");
@@ -217,7 +217,7 @@ public class PurchaseOrderRowService implements Serializable{
                 .append("LEFT JOIN dnr.handledItem hi ");
         
         //WHERE PART
-        if ((supplierItemCode != null && !supplierItemCode.isEmpty()) || (supplierItemDescription != null && !supplierItemDescription.isEmpty()) || plant != null || id != null)
+        if ((supplierItemCode != null && !supplierItemCode.isEmpty()) || (supplierItemDescription != null && !supplierItemDescription.isEmpty()) || plant != null || idPurchaseOrderRow != null)
             queryString.append("WHERE ");
         //Supplier's item code
         if (supplierItemCode != null && !supplierItemCode.isEmpty()) {
@@ -244,12 +244,12 @@ public class PurchaseOrderRowService implements Serializable{
             queryString.append("po.plant.id = ").append(plant.getId()).append(" ");
         }
         //Purchase order row's id
-        if (id != null) {
+        if (idPurchaseOrderRow != null) {
             if (filterAdded)
                 queryString.append("AND ");
             else
                 filterAdded = true;
-            queryString.append("por.id = ").append(id).append(" ");
+            queryString.append("por.id = ").append(idPurchaseOrderRow).append(" ");
         }
         
         //AGGREGATION PART

@@ -20,7 +20,9 @@ import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
 import com.prosystemingegneri.censistant.business.deliveryNote.entity.DeliveryNoteIn;
 import com.prosystemingegneri.censistant.business.deliveryNote.entity.DeliveryNoteRow;
 import com.prosystemingegneri.censistant.business.purchasing.boundary.PurchaseOrderRowService;
+import com.prosystemingegneri.censistant.business.purchasing.boundary.PurchaseOrderService;
 import com.prosystemingegneri.censistant.business.purchasing.control.PurchaseOrderRowToBeDelivered;
+import com.prosystemingegneri.censistant.business.purchasing.entity.PurchaseOrder;
 import com.prosystemingegneri.censistant.business.purchasing.entity.PurchaseOrderRow;
 import com.prosystemingegneri.censistant.business.siteSurvey.boundary.WorkerService;
 import com.prosystemingegneri.censistant.business.warehouse.boundary.HandledItemService;
@@ -30,6 +32,8 @@ import com.prosystemingegneri.censistant.presentation.Authenticator;
 import com.prosystemingegneri.censistant.presentation.purchasing.PurchaseOrderRowToBeDeliveredLazyDataModel;
 import com.prosystemingegneri.censistant.presentation.warehouse.HandledItemLazyDataModel;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -69,6 +73,11 @@ public class DeliveryNoteInRowCreationPresenter implements Serializable {
     private Location locationDestination;
     
     @Inject
+    PurchaseOrderService purchaseOrderSerivce;
+    
+    private List<PurchaseOrderRow> tempPurchaseOrderRows;
+    
+    @Inject
     Authenticator authenticator;
     @Inject
     WorkerService workerService;
@@ -80,6 +89,7 @@ public class DeliveryNoteInRowCreationPresenter implements Serializable {
         lazyHandledItems = new HandledItemLazyDataModel(handledItemService, plant.getLocation(), null, Boolean.FALSE);
         lazyPurchaseOrderRowsToBeDelivered = new PurchaseOrderRowToBeDeliveredLazyDataModel(purchaseOrderRowService, plant, Boolean.TRUE);
         preparedQuantities = new HashMap<>();
+        tempPurchaseOrderRows = new ArrayList<>();
     }
     
     public String createDeliveryNoteInRow() {
@@ -135,10 +145,26 @@ public class DeliveryNoteInRowCreationPresenter implements Serializable {
             selectedHandledItems.clear();
         if (selectedPurchaseOrderRows != null)
             selectedPurchaseOrderRows.clear();
+        locationDestination = null;
+        if (tempPurchaseOrderRows != null)
+            tempPurchaseOrderRows.clear();
     }
 
     public void onPurchaseOrderRowsCellEdit(CellEditEvent event) {
         preparedQuantities.put(Long.parseLong(event.getRowKey()), ((Long) event.getNewValue()).intValue());
+    }
+    
+    public void createNewPurchaseOrderRow() {
+        tempPurchaseOrderRows.add(new PurchaseOrderRow());
+    }
+    
+    public BigDecimal getTempPurchaseOrderRowsTotalCost() {
+        BigDecimal result = BigDecimal.ZERO;
+        
+        for (PurchaseOrderRow row : tempPurchaseOrderRows)
+            result = result.add(row.getTotalCost());
+        
+        return result;
     }
     
     public DeliveryNoteIn getDeliveryNote() {
@@ -187,6 +213,10 @@ public class DeliveryNoteInRowCreationPresenter implements Serializable {
 
     public void setLocationDestination(Location locationDestination) {
         this.locationDestination = locationDestination;
+    }
+
+    public List<PurchaseOrderRow> getTempPurchaseOrderRows() {
+        return tempPurchaseOrderRows;
     }
     
 }
