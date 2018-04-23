@@ -38,9 +38,13 @@ public class PurchaseOrderRowToBeDelivered {
     
     private Long quantityPrepared;
     
-    private String fullUnitMeasure;
+    private String boxUnitMeasureName;
+    
+    private Integer boxQuantity;
+    
+    private String itemUnitMeasureSymbol;
 
-    public PurchaseOrderRowToBeDelivered(Long id, Integer purchaseOrderNumber, Date purchaseOrderCreation, String supplierItemCode, String supplierItemDescription, Long quantityToBeDelivered, String fullUnitMeasure) {
+    public PurchaseOrderRowToBeDelivered(Long id, Integer purchaseOrderNumber, Date purchaseOrderCreation, String supplierItemCode, String supplierItemDescription, Long quantityToBeDelivered, String boxUnitMeasureName, Integer boxQuantity, String itemUnitMeasureSymbol) {
         this.id = id;
         this.purchaseOrderNumber = purchaseOrderNumber;
         this.purchaseOrderCreation = purchaseOrderCreation;
@@ -48,7 +52,9 @@ public class PurchaseOrderRowToBeDelivered {
         this.supplierItemDescription = supplierItemDescription;
         this.quantityToBeDelivered = quantityToBeDelivered;
         this.quantityPrepared = quantityToBeDelivered;
-        this.fullUnitMeasure = fullUnitMeasure;
+        this.boxUnitMeasureName = boxUnitMeasureName;
+        this.boxQuantity = boxQuantity;
+        this.itemUnitMeasureSymbol = itemUnitMeasureSymbol;
     }
 
     public Long getId() {
@@ -99,11 +105,12 @@ public class PurchaseOrderRowToBeDelivered {
     }
 
     public String getFullUnitMeasure() {
-        return fullUnitMeasure;
-    }
-
-    public void setFullUnitMeasure(String fullUnitMeasure) {
-        this.fullUnitMeasure = fullUnitMeasure;
+        return new StringBuilder(boxUnitMeasureName)
+                .append(" ")
+                .append(String.valueOf(boxQuantity))
+                .append(" ")
+                .append(itemUnitMeasureSymbol)
+                .toString();
     }
 
     public Integer getPurchaseOrderNumber() {
@@ -120,6 +127,30 @@ public class PurchaseOrderRowToBeDelivered {
 
     public void setPurchaseOrderCreation(Date purchaseOrderCreation) {
         this.purchaseOrderCreation = purchaseOrderCreation;
+    }
+
+    public String getBoxUnitMeasureName() {
+        return boxUnitMeasureName;
+    }
+
+    public void setBoxUnitMeasureName(String boxUnitMeasureName) {
+        this.boxUnitMeasureName = boxUnitMeasureName;
+    }
+
+    public Integer getBoxQuantity() {
+        return boxQuantity;
+    }
+
+    public void setBoxQuantity(Integer boxQuantity) {
+        this.boxQuantity = boxQuantity;
+    }
+
+    public String getItemUnitMeasureSymbol() {
+        return itemUnitMeasureSymbol;
+    }
+
+    public void setItemUnitMeasureSymbol(String itemUnitMeasureSymbol) {
+        this.itemUnitMeasureSymbol = itemUnitMeasureSymbol;
     }
     
 }

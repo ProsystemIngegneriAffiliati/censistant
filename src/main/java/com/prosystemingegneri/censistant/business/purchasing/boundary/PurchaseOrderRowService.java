@@ -198,7 +198,9 @@ public class PurchaseOrderRowService implements Serializable{
                     .append("si.code, ")
                     .append("si.description, ")
                     .append("por.quantity - sum(coalesce(hi.quantity, 0)), ")
-                    .append("'to be done') ");  //#{purchaseOrderRow.boxedItem.box.unitMeasure.name} #{purchaseOrderRow.boxedItem.box.quantity} #{purchaseOrderRow.boxedItem.item.item.unitMeasure.symbol}
+                    .append("bum.name, ")
+                    .append("b.quantity, ")
+                    .append("ium.symbol) ");  //#{purchaseOrderRow.boxedItem.box.unitMeasure.name} #{purchaseOrderRow.boxedItem.box.quantity} #{purchaseOrderRow.boxedItem.item.item.unitMeasure.symbol}
         }
         
         queryString.append("FROM PurchaseOrderRow por ");
@@ -207,6 +209,10 @@ public class PurchaseOrderRowService implements Serializable{
         queryString.append("JOIN por.boxedItem bi ")
                 .append("JOIN bi.item si ")
                 .append("JOIN por.purchaseOrder po ")
+                .append("JOIN bi.box b ")
+                .append("JOIN b.unitMeasure bum ")
+                .append("JOIN si.item i ")
+                .append("JOIN i.unitMeasure ium ")
                 .append("LEFT JOIN por.deliveryNoteRows dnr ")
                 .append("LEFT JOIN dnr.handledItem hi ");
         
@@ -248,7 +254,7 @@ public class PurchaseOrderRowService implements Serializable{
         
         //AGGREGATION PART
         //Is the entire row to be delivered yet?
-        queryString.append("GROUP BY por.id, si.code, si.description, po.number, po.creation ")
+        queryString.append("GROUP BY por.id, si.code, si.description, po.number, po.creation, bum.name, b.quantity, ium.symbol ")
                 .append("HAVING sum(coalesce(hi.quantity, 0))");
         if (isToBeDelivered)
             queryString.append(" < ");
