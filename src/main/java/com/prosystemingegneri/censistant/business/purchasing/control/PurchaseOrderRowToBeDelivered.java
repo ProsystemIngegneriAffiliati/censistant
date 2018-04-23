@@ -16,6 +16,9 @@
  */
 package com.prosystemingegneri.censistant.business.purchasing.control;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  *
  * @author Davide Mainardi <ingmainardi at live.com>
@@ -23,7 +26,9 @@ package com.prosystemingegneri.censistant.business.purchasing.control;
 public class PurchaseOrderRowToBeDelivered {
     private Long id;
 
-    private String purchaseOrderNumberAndCreation;
+    private Integer purchaseOrderNumber;
+    
+    private Date purchaseOrderCreation;
     
     private String supplierItemCode;
     
@@ -35,9 +40,10 @@ public class PurchaseOrderRowToBeDelivered {
     
     private String fullUnitMeasure;
 
-    public PurchaseOrderRowToBeDelivered(Long id, String purchaseOrderNumberAndCreation, String supplierItemCode, String supplierItemDescription, Long quantityToBeDelivered, String fullUnitMeasure) {
+    public PurchaseOrderRowToBeDelivered(Long id, Integer purchaseOrderNumber, Date purchaseOrderCreation, String supplierItemCode, String supplierItemDescription, Long quantityToBeDelivered, String fullUnitMeasure) {
         this.id = id;
-        this.purchaseOrderNumberAndCreation = purchaseOrderNumberAndCreation;
+        this.purchaseOrderNumber = purchaseOrderNumber;
+        this.purchaseOrderCreation = purchaseOrderCreation;
         this.supplierItemCode = supplierItemCode;
         this.supplierItemDescription = supplierItemDescription;
         this.quantityToBeDelivered = quantityToBeDelivered;
@@ -54,11 +60,10 @@ public class PurchaseOrderRowToBeDelivered {
     }
 
     public String getPurchaseOrderNumberAndCreation() {
-        return purchaseOrderNumberAndCreation;
-    }
-
-    public void setPurchaseOrderNumberAndCreation(String purchaseOrderNumberAndCreation) {
-        this.purchaseOrderNumberAndCreation = purchaseOrderNumberAndCreation;
+        return new StringBuilder(String.valueOf(purchaseOrderNumber))
+                .append(" - ")
+                .append(new SimpleDateFormat("dd/MM/yyyy").format(purchaseOrderCreation))
+                .toString();
     }
 
     public String getSupplierItemCode() {
@@ -99,6 +104,22 @@ public class PurchaseOrderRowToBeDelivered {
 
     public void setFullUnitMeasure(String fullUnitMeasure) {
         this.fullUnitMeasure = fullUnitMeasure;
+    }
+
+    public Integer getPurchaseOrderNumber() {
+        return purchaseOrderNumber;
+    }
+
+    public void setPurchaseOrderNumber(Integer purchaseOrderNumber) {
+        this.purchaseOrderNumber = purchaseOrderNumber;
+    }
+
+    public Date getPurchaseOrderCreation() {
+        return purchaseOrderCreation;
+    }
+
+    public void setPurchaseOrderCreation(Date purchaseOrderCreation) {
+        this.purchaseOrderCreation = purchaseOrderCreation;
     }
     
 }

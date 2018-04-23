@@ -193,7 +193,8 @@ public class PurchaseOrderRowService implements Serializable{
         else {
             queryString.append("new com.prosystemingegneri.censistant.business.purchasing.control.PurchaseOrderRowToBeDelivered(")
                     .append("por.id, ")
-                    .append("'to be done', ")
+                    .append("po.number, ")
+                    .append("po.creation, ")
                     .append("si.code, ")
                     .append("si.description, ")
                     .append("por.quantity - sum(coalesce(hi.quantity, 0)), ")
