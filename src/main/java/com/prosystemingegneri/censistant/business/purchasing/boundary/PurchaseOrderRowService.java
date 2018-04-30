@@ -18,6 +18,7 @@ package com.prosystemingegneri.censistant.business.purchasing.boundary;
 
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
 import com.prosystemingegneri.censistant.business.purchasing.control.PurchaseOrderRowToBeDelivered;
+import com.prosystemingegneri.censistant.business.purchasing.entity.PurchaseOrder;
 import com.prosystemingegneri.censistant.business.purchasing.entity.PurchaseOrderRow;
 import java.io.Serializable;
 import java.util.List;
@@ -36,6 +37,15 @@ import javax.persistence.Query;
 public class PurchaseOrderRowService implements Serializable{
     @PersistenceContext
     EntityManager em;
+    
+    public PurchaseOrderRow savePurchaseOrderRow(PurchaseOrderRow purchaseOrderRow) {
+        if (purchaseOrderRow.getId() == null)
+            em.persist(purchaseOrderRow);
+        else
+            return em.merge(purchaseOrderRow);
+        
+        return purchaseOrderRow;
+    }
     
     public PurchaseOrderRow readPurchaseOrderRow(Long id) {
         return em.find(PurchaseOrderRow.class, id);

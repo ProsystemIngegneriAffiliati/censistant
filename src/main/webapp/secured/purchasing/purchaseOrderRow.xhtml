@@ -101,7 +101,7 @@
                                             </p:column>
                                             <p:column headerText="#{msg.warehouse_handledItem_quantity}" priority="2">
                                                 <h:outputText value="#{deliveryNoteRow.handledItem.quantity} #{deliveryNoteRow.handledItem.boxedItem.item.item.unitMeasure.symbol}" />
-                                                <h:outputText rendered="#{stk:isBoxed(deliveryNoteRow.handledItem.quantity, deliveryNoteInRowPresenter.row.handledItem.boxedItem.box.quantity)}" value=" (#{stk:getFullBoxedQuantityStr(deliveryNoteRow.handledItem.quantity, deliveryNoteRow.handledItem.boxedItem)})" />
+                                                <h:outputText rendered="#{stk:isBoxed(deliveryNoteRow.handledItem.quantity, deliveryNoteRow.handledItem.boxedItem.box.quantity)}" value=" (#{stk:getFullBoxedQuantityStr(deliveryNoteRow.handledItem.quantity, deliveryNoteRow.handledItem.boxedItem)})" />
                                             </p:column>
                                             <p:column headerText="#{msg.warehouse_handledItem_toLocation}" priority="2">
                                                 <h:outputText value="#{deliveryNoteRow.handledItem.toLocation.name}" />

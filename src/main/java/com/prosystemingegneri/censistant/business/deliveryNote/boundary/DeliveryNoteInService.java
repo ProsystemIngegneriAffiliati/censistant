@@ -20,6 +20,7 @@ import com.prosystemingegneri.censistant.business.deliveryNote.entity.DeliveryNo
 import com.prosystemingegneri.censistant.business.deliveryNote.entity.DeliveryNoteIn;
 import com.prosystemingegneri.censistant.business.deliveryNote.entity.DeliveryNoteIn_;
 import com.prosystemingegneri.censistant.business.deliveryNote.entity.DeliveryNoteRow;
+import com.prosystemingegneri.censistant.business.purchasing.boundary.PurchaseOrderRowService;
 import com.prosystemingegneri.censistant.business.purchasing.boundary.PurchaseOrderService;
 import com.prosystemingegneri.censistant.business.warehouse.boundary.HandledItemService;
 import java.io.Serializable;
@@ -53,6 +54,8 @@ public class DeliveryNoteInService implements Serializable{
     
     @Inject
     PurchaseOrderService purchaseOrderService;
+        @Inject
+        PurchaseOrderRowService purchaseOrderRowService;
     @Inject
     HandledItemService handledItemService;
     
@@ -191,8 +194,11 @@ public class DeliveryNoteInService implements Serializable{
     */
     private void updatePurchaseOrders(@NotNull DeliveryNoteIn deliveryNoteIn) {
         for (DeliveryNoteRow row : deliveryNoteIn.getRows()) {
-            if (row.getPurchaseOrderRow() != null)
-                purchaseOrderService.savePurchaseOrder(row.getPurchaseOrderRow().getPurchaseOrder());
+            if (row.getPurchaseOrderRow() != null) {
+                if (row.getPurchaseOrderRow().getPurchaseOrder().getId() == null)
+                    purchaseOrderService.savePurchaseOrder(row.getPurchaseOrderRow().getPurchaseOrder());
+                purchaseOrderRowService.savePurchaseOrderRow(row.getPurchaseOrderRow());
+            }
         }
     }
 

@@ -96,13 +96,13 @@ public class PurchaseOrderService implements Serializable{
 	return result;
     }
     
-    public PurchaseOrder savePurchaseOrder(PurchaseOrder purchaseOrder) {        
+    public PurchaseOrder savePurchaseOrder(PurchaseOrder purchaseOrder) {
         if (purchaseOrder.getId() == null)
             em.persist(purchaseOrder);
         else
             return em.merge(purchaseOrder);
         
-        return null;
+        return purchaseOrder;
     }
     
     public PurchaseOrder readPurchaseOrder(Long id) {
