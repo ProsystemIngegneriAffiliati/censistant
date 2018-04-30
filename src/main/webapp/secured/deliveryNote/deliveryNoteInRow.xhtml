@@ -8,6 +8,7 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:composition template="/WEB-INF/template.xhtml">
         <ui:define name="content">
+            <oou:importFunctions type="com.prosystemingegneri.censistant.business.warehouse.control.Stock" var="stk" />
             <oou:form id="deliveryNoteInRowForm">
                 <div class="ui-fluid">
                     <div class="ui-g">
@@ -16,52 +17,54 @@
                                 <h1>#{msg.deliveryNote_deliveryNoteRow}</h1>
                                 <p>#{msg.deliveryNote_deliveryNoteRow_tip}</p>
 
-                                <p:tabView id="deliveryNoteInTabs" dynamic="true">
-                                    <p:tab title="#{msg.warehouse_handledItems}">
-                                        <p:dataTable id="handledItemsTable" widgetVar="handledItemsTable" var="handledItem" value="#{handledItemListPresenter.lazyHandledItems}"
-                                                     selectionMode="multiple" selection="#{handledItemListPresenter.selectedHandledItems}" rowKey="#{handledItem.id}"
-                                                     paginator="true" rows="10"
-                                                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                                     rowsPerPageTemplate="10,25,50" lazy="true">
-                                            <f:facet name="header">
-                                                <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
-                                                    #{msg.warehouse_handledItems_tip}
-                                                    <p:commandButton title="#{msg.delete}" icon="ui-icon-delete" actionListener="#{handledItemListPresenter.deleteHandledItem()}" update="handledItemsTable">
-                                                        <p:confirm header="#{msg.warehouse_handledItems_delete}" message="#{msg.warehouse_handledItems_delete_tip}" icon="ui-icon-alert"/>
-                                                    </p:commandButton>
-                                                </p:panelGrid>
-                                            </f:facet>
-                                            <p:column headerText="#{msg.warehouse_handledItem_fromLocation}" field="fromLocationName" sortable="false" priority="3">
-                                                <h:outputText value="#{handledItem.fromLocation.name}"/>
-                                            </p:column>
-                                            <p:column headerText="#{msg.warehouse_handledItem_handlingTimestamp}" field="handlingTimestamp" filterable="false" priority="0">
-                                                <h:outputText value="#{handledItem.handlingTimestamp}">
-                                                    <f:convertDateTime type="both" dateStyle="medium" timeStyle="short" />
-                                                </h:outputText>
-                                            </p:column>
-                                            <p:column headerText="#{msg.siteSurvey_worker_name}" field="workerName" priority="4">
-                                                <h:outputText value="#{handledItem.worker.name}"/>
-                                            </p:column>
-                                            <p:column headerText="#{msg.purchasing_supplierItem_code}" field="supplierItemCode" priority="0">
-                                                <h:outputText value="#{handledItem.boxedItem.item.code}"/>
-                                            </p:column>
-                                            <p:column headerText="#{msg.purchasing_supplierItem_description}" field="supplierItemDescription" priority="4">
-                                                <h:outputText value="#{handledItem.boxedItem.item.description}"/>
-                                            </p:column>
-                                            <p:column headerText="#{msg.warehouse_handledItem_quantity}" priority="0">
-                                                <h:outputText value="#{handledItem.quantity}">
-                                                    <f:convertNumber integerOnly="true" />
-                                                </h:outputText>
-                                            </p:column>
-                                            <p:column headerText="#{msg.production_unitMeasure_symbol}" priority="4">
-                                                <h:outputText value="#{handledItem.boxedItem.item.item.unitMeasure.symbol}"/>
-                                            </p:column>
-                                            <p:column headerText="#{msg.warehouse_handledItem_toLocation}" field="toLocationName" sortable="false" priority="0">
-                                                <h:outputText value="#{handledItem.toLocation.name}"/>
-                                            </p:column>
-                                        </p:dataTable>
-                                    </p:tab>
-                                </p:tabView>
+                                <h:outputText value="#{deliveryNoteInRowPresenter.row.handledItem.quantity} #{deliveryNoteInRowPresenter.row.handledItem.boxedItem.item.item.unitMeasure.symbol} #{deliveryNoteInRowPresenter.row.handledItem.boxedItem.item.codeAndDescription}" />
+                                <h:outputText rendered="#{stk:isBoxed(deliveryNoteInRowPresenter.row.handledItem.quantity, deliveryNoteInRowPresenter.row.handledItem.boxedItem.box.quantity)}" value=" (#{stk:getFullBoxedQuantityStr(deliveryNoteInRowPresenter.row.handledItem.quantity, deliveryNoteInRowPresenter.row.handledItem.boxedItem)})" />
+
+                                <p:panel header="#{msg.warehouse_itemMovement}" style="margin-bottom: 25px; margin-top: 25px">
+                                    <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:inputText id="fromLocationName" value="#{deliveryNoteInRowPresenter.row.handledItem.fromLocation.name}" readonly="true" />
+                                            <p:outputLabel for="fromLocationName" value="#{msg.warehouse_handledItem_fromLocation}" />
+                                            <p:message for="fromLocationName"/>
+                                        </h:panelGroup>
+
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:inputText id="toLocationName" value="#{deliveryNoteInRowPresenter.row.handledItem.toLocation.name}" readonly="true" />
+                                            <p:outputLabel for="toLocationName" value="#{msg.warehouse_handledItem_toLocation}" />
+                                            <p:message for="toLocationName"/>
+                                        </h:panelGroup>
+
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:inputText id="handlingTimestamp" value="#{deliveryNoteInRowPresenter.row.handledItem.handlingTimestamp}" readonly="true">
+                                                <f:convertDateTime type="both" dateStyle="medium" timeStyle="short" />
+                                            </p:inputText>
+                                            <p:outputLabel for="handlingTimestamp" value="#{msg.warehouse_handledItem_handlingTimestamp}"/>
+                                            <p:message for="handlingTimestamp"/>
+                                        </h:panelGroup>
+
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:inputText id="workerName" value="#{deliveryNoteInRowPresenter.row.handledItem.worker.name}" readonly="true" />
+                                            <p:outputLabel for="workerName" value="#{msg.siteSurvey_worker_name}" />
+                                            <p:message for="workerName"/>
+                                        </h:panelGroup>
+                                    </p:panelGrid>
+                                </p:panel>
+
+                                <p:panel header="#{msg.purchasing_purchaseOrder}" rendered="#{deliveryNoteInRowPresenter.row.purchaseOrderRow != null}" style="margin-bottom: 25px">
+                                    <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:inputText id="purchaseOrderNumberAndCreation" value="#{deliveryNoteInRowPresenter.row.purchaseOrderRow.purchaseOrder.numberAndCreation}" readonly="true" />
+                                            <p:outputLabel for="purchaseOrderNumberAndCreation" value="#{msg.purchasing_purchaseOrder_number} #{msg.purchasing_purchaseOrder_creation}" />
+                                            <p:message for="purchaseOrderNumberAndCreation"/>
+                                        </h:panelGroup>
+                                    </p:panelGrid>
+                                </p:panel>
+
+                                <h:panelGroup styleClass="md-inputfield">
+                                    <p:inputTextarea id="notes" value="#{deliveryNoteInRowPresenter.row.notes}" />
+                                    <p:outputLabel for="notes" value="#{msg.deliveryNote_deliveryNoteRow_notes}" />
+                                    <p:message for="notes"/>
+                                </h:panelGroup>
 
                                 <div class="ui-g">
                                     <div class="ui-g-1 ui-md-2"></div>
