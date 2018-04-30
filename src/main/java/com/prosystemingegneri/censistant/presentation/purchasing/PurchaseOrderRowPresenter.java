@@ -21,7 +21,6 @@ import com.prosystemingegneri.censistant.business.customerSupplier.entity.Custom
 import com.prosystemingegneri.censistant.business.purchasing.entity.BoxedItem;
 import com.prosystemingegneri.censistant.business.purchasing.entity.PurchaseOrder;
 import com.prosystemingegneri.censistant.business.purchasing.entity.PurchaseOrderRow;
-import com.prosystemingegneri.censistant.business.warehouse.boundary.HandledItemService;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -43,8 +42,6 @@ public class PurchaseOrderRowPresenter implements Serializable {
     
     @Inject
     private CustomerSupplierService service;
-    @Inject
-    private HandledItemService handledItemService;
     
     private CustomerSupplier supplier;
     private List<BoxedItem> items;

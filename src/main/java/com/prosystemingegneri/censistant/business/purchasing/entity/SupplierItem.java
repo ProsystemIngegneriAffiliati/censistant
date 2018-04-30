@@ -138,6 +138,6 @@ public class SupplierItem extends BaseEntity<Long>{
     }
     
     public String getCodeAndDescription() {
-        return code + ": " + description;
+        return new StringBuilder(code).append(": ").append(description).toString();
     }
 }

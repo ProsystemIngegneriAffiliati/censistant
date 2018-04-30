@@ -16,13 +16,14 @@
  */
 package com.prosystemingegneri.censistant.presentation.deliveryNote;
 
+import com.prosystemingegneri.censistant.business.customerSupplier.boundary.CustomerSupplierService;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
 import com.prosystemingegneri.censistant.business.deliveryNote.entity.DeliveryNoteIn;
 import com.prosystemingegneri.censistant.business.deliveryNote.entity.DeliveryNoteRow;
 import com.prosystemingegneri.censistant.business.purchasing.boundary.PurchaseOrderRowService;
 import com.prosystemingegneri.censistant.business.purchasing.boundary.PurchaseOrderService;
 import com.prosystemingegneri.censistant.business.purchasing.control.PurchaseOrderRowToBeDelivered;
-import com.prosystemingegneri.censistant.business.purchasing.entity.PurchaseOrder;
+import com.prosystemingegneri.censistant.business.purchasing.entity.BoxedItem;
 import com.prosystemingegneri.censistant.business.purchasing.entity.PurchaseOrderRow;
 import com.prosystemingegneri.censistant.business.siteSurvey.boundary.WorkerService;
 import com.prosystemingegneri.censistant.business.warehouse.boundary.HandledItemService;
@@ -34,6 +35,7 @@ import com.prosystemingegneri.censistant.presentation.warehouse.HandledItemLazyD
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -74,8 +76,11 @@ public class DeliveryNoteInRowCreationPresenter implements Serializable {
     
     @Inject
     PurchaseOrderService purchaseOrderSerivce;
-    
+    private Date purchaseOrderCreation;
     private List<PurchaseOrderRow> tempPurchaseOrderRows;
+    @Inject
+    private CustomerSupplierService customerSupplierService;
+    private List<BoxedItem> boxedItems;
     
     @Inject
     Authenticator authenticator;
@@ -90,6 +95,7 @@ public class DeliveryNoteInRowCreationPresenter implements Serializable {
         lazyPurchaseOrderRowsToBeDelivered = new PurchaseOrderRowToBeDeliveredLazyDataModel(purchaseOrderRowService, plant, Boolean.TRUE);
         preparedQuantities = new HashMap<>();
         tempPurchaseOrderRows = new ArrayList<>();
+        purchaseOrderCreation = new Date();
     }
     
     public String createDeliveryNoteInRow() {
@@ -167,6 +173,17 @@ public class DeliveryNoteInRowCreationPresenter implements Serializable {
         return result;
     }
     
+    public List<BoxedItem> completeBoxedItems(String filter) {
+        return customerSupplierService.listSupplierBoxedItems(0, 10, plant.getCustomerSupplier(), filter);
+    }
+
+    public List<BoxedItem> getBoxedItems() {
+        if (boxedItems == null || boxedItems.isEmpty())
+            boxedItems = customerSupplierService.listSupplierBoxedItems(0, 0, plant.getCustomerSupplier(), null);
+        
+        return boxedItems;
+    }
+    
     public DeliveryNoteIn getDeliveryNote() {
         return deliveryNote;
     }
@@ -217,6 +234,14 @@ public class DeliveryNoteInRowCreationPresenter implements Serializable {
 
     public List<PurchaseOrderRow> getTempPurchaseOrderRows() {
         return tempPurchaseOrderRows;
+    }
+
+    public Date getPurchaseOrderCreation() {
+        return purchaseOrderCreation;
+    }
+
+    public void setPurchaseOrderCreation(Date purchaseOrderCreation) {
+        this.purchaseOrderCreation = purchaseOrderCreation;
     }
     
 }

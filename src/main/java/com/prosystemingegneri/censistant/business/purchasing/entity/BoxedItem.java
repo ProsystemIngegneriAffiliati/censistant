@@ -108,4 +108,16 @@ public class BoxedItem extends BaseEntity<Long>{
         return id;
     }
     
+    public String getCodeDescriptionBoxUM() {
+        String delimitator = " ";
+        return new StringBuilder(item.getCodeAndDescription())
+                .append(delimitator)
+                .append(box.getUnitMeasure().getName())
+                .append(delimitator)
+                .append(box.getQuantity())
+                .append(delimitator)
+                .append(item.getItem().getUnitMeasure().getSymbol())
+                .toString();
+    }
+    
 }
