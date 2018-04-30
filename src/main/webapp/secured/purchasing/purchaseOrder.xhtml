@@ -95,6 +95,11 @@
                                                 <f:convertNumber integerOnly="true" />
                                             </h:outputText>
                                         </p:column>
+                                        <p:column headerText="#{msg.purchasing_purchaseOrderRow_quantity_toBeDelivered}" priority="4">
+                                            <h:outputText value="#{purchaseOrderPresenter.calculateQuantityToBeDelivered(purchaseOrderRow)}">
+                                                <f:convertNumber integerOnly="true" />
+                                            </h:outputText>
+                                        </p:column>
                                         <p:column headerText="#{msg.production_unitMeasure_symbol}" sortBy="#{purchaseOrderRow.box.unitMeasure.symbol}" priority="5">
                                             <h:outputText value="#{purchaseOrderRow.boxedItem.box.unitMeasure.name} #{purchaseOrderRow.boxedItem.box.quantity} #{purchaseOrderRow.boxedItem.item.item.unitMeasure.symbol}" />
                                         </p:column>

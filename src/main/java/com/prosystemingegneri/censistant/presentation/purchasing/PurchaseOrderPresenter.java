@@ -19,7 +19,9 @@ package com.prosystemingegneri.censistant.presentation.purchasing;
 import com.prosystemingegneri.censistant.business.customerSupplier.boundary.CustomerSupplierService;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
+import com.prosystemingegneri.censistant.business.purchasing.boundary.PurchaseOrderRowService;
 import com.prosystemingegneri.censistant.business.purchasing.boundary.PurchaseOrderService;
+import com.prosystemingegneri.censistant.business.purchasing.control.PurchaseOrderRowToBeDelivered;
 import com.prosystemingegneri.censistant.business.purchasing.entity.PurchaseOrder;
 import com.prosystemingegneri.censistant.business.purchasing.entity.PurchaseOrderRow;
 import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
@@ -95,6 +97,10 @@ public class PurchaseOrderPresenter implements Serializable{
     public void deleteRow(PurchaseOrderRow row) {
         if (row != null)
             purchaseOrder.removeRow(row);
+    }
+    
+    public Long calculateQuantityToBeDelivered(PurchaseOrderRow row) {
+        return service.calculateQuantityToBeDelivered(row);
     }
     
     public List<Plant> completeSupplierPlant(String value) {

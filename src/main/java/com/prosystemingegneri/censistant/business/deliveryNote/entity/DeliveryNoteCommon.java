@@ -131,4 +131,5 @@ public abstract class DeliveryNoteCommon extends BaseEntity<Long>{
         return rows;
     }
     
+    public abstract String getNumberAndCreation();
 }

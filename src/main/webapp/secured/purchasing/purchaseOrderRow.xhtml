@@ -4,10 +4,12 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:oou="http://omnifaces.org/ui">
+      xmlns:oou="http://omnifaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:composition template="/WEB-INF/template.xhtml">
         <ui:define name="content">
             <oou:importConstants type="com.prosystemingegneri.censistant.business.purchasing.entity.PurchaseOrderRow"/>
+            <oou:importFunctions type="com.prosystemingegneri.censistant.business.warehouse.control.Stock" var="stk" />
             <oou:form id="purchaseOrderRowForm">
                 <div class="ui-fluid">
                     <div class="ui-g">
@@ -85,7 +87,26 @@
                                         </p:panelGrid>
                                     </p:tab>
                                     <p:tab title="#{msg.warehouse_itemMovement}">
-                                        
+                                        <p:dataTable id="deliveryNoteRowsTable"
+                                                     var="deliveryNoteRow"
+                                                     value="#{purchaseOrderRowPresenter.row.deliveryNoteRows}">
+                                            <f:facet name="header">
+                                                #{msg.deliveryNote_deliveryNoteRows}
+                                            </f:facet>
+                                            <p:column headerText="#{msg.deliveryNote_deliveryNoteIn}" sortBy="#{deliveryNoteRow.deliveryNote.creation}" priority="0">
+                                                <h:outputText value="#{deliveryNoteRow.deliveryNote.numberAndCreation}" />
+                                            </p:column>
+                                            <p:column headerText="#{msg.purchasing_supplierItem_codeAndDescription}" priority="4">
+                                                <h:outputText value="#{deliveryNoteRow.handledItem.boxedItem.item.codeAndDescription}" />
+                                            </p:column>
+                                            <p:column headerText="#{msg.warehouse_handledItem_quantity}" priority="2">
+                                                <h:outputText value="#{deliveryNoteRow.handledItem.quantity} #{deliveryNoteRow.handledItem.boxedItem.item.item.unitMeasure.symbol}" />
+                                                <h:outputText rendered="#{stk:isBoxed(deliveryNoteRow.handledItem.quantity, deliveryNoteInRowPresenter.row.handledItem.boxedItem.box.quantity)}" value=" (#{stk:getFullBoxedQuantityStr(deliveryNoteRow.handledItem.quantity, deliveryNoteRow.handledItem.boxedItem)})" />
+                                            </p:column>
+                                            <p:column headerText="#{msg.warehouse_handledItem_toLocation}" priority="2">
+                                                <h:outputText value="#{deliveryNoteRow.handledItem.toLocation.name}" />
+                                            </p:column>
+                                        </p:dataTable>
                                     </p:tab>
                                 </p:tabView>
 

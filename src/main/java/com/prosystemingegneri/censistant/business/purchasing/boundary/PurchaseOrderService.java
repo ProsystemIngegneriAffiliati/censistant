@@ -20,9 +20,11 @@ import com.prosystemingegneri.censistant.business.customerSupplier.entity.Custom
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier_;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant_;
+import com.prosystemingegneri.censistant.business.purchasing.control.PurchaseOrderRowToBeDelivered;
 import com.prosystemingegneri.censistant.business.purchasing.entity.BoxedItem;
 import com.prosystemingegneri.censistant.business.purchasing.entity.BoxedItem_;
 import com.prosystemingegneri.censistant.business.purchasing.entity.PurchaseOrder;
+import com.prosystemingegneri.censistant.business.purchasing.entity.PurchaseOrderRow;
 import com.prosystemingegneri.censistant.business.purchasing.entity.PurchaseOrderRow_;
 import com.prosystemingegneri.censistant.business.purchasing.entity.PurchaseOrder_;
 import com.prosystemingegneri.censistant.business.purchasing.entity.SupplierItem;
@@ -34,6 +36,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -54,6 +57,9 @@ import javax.persistence.criteria.Root;
 public class PurchaseOrderService implements Serializable{
     @PersistenceContext
     EntityManager em;
+    
+    @Inject
+    PurchaseOrderRowService purchaseOrderRowService;
     
     public PurchaseOrder createNewPurchaseOrder() {
         return new PurchaseOrder(getNextNumber());
@@ -189,5 +195,17 @@ public class PurchaseOrderService implements Serializable{
         }
         
         return conditions;
+    }
+    
+    public Long calculateQuantityToBeDelivered(PurchaseOrderRow row) {
+        if (row.getId() != null) {
+            List<PurchaseOrderRowToBeDelivered> rowsToBeDelivered = purchaseOrderRowService.listPurchaseOrderRowsToBeDelivered(0, 0, null, null, null, null, null, true, row.getId(), null);
+            if (rowsToBeDelivered != null && !rowsToBeDelivered.isEmpty())
+                return rowsToBeDelivered.get(0).getQuantityToBeDelivered();
+            else
+                return 0L;
+        }
+        else
+            return new Long(row.getQuantity());
     }
 }

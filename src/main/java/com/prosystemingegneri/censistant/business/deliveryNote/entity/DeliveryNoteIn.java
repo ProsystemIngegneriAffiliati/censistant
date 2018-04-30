@@ -16,6 +16,7 @@
  */
 package com.prosystemingegneri.censistant.business.deliveryNote.entity;
 
+import java.text.SimpleDateFormat;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -45,6 +46,14 @@ public class DeliveryNoteIn extends DeliveryNoteCommon {
 
     public void setNumberStr(String numberStr) {
         this.numberStr = numberStr;
+    }
+    
+    @Override
+    public String getNumberAndCreation() {
+        return new StringBuilder(numberStr)
+                .append(" - ")
+                .append(new SimpleDateFormat("dd/MM/yyyy").format(super.getCreation()))
+                .toString();
     }
     
 }

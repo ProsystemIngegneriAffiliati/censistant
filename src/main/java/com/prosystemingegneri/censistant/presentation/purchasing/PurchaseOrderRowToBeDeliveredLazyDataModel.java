@@ -81,8 +81,8 @@ public class PurchaseOrderRowToBeDeliveredLazyDataModel extends LazyDataModel<Pu
             }
         }
         
-        List<PurchaseOrderRowToBeDelivered> result = service.listPurchaseOrderRowsToBeDelivered(first, pageSize, sortField, isAscending, supplierItemCode, supplierItemDescription, plant, isToBeDelivered, null);
-        this.setRowCount(service.getPurchaseOrderRowsToBeDeliveredCount(supplierItemCode, supplierItemDescription, plant, isToBeDelivered).intValue());
+        List<PurchaseOrderRowToBeDelivered> result = service.listPurchaseOrderRowsToBeDelivered(first, pageSize, sortField, isAscending, supplierItemCode, supplierItemDescription, plant, isToBeDelivered, null, null);
+        this.setRowCount(service.getPurchaseOrderRowsToBeDeliveredCount(supplierItemCode, supplierItemDescription, plant, isToBeDelivered, null).intValue());
         
         return result;
     }
@@ -90,7 +90,7 @@ public class PurchaseOrderRowToBeDeliveredLazyDataModel extends LazyDataModel<Pu
     @Override
     public PurchaseOrderRowToBeDelivered getRowData(String rowKey) {
         try {
-            return service.listPurchaseOrderRowsToBeDelivered(0, 0, null, false, null, null, null, true, Long.parseLong(rowKey)).get(0);
+            return service.listPurchaseOrderRowsToBeDelivered(0, 0, null, false, null, null, null, true, Long.parseLong(rowKey), null).get(0);
         } catch (NumberFormatException e) {
             return null;
         }

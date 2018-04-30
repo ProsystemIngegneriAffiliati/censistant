@@ -156,8 +156,8 @@ public class PurchaseOrderRowService implements Serializable{
         return em.createQuery(queryString.toString());
     }
     
-    public List<PurchaseOrderRowToBeDelivered> listPurchaseOrderRowsToBeDelivered(int first, int pageSize, String sortField, Boolean isAscending, String supplierItemCode, String supplierItemDescription, Plant plant, boolean isToBeDelivered, Long idPurchaseOrderRow) {
-        Query query = queryPurchaseOrderRowsToBeDelivered(false, sortField, isAscending, supplierItemCode, supplierItemDescription, plant, isToBeDelivered, idPurchaseOrderRow);
+    public List<PurchaseOrderRowToBeDelivered> listPurchaseOrderRowsToBeDelivered(int first, int pageSize, String sortField, Boolean isAscending, String supplierItemCode, String supplierItemDescription, Plant plant, boolean isToBeDelivered, Long idPurchaseOrderRow, Long idPurchaseOrder) {
+        Query query = queryPurchaseOrderRowsToBeDelivered(false, sortField, isAscending, supplierItemCode, supplierItemDescription, plant, isToBeDelivered, idPurchaseOrderRow, idPurchaseOrder);
         
         if (pageSize > 0) {
             query.setMaxResults(pageSize);
@@ -167,8 +167,8 @@ public class PurchaseOrderRowService implements Serializable{
         return query.getResultList();
     }
     
-    public Long getPurchaseOrderRowsToBeDeliveredCount(String supplierItemCode, String supplierItemDescription, Plant plant, boolean isToBeDelivered) {
-        Query query = queryPurchaseOrderRowsToBeDelivered(true, null, null, supplierItemCode, supplierItemDescription, plant, isToBeDelivered, null);
+    public Long getPurchaseOrderRowsToBeDeliveredCount(String supplierItemCode, String supplierItemDescription, Plant plant, boolean isToBeDelivered, Long idPurchaseOrder) {
+        Query query = queryPurchaseOrderRowsToBeDelivered(true, null, null, supplierItemCode, supplierItemDescription, plant, isToBeDelivered, null, idPurchaseOrder);
         
         try {
             return (Long) query.getSingleResult();
@@ -184,7 +184,7 @@ public class PurchaseOrderRowService implements Serializable{
         }
     }
     
-    private Query queryPurchaseOrderRowsToBeDelivered(boolean isCount, String sortField, Boolean isAscending, String supplierItemCode, String supplierItemDescription, Plant plant, boolean isToBeDelivered, Long idPurchaseOrderRow) {
+    private Query queryPurchaseOrderRowsToBeDelivered(boolean isCount, String sortField, Boolean isAscending, String supplierItemCode, String supplierItemDescription, Plant plant, boolean isToBeDelivered, Long idPurchaseOrderRow, Long idPurchaseOrder) {
         boolean filterAdded = false;
         
         StringBuilder queryString = new StringBuilder("SELECT ");
@@ -243,13 +243,22 @@ public class PurchaseOrderRowService implements Serializable{
                 filterAdded = true;
             queryString.append("po.plant.id = ").append(plant.getId()).append(" ");
         }
-        //Purchase order row's id
+        //Purchase order row's ID
         if (idPurchaseOrderRow != null) {
             if (filterAdded)
                 queryString.append("AND ");
             else
                 filterAdded = true;
             queryString.append("por.id = ").append(idPurchaseOrderRow).append(" ");
+        }
+        
+        //Purchase order ID
+        if (idPurchaseOrder != null) {
+            if (filterAdded)
+                queryString.append("AND ");
+            else
+                filterAdded = true;
+            queryString.append("po.id = ").append(idPurchaseOrder).append(" ");
         }
         
         //AGGREGATION PART

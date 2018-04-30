@@ -18,6 +18,7 @@ package com.prosystemingegneri.censistant.business.deliveryNote.entity;
 
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -121,6 +122,14 @@ public class DeliveryNoteOut extends DeliveryNoteCommon {
 
     public void setCarrier(Carrier carrier) {
         this.carrier = carrier;
+    }
+
+    @Override
+    public String getNumberAndCreation() {
+        return new StringBuilder(super.getNumber())
+                .append(" - ")
+                .append(new SimpleDateFormat("dd/MM/yyyy").format(super.getCreation()))
+                .toString();
     }
 
 }
