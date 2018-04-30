@@ -24,6 +24,7 @@ import com.prosystemingegneri.censistant.business.purchasing.boundary.PurchaseOr
 import com.prosystemingegneri.censistant.business.purchasing.boundary.PurchaseOrderService;
 import com.prosystemingegneri.censistant.business.purchasing.control.PurchaseOrderRowToBeDelivered;
 import com.prosystemingegneri.censistant.business.purchasing.entity.BoxedItem;
+import com.prosystemingegneri.censistant.business.purchasing.entity.PurchaseOrder;
 import com.prosystemingegneri.censistant.business.purchasing.entity.PurchaseOrderRow;
 import com.prosystemingegneri.censistant.business.siteSurvey.boundary.WorkerService;
 import com.prosystemingegneri.censistant.business.warehouse.boundary.HandledItemService;
@@ -107,23 +108,49 @@ public class DeliveryNoteInRowCreationPresenter implements Serializable {
             }
         }
         
-        if (selectedPurchaseOrderRows != null && !selectedPurchaseOrderRows.isEmpty()) {
+        if ((selectedPurchaseOrderRows != null && !selectedPurchaseOrderRows.isEmpty()) || tempPurchaseOrderRows != null && !tempPurchaseOrderRows.isEmpty()) {
             if (locationDestination != null) {
-                for (PurchaseOrderRowToBeDelivered selectedPurchaseOrderRow : selectedPurchaseOrderRows) {
-                    HandledItem handledItem = new HandledItem();
-                    PurchaseOrderRow purchaseOrderRow = purchaseOrderRowService.readPurchaseOrderRow(selectedPurchaseOrderRow.getId());
-                    handledItem.setBoxedItem(purchaseOrderRow.getBoxedItem());
-                    handledItem.setFromLocation(plant.getLocation());
-                    handledItem.setQuantity(preparedQuantities.getOrDefault(selectedPurchaseOrderRow.getId(), selectedPurchaseOrderRow.getQuantityToBeDelivered().intValue()));
-                    handledItem.setToLocation(locationDestination);
-                    handledItem.setWorker(workerService.findWorker(null, false, authenticator.getLoggedUser()));
+                if (selectedPurchaseOrderRows != null && !selectedPurchaseOrderRows.isEmpty()) {
+                    for (PurchaseOrderRowToBeDelivered selectedPurchaseOrderRow : selectedPurchaseOrderRows) {
+                        HandledItem handledItem = new HandledItem();
+                        PurchaseOrderRow purchaseOrderRow = purchaseOrderRowService.readPurchaseOrderRow(selectedPurchaseOrderRow.getId());
+                        handledItem.setBoxedItem(purchaseOrderRow.getBoxedItem());
+                        handledItem.setFromLocation(plant.getLocation());
+                        handledItem.setQuantity(preparedQuantities.getOrDefault(selectedPurchaseOrderRow.getId(), selectedPurchaseOrderRow.getQuantityToBeDelivered().intValue()));
+                        handledItem.setToLocation(locationDestination);
+                        handledItem.setWorker(workerService.findWorker(null, false, authenticator.getLoggedUser()));
 
-                    DeliveryNoteRow row = new DeliveryNoteRow();
-                    row.addHandledItem(handledItem);
-                    
-                    purchaseOrderRow.addDeliveryNoteRow(row);
-                    
-                    deliveryNote.addRow(row);
+                        DeliveryNoteRow row = new DeliveryNoteRow();
+                        row.addHandledItem(handledItem);
+
+                        purchaseOrderRow.addDeliveryNoteRow(row);
+
+                        deliveryNote.addRow(row);
+                    }
+                }
+                if (tempPurchaseOrderRows != null && !tempPurchaseOrderRows.isEmpty()) {
+                    if (purchaseOrderCreation == null)
+                        purchaseOrderCreation = new Date();
+                    PurchaseOrder tempPurchaseOrder = purchaseOrderSerivce.createNewPurchaseOrder();
+                    tempPurchaseOrder.setCreation(purchaseOrderCreation);
+                    tempPurchaseOrder.setPlant(plant);
+                    for (PurchaseOrderRow tempPurchaseOrderRow : tempPurchaseOrderRows) {
+                        HandledItem handledItem = new HandledItem();
+                        handledItem.setBoxedItem(tempPurchaseOrderRow.getBoxedItem());
+                        handledItem.setFromLocation(plant.getLocation());
+                        handledItem.setQuantity(tempPurchaseOrderRow.getQuantity() * tempPurchaseOrderRow.getBoxedItem().getBox().getQuantity());
+                        handledItem.setToLocation(locationDestination);
+                        handledItem.setWorker(workerService.findWorker(null, false, authenticator.getLoggedUser()));
+
+                        DeliveryNoteRow row = new DeliveryNoteRow();
+                        row.addHandledItem(handledItem);
+
+                        tempPurchaseOrderRow.addDeliveryNoteRow(row);
+
+                        deliveryNote.addRow(row);
+                        
+                        tempPurchaseOrder.addRow(tempPurchaseOrderRow);
+                    }
                 }
             }
             else {

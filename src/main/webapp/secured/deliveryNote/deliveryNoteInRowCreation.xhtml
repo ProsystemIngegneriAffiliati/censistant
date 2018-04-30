@@ -228,7 +228,7 @@
                                                     </f:facet>
                                                     <f:facet name="input">
                                                         <p:inputNumber value="#{tempPurchaseOrderRow.cost}" decimalPlaces="#{PurchaseOrderRow.SCALE_COST}" minValue="0">
-                                                            <p:ajax update="tempPurchaseOrderRowCost tempPurchaseOrderRowTotalCost tempPurchaseOrderRowTableFooter" />
+                                                            <p:ajax update="tempPurchaseOrderRowTotalCost tempPurchaseOrderRowTableFooter" />
                                                         </p:inputNumber>
                                                     </f:facet>
                                                 </p:cellEditor>
