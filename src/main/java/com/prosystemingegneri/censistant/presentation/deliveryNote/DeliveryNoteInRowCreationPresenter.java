@@ -90,7 +90,7 @@ public class DeliveryNoteInRowCreationPresenter implements Serializable {
     
     @PostConstruct
     public void init() {
-        deliveryNote = (DeliveryNoteIn) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("deliveryNoteIn");
+        deliveryNote = (DeliveryNoteIn) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("deliveryNote");
         plant = (Plant) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("plant");
         lazyHandledItems = new HandledItemLazyDataModel(handledItemService, plant.getLocation(), null, Boolean.FALSE);
         lazyPurchaseOrderRowsToBeDelivered = new PurchaseOrderRowToBeDeliveredLazyDataModel(purchaseOrderRowService, plant, Boolean.TRUE);
@@ -167,7 +167,7 @@ public class DeliveryNoteInRowCreationPresenter implements Serializable {
     }
     
     private String putExternalContextAndReturnToPage() {
-        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("deliveryNoteIn", deliveryNote);
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("deliveryNote", deliveryNote);
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("plant", plant);
         
         return "/secured/deliveryNote/deliveryNoteIn?faces-redirect=true";

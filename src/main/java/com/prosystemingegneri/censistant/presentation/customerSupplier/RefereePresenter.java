@@ -18,6 +18,7 @@ package com.prosystemingegneri.censistant.presentation.customerSupplier;
 
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Referee;
+import com.prosystemingegneri.censistant.business.deliveryNote.entity.DeliveryNoteCommon;
 import com.prosystemingegneri.censistant.business.deliveryNote.entity.DeliveryNoteIn;
 import com.prosystemingegneri.censistant.business.sales.entity.JobOrder;
 import com.prosystemingegneri.censistant.business.sales.entity.Offer;
@@ -47,7 +48,7 @@ public class RefereePresenter implements Serializable {
     private Offer offer;
     private JobOrder jobOrder;
     
-private DeliveryNoteIn deliveryNoteIn;
+    private DeliveryNoteCommon deliveryNote;
     
     @PostConstruct
     public void init() {
@@ -61,7 +62,7 @@ private DeliveryNoteIn deliveryNoteIn;
         offer = (Offer) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("offer");
         jobOrder = (JobOrder) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("jobOrder");
         
-        deliveryNoteIn = (DeliveryNoteIn) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("deliveryNoteIn");
+        deliveryNote = (DeliveryNoteCommon) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("deliveryNote");
         
         referee = (Referee) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("referee");
         if (referee == null)
@@ -101,7 +102,7 @@ private DeliveryNoteIn deliveryNoteIn;
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("siteSurveyReport", siteSurveyReport);
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("offer", offer);
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("jobOrder", jobOrder);
-        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("deliveryNoteIn", deliveryNoteIn);
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("deliveryNote", deliveryNote);
     }
 
     public Referee getReferee() {

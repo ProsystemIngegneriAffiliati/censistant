@@ -36,7 +36,7 @@ public class DeliveryNoteInRowPresenter implements Serializable {
     
     @PostConstruct
     public void init() {
-        deliveryNote = (DeliveryNoteIn) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("deliveryNoteIn");
+        deliveryNote = (DeliveryNoteIn) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("deliveryNote");
         row = (DeliveryNoteRow) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("deliveryNoteRow");
         if (row == null)
             row = new DeliveryNoteRow();
@@ -54,7 +54,7 @@ public class DeliveryNoteInRowPresenter implements Serializable {
     }
     
     private String putExternalContextAndReturnToPage() {
-        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("deliveryNoteIn", deliveryNote);
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("deliveryNote", deliveryNote);
         
         return "/secured/deliveryNote/deliveryNoteIn?faces-redirect=true";
     }

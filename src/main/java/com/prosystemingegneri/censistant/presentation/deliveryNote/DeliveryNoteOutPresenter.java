@@ -63,7 +63,7 @@ public class DeliveryNoteOutPresenter implements Serializable{
     
     @PostConstruct
     public void init() {
-        deliveryNoteOut = (DeliveryNoteOut) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("deliveryNoteOut");
+        deliveryNoteOut = (DeliveryNoteOut) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("deliveryNote");
         
         populateCustomerSupplierAndPlant();
     }
@@ -139,7 +139,7 @@ public class DeliveryNoteOutPresenter implements Serializable{
     }
     
     private void putExternalContext() {
-        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("deliveryNoteOut", deliveryNoteOut);
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("deliveryNote", deliveryNoteOut);
     }
     
     public void onCustomerSupplierSelect(SelectEvent event) {
@@ -160,7 +160,7 @@ public class DeliveryNoteOutPresenter implements Serializable{
     
     public String creteNewRow() {
         if (plantTemp != null) {
-            FacesContext.getCurrentInstance().getExternalContext().getFlash().put("deliveryNoteOut", deliveryNoteOut);
+            FacesContext.getCurrentInstance().getExternalContext().getFlash().put("deliveryNote", deliveryNoteOut);
             FacesContext.getCurrentInstance().getExternalContext().getFlash().put("plant", plantTemp);
             return "/secured/deliveryNote/deliveryNoteOutRowCreation?faces-redirect=true";
         }
@@ -171,7 +171,7 @@ public class DeliveryNoteOutPresenter implements Serializable{
     public String detailRow(DeliveryNoteRow row) {
         if (row != null)
             FacesContext.getCurrentInstance().getExternalContext().getFlash().put("deliveryNoteRow", row);
-        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("deliveryNoteOut", deliveryNoteOut);
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("deliveryNote", deliveryNoteOut);
         
         return "/secured/deliveryNote/deliveryNoteOutRow?faces-redirect=true";
     }

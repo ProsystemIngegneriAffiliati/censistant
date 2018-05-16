@@ -20,6 +20,7 @@ import com.prosystemingegneri.censistant.business.customerSupplier.boundary.Cust
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Referee;
+import com.prosystemingegneri.censistant.business.deliveryNote.entity.DeliveryNoteCommon;
 import com.prosystemingegneri.censistant.business.deliveryNote.entity.DeliveryNoteIn;
 import com.prosystemingegneri.censistant.business.sales.entity.JobOrder;
 import com.prosystemingegneri.censistant.business.sales.entity.Offer;
@@ -60,7 +61,7 @@ public class CustomerSupplierPresenter implements Serializable{
     private Offer offer;
     private JobOrder jobOrder;
     
-    private DeliveryNoteIn deliveryNoteIn;
+    private DeliveryNoteCommon deliveryNote;
     
     @Resource
     Validator validator;
@@ -77,7 +78,7 @@ public class CustomerSupplierPresenter implements Serializable{
         offer = (Offer) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("offer");
         jobOrder = (JobOrder) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("jobOrder");
         
-        deliveryNoteIn = (DeliveryNoteIn) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("deliveryNoteIn");
+        deliveryNote = (DeliveryNoteCommon) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("deliveryNote");
     }
     
     public String saveCustomerSupplier() {
@@ -154,7 +155,7 @@ public class CustomerSupplierPresenter implements Serializable{
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("siteSurveyReport", siteSurveyReport);
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("offer", offer);
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("jobOrder", jobOrder);
-        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("deliveryNoteIn", deliveryNoteIn);
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("deliveryNote", deliveryNote);
     }
     
     public void deleteReferee(Referee referee) {

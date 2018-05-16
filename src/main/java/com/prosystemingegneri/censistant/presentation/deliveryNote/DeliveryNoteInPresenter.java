@@ -56,7 +56,7 @@ public class DeliveryNoteInPresenter implements Serializable{
     
     @PostConstruct
     public void init() {
-        deliveryNoteIn = (DeliveryNoteIn) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("deliveryNoteIn");
+        deliveryNoteIn = (DeliveryNoteIn) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("deliveryNote");
         
         populateCustomerSupplierAndPlant();
     }
@@ -112,7 +112,7 @@ public class DeliveryNoteInPresenter implements Serializable{
     }
     
     private void putExternalContext() {
-        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("deliveryNoteIn", deliveryNoteIn);
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("deliveryNote", deliveryNoteIn);
     }
     
     public void onSupplierSelect(SelectEvent event) {
@@ -133,7 +133,7 @@ public class DeliveryNoteInPresenter implements Serializable{
     
     public String creteNewRow() {
         if (plantTemp != null) {
-            FacesContext.getCurrentInstance().getExternalContext().getFlash().put("deliveryNoteIn", deliveryNoteIn);
+            FacesContext.getCurrentInstance().getExternalContext().getFlash().put("deliveryNote", deliveryNoteIn);
             FacesContext.getCurrentInstance().getExternalContext().getFlash().put("plant", plantTemp);
             return "/secured/deliveryNote/deliveryNoteInRowCreation?faces-redirect=true";
         }
@@ -144,7 +144,7 @@ public class DeliveryNoteInPresenter implements Serializable{
     public String detailRow(DeliveryNoteRow row) {
         if (row != null)
             FacesContext.getCurrentInstance().getExternalContext().getFlash().put("deliveryNoteRow", row);
-        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("deliveryNoteIn", deliveryNoteIn);
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("deliveryNote", deliveryNoteIn);
         
         return "/secured/deliveryNote/deliveryNoteInRow?faces-redirect=true";
     }
