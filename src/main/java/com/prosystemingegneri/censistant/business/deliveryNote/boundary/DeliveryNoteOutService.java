@@ -27,10 +27,13 @@ import com.prosystemingegneri.censistant.business.deliveryNote.entity.ShippingPa
 import com.prosystemingegneri.censistant.business.deliveryNote.entity.ShippingPayment_;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -49,6 +52,41 @@ import javax.persistence.criteria.Root;
 public class DeliveryNoteOutService implements Serializable{
     @PersistenceContext
     EntityManager em;
+    
+    public DeliveryNoteOut createNewDeliveryNoteOut() {
+        return new DeliveryNoteOut(getNextNumber());
+    }
+    
+    private Integer getNextNumber() {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Integer> query = cb.createQuery(Integer.class);
+        Root<DeliveryNoteOut> root = query.from(DeliveryNoteOut.class);
+        query.select(cb.greatest(root.get(DeliveryNoteCommon_.number)));
+        
+        List<Predicate> conditions = new ArrayList<>();
+        
+        GregorianCalendar dateStart = new GregorianCalendar(new GregorianCalendar().get(Calendar.YEAR), 0, 01);
+        GregorianCalendar dateEnd = new GregorianCalendar(new GregorianCalendar().get(Calendar.YEAR), 11, 31);
+        
+        conditions.add(cb.between(root.<Date>get(DeliveryNoteCommon_.creation), dateStart.getTime(), dateEnd.getTime()));
+
+        if (!conditions.isEmpty()) {
+            query.where(conditions.toArray(new Predicate[conditions.size()]));
+        }
+        
+        Integer result;
+        try {
+            result = em.createQuery(query).getSingleResult();
+            if (result != null)
+                result++;
+            else
+                result = 1;
+        } catch (NoResultException e) {
+            result = 1;
+        }
+        
+	return result;
+    }
     
     public DeliveryNoteOut saveDeliveryNoteOut(DeliveryNoteOut deliveryNoteOut) {        
         if (deliveryNoteOut.getId() == null)

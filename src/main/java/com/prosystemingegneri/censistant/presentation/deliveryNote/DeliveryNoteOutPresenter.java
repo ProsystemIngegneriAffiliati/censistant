@@ -16,10 +16,201 @@
  */
 package com.prosystemingegneri.censistant.presentation.deliveryNote;
 
+import com.prosystemingegneri.censistant.business.customerSupplier.boundary.CustomerSupplierService;
+import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
+import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
+import com.prosystemingegneri.censistant.business.deliveryNote.boundary.DeliveryNoteOutService;
+import com.prosystemingegneri.censistant.business.deliveryNote.entity.DeliveryNoteOut;
+import com.prosystemingegneri.censistant.business.deliveryNote.entity.DeliveryNoteRow;
+import com.prosystemingegneri.censistant.business.warehouse.entity.SupplierPlantLocation;
+import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
+import javax.ejb.EJBException;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
+import javax.validation.groups.Default;
+import org.omnifaces.cdi.ViewScoped;
+import org.primefaces.event.SelectEvent;
+
 /**
  *
  * @author Davide Mainardi <ingmainardi@live.com>
  */
-public class DeliveryNoteOutPresenter {
+@Named
+@ViewScoped
+public class DeliveryNoteOutPresenter implements Serializable{
+    @Inject
+    DeliveryNoteOutService service;
+    @Inject
+    CustomerSupplierService customerSupplierService;
+    
+    private DeliveryNoteOut deliveryNoteOut;
+    private Long id;
+    
+    private CustomerSupplier customerSupplierTemp;
+    private Plant plantTemp;
+    
+    @Resource
+    Validator validator;
+    
+    @PostConstruct
+    public void init() {
+        deliveryNoteOut = (DeliveryNoteOut) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("deliveryNoteOut");
+        
+        populateCustomerSupplierAndPlant();
+    }
+    
+    public String saveDeliveryNoteOut() {
+        try {
+            boolean isValidated = true;
+            for (ConstraintViolation<DeliveryNoteOut> constraintViolation : validator.validate(deliveryNoteOut, Default.class)) {
+                isValidated = false;
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", constraintViolation.getMessage()));
+            }
+            if (!isValidated)
+                return null;
+            
+            service.saveDeliveryNoteOut(deliveryNoteOut);
+        } catch (EJBException e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", ExceptionUtility.unwrap(e.getCausedByException()).getLocalizedMessage()));
+            return null;
+        }
+        
+        return "/secured/deliveryNote/deliveryNoteOuts?faces-redirect=true";
+    }
+    
+    public void detailDeliveryNoteOut() {
+        if (deliveryNoteOut == null && id != null) {
+            if (id == 0)
+                deliveryNoteOut = service.createNewDeliveryNoteOut();
+            else {
+                deliveryNoteOut = service.readDeliveryNoteOut(id);
+                populateCustomerSupplierAndPlant();
+            }
+        }
+    }
+    
+    private void populateCustomerSupplierAndPlant() {
+        customerSupplierTemp = (CustomerSupplier) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("customerSupplier");
+        if (customerSupplierTemp != null)
+            plantTemp = customerSupplierTemp.getPlants().get(customerSupplierTemp.getPlants().size() - 1);
+        else
+            if (deliveryNoteOut != null && !deliveryNoteOut.getRows().isEmpty() && deliveryNoteOut.getRows().get(0).getHandledItem().getFromLocation() instanceof SupplierPlantLocation) {
+                plantTemp = ((SupplierPlantLocation) deliveryNoteOut.getRows().get(0).getHandledItem().getFromLocation()).getPlant();
+                customerSupplierTemp = plantTemp.getCustomerSupplier();
+            }
+    }
+
+    public String createNewCustomer() {
+        return prepareForOpeningCustomerSupplier(customerSupplierService.createCustomer(), true);
+    }
+    
+    public String createNewSupplier() {
+        return prepareForOpeningCustomerSupplier(customerSupplierService.createSupplier(), false);
+    }
+
+    public String openCustomerSupplier() {
+        if (!customerSupplierTemp.getIsCustomer())  //if it's not a customer, open supplier window
+            return prepareForOpeningCustomerSupplier(customerSupplierTemp, false);
+        if (!customerSupplierTemp.getIsSupplier())  //if it's not a supplier, open customer window
+            return prepareForOpeningCustomerSupplier(customerSupplierTemp, true);
+        
+        return prepareForOpeningCustomerSupplier(customerSupplierTemp, true);   //if it's a customer and a supplier, open customer window
+    }
+    
+    private String prepareForOpeningCustomerSupplier(CustomerSupplier customerSupplier, boolean isCustomer) {
+        putExternalContext();
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("customerSupplier", customerSupplier);
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("isCustomerView", isCustomer);
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("returnPage", "deliveryNote/deliveryNoteOut");
+        
+        if (isCustomer)
+            return "/secured/customerSupplier/customer?faces-redirect=true";
+        else
+            return "/secured/customerSupplier/supplier?faces-redirect=true";
+    }
+    
+    private void putExternalContext() {
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("deliveryNoteOut", deliveryNoteOut);
+    }
+    
+    public void onCustomerSupplierSelect(SelectEvent event) {
+        if (event != null && event.getObject() != null)
+            plantTemp = ((CustomerSupplier) event.getObject()).getHeadOffice();
+    }
+    
+    public List<Plant> completePlant(String value) {
+        List<Plant> result = new ArrayList<>();
+        
+        if (customerSupplierTemp != null)
+            for (Plant plant : customerSupplierTemp.getPlants())
+                if (plant.getName().toLowerCase().contains(value.toLowerCase()))
+                    result.add(plant);
+        
+        return result;
+    }
+    
+    public String creteNewRow() {
+        if (plantTemp != null) {
+            FacesContext.getCurrentInstance().getExternalContext().getFlash().put("deliveryNoteOut", deliveryNoteOut);
+            FacesContext.getCurrentInstance().getExternalContext().getFlash().put("plant", plantTemp);
+            return "/secured/deliveryNote/deliveryNoteOutRowCreation?faces-redirect=true";
+        }
+        
+        return null;
+    }
+    
+    public String detailRow(DeliveryNoteRow row) {
+        if (row != null)
+            FacesContext.getCurrentInstance().getExternalContext().getFlash().put("deliveryNoteRow", row);
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("deliveryNoteOut", deliveryNoteOut);
+        
+        return "/secured/deliveryNote/deliveryNoteOutRow?faces-redirect=true";
+    }
+    
+    public void deleteRow(DeliveryNoteRow row) {
+        if (row != null)
+            deliveryNoteOut.removeRow(row);
+    }
+
+    public DeliveryNoteOut getDeliveryNoteOut() {
+        return deliveryNoteOut;
+    }
+
+    public void setDeliveryNoteOut(DeliveryNoteOut deliveryNoteOut) {
+        this.deliveryNoteOut = deliveryNoteOut;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public CustomerSupplier getCustomerSupplierTemp() {
+        return customerSupplierTemp;
+    }
+
+    public void setCustomerSupplierTemp(CustomerSupplier customerSupplierTemp) {
+        this.customerSupplierTemp = customerSupplierTemp;
+    }
+
+    public Plant getPlantTemp() {
+        return plantTemp;
+    }
+
+    public void setPlantTemp(Plant plantTemp) {
+        this.plantTemp = plantTemp;
+    }
     
 }

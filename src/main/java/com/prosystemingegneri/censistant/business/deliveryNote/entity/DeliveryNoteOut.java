@@ -67,6 +67,11 @@ public class DeliveryNoteOut extends DeliveryNoteCommon {
     public DeliveryNoteOut() {
         packagesNumber = 1;
     }
+    
+    public DeliveryNoteOut(Integer number) {
+        super(number);
+        packagesNumber = 1;
+    }
 
     public Integer getPackagesNumber() {
         return packagesNumber;

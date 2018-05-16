@@ -1,12 +1,115 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
-    <h:head>
-        <title>Facelet Title</title>
-    </h:head>
-    <h:body>
-        Hello from Facelets
-    </h:body>
-</html>
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:oou="http://omnifaces.org/ui">
+    <f:metadata>
+        <f:viewParam name="id"
+                     value="#{deliveryNoteOutPresenter.id}"
+                     converter="javax.faces.Long"/>
+        <f:viewAction action="#{deliveryNoteOutPresenter.detailDeliveryNoteOut()}"/>
+    </f:metadata>
+    <ui:composition template="/WEB-INF/template.xhtml">
+        <ui:define name="content">
+            <oou:form id="deliveryNoteOutForm">
+                <div class="ui-fluid">
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <div class="card card-w-title">
+                                <h1>#{msg.deliveryNote_deliveryNoteOut}</h1>
+                                <p>#{msg.deliveryNote_deliveryNoteOut_tip}</p>
+                                <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputNumber id="number" value="#{deliveryNoteOutPresenter.deliveryNoteOut.number}" decimalPlaces="0" />
+                                        <p:outputLabel for="number" value="#{msg.deliveryNote_deliveryNote_number}" />
+                                        <p:message for="number"/>
+                                    </h:panelGroup>
 
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:calendar id="creation" value="#{deliveryNoteOutPresenter.deliveryNoteOut.creation}" locale="it" />
+                                        <p:outputLabel for="creation" value="#{msg.deliveryNote_deliveryNote_creation}"/>
+                                        <p:message for="creation"/>
+                                    </h:panelGroup>
+
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <h:panelGroup id="newCustomerSupplier">
+                                            <p:splitButton rendered="#{empty deliveryNoteOutPresenter.customerSupplierTemp}"
+                                                           action="#{deliveryNoteOutPresenter.createNewCustomer()}"
+                                                           value="#{msg.new} #{msg.customerSupplier_customer}"
+                                                           icon="ui-icon-create"
+                                                           ajax="false"
+                                                           style="width: 12em">
+                                                <p:menuitem  action="#{deliveryNoteOutPresenter.createNewSupplier()}"
+                                                             value="#{msg.new} #{msg.customerSupplier_supplier}"
+                                                             icon="ui-icon-create"
+                                                             ajax="false">
+                                                    <oou:ignoreValidationFailed />
+                                                </p:menuitem>
+                                                <oou:ignoreValidationFailed />
+                                            </p:splitButton>
+                                        </h:panelGroup>
+                                        <p:autoComplete id="customerSuppliers"
+                                                        dropdown="true"
+                                                        value="#{deliveryNoteOutPresenter.customerSupplierTemp}"
+                                                        completeMethod="#{customerSupplierListPresenter.completeCustomerSupplier}"
+                                                        var="customerSupplier"
+                                                        itemLabel="#{customerSupplier.name}"
+                                                        itemValue="#{customerSupplier}"
+                                                        forceSelection="true">
+                                            <oou:converter converterId="omnifaces.ListConverter" list="#{customerSupplierListPresenter.customerSuppliers}"/>
+                                            <p:ajax event="itemSelect" listener="#{deliveryNoteOutPresenter.onCustomerSupplierSelect}" update="plant newCustomerSupplier openCustomerSupplier" />
+                                        </p:autoComplete>
+                                        <p:outputLabel for="customerSuppliers" value="#{msg.customerSupplier_customer} #{msg.or_conjunction} #{msg.customerSupplier_supplier}"/>
+                                        <p:message for="customerSuppliers"/>
+                                    </h:panelGroup>
+
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <h:panelGroup id="openCustomerSupplier">
+                                            <p:commandButton rendered="#{not empty deliveryNoteOutPresenter.customerSupplierTemp and empty deliveryNoteOutPresenter.plantTemp}"
+                                                             action="#{deliveryNoteOutPresenter.openCustomerSupplier()}"
+                                                             title="#{msg.open} #{msg.customerSupplier_customer} #{msg.or_conjunction} #{msg.customerSupplier_supplier}, #{msg.new} #{msg.customerSupplier_plant}"
+                                                             icon="ui-icon-create"
+                                                             ajax="false">
+                                                <oou:ignoreValidationFailed />
+                                            </p:commandButton>
+                                        </h:panelGroup>
+                                        <p:autoComplete id="plant"
+                                                        dropdown="true"
+                                                        value="#{deliveryNoteOutPresenter.plantTemp}"
+                                                        completeMethod="#{deliveryNoteOutPresenter.completePlant}"
+                                                        var="plant"
+                                                        itemLabel="#{plant.name}"
+                                                        itemValue="#{plant}"
+                                                        forceSelection="true">
+                                            <oou:converter converterId="omnifaces.ListConverter" list="#{deliveryNoteOutPresenter.customerSupplierTemp.plants}"/>
+                                            <p:ajax event="itemSelect" update="openCustomerSupplier" />
+                                        </p:autoComplete>
+                                        <p:outputLabel for="plant" value="#{msg.customerSupplier_plant}"/>
+                                        <p:message for="plant"/>
+                                    </h:panelGroup>
+                                </p:panelGrid>
+
+                                <div class="ui-g">
+                                    <div class="ui-g-1 ui-md-2"></div>
+                                    <div class="ui-g-4 ui-md-3">
+                                        <p:button value="#{msg.cancel}" outcome="/secured/deliveryNote/deliveryNoteOuts" styleClass="secondary"/>
+                                    </div>
+                                    <div class="ui-g-2 ui-md-2"></div>
+                                    <div class="ui-g-4 ui-md-3">
+                                        <p:commandButton value="#{msg.save}"
+                                                         action="#{deliveryNoteOutPresenter.saveDeliveryNoteOut()}"
+                                                         ajax="false"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </oou:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

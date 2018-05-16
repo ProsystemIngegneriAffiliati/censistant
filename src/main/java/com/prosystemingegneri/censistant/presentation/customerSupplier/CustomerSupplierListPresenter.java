@@ -18,7 +18,6 @@ package com.prosystemingegneri.censistant.presentation.customerSupplier;
 
 import com.prosystemingegneri.censistant.business.customerSupplier.boundary.CustomerSupplierService;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
-import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
 import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
 import java.io.Serializable;
 import java.util.List;
@@ -46,6 +45,7 @@ public class CustomerSupplierListPresenter implements Serializable{
     
     private List<CustomerSupplier> customers;
     private List<CustomerSupplier> suppliers;
+    private List<CustomerSupplier> customerSuppliers;
     
     @PostConstruct
     public void init() {
@@ -85,6 +85,16 @@ public class CustomerSupplierListPresenter implements Serializable{
         if (suppliers == null || suppliers.isEmpty())
             suppliers = service.listCustomerSuppliers(0, 0, "name", Boolean.TRUE, null, null, Boolean.TRUE, null, null, null);
         return suppliers;
+    }
+    
+    public List<CustomerSupplier> completeCustomerSupplier(String value) {
+        return service.listCustomerSuppliers(0, 10, "name", Boolean.TRUE, Boolean.FALSE, null, null, null, value, null);
+    }
+    
+    public List<CustomerSupplier> getCustomerSuppliers() {
+        if (customerSuppliers == null || customerSuppliers.isEmpty())
+            customerSuppliers = service.listCustomerSuppliers(0, 0, "name", Boolean.TRUE, null, null, null, null, null, null);
+        return customerSuppliers;
     }
 
     public CustomerSupplierLazyDataModel getLazyCustomers() {

@@ -88,7 +88,7 @@ public class CustomerSupplierPresenter implements Serializable{
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", constraintViolation.getMessage()));
             }
             if (!isValidated)
-                return null;            
+                return null;
             
             customerSupplier = service.saveCustomerSupplier(customerSupplier);
         } catch (EJBException e) {
