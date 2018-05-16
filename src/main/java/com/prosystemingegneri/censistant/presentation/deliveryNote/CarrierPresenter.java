@@ -18,8 +18,10 @@ package com.prosystemingegneri.censistant.presentation.deliveryNote;
 
 import com.prosystemingegneri.censistant.business.deliveryNote.boundary.CarrierService;
 import com.prosystemingegneri.censistant.business.deliveryNote.entity.Carrier;
+import com.prosystemingegneri.censistant.business.deliveryNote.entity.DeliveryNoteCommon;
 import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
 import java.io.Serializable;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJBException;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -40,6 +42,18 @@ public class CarrierPresenter implements Serializable{
     private Carrier carrier;
     private Long id;
     
+    private String returnPage;
+    DeliveryNoteCommon deliveryNote;
+    
+    @PostConstruct
+    public void init() {
+        returnPage = (String) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("returnPage");
+        if (returnPage == null || returnPage.isEmpty())
+            returnPage = "deliveryNote/carriers";
+        
+        deliveryNote = (DeliveryNoteCommon) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("deliveryNote");
+    }
+    
     public String saveCarrier() {
         try {
             service.saveCarrier(carrier);
@@ -48,14 +62,30 @@ public class CarrierPresenter implements Serializable{
             return null;
         }
         
-        return "/secured/deliveryNote/carriers?faces-redirect=true";
+        return exit();
+    }
+    
+    public String cancel() {
+        return exit();
+    }
+    
+    private String exit() {
+        putExternalContext();
+        
+        return "/secured/" + returnPage + "?faces-redirect=true";
     }
     
     public void detailCarrier() {
-        if (id == 0)
-            carrier = new Carrier();
-        else
-            carrier = service.readCarrier(id);
+        if (carrier == null) {
+            if (id == null || id == 0)
+                carrier = new Carrier();
+            else
+                carrier = service.readCarrier(id);
+        }
+    }
+    
+    private void putExternalContext() {
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("deliveryNote", deliveryNote);
     }
 
     public Carrier getCarrier() {

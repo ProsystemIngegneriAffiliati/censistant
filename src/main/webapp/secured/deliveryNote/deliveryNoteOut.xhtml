@@ -60,7 +60,7 @@
                                                         itemValue="#{customerSupplier}"
                                                         forceSelection="true">
                                             <oou:converter converterId="omnifaces.ListConverter" list="#{customerSupplierListPresenter.customerSuppliers}"/>
-                                            <p:ajax event="itemSelect" listener="#{deliveryNoteOutPresenter.onCustomerSupplierSelect}" update="plant newCustomerSupplier openCustomerSupplier" />
+                                            <p:ajax event="itemSelect" listener="#{deliveryNoteOutPresenter.onCustomerSupplierSelect}" update="plant newCustomerSupplier openCustomerSupplier deliveryNoteOutTabs:deliveryNoteOutRowsTable:createNewRowButton" />
                                         </p:autoComplete>
                                         <p:outputLabel for="customerSuppliers" value="#{msg.customerSupplier_customer} #{msg.or_conjunction} #{msg.customerSupplier_supplier}"/>
                                         <p:message for="customerSuppliers"/>
@@ -85,12 +85,114 @@
                                                         itemValue="#{plant}"
                                                         forceSelection="true">
                                             <oou:converter converterId="omnifaces.ListConverter" list="#{deliveryNoteOutPresenter.customerSupplierTemp.plants}"/>
-                                            <p:ajax event="itemSelect" update="openCustomerSupplier" />
+                                            <p:ajax event="itemSelect" update="openCustomerSupplier deliveryNoteOutTabs:deliveryNoteOutRowsTable:createNewRowButton" />
                                         </p:autoComplete>
                                         <p:outputLabel for="plant" value="#{msg.customerSupplier_plant}"/>
                                         <p:message for="plant"/>
                                     </h:panelGroup>
                                 </p:panelGrid>
+
+                                <p:tabView id="deliveryNoteOutTabs" dynamic="true">
+                                    <p:tab title="#{msg.deliveryNote_deliveryNoteRows}">
+                                        <p:dataTable id="deliveryNoteOutRowsTable"
+                                                     var="row"
+                                                     value="#{deliveryNoteOutPresenter.deliveryNoteOut.rows}">
+                                            <f:facet name="header">
+                                                <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
+                                                    #{msg.deliveryNote_deliveryNoteRows}
+                                                    <p:commandButton id="createNewRowButton" title="#{msg.new}" icon="ui-icon-create" disabled="#{empty deliveryNoteOutPresenter.plantTemp}" action="#{deliveryNoteOutPresenter.creteNewRow()}" ajax="false" />
+                                                </p:panelGrid>
+                                            </f:facet>
+                                            <p:column headerText="#{msg.actions}" style="width:72px; text-align:center" priority="0">
+                                                <p:splitButton value="" icon="ui-icon-edit" action="#{deliveryNoteOutPresenter.detailRow(row)}" ajax="false">
+                                                    <p:menuitem  value="#{msg.remove}" icon="ui-icon-delete" actionListener="#{deliveryNoteOutPresenter.deleteRow(row)}" update="deliveryNoteOutRowsTable" />
+                                                </p:splitButton>
+                                            </p:column>
+                                        </p:dataTable>
+                                    </p:tab>
+                                    <p:tab title="#{msg.deliveryNote_deliveryNote_data}">
+                                        <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                            <h:panelGroup styleClass="md-inputfield">
+                                                <p:autoComplete id="goodsDescription"
+                                                                dropdown="true"
+                                                                value="#{deliveryNoteOutPresenter.deliveryNoteOut.goodsDescription}"
+                                                                completeMethod="#{goodsDescriptionListPresenter.completeGoodsDescriptions}"
+                                                                var="gd"
+                                                                itemLabel="#{gd.name}"
+                                                                itemValue="#{gd}"
+                                                                forceSelection="true">
+                                                    <oou:converter converterId="omnifaces.ListConverter" list="#{goodsDescriptionListPresenter.goodsDescriptions}"/>
+                                                </p:autoComplete>
+                                                <p:outputLabel for="goodsDescription" value="#{msg.deliveryNote_goodsDescription}"/>
+                                                <p:message for="goodsDescription"/>
+                                            </h:panelGroup>
+
+                                            <h:panelGroup styleClass="md-inputfield">
+                                                <p:autoComplete id="shipmentReason"
+                                                                dropdown="true"
+                                                                value="#{deliveryNoteOutPresenter.deliveryNoteOut.shipmentReason}"
+                                                                completeMethod="#{shipmentReasonListPresenter.completeShipmentReasons}"
+                                                                var="sr"
+                                                                itemLabel="#{sr.name}"
+                                                                itemValue="#{sr}"
+                                                                forceSelection="true">
+                                                    <oou:converter converterId="omnifaces.ListConverter" list="#{shipmentReasonListPresenter.shipmentReasons}"/>
+                                                </p:autoComplete>
+                                                <p:outputLabel for="shipmentReason" value="#{msg.deliveryNote_shipmentReason}"/>
+                                                <p:message for="shipmentReason"/>
+                                            </h:panelGroup>
+
+                                            <h:panelGroup styleClass="md-inputfield">
+                                                <p:autoComplete id="shippingPayment"
+                                                                dropdown="true"
+                                                                value="#{deliveryNoteOutPresenter.deliveryNoteOut.shippingPayment}"
+                                                                completeMethod="#{shippingPaymentListPresenter.completeShippingPayments}"
+                                                                var="sp"
+                                                                itemLabel="#{sp.name}"
+                                                                itemValue="#{sp}"
+                                                                forceSelection="true">
+                                                    <oou:converter converterId="omnifaces.ListConverter" list="#{shippingPaymentListPresenter.shippingPayments}"/>
+                                                </p:autoComplete>
+                                                <p:outputLabel for="shippingPayment" value="#{msg.deliveryNote_shippingPayment}"/>
+                                                <p:message for="shippingPayment"/>
+                                            </h:panelGroup>
+
+                                            <h:panelGroup styleClass="md-inputfield">
+                                                <h:panelGroup id="newCarrier">
+                                                    <p:commandButton rendered="#{empty deliveryNoteOutPresenter.deliveryNoteOut.carrier}"
+                                                                     action="#{deliveryNoteOutPresenter.createNewCarrier()}"
+                                                                     title="#{msg.new} #{msg.deliveryNote_carrier_name}"
+                                                                     icon="ui-icon-create"
+                                                                     ajax="false">
+                                                        <oou:ignoreValidationFailed />
+                                                    </p:commandButton>
+                                                </h:panelGroup>
+                                                <p:autoComplete id="carrier"
+                                                                dropdown="true"
+                                                                value="#{deliveryNoteOutPresenter.deliveryNoteOut.carrier}"
+                                                                completeMethod="#{carrierListPresenter.completeCarriers}"
+                                                                var="carrier"
+                                                                itemLabel="#{carrier.name}"
+                                                                itemValue="#{carrier}"
+                                                                forceSelection="true">
+                                                    <oou:converter converterId="omnifaces.ListConverter" list="#{carrierListPresenter.carriers}"/>
+                                                    <p:ajax event="itemSelect" update="newCarrier" />
+                                                </p:autoComplete>
+                                                <p:outputLabel for="carrier" value="#{msg.deliveryNote_carrier}"/>
+                                                <p:message for="carrier"/>
+                                            </h:panelGroup>
+                                        </p:panelGrid>
+                                    </p:tab>
+                                    <p:tab title="#{msg.deliveryNote_deliveryNote_notes}">
+                                        <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                            <h:panelGroup styleClass="md-inputfield">
+                                                <p:inputTextarea id="notes" value="#{deliveryNoteOutPresenter.deliveryNoteOut.notes}"/>
+                                                <p:outputLabel for="notes" value="#{msg.deliveryNote_deliveryNote_notes}"/>
+                                                <p:message for="notes"/>
+                                            </h:panelGroup>
+                                        </p:panelGrid>
+                                    </p:tab>
+                                </p:tabView>
 
                                 <div class="ui-g">
                                     <div class="ui-g-1 ui-md-2"></div>

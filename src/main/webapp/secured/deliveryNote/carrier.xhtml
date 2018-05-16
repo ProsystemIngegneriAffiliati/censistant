@@ -4,13 +4,12 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:oou="http://omnifaces.org/ui">
     <f:metadata>
         <f:viewParam name="id"
                      value="#{carrierPresenter.id}"
-                     converter="javax.faces.Long"
-                     required="true"
-                     requiredMessage="Must provide an ID"/>
+                     converter="javax.faces.Long" />
         <f:viewAction action="#{carrierPresenter.detailCarrier()}"/>
     </f:metadata>
     <ui:composition template="/WEB-INF/template.xhtml">
@@ -33,7 +32,12 @@
                                 <div class="ui-g">
                                     <div class="ui-g-1 ui-md-2"></div>
                                     <div class="ui-g-4 ui-md-3">
-                                        <p:button value="#{msg.cancel}" outcome="/secured/deliveryNote/carriers" styleClass="secondary"/>
+                                        <p:commandButton value="#{msg.cancel}"
+                                                         action="#{carrierPresenter.cancel()}"
+                                                         styleClass="secondary"
+                                                         ajax="false">
+                                            <oou:ignoreValidationFailed />
+                                        </p:commandButton>
                                     </div>
                                     <div class="ui-g-2 ui-md-2"></div>
                                     <div class="ui-g-4 ui-md-3">

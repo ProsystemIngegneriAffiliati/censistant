@@ -108,6 +108,12 @@ public class DeliveryNoteOutPresenter implements Serializable{
                 customerSupplierTemp = plantTemp.getCustomerSupplier();
             }
     }
+    
+    public String createNewCarrier() {
+        putExternalContext();
+        
+        return "/secured/deliveryNote/carrier?faces-redirect=true";
+    }
 
     public String createNewCustomer() {
         return prepareForOpeningCustomerSupplier(customerSupplierService.createCustomer(), true);
@@ -130,7 +136,6 @@ public class DeliveryNoteOutPresenter implements Serializable{
         putExternalContext();
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("customerSupplier", customerSupplier);
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("isCustomerView", isCustomer);
-        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("returnPage", "deliveryNote/deliveryNoteOut");
         
         if (isCustomer)
             return "/secured/customerSupplier/customer?faces-redirect=true";
@@ -139,6 +144,7 @@ public class DeliveryNoteOutPresenter implements Serializable{
     }
     
     private void putExternalContext() {
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("returnPage", "deliveryNote/deliveryNoteOut");
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("deliveryNote", deliveryNoteOut);
     }
     
