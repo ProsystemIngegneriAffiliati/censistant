@@ -23,6 +23,7 @@ import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -34,6 +35,10 @@ import javax.validation.constraints.NotNull;
 @Entity
 @DiscriminatorValue(value = "1")
 public class DeliveryNoteOut extends DeliveryNoteCommon {
+    @Transient
+    public static final int SCALE_WEIGHT = 1; //If zero or positive, the scale is the number of digits to the right of the decimal point.
+    @Transient
+    public static final int PRECISION_WEIGHT = 4;
     
     @NotNull
     @Min(1)
@@ -42,7 +47,7 @@ public class DeliveryNoteOut extends DeliveryNoteCommon {
 
     @NotNull
     @DecimalMin(value = "0", inclusive = false)
-    @Column(nullable = false)    
+    @Column(nullable = false, scale = SCALE_WEIGHT, precision = PRECISION_WEIGHT)   
     private BigDecimal weight;
     
     @NotNull

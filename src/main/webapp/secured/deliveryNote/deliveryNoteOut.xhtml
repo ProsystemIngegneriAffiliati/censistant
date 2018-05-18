@@ -14,6 +14,7 @@
     </f:metadata>
     <ui:composition template="/WEB-INF/template.xhtml">
         <ui:define name="content">
+            <oou:importConstants type="com.prosystemingegneri.censistant.business.deliveryNote.entity.DeliveryNoteOut"/>
             <oou:form id="deliveryNoteOutForm">
                 <div class="ui-fluid">
                     <div class="ui-g">
@@ -92,7 +93,7 @@
                                     </h:panelGroup>
                                 </p:panelGrid>
 
-                                <p:tabView id="deliveryNoteOutTabs" dynamic="true">
+                                <p:tabView id="deliveryNoteOutTabs" dynamic="true" activeIndex="#{deliveryNoteOutPresenter.activeIndex}">
                                     <p:tab title="#{msg.deliveryNote_deliveryNoteRows}">
                                         <p:dataTable id="deliveryNoteOutRowsTable"
                                                      var="row"
@@ -180,6 +181,18 @@
                                                 </p:autoComplete>
                                                 <p:outputLabel for="carrier" value="#{msg.deliveryNote_carrier}"/>
                                                 <p:message for="carrier"/>
+                                            </h:panelGroup>
+
+                                            <h:panelGroup styleClass="md-inputfield">
+                                                <p:inputNumber id="packagesNumber" value="#{deliveryNoteOutPresenter.deliveryNoteOut.packagesNumber}" decimalPlaces="0" />
+                                                <p:outputLabel for="packagesNumber" value="#{msg.deliveryNote_deliveryNote_packagesNumber}" />
+                                                <p:message for="packagesNumber"/>
+                                            </h:panelGroup>
+                                            
+                                            <h:panelGroup styleClass="md-inputfield">
+                                                <p:inputNumber id="weight" decimalPlaces="#{DeliveryNoteOut.SCALE_WEIGHT}" symbol="Kg. " value="#{deliveryNoteOutPresenter.deliveryNoteOut.weight}" />
+                                                <p:outputLabel for="weight" value="#{msg.deliveryNote_deliveryNote_weight}"/>
+                                                <p:message for="weight"/>
                                             </h:panelGroup>
                                         </p:panelGrid>
                                     </p:tab>

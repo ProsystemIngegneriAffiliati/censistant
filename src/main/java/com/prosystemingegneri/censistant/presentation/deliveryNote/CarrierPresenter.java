@@ -43,7 +43,8 @@ public class CarrierPresenter implements Serializable{
     private Long id;
     
     private String returnPage;
-    DeliveryNoteCommon deliveryNote;
+    private DeliveryNoteCommon deliveryNote;
+    private Integer activeIndex;
     
     @PostConstruct
     public void init() {
@@ -52,6 +53,7 @@ public class CarrierPresenter implements Serializable{
             returnPage = "deliveryNote/carriers";
         
         deliveryNote = (DeliveryNoteCommon) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("deliveryNote");
+        activeIndex = (Integer) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("activeIndex");
     }
     
     public String saveCarrier() {
@@ -86,6 +88,7 @@ public class CarrierPresenter implements Serializable{
     
     private void putExternalContext() {
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("deliveryNote", deliveryNote);
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("activeIndex", activeIndex);
     }
 
     public Carrier getCarrier() {

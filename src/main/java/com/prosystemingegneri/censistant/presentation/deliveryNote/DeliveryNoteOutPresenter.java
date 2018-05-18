@@ -55,6 +55,8 @@ public class DeliveryNoteOutPresenter implements Serializable{
     private DeliveryNoteOut deliveryNoteOut;
     private Long id;
     
+    private Integer activeIndex;    //useful for keep tab opened when reloading a page
+    
     private CustomerSupplier customerSupplierTemp;
     private Plant plantTemp;
     
@@ -64,6 +66,10 @@ public class DeliveryNoteOutPresenter implements Serializable{
     @PostConstruct
     public void init() {
         deliveryNoteOut = (DeliveryNoteOut) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("deliveryNote");
+        activeIndex = (Integer) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("activeIndex");
+        
+        if (activeIndex == null)
+            activeIndex = 0;
         
         populateCustomerSupplierAndPlant();
     }
@@ -146,6 +152,7 @@ public class DeliveryNoteOutPresenter implements Serializable{
     private void putExternalContext() {
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("returnPage", "deliveryNote/deliveryNoteOut");
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("deliveryNote", deliveryNoteOut);
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("activeIndex", activeIndex);
     }
     
     public void onCustomerSupplierSelect(SelectEvent event) {
@@ -217,6 +224,14 @@ public class DeliveryNoteOutPresenter implements Serializable{
 
     public void setPlantTemp(Plant plantTemp) {
         this.plantTemp = plantTemp;
+    }
+
+    public Integer getActiveIndex() {
+        return activeIndex;
+    }
+
+    public void setActiveIndex(Integer activeIndex) {
+        this.activeIndex = activeIndex;
     }
     
 }
