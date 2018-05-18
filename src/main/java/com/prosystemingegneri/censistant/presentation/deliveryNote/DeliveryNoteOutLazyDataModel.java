@@ -53,6 +53,7 @@ public class DeliveryNoteOutLazyDataModel extends LazyDataModel<DeliveryNoteOut>
         String goodsDescription = null;
         String shipmentReason = null;
         String shippingPayment = null;
+        String customerSupplierNamePlantNameAddress = null;
         
         switch (sortOrder) {
             case ASCENDING:
@@ -77,12 +78,14 @@ public class DeliveryNoteOutLazyDataModel extends LazyDataModel<DeliveryNoteOut>
                         shipmentReason = String.valueOf(filters.get(filterProperty));
                     if (filterProperty.equalsIgnoreCase("shippingPayment"))
                         shippingPayment = String.valueOf(filters.get(filterProperty));
+                    if (filterProperty.equalsIgnoreCase("customerSupplierNamePlantNameAddress"))
+                        customerSupplierNamePlantNameAddress = String.valueOf(filters.get(filterProperty));
                 }
             }
         }
         
-        List<DeliveryNoteOut> result = service.listDeliveryNoteOuts(first, pageSize, sortField, isAscending, number, start, end, goodsDescription, shipmentReason, shippingPayment);
-        this.setRowCount(service.getDeliveryNoteOutsCount(number, start, end, goodsDescription, shipmentReason, shippingPayment).intValue());
+        List<DeliveryNoteOut> result = service.listDeliveryNoteOuts(first, pageSize, sortField, isAscending, number, start, end, goodsDescription, shipmentReason, shippingPayment, customerSupplierNamePlantNameAddress);
+        this.setRowCount(service.getDeliveryNoteOutsCount(number, start, end, goodsDescription, shipmentReason, shippingPayment, customerSupplierNamePlantNameAddress).intValue());
         
         return result;
     }

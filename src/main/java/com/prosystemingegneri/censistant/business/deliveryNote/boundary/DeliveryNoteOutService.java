@@ -16,6 +16,10 @@
  */
 package com.prosystemingegneri.censistant.business.deliveryNote.boundary;
 
+import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
+import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier_;
+import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
+import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant_;
 import com.prosystemingegneri.censistant.business.deliveryNote.entity.DeliveryNoteCommon_;
 import com.prosystemingegneri.censistant.business.deliveryNote.entity.DeliveryNoteOut;
 import com.prosystemingegneri.censistant.business.deliveryNote.entity.DeliveryNoteOut_;
@@ -105,13 +109,13 @@ public class DeliveryNoteOutService implements Serializable{
         em.remove(readDeliveryNoteOut(id));
     }
 
-    public List<DeliveryNoteOut> listDeliveryNoteOuts(int first, int pageSize, String sortField, Boolean isAscending, Integer number, Date start, Date end, String goodsDescription, String shipmentReason, String shippingPayment) {
+    public List<DeliveryNoteOut> listDeliveryNoteOuts(int first, int pageSize, String sortField, Boolean isAscending, Integer number, Date start, Date end, String goodsDescription, String shipmentReason, String shippingPayment, String customerSupplierNamePlantNameAddress) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<DeliveryNoteOut> query = cb.createQuery(DeliveryNoteOut.class);
         Root<DeliveryNoteOut> root = query.from(DeliveryNoteOut.class);
         CriteriaQuery<DeliveryNoteOut> select = query.select(root).distinct(true);
         
-        List<Predicate> conditions = calculateConditions(cb, root, number, start, end, goodsDescription, shipmentReason, shippingPayment);
+        List<Predicate> conditions = calculateConditions(cb, root, number, start, end, goodsDescription, shipmentReason, shippingPayment, customerSupplierNamePlantNameAddress);
 
         if (!conditions.isEmpty())
             query.where(conditions.toArray(new Predicate[conditions.size()]));
@@ -135,6 +139,9 @@ public class DeliveryNoteOutService implements Serializable{
                 case "shippingPayment":
                     path = root.get(DeliveryNoteOut_.shippingPayment).get(ShippingPayment_.name);
                     break;
+                case "customerSupplierNamePlantNameAddress":
+                    path = root.get(DeliveryNoteOut_.plant).get(Plant_.customerSupplier).get(CustomerSupplier_.name);
+                    break;
                     
                 default:
                     path = root.get(sortField);
@@ -155,13 +162,13 @@ public class DeliveryNoteOutService implements Serializable{
         return typedQuery.getResultList();
     }
     
-    public Long getDeliveryNoteOutsCount(Integer number, Date start, Date end, String goodsDescription, String shipmentReason, String shippingPayment) {
+    public Long getDeliveryNoteOutsCount(Integer number, Date start, Date end, String goodsDescription, String shipmentReason, String shippingPayment, String customerSupplierNamePlantNameAddress) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Long> query = cb.createQuery(Long.class);
         Root<DeliveryNoteOut> root = query.from(DeliveryNoteOut.class);
         CriteriaQuery<Long> select = query.select(cb.count(root));
 
-        List<Predicate> conditions = calculateConditions(cb, root, number, start, end, goodsDescription, shipmentReason, shippingPayment);
+        List<Predicate> conditions = calculateConditions(cb, root, number, start, end, goodsDescription, shipmentReason, shippingPayment, customerSupplierNamePlantNameAddress);
 
         if (!conditions.isEmpty())
             query.where(conditions.toArray(new Predicate[conditions.size()]));
@@ -169,7 +176,7 @@ public class DeliveryNoteOutService implements Serializable{
         return em.createQuery(select).getSingleResult();
     }
     
-    private List<Predicate> calculateConditions(CriteriaBuilder cb, Root<DeliveryNoteOut> root, Integer number, Date start, Date end, String goodsDescription, String shipmentReason, String shippingPayment) {
+    private List<Predicate> calculateConditions(CriteriaBuilder cb, Root<DeliveryNoteOut> root, Integer number, Date start, Date end, String goodsDescription, String shipmentReason, String shippingPayment, String customerSupplierNamePlantNameAddress) {
         List<Predicate> conditions = new ArrayList<>();
 
         //number
@@ -196,6 +203,19 @@ public class DeliveryNoteOutService implements Serializable{
         if (shippingPayment != null && !shippingPayment.isEmpty()) {
             Join<DeliveryNoteOut, ShippingPayment> shippingPaymentRoot = root.join(DeliveryNoteOut_.shippingPayment);
             conditions.add(cb.like(cb.lower(shippingPaymentRoot.get(ShippingPayment_.name)), "%" + String.valueOf(shippingPayment).toLowerCase() + "%"));
+        }
+        
+        //Customer (or supplier) name or plant name or plant address
+        if (customerSupplierNamePlantNameAddress != null && !customerSupplierNamePlantNameAddress.isEmpty()) {
+            Join<DeliveryNoteOut, Plant> plantRoot = root.join(DeliveryNoteOut_.plant);
+            Join<Plant, CustomerSupplier> customerSupplierRoot = plantRoot.join(Plant_.customerSupplier);
+            conditions.add(
+                    cb.or(
+                            cb.like(cb.lower(plantRoot.get(Plant_.name)), "%" + String.valueOf(customerSupplierNamePlantNameAddress).toLowerCase() + "%"),
+                            cb.like(cb.lower(plantRoot.get(Plant_.address)), "%" + String.valueOf(customerSupplierNamePlantNameAddress).toLowerCase() + "%"),
+                            cb.like(cb.lower(customerSupplierRoot.get(CustomerSupplier_.name)), "%" + String.valueOf(customerSupplierNamePlantNameAddress).toLowerCase() + "%")
+                    )
+            );            
         }
         
         return conditions;
