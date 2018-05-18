@@ -69,7 +69,7 @@
 
                                     <h:panelGroup styleClass="md-inputfield">
                                         <h:panelGroup id="openCustomerSupplier">
-                                            <p:commandButton rendered="#{not empty deliveryNoteOutPresenter.customerSupplierTemp and empty deliveryNoteOutPresenter.plantTemp}"
+                                            <p:commandButton rendered="#{not empty deliveryNoteOutPresenter.customerSupplierTemp and empty deliveryNoteOutPresenter.deliveryNoteOut.plant}"
                                                              action="#{deliveryNoteOutPresenter.openCustomerSupplier()}"
                                                              title="#{msg.open} #{msg.customerSupplier_customer} #{msg.or_conjunction} #{msg.customerSupplier_supplier}, #{msg.new} #{msg.customerSupplier_plant}"
                                                              icon="ui-icon-create"
@@ -79,7 +79,7 @@
                                         </h:panelGroup>
                                         <p:autoComplete id="plant"
                                                         dropdown="true"
-                                                        value="#{deliveryNoteOutPresenter.plantTemp}"
+                                                        value="#{deliveryNoteOutPresenter.deliveryNoteOut.plant}"
                                                         completeMethod="#{deliveryNoteOutPresenter.completePlant}"
                                                         var="plant"
                                                         itemLabel="#{plant.name}"
@@ -101,7 +101,7 @@
                                             <f:facet name="header">
                                                 <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
                                                     #{msg.deliveryNote_deliveryNoteRows}
-                                                    <p:commandButton id="createNewRowButton" title="#{msg.new}" icon="ui-icon-create" disabled="#{empty deliveryNoteOutPresenter.plantTemp}" action="#{deliveryNoteOutPresenter.creteNewRow()}" ajax="false" />
+                                                    <p:commandButton id="createNewRowButton" title="#{msg.new}" icon="ui-icon-create" disabled="#{empty deliveryNoteOutPresenter.deliveryNoteOut.plant}" action="#{deliveryNoteOutPresenter.creteNewRow()}" ajax="false" />
                                                 </p:panelGrid>
                                             </f:facet>
                                             <p:column headerText="#{msg.actions}" style="width:72px; text-align:center" priority="0">

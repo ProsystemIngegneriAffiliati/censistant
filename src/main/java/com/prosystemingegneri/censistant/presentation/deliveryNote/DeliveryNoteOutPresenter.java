@@ -58,7 +58,6 @@ public class DeliveryNoteOutPresenter implements Serializable{
     private Integer activeIndex;    //useful for keep tab opened when reloading a page
     
     private CustomerSupplier customerSupplierTemp;
-    private Plant plantTemp;
     
     @Resource
     Validator validator;
@@ -107,12 +106,10 @@ public class DeliveryNoteOutPresenter implements Serializable{
     private void populateCustomerSupplierAndPlant() {
         customerSupplierTemp = (CustomerSupplier) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("customerSupplier");
         if (customerSupplierTemp != null)
-            plantTemp = customerSupplierTemp.getPlants().get(customerSupplierTemp.getPlants().size() - 1);
+            deliveryNoteOut.setPlant(customerSupplierTemp.getPlants().get(customerSupplierTemp.getPlants().size() - 1));
         else
-            if (deliveryNoteOut != null && !deliveryNoteOut.getRows().isEmpty() && deliveryNoteOut.getRows().get(0).getHandledItem().getFromLocation() instanceof SupplierPlantLocation) {
-                plantTemp = ((SupplierPlantLocation) deliveryNoteOut.getRows().get(0).getHandledItem().getFromLocation()).getPlant();
-                customerSupplierTemp = plantTemp.getCustomerSupplier();
-            }
+            if (deliveryNoteOut != null && deliveryNoteOut.getPlant() != null)
+                customerSupplierTemp = deliveryNoteOut.getPlant().getCustomerSupplier();
     }
     
     public String createNewCarrier() {
@@ -157,7 +154,7 @@ public class DeliveryNoteOutPresenter implements Serializable{
     
     public void onCustomerSupplierSelect(SelectEvent event) {
         if (event != null && event.getObject() != null)
-            plantTemp = ((CustomerSupplier) event.getObject()).getHeadOffice();
+            deliveryNoteOut.setPlant(((CustomerSupplier) event.getObject()).getHeadOffice());
     }
     
     public List<Plant> completePlant(String value) {
@@ -172,9 +169,9 @@ public class DeliveryNoteOutPresenter implements Serializable{
     }
     
     public String creteNewRow() {
-        if (plantTemp != null) {
+        if (deliveryNoteOut.getPlant() != null) {
             FacesContext.getCurrentInstance().getExternalContext().getFlash().put("deliveryNote", deliveryNoteOut);
-            FacesContext.getCurrentInstance().getExternalContext().getFlash().put("plant", plantTemp);
+            FacesContext.getCurrentInstance().getExternalContext().getFlash().put("plant", deliveryNoteOut.getPlant());
             return "/secured/deliveryNote/deliveryNoteOutRowCreation?faces-redirect=true";
         }
         
@@ -216,14 +213,6 @@ public class DeliveryNoteOutPresenter implements Serializable{
 
     public void setCustomerSupplierTemp(CustomerSupplier customerSupplierTemp) {
         this.customerSupplierTemp = customerSupplierTemp;
-    }
-
-    public Plant getPlantTemp() {
-        return plantTemp;
-    }
-
-    public void setPlantTemp(Plant plantTemp) {
-        this.plantTemp = plantTemp;
     }
 
     public Integer getActiveIndex() {
