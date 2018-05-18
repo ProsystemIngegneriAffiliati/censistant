@@ -22,7 +22,6 @@ import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
 import com.prosystemingegneri.censistant.business.deliveryNote.boundary.DeliveryNoteOutService;
 import com.prosystemingegneri.censistant.business.deliveryNote.entity.DeliveryNoteOut;
 import com.prosystemingegneri.censistant.business.deliveryNote.entity.DeliveryNoteRow;
-import com.prosystemingegneri.censistant.business.warehouse.entity.SupplierPlantLocation;
 import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -105,11 +104,8 @@ public class DeliveryNoteOutPresenter implements Serializable{
     
     private void populateCustomerSupplierAndPlant() {
         customerSupplierTemp = (CustomerSupplier) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("customerSupplier");
-        if (customerSupplierTemp != null)
-            deliveryNoteOut.setPlant(customerSupplierTemp.getPlants().get(customerSupplierTemp.getPlants().size() - 1));
-        else
-            if (deliveryNoteOut != null && deliveryNoteOut.getPlant() != null)
-                customerSupplierTemp = deliveryNoteOut.getPlant().getCustomerSupplier();
+        if (customerSupplierTemp == null && deliveryNoteOut != null && deliveryNoteOut.getPlant() != null)
+            customerSupplierTemp = deliveryNoteOut.getPlant().getCustomerSupplier();
     }
     
     public String createNewCarrier() {
@@ -150,11 +146,6 @@ public class DeliveryNoteOutPresenter implements Serializable{
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("returnPage", "deliveryNote/deliveryNoteOut");
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("deliveryNote", deliveryNoteOut);
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("activeIndex", activeIndex);
-    }
-    
-    public void onCustomerSupplierSelect(SelectEvent event) {
-        if (event != null && event.getObject() != null)
-            deliveryNoteOut.setPlant(((CustomerSupplier) event.getObject()).getHeadOffice());
     }
     
     public List<Plant> completePlant(String value) {

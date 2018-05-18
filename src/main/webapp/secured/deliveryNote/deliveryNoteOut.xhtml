@@ -61,7 +61,7 @@
                                                         itemValue="#{customerSupplier}"
                                                         forceSelection="true">
                                             <oou:converter converterId="omnifaces.ListConverter" list="#{customerSupplierListPresenter.customerSuppliers}"/>
-                                            <p:ajax event="itemSelect" listener="#{deliveryNoteOutPresenter.onCustomerSupplierSelect}" update="plant newCustomerSupplier openCustomerSupplier deliveryNoteOutTabs:deliveryNoteOutRowsTable:createNewRowButton" />
+                                            <p:ajax event="itemSelect" update="plant newCustomerSupplier openCustomerSupplier deliveryNoteOutTabs:deliveryNoteOutRowsTable:createNewRowButton" />
                                         </p:autoComplete>
                                         <p:outputLabel for="customerSuppliers" value="#{msg.customerSupplier_customer} #{msg.or_conjunction} #{msg.customerSupplier_supplier}"/>
                                         <p:message for="customerSuppliers"/>
