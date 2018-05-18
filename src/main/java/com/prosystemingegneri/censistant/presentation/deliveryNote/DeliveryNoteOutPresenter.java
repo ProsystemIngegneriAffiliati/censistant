@@ -162,7 +162,6 @@ public class DeliveryNoteOutPresenter implements Serializable{
     public String creteNewRow() {
         if (deliveryNoteOut.getPlant() != null) {
             FacesContext.getCurrentInstance().getExternalContext().getFlash().put("deliveryNote", deliveryNoteOut);
-            FacesContext.getCurrentInstance().getExternalContext().getFlash().put("plant", deliveryNoteOut.getPlant());
             return "/secured/deliveryNote/deliveryNoteOutRowCreation?faces-redirect=true";
         }
         
