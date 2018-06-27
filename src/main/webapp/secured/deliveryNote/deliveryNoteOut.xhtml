@@ -83,7 +83,7 @@
                                                         value="#{deliveryNoteOutPresenter.deliveryNoteOut.location}"
                                                         completeMethod="#{deliveryNoteOutPresenter.completeLocation}"
                                                         var="location"
-                                                        itemLabel="#{location.name}"
+                                                        itemLabel="#{location.address}"
                                                         itemValue="#{location}"
                                                         forceSelection="true">
                                             <oou:converter converterId="omnifaces.ListConverter" list="#{deliveryNoteOutPresenter.locations}"/>

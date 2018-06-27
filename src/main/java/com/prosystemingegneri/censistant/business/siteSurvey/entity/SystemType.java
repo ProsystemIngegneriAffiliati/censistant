@@ -22,8 +22,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  *
@@ -34,6 +36,14 @@ public class SystemType extends BaseEntity<Long>{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
+    @Transient
+    public static final int MAX_SYMBOL_TEXTSIZE = 3;
+    
+    @NotNull
+    @Size(max = MAX_SYMBOL_TEXTSIZE)
+    @Column(nullable = false, unique = true, length = MAX_SYMBOL_TEXTSIZE)
+    private String symbol;
     
     @NotNull
     @Column(nullable = false)
@@ -56,6 +66,14 @@ public class SystemType extends BaseEntity<Long>{
     @Override
     public Long getId() {
         return id;
+    }
+
+    public String getSymbol() {
+        return symbol;
+    }
+
+    public void setSymbol(String symbol) {
+        this.symbol = symbol;
     }
     
 }

@@ -49,7 +49,11 @@ public class SupplierPlantLocation extends Location {
 
     @Override
     public String getName() {
-        return (new StringBuilder()).append(plant.getCustomerSupplier().getName()).append(" (").append(plant.getName()).append(")").toString();
+        return (new StringBuilder())
+                .append(plant.getCustomerSupplier().getName())
+                .append(" (")
+                .append(plant.getName())
+                .append(")").toString();
     }
 
     @Override
@@ -68,5 +72,10 @@ public class SupplierPlantLocation extends Location {
                 .append(delim)
                 .append(plant.getNameAddress(isNewLine))
                 .toString();
+    }
+
+    @Override
+    public String getAddress() {
+        return plant.getNameAddress(false);
     }
 }

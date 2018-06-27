@@ -67,6 +67,8 @@ public abstract class Location extends BaseEntity<Long>{
     
     public abstract String getCustomerSupplierNamePlantNameAddress(boolean isNewLine);
     
+    public abstract String getAddress();
+    
     @Version
     private int version;
 

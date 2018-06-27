@@ -199,7 +199,7 @@ public class System extends Location {
 
     @Override
     public String getName() {
-        String delimiter = " - ";
+        String delimiter = DELIMITATOR;
         String offerNumber = "";
         String customerName = "";
         
@@ -241,6 +241,14 @@ public class System extends Location {
                 .append(delim)
                 .append(plantNameAddress)
                 .toString();
+    }
+
+    @Override
+    public String getAddress() {
+        if (!offers.isEmpty())
+            return offers.get(offers.size() - 1).getJobOrder().getJobOrderNumberAddress();
+        else
+            return "";
     }
     
 }

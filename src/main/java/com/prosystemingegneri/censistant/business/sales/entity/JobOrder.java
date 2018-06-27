@@ -17,6 +17,8 @@
 package com.prosystemingegneri.censistant.business.sales.entity;
 
 import com.prosystemingegneri.censistant.business.entity.BaseEntity;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -127,6 +129,24 @@ public class JobOrder extends BaseEntity<Long> {
     public void addOffer(Offer offer) {
         offer.setJobOrder(this);
         this.offer = offer;
+    }
+    
+    public String getNumberStr() {
+        return new StringBuilder(offer.getSiteSurveyReport().getRequest().getSystemType().getSymbol())
+                .append(" ")
+                .append(new SimpleDateFormat("yy").format(creation))
+                .append("/")
+                .append(new SimpleDateFormat("MM").format(creation))
+                .append("/")
+                .append(new DecimalFormat("0000").format(number))
+                .toString();
+    }
+    
+    public String getJobOrderNumberAddress() {
+        return new StringBuilder(getNumberStr())
+                .append(" - ")
+                .append(offer.getSiteSurveyReport().getPlant().getNameAddress(false))
+                .toString();
     }
     
 }

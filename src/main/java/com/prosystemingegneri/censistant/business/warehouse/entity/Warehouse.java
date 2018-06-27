@@ -64,5 +64,10 @@ public class Warehouse extends Location {
     public String getCustomerSupplierNamePlantNameAddress(boolean isNewLine) {
         return "";
     }
+
+    @Override
+    public String getAddress() {
+        return "";
+    }
     
 }

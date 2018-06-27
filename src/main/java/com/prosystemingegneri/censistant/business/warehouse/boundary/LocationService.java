@@ -161,36 +161,52 @@ public class LocationService implements Serializable {
         if (customerSupplier.getIsCustomer()) {
             Root<System> systemRoot = cb.treat(root, System.class);
             if (systemRoot != null) {
-                Join<System, Offer> offersRoot = systemRoot.join(System_.offers);
-                Join<Offer, SiteSurveyReport> siteSurveyReportRoot = offersRoot.join(Offer_.siteSurveyReport);
-                Join<SiteSurveyReport, Plant> plantRoot = siteSurveyReportRoot.join(SiteSurveyReport_.plant);
+                Join<System, Offer> offersRoot = systemRoot.join(System_.offers, JoinType.LEFT);
+                Join<Offer, SiteSurveyReport> siteSurveyReportRoot = offersRoot.join(Offer_.siteSurveyReport, JoinType.LEFT);
+                Join<SiteSurveyReport, Plant> plantRoot = siteSurveyReportRoot.join(SiteSurveyReport_.plant, JoinType.LEFT);
                 
-                conditions.add(cb.equal(plantRoot.get(Plant_.customerSupplier), customerSupplier));
+                Predicate restriction = cb.equal(plantRoot.get(Plant_.customerSupplier), customerSupplier);
+                
                 if (name != null && !name.isEmpty()) {
-                    conditions.add(cb.or(
-                            cb.like(cb.lower(systemRoot.get(System_.description)), "%" + name.toLowerCase() + "%"),
-                            cb.like(cb.lower(plantRoot.get(Plant_.address)), "%" + name.toLowerCase() + "%"),
-                            cb.like(cb.lower(plantRoot.get(Plant_.name)), "%" + name.toLowerCase() + "%")));
+                    conditions.add(
+                            cb.and(
+                                    restriction,
+                                    cb.or(
+                                            cb.like(cb.lower(systemRoot.get(System_.description)), "%" + name.toLowerCase() + "%"),
+                                            cb.like(cb.lower(plantRoot.get(Plant_.address)), "%" + name.toLowerCase() + "%"),
+                                            cb.like(cb.lower(plantRoot.get(Plant_.name)), "%" + name.toLowerCase() + "%")
+                                    )
+                            ));
                 }
+                else
+                    conditions.add(restriction);
             }
         }
         
         if (customerSupplier.getIsSupplier()) {
             Root<SupplierPlantLocation> supplierPlantLocationRoot = cb.treat(root, SupplierPlantLocation.class);
             if (supplierPlantLocationRoot != null) {
-                Join<SupplierPlantLocation, Plant> supplierPlantRoot = supplierPlantLocationRoot.join(SupplierPlantLocation_.plant);
+                Join<SupplierPlantLocation, Plant> supplierPlantRoot = supplierPlantLocationRoot.join(SupplierPlantLocation_.plant, JoinType.LEFT);
                 
-                conditions.add(cb.equal(supplierPlantRoot.get(Plant_.customerSupplier), customerSupplier));
+                Predicate restriction = cb.equal(supplierPlantRoot.get(Plant_.customerSupplier), customerSupplier);
+                
                 if (name != null && !name.isEmpty()) {
-                    conditions.add(cb.or(
-                            cb.like(cb.lower(supplierPlantRoot.get(Plant_.address)), "%" + name.toLowerCase() + "%"),
-                            cb.like(cb.lower(supplierPlantRoot.get(Plant_.name)), "%" + name.toLowerCase() + "%")));
+                    conditions.add(
+                            cb.and(
+                                    restriction,
+                                    cb.or(
+                                            cb.like(cb.lower(supplierPlantRoot.get(Plant_.address)), "%" + name.toLowerCase() + "%"),
+                                            cb.like(cb.lower(supplierPlantRoot.get(Plant_.name)), "%" + name.toLowerCase() + "%")
+                                    )
+                            ));
                 }
+                else
+                    conditions.add(restriction);
             }
         }
 
         if (!conditions.isEmpty())
-            query.where(conditions.toArray(new Predicate[conditions.size()]));
+            query.where(cb.or(conditions.toArray(new Predicate[conditions.size()])));
         
         query.orderBy(cb.asc(root.get(Location_.type)));
 

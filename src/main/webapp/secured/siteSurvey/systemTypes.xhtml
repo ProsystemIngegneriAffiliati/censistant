@@ -32,7 +32,10 @@
                             </f:facet>
                             <p:column headerText="#{msg.siteSurvey_systemType_name}" sortBy="#{sys.name}" filterBy="#{sys.name}" filterMatchMode="contains">
                                 <h:outputText value="#{sys.name}"/>
-                            </p:column>                       
+                            </p:column>
+                            <p:column headerText="#{msg.siteSurvey_systemType_symbol}" sortBy="#{sys.symbol}" filterBy="#{sys.symbol}" filterMatchMode="contains">
+                                <h:outputText value="#{sys.symbol}"/>
+                            </p:column>
                             <p:column headerText="#{msg.actions}" style="width:64px; text-align:center">
                                 <p:button title="#{msg.edit}" icon="ui-icon-edit" styleClass="AquaButton" outcome="/secured/siteSurvey/systemType">
                                     <f:param name="id" value="#{sys.id}" />
