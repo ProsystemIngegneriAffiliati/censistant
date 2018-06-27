@@ -28,11 +28,15 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import javax.ejb.EJBException;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
+import javax.validation.groups.Default;
 import org.omnifaces.cdi.ViewScoped;
 import org.primefaces.event.SelectEvent;
 
@@ -54,6 +58,9 @@ public class DeliveryNoteInPresenter implements Serializable{
     private CustomerSupplier supplierTemp;
     private Plant plantTemp;
     
+    @Resource
+    Validator validator;
+    
     @PostConstruct
     public void init() {
         deliveryNoteIn = (DeliveryNoteIn) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("deliveryNote");
@@ -63,6 +70,14 @@ public class DeliveryNoteInPresenter implements Serializable{
     
     public String saveDeliveryNoteIn() {
         try {
+            boolean isValidated = true;
+            for (ConstraintViolation<DeliveryNoteIn> constraintViolation : validator.validate(deliveryNoteIn, Default.class)) {
+                isValidated = false;
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", constraintViolation.getMessage()));
+            }
+            if (!isValidated)
+                return null;
+            
             service.saveDeliveryNoteIn(deliveryNoteIn);
         } catch (EJBException e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", ExceptionUtility.unwrap(e.getCausedByException()).getLocalizedMessage()));

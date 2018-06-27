@@ -23,6 +23,7 @@ import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant_
 import com.prosystemingegneri.censistant.business.deliveryNote.entity.DeliveryNoteCommon_;
 import com.prosystemingegneri.censistant.business.deliveryNote.entity.DeliveryNoteOut;
 import com.prosystemingegneri.censistant.business.deliveryNote.entity.DeliveryNoteOut_;
+import com.prosystemingegneri.censistant.business.deliveryNote.entity.DeliveryNoteRow;
 import com.prosystemingegneri.censistant.business.deliveryNote.entity.GoodsDescription;
 import com.prosystemingegneri.censistant.business.deliveryNote.entity.GoodsDescription_;
 import com.prosystemingegneri.censistant.business.deliveryNote.entity.ShipmentReason;
@@ -35,6 +36,7 @@ import com.prosystemingegneri.censistant.business.sales.entity.Offer;
 import com.prosystemingegneri.censistant.business.sales.entity.Offer_;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport_;
+import com.prosystemingegneri.censistant.business.warehouse.boundary.HandledItemService;
 import com.prosystemingegneri.censistant.business.warehouse.entity.SupplierPlantLocation;
 import com.prosystemingegneri.censistant.business.warehouse.entity.SupplierPlantLocation_;
 import java.io.Serializable;
@@ -44,6 +46,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -56,6 +59,7 @@ import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -65,6 +69,9 @@ import javax.persistence.criteria.Root;
 public class DeliveryNoteOutService implements Serializable{
     @PersistenceContext
     EntityManager em;
+    
+    @Inject
+    HandledItemService handledItemService;
     
     public DeliveryNoteOut createNewDeliveryNoteOut() {
         return new DeliveryNoteOut(getNextNumber());
@@ -101,7 +108,8 @@ public class DeliveryNoteOutService implements Serializable{
 	return result;
     }
     
-    public DeliveryNoteOut saveDeliveryNoteOut(DeliveryNoteOut deliveryNoteOut) {        
+    public DeliveryNoteOut saveDeliveryNoteOut(DeliveryNoteOut deliveryNoteOut) {
+        updateHandledItems(deliveryNoteOut);
         if (deliveryNoteOut.getId() == null)
             em.persist(deliveryNoteOut);
         else
@@ -243,5 +251,14 @@ public class DeliveryNoteOutService implements Serializable{
         }
         
         return conditions;
+    }
+    
+    /**
+    *
+    * Handled items have been created at the same moment of delivery note's rows, so they must be saved first
+    */
+    private void updateHandledItems(@NotNull DeliveryNoteOut deliveryNote) {
+        for (DeliveryNoteRow row : deliveryNote.getRows())
+            handledItemService.saveHandledItem(row.getHandledItem());
     }
 }

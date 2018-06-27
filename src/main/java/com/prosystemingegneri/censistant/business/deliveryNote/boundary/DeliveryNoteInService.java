@@ -54,8 +54,8 @@ public class DeliveryNoteInService implements Serializable{
     
     @Inject
     PurchaseOrderService purchaseOrderService;
-        @Inject
-        PurchaseOrderRowService purchaseOrderRowService;
+    @Inject
+    PurchaseOrderRowService purchaseOrderRowService;
     @Inject
     HandledItemService handledItemService;
     

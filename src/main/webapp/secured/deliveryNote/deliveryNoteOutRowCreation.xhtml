@@ -18,7 +18,7 @@
                                 <p>#{msg.deliveryNote_deliveryNoteRow_tip}</p>
 
                                 <p:tabView id="deliveryNoteOutTabs" dynamic="true">
-                                    <p:ajax event="tabChange" listener="#{deliveryNoteOutRowCreationPresenter.onTabChange}" update="handledItemsTable"/>
+                                    <p:ajax event="tabChange" listener="#{deliveryNoteOutRowCreationPresenter.onTabChange}" update="handledItemsTable warehouseStockTable preparedStockForMovementTable"/>
                                     <p:tab title="#{msg.warehouse_handledItems}">
                                         <p:dataTable id="handledItemsTable" var="handledItem" value="#{deliveryNoteOutRowCreationPresenter.lazyHandledItems}"
                                                      selectionMode="multiple" selection="#{deliveryNoteOutRowCreationPresenter.selectedHandledItems}" rowKey="#{handledItem.id}"
@@ -57,6 +57,105 @@
                                                 <h:outputText value="#{handledItem.toLocation.name}"/>
                                             </p:column>
                                         </p:dataTable>
+                                    </p:tab>
+                                    <p:tab title="#{msg.purchasing_boxedItems}">
+                                        #{msg.deliveryNote_deliveryNoteRowOut_creation_fromBoxedItem_title}
+                                        <p:panel header="#{msg.warehouse_handledItem_fromLocation}" style="margin-bottom: 25px">
+                                            <p:panelGrid columns="2" columnClasses="ui-grid-col-4,ui-grid-col-8" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                                <p:selectOneMenu id="locationTypesForBoxedItems" value="#{locationListPresenter.locationType}">
+                                                    <f:selectItem itemLabel="#{msg.warehouse_locationType_noSelection}" noSelectionOption="true" />
+                                                    <f:selectItem itemLabel="#{msg.warehouse_warehouse_name}" itemValue="#{LocationType.WAREHOUSE}" />
+                                                    <f:selectItem itemLabel="#{msg.customerSupplier_supplier}" itemValue="#{LocationType.SUPPLIER_PLANT}" />
+                                                    <f:selectItem itemLabel="#{msg.production_system}" itemValue="#{LocationType.SYSTEM}" />
+                                                    <p:ajax event="itemSelect" update="locationOrigin" />
+                                                </p:selectOneMenu>
+
+                                                <h:panelGroup styleClass="md-inputfield">
+                                                    <p:autoComplete id="locationOrigin"
+                                                                    dropdown="true"
+                                                                    value="#{deliveryNoteOutRowCreationPresenter.locationOrigin}"
+                                                                    completeMethod="#{locationListPresenter.completeLocations}"
+                                                                    var="loc"
+                                                                    itemLabel="#{loc.name}"
+                                                                    itemValue="#{loc}"
+                                                                    forceSelection="true">
+                                                        <p:ajax event="itemSelect" listener="#{deliveryNoteOutRowCreationPresenter.onLocationOriginSelect}" update="warehouseStockTable" />
+                                                        <oou:converter converterId="omnifaces.ListConverter" list="#{locationListPresenter.locations}" />
+                                                    </p:autoComplete>
+                                                    <p:outputLabel for="locationOrigin" value="#{msg.warehouse_locations}" />
+                                                    <p:message for="locationOrigin"/>
+                                                </h:panelGroup>
+                                            </p:panelGrid>
+                                        </p:panel>
+                                        <p:remoteCommand name="onCellEdit" update="preparedStockForMovementTable" />
+                                        <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                            <p:dataTable id="warehouseStockTable" var="stock" value="#{deliveryNoteOutRowCreationPresenter.lazyStock}"
+                                                         selectionMode="multiple" selection="#{deliveryNoteOutRowCreationPresenter.selectedStock}" rowKey="#{stock.id}"
+                                                         paginator="true" rows="10"
+                                                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                                         rowsPerPageTemplate="10,25,50" lazy="true">
+                                                <f:facet name="header">
+                                                    #{msg.warehouse_warehousesStock_tip}
+                                                </f:facet>
+                                                <p:ajax event="rowSelect" listener="#{deliveryNoteOutRowCreationPresenter.onWarehouseStockSelect}" update="deliveryNoteOutRowForm:deliveryNoteOutTabs:preparedStockForMovementTable" />
+                                                <p:column headerText="#{msg.warehouse_location}" field="location" filterable="false" priority="4">
+                                                    <h:outputText value="#{stock.location.name}" />
+                                                </p:column>
+                                                <p:column headerText="#{msg.purchasing_supplierItem}" field="item" sortable="false" priority="0">
+                                                    <h:outputText value="#{stock.boxedItem.item.codeAndDescription}" />
+                                                </p:column>
+                                                <p:column headerText="#{msg.purchasing_purchaseOrderRow_quantity}" style="width:64px" priority="0">
+                                                    <h:outputText value="#{stock.quantity}">
+                                                        <f:convertNumber integerOnly="true" />
+                                                    </h:outputText>
+                                                    <h:outputText value=" #{stock.boxedItem.item.item.unitMeasure.symbol}" />
+                                                </p:column>
+                                                <p:column headerText="#{msg.purchasing_box_name}" style="width:128px" priority="4">
+                                                    <h:outputText rendered="#{stock.isBoxed()}" value="#{stock.fullBoxedQuantityStr}" />
+                                                </p:column>
+                                            </p:dataTable>
+
+                                            <p:dataTable id="preparedStockForMovementTable" var="prepStock" value="#{deliveryNoteOutRowCreationPresenter.preparedStockForMovement}"
+                                                         paginator="true" rows="10"
+                                                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                                         rowsPerPageTemplate="10,25,50"
+                                                         editable="true" editMode="cell" >
+                                                <f:facet name="header">
+                                                    #{msg.warehouse_itemMovement_preparedStockForMovement}
+                                                </f:facet>
+                                                <p:ajax event="cellEdit" listener="#{deliveryNoteOutRowCreationPresenter.onCellEdit}" oncomplete="onCellEdit()" />
+                                                <p:column headerText="#{msg.purchasing_supplierItem}" priority="0">
+                                                    <h:outputText value="#{prepStock.boxedItem.item.codeAndDescription}" />
+                                                </p:column>
+                                                <p:column headerText="#{msg.purchasing_purchaseOrderRow_quantity}" priority="0">
+                                                    <p:cellEditor>
+                                                        <f:facet name="output">
+                                                            <h:outputText value="#{prepStock.quantity}">
+                                                                <f:convertNumber integerOnly="true" />
+                                                            </h:outputText>
+                                                        </f:facet>
+                                                        <f:facet name="input">
+                                                            <p:inputNumber value="#{prepStock.quantity}" decimalPlaces="0" minValue="1" maxValue="#{(prepStock.unitMeasure eq prepStock.nakedUnitMeasure) ? prepStock.nakedQuantity : prepStock.boxedQuantity}" />
+                                                        </f:facet>
+                                                    </p:cellEditor>
+                                                </p:column>
+                                                <p:column headerText="#{msg.production_unitMeasure_name}" priority="4">
+                                                    <p:cellEditor rendered="#{prepStock.boxedQuantity > 0 and prepStock.boxedItem.box.quantity > 1}">
+                                                        <f:facet name="output">
+                                                            <h:outputText value="#{prepStock.nakedUnitMeasure.symbol}" rendered="#{prepStock.unitMeasure eq prepStock.nakedUnitMeasure}" />
+                                                            <h:outputText value="#{prepStock.boxedUnitMeasure.symbol} #{prepStock.boxedItem.box.quantity} #{prepStock.nakedUnitMeasure.symbol}" rendered="#{prepStock.unitMeasure eq prepStock.boxedUnitMeasure}" />
+                                                        </f:facet>
+                                                        <f:facet name="input">
+                                                            <p:selectOneMenu value="#{prepStock.unitMeasure}" converter="omnifaces.SelectItemsConverter">
+                                                                <f:selectItem itemLabel="#{prepStock.nakedUnitMeasure.symbol}" itemValue="#{prepStock.nakedUnitMeasure}" />
+                                                                <f:selectItem itemLabel="#{prepStock.boxedUnitMeasure.symbol} #{prepStock.boxedItem.box.quantity} #{prepStock.nakedUnitMeasure.symbol}" itemValue="#{prepStock.boxedUnitMeasure}" />
+                                                            </p:selectOneMenu>
+                                                        </f:facet>
+                                                    </p:cellEditor>
+                                                    <h:outputText value="#{prepStock.unitMeasure.symbol}" rendered="#{prepStock.boxedQuantity == 0 or prepStock.boxedItem.box.quantity == 1}" />
+                                                </p:column>
+                                            </p:dataTable>
+                                        </p:panelGrid>
                                     </p:tab>
                                 </p:tabView>
 
