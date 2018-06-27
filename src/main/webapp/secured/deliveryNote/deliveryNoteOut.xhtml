@@ -85,7 +85,8 @@
                                                         var="location"
                                                         itemLabel="#{location.address}"
                                                         itemValue="#{location}"
-                                                        forceSelection="true">
+                                                        forceSelection="true"
+                                                        groupBy="#{deliveryNoteOutPresenter.getLocationType(location)}">
                                             <oou:converter converterId="omnifaces.ListConverter" list="#{deliveryNoteOutPresenter.locations}"/>
                                             <p:ajax event="itemSelect" update="openCustomerSupplier deliveryNoteOutTabs:deliveryNoteOutRowsTable:createNewRowButton" />
                                         </p:autoComplete>

@@ -18,15 +18,15 @@ package com.prosystemingegneri.censistant.presentation.deliveryNote;
 
 import com.prosystemingegneri.censistant.business.customerSupplier.boundary.CustomerSupplierService;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
-import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
 import com.prosystemingegneri.censistant.business.deliveryNote.boundary.DeliveryNoteOutService;
 import com.prosystemingegneri.censistant.business.deliveryNote.entity.DeliveryNoteOut;
 import com.prosystemingegneri.censistant.business.deliveryNote.entity.DeliveryNoteRow;
+import com.prosystemingegneri.censistant.business.production.entity.System;
 import com.prosystemingegneri.censistant.business.warehouse.boundary.LocationService;
 import com.prosystemingegneri.censistant.business.warehouse.entity.Location;
+import com.prosystemingegneri.censistant.business.warehouse.entity.SupplierPlantLocation;
 import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -157,6 +157,15 @@ public class DeliveryNoteOutPresenter implements Serializable{
     
     public List<Location> getLocations() {
         return locationService.listCustomerSupplierLocations(customerSupplierTemp, null);
+    }
+    
+    public String getLocationType(Location location) {
+        if (location instanceof System)
+            return "Commessa";
+        else if (location instanceof SupplierPlantLocation)
+            return "Fornitore";
+        
+        return "Unknown";
     }
     
     public String creteNewRow() {
