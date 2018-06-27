@@ -16,7 +16,7 @@
  */
 package com.prosystemingegneri.censistant.business.deliveryNote.entity;
 
-import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
+import com.prosystemingegneri.censistant.business.warehouse.entity.Location;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
@@ -26,7 +26,7 @@ import javax.persistence.metamodel.StaticMetamodel;
  */
 @StaticMetamodel(DeliveryNoteOut.class)
 public class DeliveryNoteOut_ {
-    public static volatile SingularAttribute<DeliveryNoteOut, Plant> plant;
+    public static volatile SingularAttribute<DeliveryNoteOut, Location> location;
     public static volatile SingularAttribute<DeliveryNoteOut, GoodsDescription> goodsDescription;
     public static volatile SingularAttribute<DeliveryNoteOut, ShipmentReason> shipmentReason;
     public static volatile SingularAttribute<DeliveryNoteOut, ShippingPayment> shippingPayment;

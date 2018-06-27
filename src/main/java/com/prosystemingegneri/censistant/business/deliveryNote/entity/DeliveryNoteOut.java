@@ -16,7 +16,8 @@
  */
 package com.prosystemingegneri.censistant.business.deliveryNote.entity;
 
-import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
+import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
+import com.prosystemingegneri.censistant.business.warehouse.entity.Location;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import javax.persistence.Column;
@@ -52,7 +53,7 @@ public class DeliveryNoteOut extends DeliveryNoteCommon {
     
     @NotNull
     @ManyToOne(optional = false)
-    private Plant plant;
+    private Location location;
     
     @NotNull
     @ManyToOne(optional = false)
@@ -94,14 +95,6 @@ public class DeliveryNoteOut extends DeliveryNoteCommon {
         this.weight = weight;
     }
 
-    public Plant getPlant() {
-        return plant;
-    }
-
-    public void setPlant(Plant plant) {
-        this.plant = plant;
-    }
-
     public GoodsDescription getGoodsDescription() {
         return goodsDescription;
     }
@@ -132,6 +125,14 @@ public class DeliveryNoteOut extends DeliveryNoteCommon {
 
     public void setCarrier(Carrier carrier) {
         this.carrier = carrier;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
     }
 
     @Override

@@ -22,6 +22,8 @@ import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
 import com.prosystemingegneri.censistant.business.deliveryNote.boundary.DeliveryNoteOutService;
 import com.prosystemingegneri.censistant.business.deliveryNote.entity.DeliveryNoteOut;
 import com.prosystemingegneri.censistant.business.deliveryNote.entity.DeliveryNoteRow;
+import com.prosystemingegneri.censistant.business.warehouse.boundary.LocationService;
+import com.prosystemingegneri.censistant.business.warehouse.entity.Location;
 import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -37,7 +39,6 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import javax.validation.groups.Default;
 import org.omnifaces.cdi.ViewScoped;
-import org.primefaces.event.SelectEvent;
 
 /**
  *
@@ -50,6 +51,8 @@ public class DeliveryNoteOutPresenter implements Serializable{
     DeliveryNoteOutService service;
     @Inject
     CustomerSupplierService customerSupplierService;
+    @Inject
+    LocationService locationService;
     
     private DeliveryNoteOut deliveryNoteOut;
     private Long id;
@@ -104,8 +107,8 @@ public class DeliveryNoteOutPresenter implements Serializable{
     
     private void populateCustomerSupplierAndPlant() {
         customerSupplierTemp = (CustomerSupplier) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("customerSupplier");
-        if (customerSupplierTemp == null && deliveryNoteOut != null && deliveryNoteOut.getPlant() != null)
-            customerSupplierTemp = deliveryNoteOut.getPlant().getCustomerSupplier();
+        if (customerSupplierTemp == null && deliveryNoteOut != null && deliveryNoteOut.getLocation() != null)
+            customerSupplierTemp = deliveryNoteOut.getLocation().getCustomerSupplier();
     }
     
     public String createNewCarrier() {
@@ -148,19 +151,16 @@ public class DeliveryNoteOutPresenter implements Serializable{
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("activeIndex", activeIndex);
     }
     
-    public List<Plant> completePlant(String value) {
-        List<Plant> result = new ArrayList<>();
-        
-        if (customerSupplierTemp != null)
-            for (Plant plant : customerSupplierTemp.getPlants())
-                if (plant.getName().toLowerCase().contains(value.toLowerCase()))
-                    result.add(plant);
-        
-        return result;
+    public List<Location> completeLocation(String value) {
+        return locationService.listCustomerSupplierLocations(customerSupplierTemp, value);
+    }
+    
+    public List<Location> getLocations() {
+        return locationService.listCustomerSupplierLocations(customerSupplierTemp, null);
     }
     
     public String creteNewRow() {
-        if (deliveryNoteOut.getPlant() != null) {
+        if (deliveryNoteOut.getLocation() != null) {
             FacesContext.getCurrentInstance().getExternalContext().getFlash().put("deliveryNote", deliveryNoteOut);
             return "/secured/deliveryNote/deliveryNoteOutRowCreation?faces-redirect=true";
         }

@@ -27,7 +27,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
-import javax.persistence.Transient;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
@@ -69,9 +68,6 @@ public class Plant extends BaseEntity<Long>{
     
     @Version
     private int version;
-    
-    @Transient
-    private static final String DELIMITATOR = " - ";
 
     public Plant() {
     }
@@ -82,20 +78,8 @@ public class Plant extends BaseEntity<Long>{
         this.address = address;
     }
     
-    public String getCustomerSupplierNamePlantNameAddress(boolean isNewLine) {
-        String delim = DELIMITATOR;
-        
-        if (isNewLine)
-            delim = System.lineSeparator();
-        
-        return new StringBuilder(customerSupplier.getName())
-                .append(delim)
-                .append(getNameAddress(isNewLine))
-                .toString();
-    }
-    
     public String getNameAddress(boolean isNewLine) {
-        String delim = DELIMITATOR;
+        String delim = " - ";
         
         if (isNewLine)
             delim = System.lineSeparator();

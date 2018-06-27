@@ -16,6 +16,7 @@
  */
 package com.prosystemingegneri.censistant.business.warehouse.entity;
 
+import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
 import com.prosystemingegneri.censistant.business.entity.BaseEntity;
 import com.prosystemingegneri.censistant.business.warehouse.control.LocationType;
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 import javax.persistence.Version;
 
 /**
@@ -56,7 +58,14 @@ public abstract class Location extends BaseEntity<Long>{
     @OneToMany(mappedBy = "fromLocation")
     private final List<HandledItem> outHandledItem; //picked items
     
+    @Transient
+    protected static final String DELIMITATOR = " - ";
+    
     public abstract String getName();
+    
+    public abstract CustomerSupplier getCustomerSupplier();
+    
+    public abstract String getCustomerSupplierNamePlantNameAddress(boolean isNewLine);
     
     @Version
     private int version;

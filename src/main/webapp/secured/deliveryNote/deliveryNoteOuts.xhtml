@@ -30,8 +30,8 @@
                                     </p:outputPanel>
                                 </p:panelGrid>
                             </f:facet>
-                            <p:column headerText="#{msg.customerSupplier_customer} #{msg.or_conjunction} #{msg.customerSupplier_supplier}" field="customerSupplierNamePlantNameAddress" priority="0">
-                                <h:outputText value="#{deliveryNoteOut.plant.getCustomerSupplierNamePlantNameAddress(false)}" />
+                            <p:column headerText="#{msg.customerSupplier_customer} #{msg.or_conjunction} #{msg.customerSupplier_supplier}" field="customerSupplierNamePlantNameAddress" sortable="false" priority="0">
+                                <h:outputText value="#{deliveryNoteOut.location.getCustomerSupplierNamePlantNameAddress(false)}" />
                             </p:column>
                             <p:column headerText="#{msg.deliveryNote_deliveryNote_creation}" field="creation" filterable="false" priority="0">
                                 <h:outputText value="#{deliveryNoteOut.creation}">

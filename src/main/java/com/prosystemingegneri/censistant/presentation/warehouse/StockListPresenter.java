@@ -31,6 +31,7 @@ import com.prosystemingegneri.censistant.presentation.Authenticator;
 import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -125,7 +126,7 @@ public class StockListPresenter implements Serializable{
     }
     
     public List<Location> completeLocationsArrival(String name) {
-        return locationService.listLocations(0, 10, null, null, locationTypeArrival, name);
+        return locationService.listLocations(0, 10, null, null, Arrays.asList(locationTypeArrival), name);
     }
     
     public String move() {

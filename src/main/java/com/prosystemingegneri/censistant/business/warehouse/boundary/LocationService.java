@@ -27,6 +27,7 @@ import com.prosystemingegneri.censistant.business.sales.entity.Offer_;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport_;
 import com.prosystemingegneri.censistant.business.warehouse.control.LocationType;
+import com.prosystemingegneri.censistant.business.warehouse.entity.HandledItem;
 import com.prosystemingegneri.censistant.business.warehouse.entity.Location;
 import com.prosystemingegneri.censistant.business.warehouse.entity.Location_;
 import com.prosystemingegneri.censistant.business.warehouse.entity.SupplierPlantLocation;
@@ -60,13 +61,13 @@ public class LocationService implements Serializable {
         return em.find(Location.class, id);
     }
     
-    public List<Location> listLocations(int first, int pageSize, String sortField, Boolean isAscending, LocationType locationType, String name) {
+    public List<Location> listLocations(int first, int pageSize, String sortField, Boolean isAscending, List<LocationType> locationTypes, String name) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Location> query = cb.createQuery(Location.class);
         Root<Location> root = query.from(Location.class);
         CriteriaQuery<Location> select = query.select(root).distinct(true);
         
-        List<Predicate> conditions = calculateConditions(cb, root, locationType, name);
+        List<Predicate> conditions = calculateConditions(cb, root, locationTypes, name);
 
         if (!conditions.isEmpty())
             query.where(conditions.toArray(new Predicate[conditions.size()]));
@@ -98,13 +99,13 @@ public class LocationService implements Serializable {
         return typedQuery.getResultList();
     }
     
-    public Long getLocationsCount(LocationType locationType, String name) {
+    public Long getLocationsCount(List<LocationType> locationTypes, String name) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Long> query = cb.createQuery(Long.class);
         Root<Location> root = query.from(Location.class);
         CriteriaQuery<Long> select = query.select(cb.count(root));
 
-        List<Predicate> conditions = calculateConditions(cb, root, locationType, name);
+        List<Predicate> conditions = calculateConditions(cb, root, locationTypes, name);
 
         if (!conditions.isEmpty())
             query.where(conditions.toArray(new Predicate[conditions.size()]));
@@ -112,7 +113,7 @@ public class LocationService implements Serializable {
         return em.createQuery(select).getSingleResult();
     }
     
-    private List<Predicate> calculateConditions(CriteriaBuilder cb, Root<Location> root, LocationType locationType, String name) {
+    private List<Predicate> calculateConditions(CriteriaBuilder cb, Root<Location> root, List<LocationType> locationTypes, String name) {
         List<Predicate> conditions = new ArrayList<>();
 
         //name
@@ -135,9 +136,64 @@ public class LocationService implements Serializable {
         }
         
         //location type
-        if (locationType != null)
-            conditions.add(cb.equal(root.get(Location_.type), locationType));
+        if (locationTypes != null && !locationTypes.isEmpty()) {
+            List<Predicate> locationConditions = new ArrayList<>();
+            for (LocationType locationType : locationTypes) {
+                locationConditions.add(cb.equal(root.get(Location_.type), locationType));
+            }
+            conditions.add(cb.or(locationConditions.toArray(new Predicate[] {})));
+        }
         
         return conditions;
+    }
+    
+    public List<Location> listCustomerSupplierLocations(CustomerSupplier customerSupplier, String name) {
+        if (customerSupplier == null)
+            return new ArrayList<>();
+        
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Location> query = cb.createQuery(Location.class);
+        Root<Location> root = query.from(Location.class);
+        CriteriaQuery<Location> select = query.select(root).distinct(true);
+        
+        List<Predicate> conditions = new ArrayList<>();
+        
+        if (customerSupplier.getIsCustomer()) {
+            Root<System> systemRoot = cb.treat(root, System.class);
+            if (systemRoot != null) {
+                Join<System, Offer> offersRoot = systemRoot.join(System_.offers);
+                Join<Offer, SiteSurveyReport> siteSurveyReportRoot = offersRoot.join(Offer_.siteSurveyReport);
+                Join<SiteSurveyReport, Plant> plantRoot = siteSurveyReportRoot.join(SiteSurveyReport_.plant);
+                
+                conditions.add(cb.equal(plantRoot.get(Plant_.customerSupplier), customerSupplier));
+                if (name != null && !name.isEmpty()) {
+                    conditions.add(cb.or(
+                            cb.like(cb.lower(systemRoot.get(System_.description)), "%" + name.toLowerCase() + "%"),
+                            cb.like(cb.lower(plantRoot.get(Plant_.address)), "%" + name.toLowerCase() + "%"),
+                            cb.like(cb.lower(plantRoot.get(Plant_.name)), "%" + name.toLowerCase() + "%")));
+                }
+            }
+        }
+        
+        if (customerSupplier.getIsSupplier()) {
+            Root<SupplierPlantLocation> supplierPlantLocationRoot = cb.treat(root, SupplierPlantLocation.class);
+            if (supplierPlantLocationRoot != null) {
+                Join<SupplierPlantLocation, Plant> supplierPlantRoot = supplierPlantLocationRoot.join(SupplierPlantLocation_.plant);
+                
+                conditions.add(cb.equal(supplierPlantRoot.get(Plant_.customerSupplier), customerSupplier));
+                if (name != null && !name.isEmpty()) {
+                    conditions.add(cb.or(
+                            cb.like(cb.lower(supplierPlantRoot.get(Plant_.address)), "%" + name.toLowerCase() + "%"),
+                            cb.like(cb.lower(supplierPlantRoot.get(Plant_.name)), "%" + name.toLowerCase() + "%")));
+                }
+            }
+        }
+
+        if (!conditions.isEmpty())
+            query.where(conditions.toArray(new Predicate[conditions.size()]));
+        
+        query.orderBy(cb.asc(root.get(Location_.type)));
+
+        return em.createQuery(select).getResultList();
     }
 }

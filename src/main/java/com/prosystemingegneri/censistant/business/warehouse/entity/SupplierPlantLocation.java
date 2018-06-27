@@ -16,6 +16,7 @@
  */
 package com.prosystemingegneri.censistant.business.warehouse.entity;
 
+import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -49,5 +50,23 @@ public class SupplierPlantLocation extends Location {
     @Override
     public String getName() {
         return (new StringBuilder()).append(plant.getCustomerSupplier().getName()).append(" (").append(plant.getName()).append(")").toString();
+    }
+
+    @Override
+    public CustomerSupplier getCustomerSupplier() {
+        return plant.getCustomerSupplier();
+    }
+
+    @Override
+    public String getCustomerSupplierNamePlantNameAddress(boolean isNewLine) {
+        String delim = DELIMITATOR;
+    
+        if (isNewLine)
+            delim = System.lineSeparator();
+    
+        return new StringBuilder(plant.getCustomerSupplier().getName())
+                .append(delim)
+                .append(plant.getNameAddress(isNewLine))
+                .toString();
     }
 }

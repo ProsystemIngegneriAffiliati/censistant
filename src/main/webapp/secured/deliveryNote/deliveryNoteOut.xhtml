@@ -62,7 +62,7 @@
                                                         itemValue="#{customerSupplier}"
                                                         forceSelection="true">
                                             <oou:converter converterId="omnifaces.ListConverter" list="#{customerSupplierListPresenter.customerSuppliers}"/>
-                                            <p:ajax event="itemSelect" update="plant newCustomerSupplier openCustomerSupplier deliveryNoteOutTabs:deliveryNoteOutRowsTable:createNewRowButton" />
+                                            <p:ajax event="itemSelect" update="location newCustomerSupplier openCustomerSupplier deliveryNoteOutTabs:deliveryNoteOutRowsTable:createNewRowButton" />
                                         </p:autoComplete>
                                         <p:outputLabel for="customerSuppliers" value="#{msg.customerSupplier_customer} #{msg.or_conjunction} #{msg.customerSupplier_supplier}"/>
                                         <p:message for="customerSuppliers"/>
@@ -70,7 +70,7 @@
 
                                     <h:panelGroup styleClass="md-inputfield">
                                         <h:panelGroup id="openCustomerSupplier">
-                                            <p:commandButton rendered="#{not empty deliveryNoteOutPresenter.customerSupplierTemp and empty deliveryNoteOutPresenter.deliveryNoteOut.plant}"
+                                            <p:commandButton rendered="#{not empty deliveryNoteOutPresenter.customerSupplierTemp and empty deliveryNoteOutPresenter.deliveryNoteOut.location}"
                                                              action="#{deliveryNoteOutPresenter.openCustomerSupplier()}"
                                                              title="#{msg.open} #{msg.customerSupplier_customer} #{msg.or_conjunction} #{msg.customerSupplier_supplier}, #{msg.new} #{msg.customerSupplier_plant}"
                                                              icon="ui-icon-create"
@@ -78,19 +78,19 @@
                                                 <oou:ignoreValidationFailed />
                                             </p:commandButton>
                                         </h:panelGroup>
-                                        <p:autoComplete id="plant"
+                                        <p:autoComplete id="location"
                                                         dropdown="true"
-                                                        value="#{deliveryNoteOutPresenter.deliveryNoteOut.plant}"
-                                                        completeMethod="#{deliveryNoteOutPresenter.completePlant}"
-                                                        var="plant"
-                                                        itemLabel="#{plant.name}"
-                                                        itemValue="#{plant}"
+                                                        value="#{deliveryNoteOutPresenter.deliveryNoteOut.location}"
+                                                        completeMethod="#{deliveryNoteOutPresenter.completeLocation}"
+                                                        var="location"
+                                                        itemLabel="#{location.name}"
+                                                        itemValue="#{location}"
                                                         forceSelection="true">
-                                            <oou:converter converterId="omnifaces.ListConverter" list="#{deliveryNoteOutPresenter.customerSupplierTemp.plants}"/>
+                                            <oou:converter converterId="omnifaces.ListConverter" list="#{deliveryNoteOutPresenter.locations}"/>
                                             <p:ajax event="itemSelect" update="openCustomerSupplier deliveryNoteOutTabs:deliveryNoteOutRowsTable:createNewRowButton" />
                                         </p:autoComplete>
-                                        <p:outputLabel for="plant" value="#{msg.customerSupplier_plant}"/>
-                                        <p:message for="plant"/>
+                                        <p:outputLabel for="location" value="#{msg.customerSupplier_plant}"/>
+                                        <p:message for="location"/>
                                     </h:panelGroup>
                                 </p:panelGrid>
 
@@ -102,7 +102,7 @@
                                             <f:facet name="header">
                                                 <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
                                                     #{msg.deliveryNote_deliveryNoteRows}
-                                                    <p:commandButton id="createNewRowButton" title="#{msg.new}" icon="ui-icon-create" disabled="#{empty deliveryNoteOutPresenter.deliveryNoteOut.plant}" action="#{deliveryNoteOutPresenter.creteNewRow()}" ajax="false" />
+                                                    <p:commandButton id="createNewRowButton" title="#{msg.new}" icon="ui-icon-create" disabled="#{empty deliveryNoteOutPresenter.deliveryNoteOut.location}" action="#{deliveryNoteOutPresenter.creteNewRow()}" ajax="false" />
                                                 </p:panelGrid>
                                             </f:facet>
                                             <p:column headerText="#{msg.purchasing_supplierItem_codeAndDescription}" sortBy="#{row.handledItem.boxedItem.item.codeAndDescription}" filterBy="#{row.handledItem.boxedItem.item.codeAndDescription}" filterMatchMode="contains" priority="0">

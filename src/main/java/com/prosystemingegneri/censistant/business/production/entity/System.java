@@ -16,6 +16,8 @@
  */
 package com.prosystemingegneri.censistant.business.production.entity;
 
+import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
+import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
 import com.prosystemingegneri.censistant.business.sales.entity.Offer;
 import com.prosystemingegneri.censistant.business.warehouse.entity.Location;
 import java.util.ArrayList;
@@ -207,6 +209,38 @@ public class System extends Location {
         }
         
         return customerName + offerNumber + description;
+    }
+
+    @Override
+    public CustomerSupplier getCustomerSupplier() {
+        CustomerSupplier result = null;
+        
+        if (!offers.isEmpty())
+            result = offers.get(offers.size() - 1).getSiteSurveyReport().getPlant().getCustomerSupplier();
+        
+        return result;
+    }
+
+    @Override
+    public String getCustomerSupplierNamePlantNameAddress(boolean isNewLine) {
+        String delim = DELIMITATOR;
+    
+        if (isNewLine)
+            delim = java.lang.System.lineSeparator();
+        
+        String customerSupplierName = "customerSupplier";
+        String plantNameAddress = "plantNameAddress";
+        
+        if (!offers.isEmpty()) {
+            Plant plant = offers.get(offers.size() - 1).getSiteSurveyReport().getPlant();
+            customerSupplierName = plant.getCustomerSupplier().getName();
+            plantNameAddress = plant.getNameAddress(isNewLine);
+        }
+    
+        return new StringBuilder(customerSupplierName)
+                .append(delim)
+                .append(plantNameAddress)
+                .toString();
     }
     
 }

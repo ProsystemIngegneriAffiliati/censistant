@@ -20,6 +20,7 @@ import com.prosystemingegneri.censistant.business.warehouse.boundary.LocationSer
 import com.prosystemingegneri.censistant.business.warehouse.control.LocationType;
 import com.prosystemingegneri.censistant.business.warehouse.entity.Location;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -47,7 +48,7 @@ public class LocationListPresenter implements Serializable{
     }
     
     public List<Location> completeLocations(String name) {
-        return service.listLocations(0, 10, null, null, locationType, name);
+        return service.listLocations(0, 10, null, null, Arrays.asList(locationType), name);
     }
     
     //Useful only for 'omnifaces.ListConverter' used in 'p:autoComplete'

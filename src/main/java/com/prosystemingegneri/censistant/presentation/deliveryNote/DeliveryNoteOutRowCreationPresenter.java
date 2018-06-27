@@ -64,7 +64,7 @@ public class DeliveryNoteOutRowCreationPresenter implements Serializable {
     @PostConstruct
     public void init() {
         deliveryNote = (DeliveryNoteOut) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("deliveryNote");
-        lazyHandledItems = new HandledItemLazyDataModel(handledItemService, null, deliveryNote.getPlant().getLocation(), Boolean.FALSE);
+        lazyHandledItems = new HandledItemLazyDataModel(handledItemService, null, deliveryNote.getLocation(), Boolean.FALSE);
     }
     
     public String createDeliveryNoteOutRow() {
@@ -96,12 +96,12 @@ public class DeliveryNoteOutRowCreationPresenter implements Serializable {
     }
     
     public List<BoxedItem> completeBoxedItems(String filter) {
-        return customerSupplierService.listSupplierBoxedItems(0, 10, deliveryNote.getPlant().getCustomerSupplier(), filter);
+        return customerSupplierService.listSupplierBoxedItems(0, 10, deliveryNote.getLocation().getCustomerSupplier(), filter);
     }
 
     public List<BoxedItem> getBoxedItems() {
         if (boxedItems == null || boxedItems.isEmpty())
-            boxedItems = customerSupplierService.listSupplierBoxedItems(0, 0, deliveryNote.getPlant().getCustomerSupplier(), null);
+            boxedItems = customerSupplierService.listSupplierBoxedItems(0, 0, deliveryNote.getLocation().getCustomerSupplier(), null);
         
         return boxedItems;
     }

@@ -29,6 +29,14 @@ import com.prosystemingegneri.censistant.business.deliveryNote.entity.ShipmentRe
 import com.prosystemingegneri.censistant.business.deliveryNote.entity.ShipmentReason_;
 import com.prosystemingegneri.censistant.business.deliveryNote.entity.ShippingPayment;
 import com.prosystemingegneri.censistant.business.deliveryNote.entity.ShippingPayment_;
+import com.prosystemingegneri.censistant.business.production.entity.System;
+import com.prosystemingegneri.censistant.business.production.entity.System_;
+import com.prosystemingegneri.censistant.business.sales.entity.Offer;
+import com.prosystemingegneri.censistant.business.sales.entity.Offer_;
+import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport;
+import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport_;
+import com.prosystemingegneri.censistant.business.warehouse.entity.SupplierPlantLocation;
+import com.prosystemingegneri.censistant.business.warehouse.entity.SupplierPlantLocation_;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -43,6 +51,7 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
@@ -139,9 +148,6 @@ public class DeliveryNoteOutService implements Serializable{
                 case "shippingPayment":
                     path = root.get(DeliveryNoteOut_.shippingPayment).get(ShippingPayment_.name);
                     break;
-                case "customerSupplierNamePlantNameAddress":
-                    path = root.get(DeliveryNoteOut_.plant).get(Plant_.customerSupplier).get(CustomerSupplier_.name);
-                    break;
                     
                 default:
                     path = root.get(sortField);
@@ -207,15 +213,33 @@ public class DeliveryNoteOutService implements Serializable{
         
         //Customer (or supplier) name or plant name or plant address
         if (customerSupplierNamePlantNameAddress != null && !customerSupplierNamePlantNameAddress.isEmpty()) {
-            Join<DeliveryNoteOut, Plant> plantRoot = root.join(DeliveryNoteOut_.plant);
-            Join<Plant, CustomerSupplier> customerSupplierRoot = plantRoot.join(Plant_.customerSupplier);
-            conditions.add(
-                    cb.or(
-                            cb.like(cb.lower(plantRoot.get(Plant_.name)), "%" + String.valueOf(customerSupplierNamePlantNameAddress).toLowerCase() + "%"),
-                            cb.like(cb.lower(plantRoot.get(Plant_.address)), "%" + String.valueOf(customerSupplierNamePlantNameAddress).toLowerCase() + "%"),
-                            cb.like(cb.lower(customerSupplierRoot.get(CustomerSupplier_.name)), "%" + String.valueOf(customerSupplierNamePlantNameAddress).toLowerCase() + "%")
-                    )
-            );            
+            Join<DeliveryNoteOut, SupplierPlantLocation> supplierPlantLocationRoot = cb.treat(root.join(DeliveryNoteOut_.location), SupplierPlantLocation.class);
+            if (supplierPlantLocationRoot != null) {
+                Join<SupplierPlantLocation, Plant> supplierPlantRoot = supplierPlantLocationRoot.join(SupplierPlantLocation_.plant);
+                Join<Plant, CustomerSupplier> supplierRoot = supplierPlantRoot.join(Plant_.customerSupplier);
+                conditions.add(
+                        cb.or(
+                                cb.like(cb.lower(supplierPlantRoot.get(Plant_.name)), "%" + String.valueOf(customerSupplierNamePlantNameAddress).toLowerCase() + "%"),
+                                cb.like(cb.lower(supplierPlantRoot.get(Plant_.address)), "%" + String.valueOf(customerSupplierNamePlantNameAddress).toLowerCase() + "%"),
+                                cb.like(cb.lower(supplierRoot.get(CustomerSupplier_.name)), "%" + String.valueOf(customerSupplierNamePlantNameAddress).toLowerCase() + "%")
+                        )
+                );
+            }
+
+            Join<DeliveryNoteOut, System> systemRoot = cb.treat(root.join(DeliveryNoteOut_.location), System.class);
+            if (systemRoot != null) {
+                Join<com.prosystemingegneri.censistant.business.production.entity.System, Offer> offersRoot = systemRoot.join(System_.offers, JoinType.LEFT);
+                Join<Offer, SiteSurveyReport> siteSurveyReportRoot = offersRoot.join(Offer_.siteSurveyReport);
+                Join<SiteSurveyReport, Plant> plantRoot = siteSurveyReportRoot.join(SiteSurveyReport_.plant);
+                Join<Plant, CustomerSupplier> customerRoot = plantRoot.join(Plant_.customerSupplier);
+                conditions.add(
+                        cb.or(
+                                cb.like(cb.lower(plantRoot.get(Plant_.name)), "%" + String.valueOf(customerSupplierNamePlantNameAddress).toLowerCase() + "%"),
+                                cb.like(cb.lower(plantRoot.get(Plant_.address)), "%" + String.valueOf(customerSupplierNamePlantNameAddress).toLowerCase() + "%"),
+                                cb.like(cb.lower(customerRoot.get(CustomerSupplier_.name)), "%" + String.valueOf(customerSupplierNamePlantNameAddress).toLowerCase() + "%")
+                        )
+                );
+            }
         }
         
         return conditions;
