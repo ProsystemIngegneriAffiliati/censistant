@@ -85,10 +85,10 @@ public class DevicePresenter implements Serializable {
     }
     
     public Long calculateDevicePlacedQuantity() {
-        if (device != null)
+        if (device != null && device.getSystem() != null && device.getItem() != null)
             return stockService.countPlacedQuantity(device.getSystem().getId(), device.getItem().getId());
         else
-            return Long.getLong("0");
+            return 0L;
     }
 
     public Device getDevice() {

@@ -42,7 +42,7 @@ public class Worker extends BaseEntity<Long>{
     private String name;
     
     @NotNull
-    @Column(nullable = false)    
+    @Column(nullable = false, unique = true)    
     private String initials;
 
     @NotNull
