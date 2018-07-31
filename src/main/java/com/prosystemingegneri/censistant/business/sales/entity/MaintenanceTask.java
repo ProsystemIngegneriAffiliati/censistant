@@ -45,8 +45,7 @@ public class MaintenanceTask extends BaseEntity<Long> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @NotNull
-    @ManyToOne(optional = false)
+    @ManyToOne
     private ScheduledMaintenance scheduledMaintenance;
     
     @NotNull
@@ -60,7 +59,7 @@ public class MaintenanceTask extends BaseEntity<Long> {
     @NotNull
     @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
-    private final Date created;
+    private Date created;
     
     @NotNull
     @Column(nullable = false)
@@ -133,6 +132,10 @@ public class MaintenanceTask extends BaseEntity<Long> {
 
     public Date getCreated() {
         return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
     }
 
     public List<Worker> getWorkers() {

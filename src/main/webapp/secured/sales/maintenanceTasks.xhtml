@@ -1,0 +1,73 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:define name="content">
+        <h:form id="maintenanceTasksForm">
+            <div class="ui-g">
+                <div class="ui-g-12">
+                    <div class="card card-w-title">
+                        <h1>#{msg.sales_maintenanceTasks}</h1>
+                        <p:dataTable id="maintenanceTasksTable" widgetVar="maintenanceTasksTable" var="maintenanceTask" value="#{maintenanceTaskListPresenter.lazyMaintenanceTasks}"
+                                     selectionMode="multiple" selection="#{maintenanceTaskListPresenter.selectedMaintenanceTasks}" rowKey="#{maintenanceTask.id}"
+                                     paginator="true" rows="10"
+                                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     rowsPerPageTemplate="10,25,50" lazy="true">
+                            <f:facet name="header">
+                                <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
+                                    #{msg.sales_maintenanceTasks_tip}
+                                    <p:outputPanel>
+                                        <p:outputPanel style="display: inline-block">
+                                            <p:button title="#{msg.new}" icon="ui-icon-create" styleClass="AquaButton" outcome="/secured/sales/maintenanceTask">
+                                                <f:param name="id" value="0" />
+                                            </p:button>
+                                            <p:commandButton title="#{msg.delete}" icon="ui-icon-delete" actionListener="#{maintenanceTaskListPresenter.deleteMaintenanceTask()}" update="maintenanceTasksTable">
+                                                <p:confirm header="#{msg.sales_maintenanceTasks_delete}" message="#{msg.sales_maintenanceTasks_delete_tip}" icon="ui-icon-alert"/>
+                                            </p:commandButton>
+                                        </p:outputPanel>
+                                    </p:outputPanel>
+                                </p:panelGrid>
+                            </f:facet>
+                            <p:column headerText="#{msg.sales_maintenanceTask_description}" field="description" priority="0">
+                                <h:outputText value="#{maintenanceTask.description}" />
+                            </p:column>
+                            <p:column headerText="#{msg.customerSupplier_plant_address}" field="customerSupplierNamePlantNameAddress" sortable="false" priority="2">
+                                <h:outputText value="#{maintenanceTask.system.getCustomerSupplierNamePlantNameAddress(false)}" />
+                            </p:column>
+                            <p:column headerText="#{msg.sales_maintenanceTask_created}" field="created" filterable="false" priority="4">
+                                <h:outputText value="#{maintenanceTask.created}">
+                                    <f:convertDateTime pattern="dd/MM/YYYY" />
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="#{msg.sales_maintenanceTask_expiry}" field="expiry" filterable="false" priority="2">
+                                <h:outputText value="#{maintenanceTask.expiry}">
+                                    <f:convertDateTime pattern="dd/MM/YYYY" />
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="#{msg.sales_maintenanceTask_closed}" field="isClosed" sortable="false" priority="0">
+                                <f:facet name="filter">
+                                    <p:selectOneButton onchange="PF('maintenanceTasksTable').filter()">
+                                        <f:converter converterId="javax.faces.Boolean" />
+                                        <f:selectItem itemLabel="#{msg.all}" itemValue="" />
+                                        <f:selectItem itemLabel="#{msg.sales_maintenanceTask_closed_onlyClosed}" itemValue="true" />
+                                        <f:selectItem itemLabel="#{msg.sales_maintenanceTask_closed_onlyOpen}" itemValue="false" />
+                                    </p:selectOneButton>
+                                </f:facet>
+                                <h:outputText value="#{maintenanceTask.closed}">
+                                    <f:convertDateTime pattern="dd/MM/YYYY" />
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="#{msg.actions}" style="width:64px; text-align:center" priority="0" exportable="false">
+                                <p:button title="#{msg.edit}" icon="ui-icon-edit" styleClass="AquaButton" outcome="/secured/sales/maintenanceTask">
+                                    <f:param name="id" value="#{maintenanceTask.id}" />
+                                </p:button>
+                            </p:column>
+                        </p:dataTable>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>

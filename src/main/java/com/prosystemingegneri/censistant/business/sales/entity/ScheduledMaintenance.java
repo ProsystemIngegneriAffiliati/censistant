@@ -17,15 +17,11 @@
 package com.prosystemingegneri.censistant.business.sales.entity;
 
 import com.prosystemingegneri.censistant.business.entity.BaseEntity;
-import java.util.ArrayList;
-import java.util.List;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -55,15 +51,11 @@ public class ScheduledMaintenance extends BaseEntity<Long> {
     @Column(nullable = false)
     private Boolean isDynamicExpiry;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "scheduledMaintenance", orphanRemoval = true)
-    private final List<MaintenanceTask> maintenanceTasks;
-    
     @Version
     private int version;
 
     public ScheduledMaintenance() {
         isDynamicExpiry = Boolean.FALSE;
-        maintenanceTasks = new ArrayList<>();
     }
 
     public String getName() {
@@ -101,24 +93,6 @@ public class ScheduledMaintenance extends BaseEntity<Long> {
     @Override
     public Long getId() {
         return id;
-    }
-    
-    public void addMaintenanceTask(MaintenanceTask maintenanceTask) {
-        if (!maintenanceTasks.contains(maintenanceTask)) {
-            maintenanceTask.setScheduledMaintenance(this);
-            maintenanceTasks.add(maintenanceTask);
-        }
-    }
-    
-    public void removeMaintenanceTask(MaintenanceTask maintenanceTask) {
-        if (maintenanceTasks.contains(maintenanceTask)) {
-            maintenanceTask.setScheduledMaintenance(null);
-            maintenanceTasks.remove(maintenanceTask);
-        }
-    }
-
-    public List<MaintenanceTask> getMaintenanceTasks() {
-        return maintenanceTasks;
     }
     
 }

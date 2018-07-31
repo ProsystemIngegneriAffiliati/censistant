@@ -16,9 +16,18 @@
  */
 package com.prosystemingegneri.censistant.business.sales.boundary;
 
+import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
+import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier_;
+import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
+import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant_;
 import com.prosystemingegneri.censistant.business.production.entity.System;
+import com.prosystemingegneri.censistant.business.production.entity.System_;
 import com.prosystemingegneri.censistant.business.sales.entity.MaintenanceTask;
 import com.prosystemingegneri.censistant.business.sales.entity.MaintenanceTask_;
+import com.prosystemingegneri.censistant.business.sales.entity.Offer;
+import com.prosystemingegneri.censistant.business.sales.entity.Offer_;
+import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport;
+import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport_;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.Worker;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -29,6 +38,8 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
@@ -60,13 +71,13 @@ public class MaintenanceTaskService implements Serializable{
         em.remove(readMaintenanceTask(id));
     }
 
-    public List<MaintenanceTask> listMaintenanceTasks(int first, int pageSize, String sortField, Boolean isAscending, System system, String description, Boolean isClosed, Worker worker) {
+    public List<MaintenanceTask> listMaintenanceTasks(int first, int pageSize, String sortField, Boolean isAscending, System system, String description, Boolean isClosed, Worker worker, String customerSupplierNamePlantNameAddress) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<MaintenanceTask> query = cb.createQuery(MaintenanceTask.class);
         Root<MaintenanceTask> root = query.from(MaintenanceTask.class);
         CriteriaQuery<MaintenanceTask> select = query.select(root).distinct(true);
         
-        List<Predicate> conditions = calculateConditions(cb, root, system, description, isClosed, worker);
+        List<Predicate> conditions = calculateConditions(cb, root, system, description, isClosed, worker, customerSupplierNamePlantNameAddress);
 
         if (!conditions.isEmpty())
             query.where(conditions.toArray(new Predicate[conditions.size()]));
@@ -106,13 +117,13 @@ public class MaintenanceTaskService implements Serializable{
         return typedQuery.getResultList();
     }
     
-    public Long getMaintenanceTasksCount(System system, String description, Boolean isClosed, Worker worker) {
+    public Long getMaintenanceTasksCount(System system, String description, Boolean isClosed, Worker worker, String customerSupplierNamePlantNameAddress) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Long> query = cb.createQuery(Long.class);
         Root<MaintenanceTask> root = query.from(MaintenanceTask.class);
         CriteriaQuery<Long> select = query.select(cb.count(root));
 
-        List<Predicate> conditions = calculateConditions(cb, root, system, description, isClosed, worker);
+        List<Predicate> conditions = calculateConditions(cb, root, system, description, isClosed, worker, customerSupplierNamePlantNameAddress);
 
         if (!conditions.isEmpty())
             query.where(conditions.toArray(new Predicate[conditions.size()]));
@@ -120,7 +131,7 @@ public class MaintenanceTaskService implements Serializable{
         return em.createQuery(select).getSingleResult();
     }
     
-    private List<Predicate> calculateConditions(CriteriaBuilder cb, Root<MaintenanceTask> root, System system, String description, Boolean isClosed, Worker worker) {
+    private List<Predicate> calculateConditions(CriteriaBuilder cb, Root<MaintenanceTask> root, System system, String description, Boolean isClosed, Worker worker, String customerSupplierNamePlantNameAddress) {
         List<Predicate> conditions = new ArrayList<>();
         
         //system
@@ -143,6 +154,34 @@ public class MaintenanceTaskService implements Serializable{
         if (worker != null)
             conditions.add(cb.isMember(worker, root.get(MaintenanceTask_.workers)));
         
+        //customerSupplierNamePlantNameAddress
+        if (customerSupplierNamePlantNameAddress != null && !customerSupplierNamePlantNameAddress.isEmpty()) {
+            Join<SiteSurveyReport, Plant> plantRoot = root
+                    .join(MaintenanceTask_.system)
+                    .join(System_.offers, JoinType.LEFT)
+                    .join(Offer_.siteSurveyReport)
+                    .join(SiteSurveyReport_.plant);
+            Join<Plant, CustomerSupplier> customerRoot = plantRoot.join(Plant_.customerSupplier);
+            conditions.add(
+                    cb.or(
+                            cb.like(cb.lower(plantRoot.get(Plant_.name)), "%" + String.valueOf(customerSupplierNamePlantNameAddress).toLowerCase() + "%"),
+                            cb.like(cb.lower(plantRoot.get(Plant_.address)), "%" + String.valueOf(customerSupplierNamePlantNameAddress).toLowerCase() + "%"),
+                            cb.like(cb.lower(customerRoot.get(CustomerSupplier_.name)), "%" + String.valueOf(customerSupplierNamePlantNameAddress).toLowerCase() + "%")
+                    )
+            );
+        }
+        
         return conditions;
+    }
+    
+    public List<Worker> avaibleWorkers(MaintenanceTask maintenanceTask) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Worker> query = cb.createQuery(Worker.class);
+        Root<Worker> root = query.from(Worker.class);
+        if (!maintenanceTask.getWorkers().isEmpty())
+            query.where(cb.not(root.in(maintenanceTask.getWorkers())));
+        query.select(root);
+        
+        return em.createQuery(query).getResultList();
     }
 }
