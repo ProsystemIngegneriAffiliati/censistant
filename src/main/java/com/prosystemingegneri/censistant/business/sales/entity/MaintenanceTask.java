@@ -28,6 +28,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
@@ -73,6 +74,9 @@ public class MaintenanceTask extends BaseEntity<Long> {
     
     @ManyToMany
     private List<Worker> workers;
+    
+    @Lob
+    private String customerSignature;
 
     public MaintenanceTask() {
         created = new Date();
@@ -148,6 +152,14 @@ public class MaintenanceTask extends BaseEntity<Long> {
 
     public void setSystem(System system) {
         this.system = system;
+    }
+
+    public String getCustomerSignature() {
+        return customerSignature;
+    }
+
+    public void setCustomerSignature(String customerSignature) {
+        this.customerSignature = customerSignature;
     }
     
 }

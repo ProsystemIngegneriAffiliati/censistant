@@ -17,6 +17,10 @@
 package com.prosystemingegneri.censistant.business.sales.entity;
 
 import com.prosystemingegneri.censistant.business.entity.BaseEntity;
+import com.prosystemingegneri.censistant.business.sales.control.Interval;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -95,4 +99,49 @@ public class ScheduledMaintenance extends BaseEntity<Long> {
         return id;
     }
     
+    private static int calculateCalendarField(String field) {
+        for (Interval interval : Interval.values()) {
+            if (field.equalsIgnoreCase(interval.toString())) {
+                switch (interval) {
+                    case DAY:
+                        return Calendar.DAY_OF_YEAR;
+                    case MONTH:
+                        return Calendar.MONTH;
+                    case WEEK:
+                        return Calendar.WEEK_OF_YEAR;
+                    case YEAR:
+                        return Calendar.YEAR;
+                    default:
+                }
+                break;
+            }
+        }
+        
+        return -1;
+    }
+    
+    public static Date calculateNextDeadline(MaintenanceTask maintenanceTask) {
+        ScheduledMaintenance scheduledMaintenance = maintenanceTask.getScheduledMaintenance();
+        String repeatPattern = scheduledMaintenance.getRepeatPattern();
+        if (repeatPattern != null) {
+            int field = calculateCalendarField(repeatPattern.substring(0, 1));
+            if (field >= 0) {
+                try {
+                    Date startDate;
+                    if (scheduledMaintenance.getIsDynamicExpiry())
+                        startDate = maintenanceTask.getClosed();
+                    else
+                        startDate = maintenanceTask.getExpiry();
+                    Calendar nextExpiry = new GregorianCalendar();
+                    nextExpiry.setTime(startDate);
+                    nextExpiry.add(field, Integer.valueOf(repeatPattern.substring(1)));
+
+                    return nextExpiry.getTime();
+                } catch (NumberFormatException e) {
+                }
+            }
+        }
+            
+        return null;
+    }
 }

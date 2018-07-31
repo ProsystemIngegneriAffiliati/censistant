@@ -54,7 +54,7 @@
                                         <p:message for="scheduledMaintenance"/>
                                     </h:panelGroup>
                                 </p:panelGrid>
-                                
+
                                 <p:panelGrid columns="2" columnClasses="ui-grid-col-4,ui-grid-col-8" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputTextarea id="description" value="#{maintenanceTaskPresenter.maintenanceTask.description}" />
@@ -62,15 +62,15 @@
                                         <p:message for="description"/>
                                     </h:panelGroup>
 
-                                        <p:pickList id="workers"
-                                                    value="#{maintenanceTaskPresenter.workers}" var="wrk"
-                                                    itemValue="#{wrk}" itemLabel="#{wrk.name}"
-                                                    responsive="true"
-                                                    showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains">
-                                            <oou:converter converterId="omnifaces.ListConverter" list="#{workerListPresenter.workers}"/>
-                                            <f:facet name="sourceCaption">#{msg.siteSurvey_workers}</f:facet>
-                                            <f:facet name="targetCaption">#{msg.sales_maintenanceTask_workers}</f:facet>
-                                        </p:pickList>
+                                    <p:pickList id="workers"
+                                                value="#{maintenanceTaskPresenter.workers}" var="wrk"
+                                                itemValue="#{wrk}" itemLabel="#{wrk.name}"
+                                                responsive="true"
+                                                showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains">
+                                        <oou:converter converterId="omnifaces.ListConverter" list="#{workerListPresenter.workers}"/>
+                                        <f:facet name="sourceCaption">#{msg.siteSurvey_workers}</f:facet>
+                                        <f:facet name="targetCaption">#{msg.sales_maintenanceTask_workers}</f:facet>
+                                    </p:pickList>
                                 </p:panelGrid>
 
                                 <p:panelGrid columns="3" columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group">
@@ -93,11 +93,33 @@
 
                                 <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                     <h:panelGroup styleClass="md-inputfield">
-                                        <p:inputTextarea id="notes" value="#{maintenanceTaskPresenter.maintenanceTask.notes}" />
+                                        <p:inputTextarea id="notes" value="#{maintenanceTaskPresenter.maintenanceTask.notes}">
+                                            <p:ajax update="customerSignaturePanel" />
+                                        </p:inputTextarea>
                                         <p:outputLabel for="notes" value="#{msg.sales_maintenanceTask_notes}" />
                                         <p:message for="notes"/>
                                     </h:panelGroup>
                                 </p:panelGrid>
+
+                                <h:panelGroup id="customerSignaturePanel">
+                                    <p:panelGrid rendered="#{not empty maintenanceTaskPresenter.maintenanceTask.notes}" columns="2" columnClasses="ui-grid-col-11,ui-grid-col-1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:outputLabel for="customerSignature" value="#{msg.sales_maintenanceTask_customerSignature}" />
+                                            <p:signature id="customerSignature"
+                                                         value="#{maintenanceTaskPresenter.maintenanceTask.customerSignature}"
+                                                         guideline="true"
+                                                         style="width: 100%;height: 200px"
+                                                         readonly="#{not empty maintenanceTaskPresenter.maintenanceTask.customerSignature}" />
+                                            <p:message for="customerSignature"/>
+                                        </h:panelGroup>
+                                        <p:commandButton action="#{maintenanceTaskPresenter.clearCustomerSignature()}"
+                                                         title="#{msg.clear} #{msg.sales_maintenanceTask_customerSignature}"
+                                                         icon="ui-icon-clear"
+                                                         update="customerSignature">
+                                            <oou:ignoreValidationFailed />
+                                        </p:commandButton>
+                                    </p:panelGrid>
+                                </h:panelGroup>
 
                                 <div class="ui-g">
                                     <div class="ui-g-1 ui-md-2"></div>

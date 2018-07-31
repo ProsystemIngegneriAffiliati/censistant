@@ -24,8 +24,8 @@ import com.prosystemingegneri.censistant.business.production.entity.System;
 import com.prosystemingegneri.censistant.business.production.entity.System_;
 import com.prosystemingegneri.censistant.business.sales.entity.MaintenanceTask;
 import com.prosystemingegneri.censistant.business.sales.entity.MaintenanceTask_;
-import com.prosystemingegneri.censistant.business.sales.entity.Offer;
 import com.prosystemingegneri.censistant.business.sales.entity.Offer_;
+import com.prosystemingegneri.censistant.business.sales.entity.ScheduledMaintenance;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport_;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.Worker;
@@ -54,13 +54,27 @@ public class MaintenanceTaskService implements Serializable{
     @PersistenceContext
     EntityManager em;
     
-    public MaintenanceTask saveMaintenanceTask(MaintenanceTask maintenanceTask) {
+    public MaintenanceTask saveMaintenanceTask(MaintenanceTask maintenanceTask, boolean wasClosed) {
         if (maintenanceTask.getId() == null)
             em.persist(maintenanceTask);
         else
-            return em.merge(maintenanceTask);
-
+            maintenanceTask = em.merge(maintenanceTask);
+        
+        if (!wasClosed && maintenanceTask.getClosed() != null && maintenanceTask.getScheduledMaintenance() != null)
+            createNextMaintenanceTaskAsScheduled(maintenanceTask);
+        
         return maintenanceTask;
+    }
+    
+    private void createNextMaintenanceTaskAsScheduled(MaintenanceTask maintenanceTask) {
+        ScheduledMaintenance scheduledMaintenance = maintenanceTask.getScheduledMaintenance();
+        MaintenanceTask newMaintenanceTask = new MaintenanceTask();
+        newMaintenanceTask.setDescription(scheduledMaintenance.getDescription());
+        newMaintenanceTask.setScheduledMaintenance(scheduledMaintenance);
+        newMaintenanceTask.setSystem(maintenanceTask.getSystem());
+        newMaintenanceTask.setExpiry(ScheduledMaintenance.calculateNextDeadline(maintenanceTask));
+
+        em.persist(newMaintenanceTask);
     }
     
     public MaintenanceTask readMaintenanceTask(Long id) {

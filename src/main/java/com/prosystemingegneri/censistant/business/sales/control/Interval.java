@@ -16,24 +16,24 @@
  */
 package com.prosystemingegneri.censistant.business.sales.control;
 
-import com.prosystemingegneri.censistant.business.sales.entity.MaintenanceTask;
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
-
 /**
  *
  * @author Davide Mainardi <ingmainardi at live.com>
  */
-public class MandatoryNotesSignatureForClosedMaintenanceTaskValidator implements ConstraintValidator<MandatoryNotesSignatureForClosedMaintenanceTask, MaintenanceTask> {
+public enum Interval {
+    DAY("d"),
+    WEEK("w"),
+    MONTH("m"),
+    YEAR("y");
 
-    @Override
-    public void initialize(MandatoryNotesSignatureForClosedMaintenanceTask constraintAnnotation) {
+    private final String text;
+
+    private Interval(final String text) {
+        this.text = text;
     }
 
     @Override
-    public boolean isValid(MaintenanceTask mantenanceTask, ConstraintValidatorContext context) {
-        
-        return !(mantenanceTask.getClosed() != null && ((mantenanceTask.getNotes() == null || mantenanceTask.getNotes().isEmpty()) || (mantenanceTask.getCustomerSignature() == null || mantenanceTask.getCustomerSignature().isEmpty())));
+    public String toString() {
+        return text;
     }
-    
 }

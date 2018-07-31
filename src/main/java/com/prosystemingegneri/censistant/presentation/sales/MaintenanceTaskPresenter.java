@@ -48,6 +48,8 @@ public class MaintenanceTaskPresenter implements Serializable{
     private MaintenanceTask maintenanceTask;
     private Long id;
     
+    private boolean wasClosed;
+    
     private DualListModel<Worker> workers = new DualListModel<>();
     
     @Resource
@@ -65,7 +67,7 @@ public class MaintenanceTaskPresenter implements Serializable{
             
             maintenanceTask.getWorkers().clear();
             maintenanceTask.getWorkers().addAll(workers.getTarget());
-            service.saveMaintenanceTask(maintenanceTask);
+            service.saveMaintenanceTask(maintenanceTask, wasClosed);
         } catch (EJBException e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", ExceptionUtility.unwrap(e.getCausedByException()).getLocalizedMessage()));
             return null;
@@ -78,8 +80,10 @@ public class MaintenanceTaskPresenter implements Serializable{
         if (maintenanceTask == null && id != null) {
             if (id == 0)
                 maintenanceTask = new MaintenanceTask();
-            else
+            else {
                 maintenanceTask = service.readMaintenanceTask(id);
+                wasClosed = maintenanceTask.getClosed() != null;
+            }
         }
     }
     
@@ -87,6 +91,10 @@ public class MaintenanceTaskPresenter implements Serializable{
         ScheduledMaintenance scheduledMaintenance = (ScheduledMaintenance) event.getObject();
         maintenanceTask.setScheduledMaintenance(scheduledMaintenance);
         maintenanceTask.setDescription(scheduledMaintenance.getDescription());
+    }
+    
+    public void clearCustomerSignature() {
+        maintenanceTask.setCustomerSignature(null);
     }
 
     public Long getId() {
