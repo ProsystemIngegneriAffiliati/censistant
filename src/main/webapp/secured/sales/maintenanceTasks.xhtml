@@ -14,7 +14,8 @@
                                      selectionMode="multiple" selection="#{maintenanceTaskListPresenter.selectedMaintenanceTasks}" rowKey="#{maintenanceTask.id}"
                                      paginator="true" rows="10"
                                      paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                     rowsPerPageTemplate="10,25,50" lazy="true">
+                                     rowsPerPageTemplate="10,25,50" lazy="true"
+                                     rowStyleClass="#{maintenanceTaskListPresenter.calculateExpiryColor(maintenanceTask)}">
                             <f:facet name="header">
                                 <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
                                     #{msg.sales_maintenanceTasks_tip}

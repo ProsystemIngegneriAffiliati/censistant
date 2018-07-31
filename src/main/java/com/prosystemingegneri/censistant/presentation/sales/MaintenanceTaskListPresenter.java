@@ -20,6 +20,8 @@ import com.prosystemingegneri.censistant.business.sales.boundary.MaintenanceTask
 import com.prosystemingegneri.censistant.business.sales.entity.MaintenanceTask;
 import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
 import java.io.Serializable;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJBException;
@@ -59,6 +61,31 @@ public class MaintenanceTaskListPresenter implements Serializable{
         }
         else
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Missing selection", "Select a row before deleting"));
+    }
+    
+    public String calculateExpiryColor(MaintenanceTask maintenanceTask) {
+        if (maintenanceTask.getClosed() == null) {
+            GregorianCalendar oneMonthAhead = new GregorianCalendar();
+            oneMonthAhead.add(Calendar.MONTH, 1);
+
+            GregorianCalendar oneWeekAhead = new GregorianCalendar();
+            oneWeekAhead.add(Calendar.WEEK_OF_YEAR, 1);
+
+            GregorianCalendar yesterday = new GregorianCalendar();
+            yesterday.add(Calendar.DAY_OF_YEAR, -1);
+
+            GregorianCalendar scadCal = new GregorianCalendar();
+            scadCal.setTime(maintenanceTask.getExpiry());
+
+            if (scadCal.before(yesterday))
+                return "blue-grey-row";
+            if (scadCal.before(oneWeekAhead))
+                return "red-row";
+            if (scadCal.before(oneMonthAhead))
+                return "amber-row";            
+        }
+        
+        return "";
     }
 
     public MaintenanceTaskLazyDataModel getLazyMaintenanceTasks() {
