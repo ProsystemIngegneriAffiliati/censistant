@@ -1,3 +1,5 @@
 /target/
 /src/main/webapp/resources/ultima-layout/
 /src/main/resources/payara/production/dbUserPassword
+/src/main/webapp/WEB-INF/document/images/logo.png
+/bin/

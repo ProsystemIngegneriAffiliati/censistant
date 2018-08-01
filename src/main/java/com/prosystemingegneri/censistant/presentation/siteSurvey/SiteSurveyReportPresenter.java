@@ -24,15 +24,25 @@ import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyRe
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyRequest;
 import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJBException;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.omnifaces.cdi.ViewScoped;
 import org.primefaces.event.SelectEvent;
+import org.primefaces.model.ByteArrayContent;
+import org.primefaces.model.StreamedContent;
 
 /**
  *
@@ -108,6 +118,29 @@ public class SiteSurveyReportPresenter implements Serializable{
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("returnPage", "siteSurvey/siteSurveyReport");
         
         return "/secured/customerSupplier/customer?faces-redirect=true";
+    }
+    
+    public StreamedContent print() {
+        try {
+            List<SiteSurveyReport> tempBean = new ArrayList<>();
+            tempBean.add(siteSurveyReport);
+            Map<String, Object> params = new HashMap<>();
+            params.put("ReportTitle", "Stampa verbale di sopralluogo");
+            //params.put("subReportPath", FacesContext.getCurrentInstance().getExternalContext().getRealPath("/document/offerta/") + "/");
+            params.put("reportImagePath", FacesContext.getCurrentInstance().getExternalContext().getRealPath("/WEB-INF/document/images/") + "/");
+            
+            String reportPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/WEB-INF/document/siteSurvey/siteSurveyReport.jasper");
+            JasperPrint jasperPrint = JasperFillManager.fillReport(reportPath, params, new JRBeanCollectionDataSource(tempBean));
+            
+            return new ByteArrayContent(JasperExportManager.exportReportToPdf(jasperPrint), "application/pdf", siteSurveyReport.getNumber() + ".pdf");
+            
+        } catch (JRException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Error during printing" + 
+                    System.lineSeparator() +
+                    System.lineSeparator() + ex.getLocalizedMessage()));
+        }
+        
+        return null;
     }
     
     public List<Plant> completePlant(String value) {

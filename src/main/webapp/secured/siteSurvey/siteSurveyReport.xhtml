@@ -99,7 +99,7 @@
 
                                 <h:panelGroup id="siteSurveyReportPanel">
                                     <h:panelGroup rendered="#{siteSurveyReportPresenter.siteSurveyReport.request.customer != null and siteSurveyReportPresenter.siteSurveyReport.request.systemType != null}">
-                                        <p:panelGrid columns="3" columnClasses="ui-grid-col-2,ui-grid-col-5,ui-grid-col-5" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                        <p:panelGrid columns="4" columnClasses="ui-grid-col-3,ui-grid-col-4,ui-grid-col-4,ui-grid-col-1" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                             <h:panelGroup styleClass="md-inputfield">
                                                 <p:inputNumber id="number" value="#{siteSurveyReportPresenter.siteSurveyReport.number}" decimalPlaces="0"/>
                                                 <p:outputLabel for="number" value="#{msg.siteSurvey_siteSurveyReport_number}"/>
@@ -117,6 +117,10 @@
                                                 <p:outputLabel for="actual" value="#{msg.siteSurvey_siteSurveyReport_actual}"/>
                                                 <p:message for="actual"/>
                                             </h:panelGroup>
+
+                                            <p:commandButton title="#{msg.print}" icon="ui-icon-print" ajax="false">
+                                                <p:fileDownload value="#{siteSurveyReportPresenter.print()}" />
+                                            </p:commandButton>
                                         </p:panelGrid>
 
                                         <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
