@@ -14,17 +14,26 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.prosystemingegneri.censistant.business.sales.entity;
-
-import javax.persistence.metamodel.SingularAttribute;
-import javax.persistence.metamodel.StaticMetamodel;
+package com.prosystemingegneri.censistant.business.maintenance.control;
 
 /**
  *
  * @author Davide Mainardi <ingmainardi at live.com>
  */
-@StaticMetamodel(ScheduledMaintenance.class)
-public class ScheduledMaintenance_ {
-    public static volatile SingularAttribute <ScheduledMaintenance, String> name;
-    public static volatile SingularAttribute <ScheduledMaintenance, String> description;
+public enum Interval {
+    DAY("d"),
+    WEEK("w"),
+    MONTH("m"),
+    YEAR("y");
+
+    private final String text;
+
+    private Interval(final String text) {
+        this.text = text;
+    }
+
+    @Override
+    public String toString() {
+        return text;
+    }
 }

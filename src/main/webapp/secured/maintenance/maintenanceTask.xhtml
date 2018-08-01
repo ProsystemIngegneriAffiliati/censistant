@@ -19,8 +19,8 @@
                     <div class="ui-g">
                         <div class="ui-g-12">
                             <div class="card card-w-title">
-                                <h1>#{msg.sales_maintenanceTask}</h1>
-                                <p>#{msg.sales_maintenanceTask_tip}</p>
+                                <h1>#{msg.maintenance_maintenanceTask}</h1>
+                                <p>#{msg.maintenance_maintenanceTask_tip}</p>
                                 <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:autoComplete id="system"
@@ -50,7 +50,7 @@
                                             <oou:converter converterId="omnifaces.ListConverter" list="#{scheduledMaintenanceListPresenter.scheduledMaintenances}"/>
                                             <p:ajax event="itemSelect" listener="#{maintenanceTaskPresenter.onScheduledMaintenancSelect}" update="description" />
                                         </p:autoComplete>
-                                        <p:outputLabel for="scheduledMaintenance" value="#{msg.sales_scheduledMaintenance}"/>
+                                        <p:outputLabel for="scheduledMaintenance" value="#{msg.maintenance_scheduledMaintenance}"/>
                                         <p:message for="scheduledMaintenance"/>
                                     </h:panelGroup>
                                 </p:panelGrid>
@@ -58,7 +58,7 @@
                                 <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputTextarea id="description" value="#{maintenanceTaskPresenter.maintenanceTask.description}" />
-                                        <p:outputLabel for="description" value="#{msg.sales_maintenanceTask_description}" />
+                                        <p:outputLabel for="description" value="#{msg.maintenance_maintenanceTask_description}" />
                                         <p:message for="description"/>
                                     </h:panelGroup>
                                 </p:panelGrid>
@@ -66,17 +66,17 @@
                                 <p:panelGrid columns="3" columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:calendar id="created" value="#{maintenanceTaskPresenter.maintenanceTask.created}" locale="it" />
-                                        <p:outputLabel for="created" value="#{msg.sales_maintenanceTask_created}"/>
+                                        <p:outputLabel for="created" value="#{msg.maintenance_maintenanceTask_created}"/>
                                         <p:message for="created"/>
                                     </h:panelGroup>
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:calendar id="expiry" value="#{maintenanceTaskPresenter.maintenanceTask.expiry}" locale="it" />
-                                        <p:outputLabel for="expiry" value="#{msg.sales_maintenanceTask_expiry}"/>
+                                        <p:outputLabel for="expiry" value="#{msg.maintenance_maintenanceTask_expiry}"/>
                                         <p:message for="expiry"/>
                                     </h:panelGroup>
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:calendar id="closed" value="#{maintenanceTaskPresenter.maintenanceTask.closed}" locale="it" />
-                                        <p:outputLabel for="closed" value="#{msg.sales_maintenanceTask_closed}"/>
+                                        <p:outputLabel for="closed" value="#{msg.maintenance_maintenanceTask_closed}"/>
                                         <p:message for="closed"/>
                                     </h:panelGroup>
                                 </p:panelGrid>
@@ -86,7 +86,7 @@
                                         <p:inputTextarea id="notes" value="#{maintenanceTaskPresenter.maintenanceTask.notes}">
                                             <p:ajax update="customerSignaturePanel" />
                                         </p:inputTextarea>
-                                        <p:outputLabel for="notes" value="#{msg.sales_maintenanceTask_notes}" />
+                                        <p:outputLabel for="notes" value="#{msg.maintenance_maintenanceTask_notes}" />
                                         <p:message for="notes"/>
                                     </h:panelGroup>
                                 </p:panelGrid>
@@ -94,7 +94,7 @@
                                 <h:panelGroup id="customerSignaturePanel">
                                     <p:panelGrid rendered="#{not empty maintenanceTaskPresenter.maintenanceTask.notes}" columns="2" columnClasses="ui-grid-col-11,ui-grid-col-1" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                         <h:panelGroup styleClass="md-inputfield">
-                                            <p:outputLabel for="customerSignature" value="#{msg.sales_maintenanceTask_customerSignature}" />
+                                            <p:outputLabel for="customerSignature" value="#{msg.maintenance_maintenanceTask_customerSignature}" />
                                             <p:signature id="customerSignature"
                                                          value="#{maintenanceTaskPresenter.maintenanceTask.customerSignature}"
                                                          guideline="true"
@@ -103,7 +103,7 @@
                                             <p:message for="customerSignature"/>
                                         </h:panelGroup>
                                         <p:commandButton action="#{maintenanceTaskPresenter.clearCustomerSignature()}"
-                                                         title="#{msg.clear} #{msg.sales_maintenanceTask_customerSignature}"
+                                                         title="#{msg.clear} #{msg.maintenance_maintenanceTask_customerSignature}"
                                                          icon="ui-icon-clear"
                                                          update="customerSignature">
                                             <oou:ignoreValidationFailed />
@@ -114,7 +114,7 @@
                                 <div class="ui-g">
                                     <div class="ui-g-1 ui-md-2"></div>
                                     <div class="ui-g-4 ui-md-3">
-                                        <p:button value="#{msg.cancel}" outcome="/secured/sales/maintenanceTasks" styleClass="secondary"/>
+                                        <p:button value="#{msg.cancel}" outcome="/secured/maintenance/maintenanceTasks" styleClass="secondary"/>
                                     </div>
                                     <div class="ui-g-2 ui-md-2"></div>
                                     <div class="ui-g-4 ui-md-3">

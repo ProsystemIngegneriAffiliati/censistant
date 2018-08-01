@@ -14,10 +14,10 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.prosystemingegneri.censistant.presentation.sales;
+package com.prosystemingegneri.censistant.presentation.maintenance;
 
-import com.prosystemingegneri.censistant.business.sales.boundary.ScheduledMaintenanceService;
-import com.prosystemingegneri.censistant.business.sales.entity.ScheduledMaintenance;
+import com.prosystemingegneri.censistant.business.maintenance.boundary.ScheduledMaintenanceService;
+import com.prosystemingegneri.censistant.business.maintenance.entity.ScheduledMaintenance;
 import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
 import java.io.Serializable;
 import javax.ejb.EJBException;
@@ -48,7 +48,7 @@ public class ScheduledMaintenancePresenter implements Serializable{
             return null;
         }
         
-        return "/secured/sales/scheduledMaintenances?faces-redirect=true";
+        return "/secured/maintenance/scheduledMaintenances?faces-redirect=true";
     }
     
     public void detailScheduledMaintenance() {

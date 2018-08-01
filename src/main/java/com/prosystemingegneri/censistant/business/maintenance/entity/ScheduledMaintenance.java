@@ -14,10 +14,11 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.prosystemingegneri.censistant.business.sales.entity;
+package com.prosystemingegneri.censistant.business.maintenance.entity;
 
+import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceTask;
 import com.prosystemingegneri.censistant.business.entity.BaseEntity;
-import com.prosystemingegneri.censistant.business.sales.control.Interval;
+import com.prosystemingegneri.censistant.business.maintenance.control.Interval;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;

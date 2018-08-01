@@ -14,10 +14,10 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.prosystemingegneri.censistant.presentation.sales;
+package com.prosystemingegneri.censistant.presentation.maintenance;
 
-import com.prosystemingegneri.censistant.business.sales.boundary.ScheduledMaintenanceService;
-import com.prosystemingegneri.censistant.business.sales.entity.ScheduledMaintenance;
+import com.prosystemingegneri.censistant.business.maintenance.boundary.ScheduledMaintenanceService;
+import com.prosystemingegneri.censistant.business.maintenance.entity.ScheduledMaintenance;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;

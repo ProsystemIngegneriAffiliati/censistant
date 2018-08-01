@@ -14,8 +14,9 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.prosystemingegneri.censistant.business.sales.entity;
+package com.prosystemingegneri.censistant.business.maintenance.entity;
 
+import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceTask;
 import com.prosystemingegneri.censistant.business.production.entity.System;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.Worker;
 import java.util.Date;

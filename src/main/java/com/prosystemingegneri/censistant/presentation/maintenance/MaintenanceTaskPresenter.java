@@ -14,11 +14,11 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.prosystemingegneri.censistant.presentation.sales;
+package com.prosystemingegneri.censistant.presentation.maintenance;
 
-import com.prosystemingegneri.censistant.business.sales.boundary.MaintenanceTaskService;
-import com.prosystemingegneri.censistant.business.sales.entity.MaintenanceTask;
-import com.prosystemingegneri.censistant.business.sales.entity.ScheduledMaintenance;
+import com.prosystemingegneri.censistant.business.maintenance.boundary.MaintenanceTaskService;
+import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceTask;
+import com.prosystemingegneri.censistant.business.maintenance.entity.ScheduledMaintenance;
 import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
 import java.io.Serializable;
 import javax.annotation.Resource;
@@ -67,7 +67,7 @@ public class MaintenanceTaskPresenter implements Serializable{
             return null;
         }
         
-        return "/secured/sales/maintenanceTasks?faces-redirect=true";
+        return "/secured/maintenance/maintenanceTasks?faces-redirect=true";
     }
     
     public void detailMaintenanceTask() {

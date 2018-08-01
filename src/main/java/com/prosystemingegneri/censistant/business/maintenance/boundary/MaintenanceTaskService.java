@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.prosystemingegneri.censistant.business.sales.boundary;
+package com.prosystemingegneri.censistant.business.maintenance.boundary;
 
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier_;
@@ -22,10 +22,10 @@ import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant_;
 import com.prosystemingegneri.censistant.business.production.entity.System;
 import com.prosystemingegneri.censistant.business.production.entity.System_;
-import com.prosystemingegneri.censistant.business.sales.entity.MaintenanceTask;
-import com.prosystemingegneri.censistant.business.sales.entity.MaintenanceTask_;
+import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceTask;
+import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceTask_;
 import com.prosystemingegneri.censistant.business.sales.entity.Offer_;
-import com.prosystemingegneri.censistant.business.sales.entity.ScheduledMaintenance;
+import com.prosystemingegneri.censistant.business.maintenance.entity.ScheduledMaintenance;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport_;
 import java.io.Serializable;

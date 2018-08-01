@@ -19,23 +19,23 @@
                     <div class="ui-g">
                         <div class="ui-g-12">
                             <div class="card card-w-title">
-                                <h1>#{msg.sales_scheduledMaintenance}</h1>
-                                <p>#{msg.sales_scheduledMaintenance_tip}</p>
+                                <h1>#{msg.maintenance_scheduledMaintenance}</h1>
+                                <p>#{msg.maintenance_scheduledMaintenance_tip}</p>
                                 <p:panelGrid columns="3" columnClasses="ui-grid-col-7,ui-grid-col-3,ui-grid-col-2" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputText id="name" value="#{scheduledMaintenancePresenter.scheduledMaintenance.name}" />
-                                        <p:outputLabel for="name" value="#{msg.sales_scheduledMaintenance_name}" />
+                                        <p:outputLabel for="name" value="#{msg.maintenance_scheduledMaintenance_name}" />
                                         <p:message for="name"/>
                                     </h:panelGroup>
 
                                     <h:panelGroup styleClass="md-inputfield">
-                                        <p:inputMask id="repeatPattern" title="#{msg.sales_scheduledMaintenance_repeatPattern_tip}" value="#{scheduledMaintenancePresenter.scheduledMaintenance.repeatPattern}" mask="a9?9"/>
-                                        <p:outputLabel for="repeatPattern" value="#{msg.sales_scheduledMaintenance_repeatPattern}" />
+                                        <p:inputMask id="repeatPattern" title="#{msg.maintenance_scheduledMaintenance_repeatPattern_tip}" value="#{scheduledMaintenancePresenter.scheduledMaintenance.repeatPattern}" mask="a9?9"/>
+                                        <p:outputLabel for="repeatPattern" value="#{msg.maintenance_scheduledMaintenance_repeatPattern}" />
                                         <p:message for="repeatPattern"/>
                                     </h:panelGroup>
 
                                     <h:panelGroup>
-                                        <p:outputLabel for="isDynamicExpiry" value="#{msg.sales_scheduledMaintenance_isDynamicExpiry}" title="#{msg.sales_scheduledMaintenance_isDynamicExpiry_tip}"/>
+                                        <p:outputLabel for="isDynamicExpiry" value="#{msg.maintenance_scheduledMaintenance_isDynamicExpiry}" title="#{msg.maintenance_scheduledMaintenance_isDynamicExpiry_tip}"/>
                                         <p:inputSwitch id="isDynamicExpiry" value="#{scheduledMaintenancePresenter.scheduledMaintenance.isDynamicExpiry}"/>
                                         <p:message for="isDynamicExpiry"/>
                                     </h:panelGroup>                                  
@@ -44,7 +44,7 @@
                                 <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputTextarea id="description" value="#{scheduledMaintenancePresenter.scheduledMaintenance.description}" />
-                                        <p:outputLabel for="description" value="#{msg.sales_scheduledMaintenance_description}" />
+                                        <p:outputLabel for="description" value="#{msg.maintenance_scheduledMaintenance_description}" />
                                         <p:message for="description"/>
                                     </h:panelGroup>
                                 </p:panelGrid>
@@ -52,7 +52,7 @@
                                 <div class="ui-g">
                                     <div class="ui-g-1 ui-md-2"></div>
                                     <div class="ui-g-4 ui-md-3">
-                                        <p:button value="#{msg.cancel}" outcome="/secured/sales/scheduledMaintenances" styleClass="secondary"/>
+                                        <p:button value="#{msg.cancel}" outcome="/secured/maintenance/scheduledMaintenances" styleClass="secondary"/>
                                     </div>
                                     <div class="ui-g-2 ui-md-2"></div>
                                     <div class="ui-g-4 ui-md-3">
