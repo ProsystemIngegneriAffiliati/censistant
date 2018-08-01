@@ -28,7 +28,6 @@ import com.prosystemingegneri.censistant.business.sales.entity.Offer_;
 import com.prosystemingegneri.censistant.business.sales.entity.ScheduledMaintenance;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport_;
-import com.prosystemingegneri.censistant.business.siteSurvey.entity.Worker;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -85,13 +84,13 @@ public class MaintenanceTaskService implements Serializable{
         em.remove(readMaintenanceTask(id));
     }
 
-    public List<MaintenanceTask> listMaintenanceTasks(int first, int pageSize, String sortField, Boolean isAscending, System system, String description, Boolean isClosed, Worker worker, String customerSupplierNamePlantNameAddress) {
+    public List<MaintenanceTask> listMaintenanceTasks(int first, int pageSize, String sortField, Boolean isAscending, System system, String description, Boolean isClosed, String customerSupplierNamePlantNameAddress) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<MaintenanceTask> query = cb.createQuery(MaintenanceTask.class);
         Root<MaintenanceTask> root = query.from(MaintenanceTask.class);
         CriteriaQuery<MaintenanceTask> select = query.select(root).distinct(true);
         
-        List<Predicate> conditions = calculateConditions(cb, root, system, description, isClosed, worker, customerSupplierNamePlantNameAddress);
+        List<Predicate> conditions = calculateConditions(cb, root, system, description, isClosed, customerSupplierNamePlantNameAddress);
 
         if (!conditions.isEmpty())
             query.where(conditions.toArray(new Predicate[conditions.size()]));
@@ -131,13 +130,13 @@ public class MaintenanceTaskService implements Serializable{
         return typedQuery.getResultList();
     }
     
-    public Long getMaintenanceTasksCount(System system, String description, Boolean isClosed, Worker worker, String customerSupplierNamePlantNameAddress) {
+    public Long getMaintenanceTasksCount(System system, String description, Boolean isClosed, String customerSupplierNamePlantNameAddress) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Long> query = cb.createQuery(Long.class);
         Root<MaintenanceTask> root = query.from(MaintenanceTask.class);
         CriteriaQuery<Long> select = query.select(cb.count(root));
 
-        List<Predicate> conditions = calculateConditions(cb, root, system, description, isClosed, worker, customerSupplierNamePlantNameAddress);
+        List<Predicate> conditions = calculateConditions(cb, root, system, description, isClosed, customerSupplierNamePlantNameAddress);
 
         if (!conditions.isEmpty())
             query.where(conditions.toArray(new Predicate[conditions.size()]));
@@ -145,7 +144,7 @@ public class MaintenanceTaskService implements Serializable{
         return em.createQuery(select).getSingleResult();
     }
     
-    private List<Predicate> calculateConditions(CriteriaBuilder cb, Root<MaintenanceTask> root, System system, String description, Boolean isClosed, Worker worker, String customerSupplierNamePlantNameAddress) {
+    private List<Predicate> calculateConditions(CriteriaBuilder cb, Root<MaintenanceTask> root, System system, String description, Boolean isClosed, String customerSupplierNamePlantNameAddress) {
         List<Predicate> conditions = new ArrayList<>();
         
         //system
@@ -163,10 +162,6 @@ public class MaintenanceTaskService implements Serializable{
             else
                 conditions.add(cb.isNull(root.get(MaintenanceTask_.closed)));
         }
-        
-        //worker
-        if (worker != null)
-            conditions.add(cb.isMember(worker, root.get(MaintenanceTask_.workers)));
         
         //customerSupplierNamePlantNameAddress
         if (customerSupplierNamePlantNameAddress != null && !customerSupplierNamePlantNameAddress.isEmpty()) {
@@ -186,16 +181,5 @@ public class MaintenanceTaskService implements Serializable{
         }
         
         return conditions;
-    }
-    
-    public List<Worker> avaibleWorkers(MaintenanceTask maintenanceTask) {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Worker> query = cb.createQuery(Worker.class);
-        Root<Worker> root = query.from(Worker.class);
-        if (!maintenanceTask.getWorkers().isEmpty())
-            query.where(cb.not(root.in(maintenanceTask.getWorkers())));
-        query.select(root);
-        
-        return em.createQuery(query).getResultList();
     }
 }

@@ -22,6 +22,7 @@ INSERT INTO provenance(name, version) VALUES('Sito pagine gialle', 0)
 INSERT INTO provenance(name, version) VALUES('Stampa', 0)
 INSERT INTO provenance(name, version) VALUES('Ufficio', 0)
 INSERT INTO provenance(name, version) VALUES('Volantino', 0)
+INSERT INTO provenance(name, version) VALUES('Informatore', 0)
 
 INSERT INTO customersupplier(businessname, name, ispotentialcustomer, iscustomer, issupplier, taxcode, vatregistrationnumber, notes, provenance_id, version) VALUES('Prosystem Ingegneri Affiliati di Gilli Enrico & C.', 'Prosystem', false, true, false, '10805010013', '10805010013', 'Cliente o fornitore di prova', 4, 0)
 INSERT INTO plant(customersupplier_id, isheadoffice, name, address, phone, fax, email, version) VALUES(1, true, 'Sede Prosystem', 'Via Nazionale, 24 10064 Pinerolo (TO)', '0123 456789', '0123 567890', 'info@prosystemingegneri.com', 0)
@@ -124,9 +125,9 @@ INSERT INTO purchaseorderrow(purchaseorder_id, boxeditem_id, cost, quantity, ver
 INSERT INTO purchaseorderrow(purchaseorder_id, boxeditem_id, cost, quantity, version) VALUES (2, 10, 20500, 10, 0)
 
 INSERT INTO location(dtype, version) VALUES(0, 0)
-INSERT INTO warehouse(id, name, description) VALUES(3, 'Centrale', 'Magazzino centrale')
+INSERT INTO warehouse(id, name, description) VALUES(3, 'Magazzino principale CSA', 'Magazzino centrale')
 INSERT INTO location(dtype, version) VALUES(0, 0)
-INSERT INTO warehouse(id, name, description) VALUES(4, 'Secondario', null)
+INSERT INTO warehouse(id, name, description) VALUES(4, 'Magazzino secondario CSA', null)
 
 INSERT INTO handleditem(boxeditem_id, worker_id, handlingtimestamp, quantity, fromlocation_id, tolocation_id, version) VALUES(1, 1, '2017-10-30 08:00:00', 1, 2, 3, 0)
 INSERT INTO handleditem(boxeditem_id, worker_id, handlingtimestamp, quantity, fromlocation_id, tolocation_id, version) VALUES(3, 1, '2017-10-30 08:00:01', 3, 2, 3, 0)

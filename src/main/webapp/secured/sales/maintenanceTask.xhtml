@@ -55,22 +55,12 @@
                                     </h:panelGroup>
                                 </p:panelGrid>
 
-                                <p:panelGrid columns="2" columnClasses="ui-grid-col-4,ui-grid-col-8" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputTextarea id="description" value="#{maintenanceTaskPresenter.maintenanceTask.description}" />
                                         <p:outputLabel for="description" value="#{msg.sales_maintenanceTask_description}" />
                                         <p:message for="description"/>
                                     </h:panelGroup>
-
-                                    <p:pickList id="workers"
-                                                value="#{maintenanceTaskPresenter.workers}" var="wrk"
-                                                itemValue="#{wrk}" itemLabel="#{wrk.name}"
-                                                responsive="true"
-                                                showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains">
-                                        <oou:converter converterId="omnifaces.ListConverter" list="#{workerListPresenter.workers}"/>
-                                        <f:facet name="sourceCaption">#{msg.siteSurvey_workers}</f:facet>
-                                        <f:facet name="targetCaption">#{msg.sales_maintenanceTask_workers}</f:facet>
-                                    </p:pickList>
                                 </p:panelGrid>
 
                                 <p:panelGrid columns="3" columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group">

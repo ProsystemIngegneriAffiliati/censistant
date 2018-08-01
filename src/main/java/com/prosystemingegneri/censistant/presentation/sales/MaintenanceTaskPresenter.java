@@ -19,7 +19,6 @@ package com.prosystemingegneri.censistant.presentation.sales;
 import com.prosystemingegneri.censistant.business.sales.boundary.MaintenanceTaskService;
 import com.prosystemingegneri.censistant.business.sales.entity.MaintenanceTask;
 import com.prosystemingegneri.censistant.business.sales.entity.ScheduledMaintenance;
-import com.prosystemingegneri.censistant.business.siteSurvey.entity.Worker;
 import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
 import java.io.Serializable;
 import javax.annotation.Resource;
@@ -33,7 +32,6 @@ import javax.validation.Validator;
 import javax.validation.groups.Default;
 import org.omnifaces.cdi.ViewScoped;
 import org.primefaces.event.SelectEvent;
-import org.primefaces.model.DualListModel;
 
 /**
  *
@@ -50,8 +48,6 @@ public class MaintenanceTaskPresenter implements Serializable{
     
     private boolean wasClosed;
     
-    private DualListModel<Worker> workers = new DualListModel<>();
-    
     @Resource
     Validator validator;
     
@@ -64,9 +60,7 @@ public class MaintenanceTaskPresenter implements Serializable{
             }
             if (!isValidated)
                 return null;
-            
-            maintenanceTask.getWorkers().clear();
-            maintenanceTask.getWorkers().addAll(workers.getTarget());
+
             service.saveMaintenanceTask(maintenanceTask, wasClosed);
         } catch (EJBException e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", ExceptionUtility.unwrap(e.getCausedByException()).getLocalizedMessage()));
@@ -111,18 +105,6 @@ public class MaintenanceTaskPresenter implements Serializable{
 
     public void setMaintenanceTask(MaintenanceTask maintenanceTask) {
         this.maintenanceTask = maintenanceTask;
-    }
-
-    public DualListModel<Worker> getWorkers() {
-        if (workers.getSource().isEmpty() && workers.getTarget().isEmpty()) {
-            workers.setSource(service.avaibleWorkers(maintenanceTask));
-            workers.setTarget(maintenanceTask.getWorkers());
-        }
-        return workers;
-    }
-
-    public void setWorkers(DualListModel<Worker> workers) {
-        this.workers = workers;
     }
     
 }

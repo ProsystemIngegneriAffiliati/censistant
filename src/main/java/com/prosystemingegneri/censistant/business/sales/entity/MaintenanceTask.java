@@ -72,15 +72,11 @@ public class MaintenanceTask extends BaseEntity<Long> {
     
     private String notes;
     
-    @ManyToMany
-    private List<Worker> workers;
-    
     @Lob
     private String customerSignature;
 
     public MaintenanceTask() {
         created = new Date();
-        workers = new ArrayList<>();
     }
 
     public MaintenanceTask(String description, System system) {
@@ -140,10 +136,6 @@ public class MaintenanceTask extends BaseEntity<Long> {
 
     public void setCreated(Date created) {
         this.created = created;
-    }
-
-    public List<Worker> getWorkers() {
-        return workers;
     }
 
     public System getSystem() {

@@ -36,5 +36,4 @@ public class MaintenanceTask_ {
     public static volatile SingularAttribute<MaintenanceTask, Date> expiry;
     public static volatile SingularAttribute<MaintenanceTask, Date> closed;
     public static volatile SingularAttribute<MaintenanceTask, String> notes;
-    public static volatile ListAttribute<MaintenanceTask, Worker> workers;
 }

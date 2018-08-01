@@ -19,7 +19,6 @@ package com.prosystemingegneri.censistant.presentation.sales;
 import com.prosystemingegneri.censistant.business.production.entity.System;
 import com.prosystemingegneri.censistant.business.sales.boundary.MaintenanceTaskService;
 import com.prosystemingegneri.censistant.business.sales.entity.MaintenanceTask;
-import com.prosystemingegneri.censistant.business.siteSurvey.entity.Worker;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -36,7 +35,6 @@ public class MaintenanceTaskLazyDataModel extends LazyDataModel<MaintenanceTask>
     private final MaintenanceTaskService service;
     
     private System system;
-    private Worker worker;
 
     public MaintenanceTaskLazyDataModel(MaintenanceTaskService service) {
         this.service = service;
@@ -79,8 +77,8 @@ public class MaintenanceTaskLazyDataModel extends LazyDataModel<MaintenanceTask>
             }
         }
         
-        List<MaintenanceTask> result = service.listMaintenanceTasks(first, pageSize, sortField, isAscending, system, description, isClosed, worker, customerSupplierNamePlantNameAddress);
-        this.setRowCount(service.getMaintenanceTasksCount(system, description, isClosed, worker, customerSupplierNamePlantNameAddress).intValue());
+        List<MaintenanceTask> result = service.listMaintenanceTasks(first, pageSize, sortField, isAscending, system, description, isClosed, customerSupplierNamePlantNameAddress);
+        this.setRowCount(service.getMaintenanceTasksCount(system, description, isClosed, customerSupplierNamePlantNameAddress).intValue());
         
         return result;
     }
@@ -100,14 +98,6 @@ public class MaintenanceTaskLazyDataModel extends LazyDataModel<MaintenanceTask>
 
     public void setSystem(System system) {
         this.system = system;
-    }
-
-    public Worker getWorker() {
-        return worker;
-    }
-
-    public void setWorker(Worker worker) {
-        this.worker = worker;
     }
     
 }
