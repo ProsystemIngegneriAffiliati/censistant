@@ -18,4 +18,5 @@ sh '${AS_BIN}'/asadmin undeploy '${APP_NAME}'; \
 \
 rm -r '${AS_ROOT_DIR}'/glassfish/domains/'${AS_DOMAIN_NAME}'/generated/*
 \
-sh '${AS_BIN}'/asadmin deploy ${HOME}/'${APP_NAME}'.war'
+sh '${AS_BIN}'/asadmin deploy ${HOME}/'${APP_NAME}'.war; \
+sh '${AS_BIN}'/asadmin restart-domain '${AS_DOMAIN_NAME}''
