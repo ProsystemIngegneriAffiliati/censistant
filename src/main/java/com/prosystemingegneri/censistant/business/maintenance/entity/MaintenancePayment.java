@@ -16,10 +16,46 @@
  */
 package com.prosystemingegneri.censistant.business.maintenance.entity;
 
+import com.prosystemingegneri.censistant.business.entity.BaseEntity;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Version;
+import javax.validation.constraints.NotNull;
+
 /**
  *
  * @author Davide Mainardi <ingmainardi at live.com>
  */
-public class Contract {
+@Entity
+public class MaintenancePayment extends BaseEntity<Long> {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    @NotNull
+    @Column(nullable = false, unique = true)
+    private String name;
+    
+    @Version
+    private int version;
+
+    public MaintenancePayment() {
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public Long getId() {
+        return id;
+    }
     
 }

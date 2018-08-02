@@ -24,7 +24,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Version;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -32,64 +31,73 @@ import javax.validation.constraints.NotNull;
  * @author Davide Mainardi <ingmainardi at live.com>
  */
 @Entity
-public class ScheduledMaintenance extends BaseEntity<Long> {
+public class InspectionDone extends BaseEntity<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
     @NotNull
     @ManyToOne(optional = false)
-    private MaintenanceContract maintenanceContract;
+    private Inspection inspection;
     
     @NotNull
     @ManyToOne(optional = false)
-    private PreventiveMaintenance preventiveMaintenance;
+    private MaintenanceTask maintenanceTask;
     
     @NotNull
-    @Min(1)
     @Column(nullable = false)
-    private Integer quantity;
+    private Boolean isPassed;
+    
+    private String notes;
     
     @Version
     private int version;
 
-    public ScheduledMaintenance() {
-        quantity = 1;
+    public InspectionDone() {
+        isPassed = Boolean.FALSE;
     }
 
-    public ScheduledMaintenance(MaintenanceContract maintenanceContract, PreventiveMaintenance preventiveMaintenance) {
+    public InspectionDone(Inspection inspection, MaintenanceTask maintenanceTask) {
         this();
-        this.maintenanceContract = maintenanceContract;
-        this.preventiveMaintenance = preventiveMaintenance;
+        this.inspection = inspection;
+        this.maintenanceTask = maintenanceTask;
+    }
+
+    public Inspection getInspection() {
+        return inspection;
+    }
+
+    public void setInspection(Inspection inspection) {
+        this.inspection = inspection;
+    }
+
+    public MaintenanceTask getMaintenanceTask() {
+        return maintenanceTask;
+    }
+
+    public void setMaintenanceTask(MaintenanceTask maintenanceTask) {
+        this.maintenanceTask = maintenanceTask;
+    }
+
+    public Boolean getIsPassed() {
+        return isPassed;
+    }
+
+    public void setIsPassed(Boolean isPassed) {
+        this.isPassed = isPassed;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 
     @Override
     public Long getId() {
         return id;
-    }
-
-    public MaintenanceContract getMaintenanceContract() {
-        return maintenanceContract;
-    }
-
-    public void setMaintenanceContract(MaintenanceContract maintenanceContract) {
-        this.maintenanceContract = maintenanceContract;
-    }
-
-    public PreventiveMaintenance getPreventiveMaintenance() {
-        return preventiveMaintenance;
-    }
-
-    public void setPreventiveMaintenance(PreventiveMaintenance preventiveMaintenance) {
-        this.preventiveMaintenance = preventiveMaintenance;
-    }
-
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
     }
     
 }

@@ -16,11 +16,9 @@
  */
 package com.prosystemingegneri.censistant.business.maintenance.entity;
 
-import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceTask;
 import com.prosystemingegneri.censistant.business.production.entity.System;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.Worker;
 import java.util.Date;
-import javax.persistence.metamodel.ListAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
@@ -30,11 +28,13 @@ import javax.persistence.metamodel.StaticMetamodel;
  */
 @StaticMetamodel(MaintenanceTask.class)
 public class MaintenanceTask_ {
-    public static volatile SingularAttribute<MaintenanceTask, ScheduledMaintenance> scheduledMaintenance;
+    public static volatile SingularAttribute<MaintenanceTask, Long> id;
+    public static volatile SingularAttribute<MaintenanceTask, MaintenanceContract> maintenanceContract;
     public static volatile SingularAttribute<MaintenanceTask, System> system;
     public static volatile SingularAttribute<MaintenanceTask, String> description;
-    public static volatile SingularAttribute<MaintenanceTask, Date> created;
+    public static volatile SingularAttribute<MaintenanceTask, Date> creation;
+    public static volatile SingularAttribute<MaintenanceTask, Worker> inChargeWorker;
+    public static volatile SingularAttribute<MaintenanceTask, Boolean> isGuaranteeValid;
     public static volatile SingularAttribute<MaintenanceTask, Date> expiry;
     public static volatile SingularAttribute<MaintenanceTask, Date> closed;
-    public static volatile SingularAttribute<MaintenanceTask, String> notes;
 }

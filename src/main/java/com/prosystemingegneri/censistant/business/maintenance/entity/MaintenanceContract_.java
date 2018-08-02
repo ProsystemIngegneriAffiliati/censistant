@@ -16,6 +16,9 @@
  */
 package com.prosystemingegneri.censistant.business.maintenance.entity;
 
+import com.prosystemingegneri.censistant.business.production.entity.System;
+import java.util.Date;
+import javax.persistence.metamodel.ListAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
@@ -23,8 +26,11 @@ import javax.persistence.metamodel.StaticMetamodel;
  *
  * @author Davide Mainardi <ingmainardi at live.com>
  */
-@StaticMetamodel(ScheduledMaintenance.class)
-public class ScheduledMaintenance_ {
-    public static volatile SingularAttribute<ScheduledMaintenance, MaintenanceContract> maintenanceContract;
-    public static volatile SingularAttribute<ScheduledMaintenance, PreventiveMaintenance> preventiveMaintenance;
+@StaticMetamodel(MaintenanceContract.class)
+public class MaintenanceContract_ {
+    public static volatile SingularAttribute<MaintenanceContract, Date> creation;
+    public static volatile SingularAttribute<MaintenanceContract, Boolean> isFullService;
+    public static volatile SingularAttribute<MaintenanceContract, Boolean> isOnCall;
+    public static volatile ListAttribute<MaintenanceContract, System> systems;
+    public static volatile ListAttribute<MaintenanceContract, MaintenanceTask> maintenanceTasks;
 }

@@ -23,8 +23,7 @@ import javax.persistence.metamodel.StaticMetamodel;
  *
  * @author Davide Mainardi <ingmainardi at live.com>
  */
-@StaticMetamodel(ScheduledMaintenance.class)
-public class ScheduledMaintenance_ {
-    public static volatile SingularAttribute<ScheduledMaintenance, MaintenanceContract> maintenanceContract;
-    public static volatile SingularAttribute<ScheduledMaintenance, PreventiveMaintenance> preventiveMaintenance;
+@StaticMetamodel(PreventiveMaintenance.class)
+public class PreventiveMaintenance_ {
+    public static volatile SingularAttribute<PreventiveMaintenance, String> name;
 }

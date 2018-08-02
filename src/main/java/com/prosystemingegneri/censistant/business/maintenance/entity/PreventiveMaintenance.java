@@ -17,14 +17,16 @@
 package com.prosystemingegneri.censistant.business.maintenance.entity;
 
 import com.prosystemingegneri.censistant.business.entity.BaseEntity;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Version;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -32,64 +34,54 @@ import javax.validation.constraints.NotNull;
  * @author Davide Mainardi <ingmainardi at live.com>
  */
 @Entity
-public class ScheduledMaintenance extends BaseEntity<Long> {
+public class PreventiveMaintenance extends BaseEntity<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
     @NotNull
-    @ManyToOne(optional = false)
-    private MaintenanceContract maintenanceContract;
+    @Column(nullable = false, unique = true)
+    private String name;
     
-    @NotNull
-    @ManyToOne(optional = false)
-    private PreventiveMaintenance preventiveMaintenance;
-    
-    @NotNull
-    @Min(1)
-    @Column(nullable = false)
-    private Integer quantity;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "preventiveMaintenance", orphanRemoval = true)
+    private final List<Inspection> inspections;
     
     @Version
     private int version;
 
-    public ScheduledMaintenance() {
-        quantity = 1;
+    public PreventiveMaintenance() {
+        inspections = new ArrayList<>();
     }
 
-    public ScheduledMaintenance(MaintenanceContract maintenanceContract, PreventiveMaintenance preventiveMaintenance) {
-        this();
-        this.maintenanceContract = maintenanceContract;
-        this.preventiveMaintenance = preventiveMaintenance;
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
     public Long getId() {
         return id;
     }
-
-    public MaintenanceContract getMaintenanceContract() {
-        return maintenanceContract;
+    
+    public void addInspection(Inspection inspection) {
+        if (!inspections.contains(inspection)) {
+            inspections.add(inspection);
+            inspection.setPreventiveMaintenance(this);
+        }
+    }
+    
+    public void removeInspection(Inspection inspection) {
+        if (inspections.contains(inspection)) {
+            inspections.remove(inspection);
+            inspection.setPreventiveMaintenance(null);
+        }
     }
 
-    public void setMaintenanceContract(MaintenanceContract maintenanceContract) {
-        this.maintenanceContract = maintenanceContract;
-    }
-
-    public PreventiveMaintenance getPreventiveMaintenance() {
-        return preventiveMaintenance;
-    }
-
-    public void setPreventiveMaintenance(PreventiveMaintenance preventiveMaintenance) {
-        this.preventiveMaintenance = preventiveMaintenance;
-    }
-
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
+    public List<Inspection> getInspections() {
+        return inspections;
     }
     
 }

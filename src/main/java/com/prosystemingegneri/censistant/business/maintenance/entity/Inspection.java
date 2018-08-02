@@ -24,7 +24,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Version;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -32,48 +31,35 @@ import javax.validation.constraints.NotNull;
  * @author Davide Mainardi <ingmainardi at live.com>
  */
 @Entity
-public class ScheduledMaintenance extends BaseEntity<Long> {
+public class Inspection extends BaseEntity<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @NotNull
-    @ManyToOne(optional = false)
-    private MaintenanceContract maintenanceContract;
-    
-    @NotNull
     @ManyToOne(optional = false)
     private PreventiveMaintenance preventiveMaintenance;
     
     @NotNull
-    @Min(1)
-    @Column(nullable = false)
-    private Integer quantity;
+    @Column(nullable = false, unique = true)
+    private String name;
     
     @Version
     private int version;
 
-    public ScheduledMaintenance() {
-        quantity = 1;
+    public Inspection() {
     }
 
-    public ScheduledMaintenance(MaintenanceContract maintenanceContract, PreventiveMaintenance preventiveMaintenance) {
-        this();
-        this.maintenanceContract = maintenanceContract;
-        this.preventiveMaintenance = preventiveMaintenance;
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
     public Long getId() {
         return id;
-    }
-
-    public MaintenanceContract getMaintenanceContract() {
-        return maintenanceContract;
-    }
-
-    public void setMaintenanceContract(MaintenanceContract maintenanceContract) {
-        this.maintenanceContract = maintenanceContract;
     }
 
     public PreventiveMaintenance getPreventiveMaintenance() {
@@ -82,14 +68,6 @@ public class ScheduledMaintenance extends BaseEntity<Long> {
 
     public void setPreventiveMaintenance(PreventiveMaintenance preventiveMaintenance) {
         this.preventiveMaintenance = preventiveMaintenance;
-    }
-
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
     }
     
 }

@@ -33,7 +33,7 @@ public class MandatoryNotesSignatureForClosedMaintenanceTaskValidator implements
     @Override
     public boolean isValid(MaintenanceTask mantenanceTask, ConstraintValidatorContext context) {
         
-        return !(mantenanceTask.getClosed() != null && ((mantenanceTask.getNotes() == null || mantenanceTask.getNotes().isEmpty()) || (mantenanceTask.getCustomerSignature() == null || mantenanceTask.getCustomerSignature().isEmpty())));
+        return !(mantenanceTask.getClosed() != null && ((mantenanceTask.getClosingNotes() == null || mantenanceTask.getClosingNotes().isEmpty()) || (mantenanceTask.getCustomerSignature() == null || mantenanceTask.getCustomerSignature().isEmpty())));
     }
     
 }

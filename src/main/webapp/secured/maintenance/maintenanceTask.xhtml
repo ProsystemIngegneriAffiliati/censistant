@@ -65,7 +65,7 @@
 
                                 <p:panelGrid columns="3" columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                     <h:panelGroup styleClass="md-inputfield">
-                                        <p:calendar id="created" value="#{maintenanceTaskPresenter.maintenanceTask.created}" locale="it" />
+                                        <p:calendar id="created" value="#{maintenanceTaskPresenter.maintenanceTask.creation}" locale="it" />
                                         <p:outputLabel for="created" value="#{msg.maintenance_maintenanceTask_created}"/>
                                         <p:message for="created"/>
                                     </h:panelGroup>
@@ -83,7 +83,7 @@
 
                                 <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                     <h:panelGroup styleClass="md-inputfield">
-                                        <p:inputTextarea id="notes" value="#{maintenanceTaskPresenter.maintenanceTask.notes}">
+                                        <p:inputTextarea id="notes" value="#{maintenanceTaskPresenter.maintenanceTask.closingNotes}">
                                             <p:ajax update="customerSignaturePanel" />
                                         </p:inputTextarea>
                                         <p:outputLabel for="notes" value="#{msg.maintenance_maintenanceTask_notes}" />
@@ -92,7 +92,7 @@
                                 </p:panelGrid>
 
                                 <h:panelGroup id="customerSignaturePanel">
-                                    <p:panelGrid rendered="#{not empty maintenanceTaskPresenter.maintenanceTask.notes}" columns="2" columnClasses="ui-grid-col-11,ui-grid-col-1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                    <p:panelGrid rendered="#{not empty maintenanceTaskPresenter.maintenanceTask.closingNotes}" columns="2" columnClasses="ui-grid-col-11,ui-grid-col-1" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:outputLabel for="customerSignature" value="#{msg.maintenance_maintenanceTask_customerSignature}" />
                                             <p:signature id="customerSignature"
