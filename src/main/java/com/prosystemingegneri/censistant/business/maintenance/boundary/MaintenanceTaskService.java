@@ -20,12 +20,12 @@ import com.prosystemingegneri.censistant.business.customerSupplier.entity.Custom
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier_;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant_;
+import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceContract;
 import com.prosystemingegneri.censistant.business.production.entity.System;
 import com.prosystemingegneri.censistant.business.production.entity.System_;
 import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceTask;
 import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceTask_;
 import com.prosystemingegneri.censistant.business.sales.entity.Offer_;
-import com.prosystemingegneri.censistant.business.maintenance.entity.ScheduledMaintenance;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport_;
 import java.io.Serializable;
@@ -53,27 +53,13 @@ public class MaintenanceTaskService implements Serializable{
     @PersistenceContext
     EntityManager em;
     
-    public MaintenanceTask saveMaintenanceTask(MaintenanceTask maintenanceTask, boolean wasClosed) {
+    public MaintenanceTask saveMaintenanceTask(MaintenanceTask maintenanceTask) {
         if (maintenanceTask.getId() == null)
             em.persist(maintenanceTask);
         else
             maintenanceTask = em.merge(maintenanceTask);
         
-        if (!wasClosed && maintenanceTask.getClosed() != null && maintenanceTask.getScheduledMaintenance() != null)
-            createNextMaintenanceTaskAsScheduled(maintenanceTask);
-        
         return maintenanceTask;
-    }
-    
-    private void createNextMaintenanceTaskAsScheduled(MaintenanceTask maintenanceTask) {
-        ScheduledMaintenance scheduledMaintenance = maintenanceTask.getScheduledMaintenance();
-        MaintenanceTask newMaintenanceTask = new MaintenanceTask();
-        newMaintenanceTask.setDescription(scheduledMaintenance.getDescription());
-        newMaintenanceTask.setScheduledMaintenance(scheduledMaintenance);
-        newMaintenanceTask.setSystem(maintenanceTask.getSystem());
-        newMaintenanceTask.setExpiry(ScheduledMaintenance.calculateNextDeadline(maintenanceTask));
-
-        em.persist(newMaintenanceTask);
     }
     
     public MaintenanceTask readMaintenanceTask(Long id) {
@@ -84,13 +70,13 @@ public class MaintenanceTaskService implements Serializable{
         em.remove(readMaintenanceTask(id));
     }
 
-    public List<MaintenanceTask> listMaintenanceTasks(int first, int pageSize, String sortField, Boolean isAscending, System system, String description, Boolean isClosed, String customerSupplierNamePlantNameAddress) {
+    public List<MaintenanceTask> listMaintenanceTasks(int first, int pageSize, String sortField, Boolean isAscending, System system, String description, Boolean isClosed, String customerSupplierNamePlantNameAddress, MaintenanceContract maintenanceContract) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<MaintenanceTask> query = cb.createQuery(MaintenanceTask.class);
         Root<MaintenanceTask> root = query.from(MaintenanceTask.class);
         CriteriaQuery<MaintenanceTask> select = query.select(root).distinct(true);
         
-        List<Predicate> conditions = calculateConditions(cb, root, system, description, isClosed, customerSupplierNamePlantNameAddress);
+        List<Predicate> conditions = calculateConditions(cb, root, system, description, isClosed, customerSupplierNamePlantNameAddress, maintenanceContract);
 
         if (!conditions.isEmpty())
             query.where(conditions.toArray(new Predicate[conditions.size()]));
@@ -102,8 +88,8 @@ public class MaintenanceTaskService implements Serializable{
                 case "description":
                     path = root.get(MaintenanceTask_.description);
                     break;
-                case "created":
-                    path = root.get(MaintenanceTask_.created);
+                case "creation":
+                    path = root.get(MaintenanceTask_.creation);
                     break;
                 case "expiry":
                     path = root.get(MaintenanceTask_.expiry);
@@ -130,13 +116,13 @@ public class MaintenanceTaskService implements Serializable{
         return typedQuery.getResultList();
     }
     
-    public Long getMaintenanceTasksCount(System system, String description, Boolean isClosed, String customerSupplierNamePlantNameAddress) {
+    public Long getMaintenanceTasksCount(System system, String description, Boolean isClosed, String customerSupplierNamePlantNameAddress, MaintenanceContract maintenanceContract) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Long> query = cb.createQuery(Long.class);
         Root<MaintenanceTask> root = query.from(MaintenanceTask.class);
         CriteriaQuery<Long> select = query.select(cb.count(root));
 
-        List<Predicate> conditions = calculateConditions(cb, root, system, description, isClosed, customerSupplierNamePlantNameAddress);
+        List<Predicate> conditions = calculateConditions(cb, root, system, description, isClosed, customerSupplierNamePlantNameAddress, maintenanceContract);
 
         if (!conditions.isEmpty())
             query.where(conditions.toArray(new Predicate[conditions.size()]));
@@ -144,7 +130,7 @@ public class MaintenanceTaskService implements Serializable{
         return em.createQuery(select).getSingleResult();
     }
     
-    private List<Predicate> calculateConditions(CriteriaBuilder cb, Root<MaintenanceTask> root, System system, String description, Boolean isClosed, String customerSupplierNamePlantNameAddress) {
+    private List<Predicate> calculateConditions(CriteriaBuilder cb, Root<MaintenanceTask> root, System system, String description, Boolean isClosed, String customerSupplierNamePlantNameAddress, MaintenanceContract maintenanceContract) {
         List<Predicate> conditions = new ArrayList<>();
         
         //system
@@ -178,6 +164,11 @@ public class MaintenanceTaskService implements Serializable{
                             cb.like(cb.lower(customerRoot.get(CustomerSupplier_.name)), "%" + String.valueOf(customerSupplierNamePlantNameAddress).toLowerCase() + "%")
                     )
             );
+        }
+        
+        //Maintenance contract
+        if (maintenanceContract != null) {
+            conditions.add(cb.equal(root.get(MaintenanceTask_.maintenanceContract), maintenanceContract));
         }
         
         return conditions;

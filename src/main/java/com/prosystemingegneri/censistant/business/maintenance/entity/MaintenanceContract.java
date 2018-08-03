@@ -18,6 +18,8 @@ package com.prosystemingegneri.censistant.business.maintenance.entity;
 
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
 import com.prosystemingegneri.censistant.business.entity.BaseEntity;
+import com.prosystemingegneri.censistant.business.maintenance.control.AtLeastOneScheduledMaintenance;
+import com.prosystemingegneri.censistant.business.maintenance.control.AtLeastOneSystem;
 import com.prosystemingegneri.censistant.business.production.entity.System;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -43,6 +45,8 @@ import javax.validation.constraints.NotNull;
  * @author Davide Mainardi <ingmainardi at live.com>
  */
 @Entity
+@AtLeastOneSystem
+@AtLeastOneScheduledMaintenance
 public class MaintenanceContract extends BaseEntity<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

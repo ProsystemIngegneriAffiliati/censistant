@@ -16,8 +16,8 @@
  */
 package com.prosystemingegneri.censistant.presentation.maintenance;
 
-import com.prosystemingegneri.censistant.business.maintenance.boundary.MaintenanceTaskService;
-import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceTask;
+import com.prosystemingegneri.censistant.business.maintenance.boundary.MaintenanceContractService;
+import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceContract;
 import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
 import java.io.Serializable;
 import javax.annotation.Resource;
@@ -37,46 +37,42 @@ import org.omnifaces.cdi.ViewScoped;
  */
 @Named
 @ViewScoped
-public class MaintenanceTaskPresenter implements Serializable{
+public class MaintenanceContractPresenter implements Serializable{
     @Inject
-    MaintenanceTaskService service;
+    MaintenanceContractService service;
     
-    private MaintenanceTask maintenanceTask;
+    private MaintenanceContract maintenanceContract;
     private Long id;
     
     @Resource
     Validator validator;
     
-    public String saveMaintenanceTask() {
+    public String saveMaintenanceContract() {
         try {
             boolean isValidated = true;
-            for (ConstraintViolation<MaintenanceTask> constraintViolation : validator.validate(maintenanceTask, Default.class)) {
+            for (ConstraintViolation<MaintenanceContract> constraintViolation : validator.validate(maintenanceContract, Default.class)) {
                 isValidated = false;
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", constraintViolation.getMessage()));
             }
             if (!isValidated)
                 return null;
 
-            service.saveMaintenanceTask(maintenanceTask);
+            service.saveMaintenanceContract(maintenanceContract);
         } catch (EJBException e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", ExceptionUtility.unwrap(e.getCausedByException()).getLocalizedMessage()));
             return null;
         }
         
-        return "/secured/maintenance/maintenanceTasks?faces-redirect=true";
+        return "/secured/maintenance/maintenanceContracts?faces-redirect=true";
     }
     
-    public void detailMaintenanceTask() {
-        if (maintenanceTask == null && id != null) {
+    public void detailMaintenanceContract() {
+        if (maintenanceContract == null && id != null) {
             if (id == 0)
-                maintenanceTask = new MaintenanceTask();
+                maintenanceContract = new MaintenanceContract();
             else
-                maintenanceTask = service.readMaintenanceTask(id);
+                maintenanceContract = service.readMaintenanceContract(id);
         }
-    }
-    
-    public void clearCustomerSignature() {
-        maintenanceTask.setCustomerSignature(null);
     }
 
     public Long getId() {
@@ -87,12 +83,12 @@ public class MaintenanceTaskPresenter implements Serializable{
         this.id = id;
     }
 
-    public MaintenanceTask getMaintenanceTask() {
-        return maintenanceTask;
+    public MaintenanceContract getMaintenanceContract() {
+        return maintenanceContract;
     }
 
-    public void setMaintenanceTask(MaintenanceTask maintenanceTask) {
-        this.maintenanceTask = maintenanceTask;
+    public void setMaintenanceContract(MaintenanceContract maintenanceContract) {
+        this.maintenanceContract = maintenanceContract;
     }
     
 }

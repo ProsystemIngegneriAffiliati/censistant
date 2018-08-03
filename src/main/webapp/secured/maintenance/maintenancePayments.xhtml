@@ -1,0 +1,47 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:define name="content">
+        <h:form id="maintenancePaymentsForm">
+            <div class="ui-g">
+                <div class="ui-g-12">
+                    <div class="card card-w-title">
+                        <h1>#{msg.maintenance_maintenancePayments}</h1>
+
+                        <p:dataTable id="maintenancePaymentsTable"
+                                     var="mp"
+                                     value="#{maintenancePaymentListPresenter.maintenancePayments}"
+                                     selectionMode="multiple"
+                                     selection="#{maintenancePaymentListPresenter.selectedMaintenancePayments}"
+                                     rowKey="#{mp.id}">
+                            <f:facet name="header">
+                                <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
+                                    #{msg.maintenance_maintenancePayments_tip}
+                                    <p:outputPanel>
+                                        <p:button title="#{msg.new}" icon="ui-icon-create" styleClass="AquaButton" outcome="/secured/maintenance/maintenancePayment">
+                                            <f:param name="id" value="0" />
+                                        </p:button>
+                                        <p:commandButton title="#{msg.delete}" icon="ui-icon-delete" actionListener="#{maintenancePaymentListPresenter.deleteMaintenancePayments()}" update="maintenancePaymentsTable">
+                                            <p:confirm header="#{msg.maintenance_maintenancePayments_delete}" message="#{msg.maintenance_maintenancePayments_delete_tip}" icon="ui-icon-alert"/>
+                                        </p:commandButton>
+                                    </p:outputPanel>
+                                </p:panelGrid>
+                            </f:facet>
+                            <p:column headerText="#{msg.maintenance_maintenancePayment_name}" sortBy="#{mp.name}" filterBy="#{mp.name}" filterMatchMode="contains">
+                                <h:outputText value="#{mp.name}"/>
+                            </p:column>
+                            <p:column headerText="#{msg.actions}" style="width:64px; text-align:center">
+                                <p:button title="#{msg.edit}" icon="ui-icon-edit" styleClass="AquaButton" outcome="/secured/maintenance/maintenancePayment">
+                                    <f:param name="id" value="#{mp.id}" />
+                                </p:button>
+                            </p:column>
+                        </p:dataTable>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>

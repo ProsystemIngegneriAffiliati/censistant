@@ -1,0 +1,78 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:oou="http://omnifaces.org/ui">
+    <f:metadata>
+        <f:viewParam name="id"
+                     value="#{preventiveMaintenancePresenter.id}"
+                     converter="javax.faces.Long"/>
+        <f:viewAction action="#{preventiveMaintenancePresenter.detailPreventiveMaintenance()}"/>
+    </f:metadata>
+    <ui:composition template="/WEB-INF/template.xhtml">
+        <ui:define name="content">
+            <oou:form id="preventiveMaintenanceForm">
+                <div class="ui-fluid">
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <div class="card card-w-title">
+                                <h1>#{msg.maintenance_preventiveMaintenance}</h1>
+                                <p>#{msg.maintenance_preventiveMaintenance_tip}</p>
+                                <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="name" value="#{preventiveMaintenancePresenter.preventiveMaintenance.name}"/>
+                                        <p:outputLabel for="name" value="#{msg.maintenance_preventiveMaintenance_name}"/>
+                                        <p:message for="name"/>
+                                    </h:panelGroup>
+                                    
+                                    <p:dataTable id="inspectionsTable"
+                                                 widgetVar="insTbl"
+                                                 var="insp"
+                                                 value="#{preventiveMaintenancePresenter.preventiveMaintenance.inspections}"
+                                                 editable="true" editMode="cell">
+                                        <f:facet name="header">
+                                            <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
+                                                #{msg.maintenance_inspections_tip}
+                                                <p:outputPanel style="display: inline-block">
+                                                    <p:commandButton title="#{msg.add}" icon="ui-icon-add" actionListener="#{preventiveMaintenancePresenter.createNewInspection()}" oncomplete="PF('insTbl').addRow()" process="@this"/>
+                                                </p:outputPanel>
+                                            </p:panelGrid>
+                                        </f:facet>
+                                        <p:column headerText="#{msg.maintenance_inspection_name}" filterBy="#{insp.name}" filterMatchMode="contains" priority="0">
+                                            <p:cellEditor>
+                                                <f:facet name="output"><h:outputText value="#{insp.name}" /></f:facet>
+                                                <f:facet name="input"><p:inputText value="#{insp.name}" /></f:facet>
+                                            </p:cellEditor>
+                                        </p:column>
+                                        <p:column headerText="#{msg.actions}" style="width:72px; text-align:center" exportable="false">
+                                            <p:commandButton title="#{msg.remove}" icon="ui-icon-delete" actionListener="#{preventiveMaintenancePresenter.preventiveMaintenance.removeInspection(insp)}" update="inspectionsTable">
+                                                <oou:ignoreValidationFailed />
+                                            </p:commandButton>
+                                        </p:column>
+                                    </p:dataTable>
+                                </p:panelGrid>
+
+                                <div class="ui-g">
+                                    <div class="ui-g-1 ui-md-2"></div>
+                                    <div class="ui-g-4 ui-md-3">
+                                        <p:button value="#{msg.cancel}" outcome="/secured/maintenance/preventiveMaintenances" styleClass="secondary"/>
+                                    </div>
+                                    <div class="ui-g-2 ui-md-2"></div>
+                                    <div class="ui-g-4 ui-md-3">
+                                        <p:commandButton value="#{msg.save}"
+                                                         action="#{preventiveMaintenancePresenter.savePreventiveMaintenance()}"
+                                                         ajax="false"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </oou:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

@@ -16,8 +16,9 @@
  */
 package com.prosystemingegneri.censistant.presentation.maintenance;
 
-import com.prosystemingegneri.censistant.business.maintenance.boundary.ScheduledMaintenanceService;
-import com.prosystemingegneri.censistant.business.maintenance.entity.ScheduledMaintenance;
+import com.prosystemingegneri.censistant.business.maintenance.boundary.PreventiveMaintenanceService;
+import com.prosystemingegneri.censistant.business.maintenance.entity.Inspection;
+import com.prosystemingegneri.censistant.business.maintenance.entity.PreventiveMaintenance;
 import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
 import java.io.Serializable;
 import javax.ejb.EJBException;
@@ -33,31 +34,41 @@ import org.omnifaces.cdi.ViewScoped;
  */
 @Named
 @ViewScoped
-public class ScheduledMaintenancePresenter implements Serializable{
+public class PreventiveMaintenancePresenter implements Serializable{
     @Inject
-    ScheduledMaintenanceService service;
+    PreventiveMaintenanceService service;
     
-    private ScheduledMaintenance scheduledMaintenance;
+    private PreventiveMaintenance preventiveMaintenance;
     private Long id;
     
-    public String saveScheduledMaintenance() {
+    public String savePreventiveMaintenance() {
         try {
-            service.saveScheduledMaintenance(scheduledMaintenance);
+            service.savePreventiveMaintenance(preventiveMaintenance);
         } catch (EJBException e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", ExceptionUtility.unwrap(e.getCausedByException()).getLocalizedMessage()));
             return null;
         }
         
-        return "/secured/maintenance/scheduledMaintenances?faces-redirect=true";
+        return "/secured/maintenance/preventiveMaintenances?faces-redirect=true";
     }
     
-    public void detailScheduledMaintenance() {
-        if (scheduledMaintenance == null && id != null) {
-            if (id == 0)
-                scheduledMaintenance = new ScheduledMaintenance();
-            else
-                scheduledMaintenance = service.readScheduledMaintenance(id);
-        }
+    public void detailPreventiveMaintenance() {
+        if (id == 0)
+            preventiveMaintenance = new PreventiveMaintenance();
+        else
+            preventiveMaintenance = service.readPreventiveMaintenance(id);
+    }
+    
+    public void createNewInspection() {
+        preventiveMaintenance.addInspection(new Inspection());
+    }
+
+    public PreventiveMaintenance getPreventiveMaintenance() {
+        return preventiveMaintenance;
+    }
+
+    public void setPreventiveMaintenance(PreventiveMaintenance preventiveMaintenance) {
+        this.preventiveMaintenance = preventiveMaintenance;
     }
 
     public Long getId() {
@@ -67,13 +78,4 @@ public class ScheduledMaintenancePresenter implements Serializable{
     public void setId(Long id) {
         this.id = id;
     }
-
-    public ScheduledMaintenance getScheduledMaintenance() {
-        return scheduledMaintenance;
-    }
-
-    public void setScheduledMaintenance(ScheduledMaintenance scheduledMaintenance) {
-        this.scheduledMaintenance = scheduledMaintenance;
-    }
-    
 }

@@ -35,8 +35,12 @@
                             </p:submenu>
                         </p:submenu>
                         <p:submenu id="maintenanceMenu" label="#{msg.maintenance}" icon="&#xE869;">
-                            <p:menuitem id="scheduledMaintenancesMenu" value="#{msg.maintenance_scheduledMaintenances_abbr}" icon="&#xE425;" outcome="/secured/maintenance/scheduledMaintenances"/>
                             <p:menuitem id="maintenanceTasksMenu" value="#{msg.maintenance_maintenanceTasks}" icon="&#xE869;" outcome="/secured/maintenance/maintenanceTasks"/>
+                            <p:menuitem id="maintenanceContractsMenu" value="#{msg.maintenance_maintenanceContracts_abbr}" icon="&#xE869;" outcome="/secured/maintenance/maintenanceContracts"/>
+                            <p:submenu id="maintenanceUtils" label="#{msg.utils}" icon="&#xE149;">
+                                <p:menuitem id="maintenancePaymentsMenu" value="#{msg.maintenance_maintenancePayments}" icon="&#xE3EC;" outcome="/secured/maintenance/maintenancePayments"/>
+                                <p:menuitem id="preventiveMaintenancesMenu" value="#{msg.maintenance_preventiveMaintenances_abbr}" icon="&#xE3EC;" outcome="/secured/maintenance/preventiveMaintenances"/>
+                            </p:submenu>
                         </p:submenu>
                         <p:submenu id="purchasingMenu" label="#{msg.purchasing}" icon="&#xE558;">
                             <p:menuitem id="suppliersMenu" value="#{msg.customerSupplier_suppliers}" icon="&#xE8A3;" outcome="/secured/customerSupplier/suppliers"/>
