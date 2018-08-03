@@ -16,10 +16,16 @@
  */
 package com.prosystemingegneri.censistant.presentation.maintenance;
 
+import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
+import com.prosystemingegneri.censistant.business.production.entity.System;
 import com.prosystemingegneri.censistant.business.maintenance.boundary.MaintenanceContractService;
 import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceContract;
+import com.prosystemingegneri.censistant.business.maintenance.entity.ScheduledMaintenance;
+import com.prosystemingegneri.censistant.business.production.boundary.SystemService;
 import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import javax.annotation.Resource;
 import javax.ejb.EJBException;
 import javax.faces.application.FacesMessage;
@@ -30,6 +36,8 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import javax.validation.groups.Default;
 import org.omnifaces.cdi.ViewScoped;
+import org.primefaces.event.SelectEvent;
+import org.primefaces.model.DualListModel;
 
 /**
  *
@@ -47,6 +55,12 @@ public class MaintenanceContractPresenter implements Serializable{
     @Resource
     Validator validator;
     
+    private CustomerSupplier tempCustomer;
+    private List<System> customerSystems = new ArrayList<>();
+    private DualListModel<System> systems = new DualListModel<>();
+    @Inject
+    SystemService systemService;
+    
     public String saveMaintenanceContract() {
         try {
             boolean isValidated = true;
@@ -57,6 +71,8 @@ public class MaintenanceContractPresenter implements Serializable{
             if (!isValidated)
                 return null;
 
+            maintenanceContract.getSystems().clear();
+            maintenanceContract.getSystems().addAll(systems.getTarget());
             service.saveMaintenanceContract(maintenanceContract);
         } catch (EJBException e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", ExceptionUtility.unwrap(e.getCausedByException()).getLocalizedMessage()));
@@ -70,9 +86,35 @@ public class MaintenanceContractPresenter implements Serializable{
         if (maintenanceContract == null && id != null) {
             if (id == 0)
                 maintenanceContract = new MaintenanceContract();
-            else
+            else {
                 maintenanceContract = service.readMaintenanceContract(id);
+                tempCustomer = maintenanceContract.getCustomer();
+                updateCustomerSystem();
+            }
         }
+    }
+    
+    public void createNewScheduledMaintenance() {
+        maintenanceContract.addScheduledMaintenance(new ScheduledMaintenance());
+    }
+    
+    public DualListModel<System> getSystems() {
+        if (tempCustomer == null)
+            return new DualListModel<>();
+        
+        if (systems.getSource().isEmpty() && systems.getTarget().isEmpty()) {
+            systems.setSource(service.avaibleSystems(maintenanceContract));
+            systems.setTarget(maintenanceContract.getSystems());
+        }
+        return systems;
+    }
+
+    public void setSystems(DualListModel<System> systems) {
+        this.systems = systems;
+    }
+    
+    public void onTempCustomerSelect(SelectEvent event) {
+        updateCustomerSystem();
     }
 
     public Long getId() {
@@ -89,6 +131,22 @@ public class MaintenanceContractPresenter implements Serializable{
 
     public void setMaintenanceContract(MaintenanceContract maintenanceContract) {
         this.maintenanceContract = maintenanceContract;
+    }
+
+    public CustomerSupplier getTempCustomer() {
+        return tempCustomer;
+    }
+
+    public void setTempCustomer(CustomerSupplier tempCustomer) {
+        this.tempCustomer = tempCustomer;
+    }
+
+    public List<System> getCustomerSystems() {
+        return customerSystems;
+    }
+    
+    public void updateCustomerSystem() {
+        customerSystems = systemService.listSystems(0, 0, null, null, null, tempCustomer);
     }
     
 }

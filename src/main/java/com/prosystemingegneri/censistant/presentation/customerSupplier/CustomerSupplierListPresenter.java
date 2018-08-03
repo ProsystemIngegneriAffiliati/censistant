@@ -77,6 +77,16 @@ public class CustomerSupplierListPresenter implements Serializable{
         return customers;
     }
     
+    public List<CustomerSupplier> completeAcquiredCustomer(String value) {
+        return service.listCustomerSuppliers(0, 10, "name", Boolean.TRUE, Boolean.FALSE, Boolean.TRUE, null, null, value, null);
+    }
+
+    public List<CustomerSupplier> getAcquiredCustomers() {
+        if (customers == null || customers.isEmpty())
+            customers = service.listCustomerSuppliers(0, 0, "name", Boolean.TRUE, Boolean.FALSE, Boolean.TRUE, null, null, null, null);
+        return customers;
+    }
+    
     public List<CustomerSupplier> completeSupplier(String value) {
         return service.listCustomerSuppliers(0, 10, "name", Boolean.TRUE, null, null, Boolean.TRUE, null, value, null);
     }

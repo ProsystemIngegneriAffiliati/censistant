@@ -16,8 +16,13 @@
  */
 package com.prosystemingegneri.censistant.business.production.boundary;
 
+import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
+import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant_;
 import com.prosystemingegneri.censistant.business.production.entity.System;
 import com.prosystemingegneri.censistant.business.production.entity.System_;
+import com.prosystemingegneri.censistant.business.sales.entity.Offer;
+import com.prosystemingegneri.censistant.business.sales.entity.Offer_;
+import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport_;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +32,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.ListJoin;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
@@ -58,13 +64,13 @@ public class SystemService implements Serializable{
         em.remove(readSystem(id));
     }
 
-    public List<System> listSystems(int first, int pageSize, String sortField, Boolean isAscending, String description) {
+    public List<System> listSystems(int first, int pageSize, String sortField, Boolean isAscending, String description, CustomerSupplier customer) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<System> query = cb.createQuery(System.class);
         Root<System> root = query.from(System.class);
         CriteriaQuery<System> select = query.select(root).distinct(true);
         
-        List<Predicate> conditions = calculateConditions(cb, root, description);
+        List<Predicate> conditions = calculateConditions(cb, root, description, customer);
 
         if (!conditions.isEmpty())
             query.where(conditions.toArray(new Predicate[conditions.size()]));
@@ -95,13 +101,13 @@ public class SystemService implements Serializable{
         return typedQuery.getResultList();
     }
     
-    public Long getSystemsCount(String description) {
+    public Long getSystemsCount(String description, CustomerSupplier customer) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Long> query = cb.createQuery(Long.class);
         Root<System> root = query.from(System.class);
         CriteriaQuery<Long> select = query.select(cb.count(root));
 
-        List<Predicate> conditions = calculateConditions(cb, root, description);
+        List<Predicate> conditions = calculateConditions(cb, root, description, customer);
 
         if (!conditions.isEmpty())
             query.where(conditions.toArray(new Predicate[conditions.size()]));
@@ -109,12 +115,23 @@ public class SystemService implements Serializable{
         return em.createQuery(select).getSingleResult();
     }
     
-    private List<Predicate> calculateConditions(CriteriaBuilder cb, Root<System> root, String description) {
+    private List<Predicate> calculateConditions(CriteriaBuilder cb, Root<System> root, String description, CustomerSupplier customer) {
         List<Predicate> conditions = new ArrayList<>();
 
         //description
         if (description != null && !description.isEmpty())
             conditions.add(cb.like(cb.lower(root.get(System_.description)), "%" + description.toLowerCase() + "%"));
+        
+        //Customer
+        if (customer != null) {
+            ListJoin<System, Offer> offersRoot = root.join(System_.offers);
+            conditions.add(cb.isNotNull(offersRoot.get(Offer_.jobOrder)));
+            conditions.add(cb.equal(
+                    offersRoot
+                    .join(Offer_.siteSurveyReport)
+                    .join(SiteSurveyReport_.plant)
+                    .join(Plant_.customerSupplier), customer));
+        }
         
         return conditions;
     }

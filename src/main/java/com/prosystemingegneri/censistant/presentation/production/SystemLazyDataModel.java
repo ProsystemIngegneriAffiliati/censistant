@@ -16,6 +16,7 @@
  */
 package com.prosystemingegneri.censistant.presentation.production;
 
+import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
 import com.prosystemingegneri.censistant.business.production.entity.System;
 import com.prosystemingegneri.censistant.business.production.boundary.SystemService;
 import java.util.Iterator;
@@ -32,6 +33,8 @@ import static org.primefaces.model.SortOrder.DESCENDING;
  */
 public class SystemLazyDataModel extends LazyDataModel<System>{
     private final SystemService service;
+    
+    private CustomerSupplier customer;
 
     public SystemLazyDataModel(SystemService service) {
         this.service = service;
@@ -68,8 +71,8 @@ public class SystemLazyDataModel extends LazyDataModel<System>{
             }
         }
         
-        List<System> result = service.listSystems(first, pageSize, sortField, isAscending, description);
-        this.setRowCount(service.getSystemsCount(description).intValue());
+        List<System> result = service.listSystems(first, pageSize, sortField, isAscending, description, customer);
+        this.setRowCount(service.getSystemsCount(description, customer).intValue());
         
         return result;
     }
@@ -82,4 +85,13 @@ public class SystemLazyDataModel extends LazyDataModel<System>{
             return null;
         }
     }
+
+    public CustomerSupplier getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(CustomerSupplier customer) {
+        this.customer = customer;
+    }
+    
 }

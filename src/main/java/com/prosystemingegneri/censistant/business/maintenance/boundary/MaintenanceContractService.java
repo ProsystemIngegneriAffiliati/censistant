@@ -22,6 +22,7 @@ import com.prosystemingegneri.censistant.business.maintenance.entity.Maintenance
 import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceContract_;
 import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceTask;
 import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceTask_;
+import com.prosystemingegneri.censistant.business.production.entity.System;
 import com.prosystemingegneri.censistant.business.production.entity.System_;
 import com.prosystemingegneri.censistant.business.sales.entity.Offer_;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport_;
@@ -170,5 +171,16 @@ public class MaintenanceContractService implements Serializable{
         }
         
         return conditions;
+    }
+    
+    public List<System> avaibleSystems(MaintenanceContract contract) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<System> query = cb.createQuery(System.class);
+        Root<System> root = query.from(System.class);
+        if (!contract.getSystems().isEmpty())
+            query.where(cb.not(root.in(contract.getSystems())));
+        query.select(root);
+        
+        return em.createQuery(query).getResultList();
     }
 }
