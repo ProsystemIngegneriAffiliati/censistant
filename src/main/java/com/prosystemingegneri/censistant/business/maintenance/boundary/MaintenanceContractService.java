@@ -19,6 +19,8 @@ package com.prosystemingegneri.censistant.business.maintenance.boundary;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier_;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant_;
+import com.prosystemingegneri.censistant.business.maintenance.entity.Inspection;
+import com.prosystemingegneri.censistant.business.maintenance.entity.InspectionDone;
 import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceContract;
 import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceContract_;
 import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceTask;
@@ -172,21 +174,24 @@ public class MaintenanceContractService implements Serializable{
         }
         
         //Is completed
-        if (isCompleted != null) {
-            Path<Object> path = root.get(MaintenanceTask_.id.getName()); // field to map with sub-query
-            
-            Root<MaintenanceTask> subRoot = subquery.from(MaintenanceTask.class);
-            subquery.select(subRoot.get(MaintenanceTask_.maintenanceContract.getName()).get(MaintenanceTask_.id.getName())); // field to map with main-query
-            
-            if (isCompleted)
-                subquery.where(cb.isNull(subRoot.get(MaintenanceTask_.closed)));
-            else
-                subquery.where(cb.isNotNull(subRoot.get(MaintenanceTask_.closed)));
-            
-            conditions.add(cb.not(cb.in(path).value(subquery)));
-        }
+        if (isCompleted != null)
+            conditions.add(calculateConditionIsCompleted(cb, root, subquery, isCompleted));
         
         return conditions;
+    }
+    
+    private Predicate calculateConditionIsCompleted(CriteriaBuilder cb, Root<MaintenanceContract> root, Subquery<MaintenanceTask> subquery, @NotNull Boolean isCompleted) {
+        Path<Object> path = root.get(MaintenanceContract_.id.getName()); // field to map with sub-query
+
+        Root<MaintenanceTask> subRoot = subquery.from(MaintenanceTask.class);
+        subquery.select(subRoot.get(MaintenanceTask_.maintenanceContract.getName()).get(MaintenanceContract_.id.getName())); // field to map with main-query
+
+        subquery.where(cb.isNull(subRoot.get(MaintenanceTask_.closed)));
+        
+        if (isCompleted)
+            return cb.not(cb.in(path).value(subquery));
+        else
+            return cb.in(path).value(subquery);
     }
     
     public List<System> avaibleSystems(@NotNull MaintenanceContract contract, @NotNull CustomerSupplier customer) {
@@ -219,19 +224,13 @@ public class MaintenanceContractService implements Serializable{
         Root<MaintenanceContract> root = query.from(MaintenanceContract.class);
         CriteriaQuery<Long> select = query.select(cb.count(root));
 
-        Path<Object> path = root.get(MaintenanceTask_.id.getName()); // field to map with sub-query
-        Subquery<MaintenanceTask> subquery = query.subquery(MaintenanceTask.class);
-        Root<MaintenanceTask> subRoot = subquery.from(MaintenanceTask.class);
-        subquery.select(subRoot.get(MaintenanceTask_.maintenanceContract.getName()).get(MaintenanceTask_.id.getName())); // field to map with main-query
-        subquery.where(cb.isNull(subRoot.get(MaintenanceTask_.closed)));
-
         query.where(
                 cb.equal(root.get(MaintenanceContract_.id), idMaintenanceContract),
-                cb.not(cb.in(path).value(subquery)));
+                calculateConditionIsCompleted(cb, root, query.subquery(MaintenanceTask.class), true));
 
         Long result = em.createQuery(select).getSingleResult();
         
-        return result <= 0;
+        return result > 0;
     }
     
     public MaintenanceContract createMaintenanceTasks(@NotNull MaintenanceContract maintenanceContract) {
@@ -264,6 +263,8 @@ public class MaintenanceContractService implements Serializable{
                             newMaintenanceTask.setMaintenanceContract(maintenanceContract);
                             newMaintenanceTask.setPreventiveMaintenance(scheduledMaintenance.getPreventiveMaintenance());
                             newMaintenanceTask.setSystem(system);
+                            for (Inspection inspection : scheduledMaintenance.getPreventiveMaintenance().getInspections())
+                                newMaintenanceTask.addInspectionDone(new InspectionDone(inspection, newMaintenanceTask));
                             
                             taskExpiry.add(Calendar.DAY_OF_YEAR, (int) (spanInDays / tasksToBeCreated));
                             newMaintenanceTask.setExpiry(taskExpiry.getTime());

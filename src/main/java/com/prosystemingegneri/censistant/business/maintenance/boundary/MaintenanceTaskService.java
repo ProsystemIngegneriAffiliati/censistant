@@ -21,6 +21,7 @@ import com.prosystemingegneri.censistant.business.customerSupplier.entity.Custom
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant_;
 import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceContract;
+import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenancePayment;
 import com.prosystemingegneri.censistant.business.production.entity.System;
 import com.prosystemingegneri.censistant.business.production.entity.System_;
 import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceTask;
@@ -176,5 +177,18 @@ public class MaintenanceTaskService implements Serializable{
             conditions.add(cb.equal(root.get(MaintenanceTask_.preventiveMaintenance), preventiveMaintenance));
         
         return conditions;
+    }
+    
+    public List<MaintenancePayment> avaibleMaintenancePayments(MaintenanceTask maintenanceTask) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<MaintenancePayment> query = cb.createQuery(MaintenancePayment.class);
+        Root<MaintenancePayment> root = query.from(MaintenancePayment.class);
+        
+        if (!maintenanceTask.getMaintenancePayments().isEmpty())
+            query.where(cb.not(root.in(maintenanceTask.getMaintenancePayments())));
+        
+        query.select(root);
+        
+        return em.createQuery(query).getResultList();
     }
 }

@@ -20,6 +20,7 @@ import java.text.SimpleDateFormat;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -51,7 +52,7 @@ public class DeliveryNoteIn extends DeliveryNoteCommon {
     @Override
     public String getNumberAndCreation() {
         return new StringBuilder(numberStr)
-                .append(" - ")
+                .append(SEPARATOR)
                 .append(new SimpleDateFormat("dd/MM/yyyy").format(super.getCreation()))
                 .toString();
     }

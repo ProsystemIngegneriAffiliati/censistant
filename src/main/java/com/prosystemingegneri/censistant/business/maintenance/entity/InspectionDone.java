@@ -17,8 +17,11 @@
 package com.prosystemingegneri.censistant.business.maintenance.entity;
 
 import com.prosystemingegneri.censistant.business.entity.BaseEntity;
+import com.prosystemingegneri.censistant.business.maintenance.control.ResultType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -44,9 +47,9 @@ public class InspectionDone extends BaseEntity<Long> {
     @ManyToOne(optional = false)
     private MaintenanceTask maintenanceTask;
     
-    @NotNull
-    @Column(nullable = false)
-    private Boolean isPassed;
+    @Enumerated(EnumType.ORDINAL)
+    @Column(columnDefinition = "smallint")
+    private ResultType inspectionResult;
     
     private String notes;
     
@@ -54,7 +57,7 @@ public class InspectionDone extends BaseEntity<Long> {
     private int version;
 
     public InspectionDone() {
-        isPassed = Boolean.FALSE;
+        inspectionResult = ResultType.NULL;
     }
 
     public InspectionDone(Inspection inspection, MaintenanceTask maintenanceTask) {
@@ -79,14 +82,6 @@ public class InspectionDone extends BaseEntity<Long> {
         this.maintenanceTask = maintenanceTask;
     }
 
-    public Boolean getIsPassed() {
-        return isPassed;
-    }
-
-    public void setIsPassed(Boolean isPassed) {
-        this.isPassed = isPassed;
-    }
-
     public String getNotes() {
         return notes;
     }
@@ -98,6 +93,14 @@ public class InspectionDone extends BaseEntity<Long> {
     @Override
     public Long getId() {
         return id;
+    }
+
+    public ResultType getInspectionResult() {
+        return inspectionResult;
+    }
+
+    public void setInspectionResult(ResultType inspectionResult) {
+        this.inspectionResult = inspectionResult;
     }
     
 }

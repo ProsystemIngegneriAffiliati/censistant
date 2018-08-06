@@ -17,6 +17,7 @@
 package com.prosystemingegneri.censistant.presentation.maintenance;
 
 import com.prosystemingegneri.censistant.business.maintenance.boundary.MaintenanceTaskService;
+import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenancePayment;
 import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceTask;
 import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
 import java.io.Serializable;
@@ -30,6 +31,8 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import javax.validation.groups.Default;
 import org.omnifaces.cdi.ViewScoped;
+import org.primefaces.model.DualListModel;
+
 
 /**
  *
@@ -47,8 +50,13 @@ public class MaintenanceTaskPresenter implements Serializable{
     @Resource
     Validator validator;
     
+    private DualListModel<MaintenancePayment> payments = new DualListModel<>();
+    
     public String saveMaintenanceTask() {
         try {
+            maintenanceTask.getMaintenancePayments().clear();
+            maintenanceTask.getMaintenancePayments().addAll(payments.getTarget());
+            
             boolean isValidated = true;
             for (ConstraintViolation<MaintenanceTask> constraintViolation : validator.validate(maintenanceTask, Default.class)) {
                 isValidated = false;
@@ -93,6 +101,19 @@ public class MaintenanceTaskPresenter implements Serializable{
 
     public void setMaintenanceTask(MaintenanceTask maintenanceTask) {
         this.maintenanceTask = maintenanceTask;
+    }
+
+    public DualListModel<MaintenancePayment> getPayments() {
+        if (payments.getSource().isEmpty() && payments.getTarget().isEmpty()) {
+            payments.setSource(service.avaibleMaintenancePayments(maintenanceTask));
+            payments.setTarget(maintenanceTask.getMaintenancePayments());
+        }
+        
+        return payments;
+    }
+
+    public void setPayments(DualListModel<MaintenancePayment> payments) {
+        this.payments = payments;
     }
     
 }

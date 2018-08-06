@@ -42,6 +42,8 @@ public class MaintenanceContractListPresenter implements Serializable{
     private MaintenanceContractLazyDataModel lazyMaintenanceContracts;
     private List<MaintenanceContract> selectedMaintenanceContracts;
     
+    private List<MaintenanceContract> unexpiredMaintenanceContracts;
+    
     @PostConstruct
     public void init() {
         lazyMaintenanceContracts = new MaintenanceContractLazyDataModel(service);
@@ -79,5 +81,15 @@ public class MaintenanceContractListPresenter implements Serializable{
 
     public void setSelectedMaintenanceContracts(List<MaintenanceContract> selectedMaintenanceContract) {
         this.selectedMaintenanceContracts = selectedMaintenanceContract;
+    }
+    
+    public List<MaintenanceContract> completeUnexpiredMaintenanceContract(String value) {
+        return service.listMaintenanceContracts(0, 0, null, null, null, null, value, Boolean.FALSE, null);
+    }
+
+    public List<MaintenanceContract> getUnexpiredMaintenanceContracts() {
+        if (unexpiredMaintenanceContracts == null || unexpiredMaintenanceContracts.isEmpty())
+            unexpiredMaintenanceContracts = service.listMaintenanceContracts(0, 0, null, null, null, null, null, Boolean.FALSE, null);
+        return unexpiredMaintenanceContracts;
     }
 }

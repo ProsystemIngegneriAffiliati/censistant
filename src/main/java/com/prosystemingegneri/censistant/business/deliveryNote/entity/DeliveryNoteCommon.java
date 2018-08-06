@@ -37,6 +37,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.persistence.Version;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -75,6 +76,9 @@ public abstract class DeliveryNoteCommon extends BaseEntity<Long>{
     
     @Version
     private int version;
+    
+    @Transient
+    protected final String SEPARATOR = " - ";
 
     public DeliveryNoteCommon() {
         creation = new Date();

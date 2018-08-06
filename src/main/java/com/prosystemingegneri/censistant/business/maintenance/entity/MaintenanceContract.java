@@ -21,6 +21,7 @@ import com.prosystemingegneri.censistant.business.entity.BaseEntity;
 import com.prosystemingegneri.censistant.business.maintenance.control.AtLeastOneScheduledMaintenance;
 import com.prosystemingegneri.censistant.business.maintenance.control.AtLeastOneSystem;
 import com.prosystemingegneri.censistant.business.production.entity.System;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -79,6 +80,9 @@ public class MaintenanceContract extends BaseEntity<Long> {
     
     @Version
     private int version;
+    
+    @Transient
+    private final String SEPARATOR = " - ";
 
     public MaintenanceContract() {
         creation = new Date();
@@ -178,6 +182,13 @@ public class MaintenanceContract extends BaseEntity<Long> {
             return systems.get(0).getCustomerSupplier().getName();
         else
             return "";
+    }
+    
+    public String getCustomerNameContractExpiry() {
+                return new StringBuilder(getCustomerName())
+                .append(SEPARATOR)
+                .append(new SimpleDateFormat("dd/MM/yyyy").format(getExpiry()))
+                .toString();
     }
     
     /*public boolean isCompleted() {

@@ -37,8 +37,8 @@
                             <p:column headerText="#{msg.customerSupplier_plant_address}" field="customerSupplierNamePlantNameAddress" sortable="false" priority="2">
                                 <h:outputText value="#{maintenanceTask.system.getCustomerSupplierNamePlantNameAddress(false)}" />
                             </p:column>
-                            <p:column headerText="#{msg.maintenance_maintenanceTask_created}" field="created" filterable="false" priority="4">
-                                <h:outputText value="#{maintenanceTask.created}">
+                            <p:column headerText="#{msg.maintenance_maintenanceTask_creation}" field="creation" filterable="false" priority="4">
+                                <h:outputText value="#{maintenanceTask.creation}">
                                     <f:convertDateTime pattern="dd/MM/YYYY" />
                                 </h:outputText>
                             </p:column>
@@ -52,8 +52,8 @@
                                     <p:selectOneButton onchange="PF('maintenanceTasksTable').filter()">
                                         <f:converter converterId="javax.faces.Boolean" />
                                         <f:selectItem itemLabel="#{msg.all}" itemValue="" />
-                                        <f:selectItem itemLabel="#{msg.maintenance_maintenanceTask_closed_onlyClosed}" itemValue="true" />
-                                        <f:selectItem itemLabel="#{msg.maintenance_maintenanceTask_closed_onlyOpen}" itemValue="false" />
+                                        <f:selectItem itemLabel="#{msg.maintenance_maintenanceTasks_onlyClosed}" itemValue="true" />
+                                        <f:selectItem itemLabel="#{msg.maintenance_maintenanceTasks_onlyOpen}" itemValue="false" />
                                     </p:selectOneButton>
                                 </f:facet>
                                 <h:outputText value="#{maintenanceTask.closed}">

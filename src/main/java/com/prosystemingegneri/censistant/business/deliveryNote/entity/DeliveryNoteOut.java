@@ -138,7 +138,7 @@ public class DeliveryNoteOut extends DeliveryNoteCommon {
     @Override
     public String getNumberAndCreation() {
         return new StringBuilder(super.getNumber())
-                .append(" - ")
+                .append(SEPARATOR)
                 .append(new SimpleDateFormat("dd/MM/yyyy").format(super.getCreation()))
                 .toString();
     }
