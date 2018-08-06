@@ -17,8 +17,10 @@
 package com.prosystemingegneri.censistant.business.maintenance.entity;
 
 import com.prosystemingegneri.censistant.business.entity.BaseEntity;
+import com.prosystemingegneri.censistant.business.maintenance.control.MandatoryInspectionsDoneForClosedMaintenanceTask;
 import com.prosystemingegneri.censistant.business.production.entity.System;
 import com.prosystemingegneri.censistant.business.maintenance.control.MandatoryNotesSignatureForClosedMaintenanceTask;
+import com.prosystemingegneri.censistant.business.maintenance.control.MandatoryPaymentsForClosedMaintenanceTask;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.Worker;
 import java.util.ArrayList;
 import java.util.Date;
@@ -44,6 +46,8 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @MandatoryNotesSignatureForClosedMaintenanceTask
+@MandatoryInspectionsDoneForClosedMaintenanceTask
+@MandatoryPaymentsForClosedMaintenanceTask
 public class MaintenanceTask extends BaseEntity<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -143,7 +143,7 @@
                                             <p:column headerText="#{msg.production_system}" sortBy="#{maintenanceTask.system.address}" filterBy="#{maintenanceTask.system.address}" filterMatchMode="contains" priority="3">
                                                 <h:outputText value="#{maintenanceTask.system.address}" />
                                             </p:column>
-                                            <p:column headerText="#{msg.maintenance_maintenanceTask_description}" sortBy="#{maintenanceTask.description}" filterBy="#{maintenanceTask.description}" filterMatchMode="contains" priority="2">
+                                            <p:column headerText="#{msg.maintenance_maintenanceTask_description}" sortBy="#{maintenanceTask.description}" filterBy="#{maintenanceTask.description}" filterMatchMode="contains" priority="4">
                                                 <h:outputText value="#{maintenanceTask.description}" />
                                             </p:column>
                                             <p:column headerText="#{msg.maintenance_maintenanceTask_expiry}" sortBy="#{maintenanceTask.expiry}" priority="0">
@@ -158,7 +158,7 @@
                                                     </f:facet>
                                                 </p:cellEditor>
                                             </p:column>
-                                            <p:column headerText="#{msg.maintenance_maintenanceTask_closed}" filterMatchMode="equals" priority="3">
+                                            <p:column headerText="#{msg.maintenance_maintenanceTask_closed}" filterMatchMode="equals" priority="0">
                                                 <f:facet name="filter">
                                                     <p:selectOneButton onchange="PF('maintenanceTasksTable').filter()">
                                                         <f:converter converterId="javax.faces.Boolean" />
