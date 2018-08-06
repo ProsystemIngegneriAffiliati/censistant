@@ -34,6 +34,7 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderColumn;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
@@ -66,6 +67,7 @@ public abstract class DeliveryNoteCommon extends BaseEntity<Long>{
     @Column(nullable = false)
     private Integer number;
     
+    @OrderColumn
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "deliveryNote", orphanRemoval = true)
     private final List<DeliveryNoteRow> rows;
     

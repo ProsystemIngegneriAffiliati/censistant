@@ -55,7 +55,7 @@
                                         <f:selectItem itemLabel="#{msg.maintenance_maintenanceContracts_onlyUncompleted}" itemValue="false" />
                                     </p:selectOneButton>
                                 </f:facet>
-                                <h:outputText value="#{maintenanceContract.isOnCall == true ? 'X' : ''}" />
+                                <h:outputText value="#{maintenanceContractListPresenter.isMaintenanceContractCompleted(maintenanceContract.id) == true ? 'X' : ''}" />
                             </p:column>
                             <p:column headerText="#{msg.actions}" style="width:64px; text-align:center" priority="0" exportable="false">
                                 <p:button title="#{msg.edit}" icon="ui-icon-edit" styleClass="AquaButton" outcome="/secured/maintenance/maintenanceContract">

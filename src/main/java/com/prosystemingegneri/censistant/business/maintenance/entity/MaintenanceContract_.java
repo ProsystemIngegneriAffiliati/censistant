@@ -28,6 +28,7 @@ import javax.persistence.metamodel.StaticMetamodel;
  */
 @StaticMetamodel(MaintenanceContract.class)
 public class MaintenanceContract_ {
+    public static volatile SingularAttribute<MaintenanceContract, Long> id;
     public static volatile SingularAttribute<MaintenanceContract, Date> creation;
     public static volatile SingularAttribute<MaintenanceContract, Boolean> isFullService;
     public static volatile SingularAttribute<MaintenanceContract, Boolean> isOnCall;

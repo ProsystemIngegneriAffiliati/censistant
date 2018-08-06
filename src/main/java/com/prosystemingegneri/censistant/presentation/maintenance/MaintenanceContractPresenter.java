@@ -19,7 +19,9 @@ package com.prosystemingegneri.censistant.presentation.maintenance;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
 import com.prosystemingegneri.censistant.business.production.entity.System;
 import com.prosystemingegneri.censistant.business.maintenance.boundary.MaintenanceContractService;
+import com.prosystemingegneri.censistant.business.maintenance.boundary.MaintenanceTaskService;
 import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceContract;
+import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceTask;
 import com.prosystemingegneri.censistant.business.maintenance.entity.ScheduledMaintenance;
 import com.prosystemingegneri.censistant.business.production.boundary.SystemService;
 import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
@@ -61,8 +63,15 @@ public class MaintenanceContractPresenter implements Serializable{
     @Inject
     SystemService systemService;
     
+    @Inject
+    MaintenanceTaskService maintenanceTaskService;
+    private final List<MaintenanceTask> maintenanceTasks = new ArrayList<>();
+    
     public String saveMaintenanceContract() {
         try {
+            maintenanceContract.getSystems().clear();
+            maintenanceContract.getSystems().addAll(systems.getTarget());
+            
             boolean isValidated = true;
             for (ConstraintViolation<MaintenanceContract> constraintViolation : validator.validate(maintenanceContract, Default.class)) {
                 isValidated = false;
@@ -70,9 +79,7 @@ public class MaintenanceContractPresenter implements Serializable{
             }
             if (!isValidated)
                 return null;
-
-            maintenanceContract.getSystems().clear();
-            maintenanceContract.getSystems().addAll(systems.getTarget());
+            
             service.saveMaintenanceContract(maintenanceContract);
         } catch (EJBException e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", ExceptionUtility.unwrap(e.getCausedByException()).getLocalizedMessage()));
@@ -103,9 +110,10 @@ public class MaintenanceContractPresenter implements Serializable{
             return new DualListModel<>();
         
         if (systems.getSource().isEmpty() && systems.getTarget().isEmpty()) {
-            systems.setSource(service.avaibleSystems(maintenanceContract));
+            systems.setSource(service.avaibleSystems(maintenanceContract, tempCustomer));
             systems.setTarget(maintenanceContract.getSystems());
         }
+        
         return systems;
     }
 
@@ -147,6 +155,24 @@ public class MaintenanceContractPresenter implements Serializable{
     
     public void updateCustomerSystem() {
         customerSystems = systemService.listSystems(0, 0, null, null, null, tempCustomer);
+    }
+    
+    public void updateMaintenanceTasks() {
+        if (maintenanceContract != null) {
+            maintenanceTasks.clear();
+            maintenanceTasks.addAll(maintenanceTaskService.listMaintenanceTasks(0, 0, null, null, null, null, null, null, maintenanceContract, null));
+        }
+    }
+
+    public List<MaintenanceTask> getMaintenanceTasks() {
+        if (maintenanceTasks.isEmpty())
+            updateMaintenanceTasks();
+        
+        return maintenanceTasks;
+    }
+    
+    public void onMaintenanceTaskEdit(MaintenanceTask maintenanceTask) {
+        maintenanceTaskService.saveMaintenanceTask(maintenanceTask);
     }
     
 }

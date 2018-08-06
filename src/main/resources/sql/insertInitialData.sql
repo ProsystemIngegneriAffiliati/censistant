@@ -182,3 +182,21 @@ INSERT INTO offer(creation, number, sitesurveyreport_id, system_id, version) VAL
 INSERT INTO joborder(creation, number, placetype_id, offer_id, version) VALUES('2017-12-21', 1, 2, 1, 0)
 
 INSERT INTO handleditem(boxeditem_id, worker_id, handlingtimestamp, quantity, fromlocation_id, tolocation_id, version) VALUES(1, 1, '2017-12-20 11:14:00', 1, 3, 5, 0)
+
+INSERT INTO preventivemaintenance(name, version) VALUES('Manutezione preventiva', 0)
+INSERT INTO preventivemaintenance(name, version) VALUES('Telecontrollo', 0)
+
+INSERT INTO inspection(preventivemaintenance_id, name, inspections_order, version) VALUES (1, 'Alimentazione 220V', 0, 0)
+INSERT INTO inspection(preventivemaintenance_id, name, inspections_order, version) VALUES (1, 'Alimentazione 12V', 1, 0)
+INSERT INTO inspection(preventivemaintenance_id, name, inspections_order, version) VALUES (1, 'Accumulatori', 2, 0)
+INSERT INTO inspection(preventivemaintenance_id, name, inspections_order, version) VALUES (1, 'Prova sensori', 3, 0)
+INSERT INTO inspection(preventivemaintenance_id, name, inspections_order, version) VALUES (1, 'Dispositivi di allarme', 4, 0)
+INSERT INTO inspection(preventivemaintenance_id, name, inspections_order, version) VALUES (1, 'Collaudo sistema', 5, 0)
+INSERT INTO inspection(preventivemaintenance_id, name, inspections_order, version) VALUES (2, 'Connessione all''impianto', 0, 0)
+INSERT INTO inspection(preventivemaintenance_id, name, inspections_order, version) VALUES (2, 'Verifica parametri', 1, 0)
+
+INSERT INTO maintenancepayment(name, version) VALUES('Non fatturare - garanzia', 0)
+INSERT INTO maintenancepayment(name, version) VALUES('Inviare fattura', 0)
+INSERT INTO maintenancepayment(name, version) VALUES('Pagamento contante', 0)
+INSERT INTO maintenancepayment(name, version) VALUES('Pagamento con assegno', 0)
+INSERT INTO maintenancepayment(name, version) VALUES('Non effettuato', 0)

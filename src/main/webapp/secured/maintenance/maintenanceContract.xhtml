@@ -50,7 +50,7 @@
                                                 <p:message for="creation"/>
                                             </h:panelGroup>
                                             <h:panelGroup styleClass="md-inputfield">
-                                                <p:calendar id="expiry" readonly="true" value="#{maintenanceContractPresenter.maintenanceContract.expiry}" locale="it" />
+                                                <p:calendar id="expiry" disabled="true" value="#{maintenanceContractPresenter.maintenanceContract.expiry}" locale="it" />
                                                 <p:outputLabel for="expiry" value="#{msg.maintenance_maintenanceContract_expiry}"/>
                                                 <p:message for="expiry"/>
                                             </h:panelGroup>
@@ -67,7 +67,7 @@
                                             </h:panelGroup>
                                         </p:panelGrid>
                                     </p:tab>
-                                    <p:tab title="#{msg.maintenance_maintenanceContract_data}">
+                                    <p:tab title="#{msg.maintenance_scheduledMaintenances}">
                                         <p:dataTable id="scheduledMaintenancesTable"
                                                      widgetVar="schMntTbl"
                                                      var="scheduledMaintenance"
@@ -75,7 +75,7 @@
                                                      editable="true" editMode="cell">
                                             <f:facet name="header">
                                                 <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
-                                                    #{msg.maintenance_scheduledMaintenances}
+                                                    #{msg.maintenance_scheduledMaintenances_tip}
                                                     <p:commandButton title="#{msg.add}" icon="ui-icon-add" actionListener="#{maintenanceContractPresenter.createNewScheduledMaintenance()}" oncomplete="PF('schMntTbl').addRow()" process="@this"/>
                                                 </p:panelGrid>
                                             </f:facet>
@@ -98,7 +98,7 @@
                                                     </f:facet>
                                                 </p:cellEditor>
                                             </p:column>
-                                            <p:column headerText="#{msg.maintenance_scheduledMaintenance_quantity}" sortBy="#{row.handledItem.quantity}" priority="2">
+                                            <p:column headerText="#{msg.maintenance_scheduledMaintenance_quantity_tip}" sortBy="#{row.handledItem.quantity}" priority="2">
                                                 <p:cellEditor>
                                                     <f:facet name="output">
                                                         <h:outputText value="#{scheduledMaintenance.quantity}">
@@ -106,7 +106,7 @@
                                                         </h:outputText>
                                                     </f:facet>
                                                     <f:facet name="input">
-                                                        <p:inputNumber value="#{scheduledMaintenance.quantity}" minValue="1" />
+                                                        <p:inputNumber value="#{scheduledMaintenance.quantity}" minValue="1" decimalPlaces="0" />
                                                     </f:facet>
                                                 </p:cellEditor>
                                             </p:column>
@@ -120,13 +120,58 @@
                                     <p:tab title="#{msg.production_systems}">
                                         <p:pickList id="systems"
                                                     value="#{maintenanceContractPresenter.systems}" var="system"
-                                                    itemValue="#{system}" itemLabel="#{system.name}"
+                                                    itemValue="#{system}" itemLabel="#{system.address}"
                                                     responsive="true"
                                                     showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains">
                                             <oou:converter converterId="omnifaces.ListConverter" list="#{maintenanceContractPresenter.customerSystems}"/>
                                             <f:facet name="sourceCaption">#{msg.production_systems}</f:facet>
                                             <f:facet name="targetCaption">#{msg.maintenance_maintenanceContract_systems}</f:facet>
                                         </p:pickList>
+                                    </p:tab>
+                                    <p:tab title="#{msg.maintenance_maintenanceTasks}">
+                                        <p:dataTable id="maintenanceTasksTable"
+                                                     var="maintenanceTask"
+                                                     value="#{maintenanceContractPresenter.maintenanceTasks}"
+                                                     editable="true" editMode="cell">
+                                            <f:facet name="header">
+                                                <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
+                                                    #{msg.maintenance_maintenanceTasks_tip}
+                                                    <p:commandButton title="#{msg.update}" icon="ui-icon-update" actionListener="#{maintenanceContractPresenter.updateMaintenanceTasks()}" update="maintenanceTasksTable"/>
+                                                </p:panelGrid>
+                                            </f:facet>
+                                            <p:ajax event="cellEdit" listener="#{maintenanceContractPresenter.onMaintenanceTaskEdit(maintenanceTask)}" />
+                                            <p:column headerText="#{msg.production_system}" sortBy="#{maintenanceTask.system.address}" filterBy="#{maintenanceTask.system.address}" filterMatchMode="contains" priority="3">
+                                                <h:outputText value="#{maintenanceTask.system.address}" />
+                                            </p:column>
+                                            <p:column headerText="#{msg.maintenance_maintenanceTask_description}" sortBy="#{maintenanceTask.description}" filterBy="#{maintenanceTask.description}" filterMatchMode="contains" priority="2">
+                                                <h:outputText value="#{maintenanceTask.description}" />
+                                            </p:column>
+                                            <p:column headerText="#{msg.maintenance_maintenanceTask_expiry}" sortBy="#{maintenanceTask.expiry}" priority="0">
+                                                <p:cellEditor>
+                                                    <f:facet name="output">
+                                                        <h:outputText value="#{maintenanceTask.expiry}">
+                                                            <f:convertDateTime pattern="dd/MM/YYYY" />
+                                                        </h:outputText>
+                                                    </f:facet>
+                                                    <f:facet name="input">
+                                                        <p:calendar value="#{maintenanceTask.expiry}" locale="it" />
+                                                    </f:facet>
+                                                </p:cellEditor>
+                                            </p:column>
+                                            <p:column headerText="#{msg.maintenance_maintenanceTask_closed}" filterMatchMode="equals" priority="3">
+                                                <f:facet name="filter">
+                                                    <p:selectOneButton onchange="PF('maintenanceTasksTable').filter()">
+                                                        <f:converter converterId="javax.faces.Boolean" />
+                                                        <f:selectItem itemLabel="#{msg.all}" itemValue="" />
+                                                        <f:selectItem itemLabel="#{msg.maintenance_maintenanceTasks_onlyClosed}" itemValue="true" />
+                                                        <f:selectItem itemLabel="#{msg.maintenance_maintenanceTasks_onlyOpen}" itemValue="false" />
+                                                    </p:selectOneButton>
+                                                </f:facet>
+                                                <h:outputText value="#{maintenanceTask.closed}">
+                                                    <f:convertDateTime pattern="dd/MM/YYYY" />
+                                                </h:outputText>
+                                            </p:column>
+                                        </p:dataTable>
                                     </p:tab>
                                 </p:tabView>
 

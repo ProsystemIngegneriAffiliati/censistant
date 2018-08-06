@@ -26,6 +26,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderColumn;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
@@ -43,6 +44,7 @@ public class PreventiveMaintenance extends BaseEntity<Long> {
     @Column(nullable = false, unique = true)
     private String name;
     
+    @OrderColumn
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "preventiveMaintenance", orphanRemoval = true)
     private final List<Inspection> inspections;
     

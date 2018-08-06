@@ -106,10 +106,10 @@
                                                     <p:commandButton id="createNewRowButton" title="#{msg.new}" icon="ui-icon-create" disabled="#{empty deliveryNoteOutPresenter.deliveryNoteOut.location}" action="#{deliveryNoteOutPresenter.creteNewRow()}" ajax="false" />
                                                 </p:panelGrid>
                                             </f:facet>
-                                            <p:column headerText="#{msg.purchasing_supplierItem_codeAndDescription}" sortBy="#{row.handledItem.boxedItem.item.codeAndDescription}" filterBy="#{row.handledItem.boxedItem.item.codeAndDescription}" filterMatchMode="contains" priority="0">
+                                            <p:column headerText="#{msg.purchasing_supplierItem_codeAndDescription}" filterBy="#{row.handledItem.boxedItem.item.codeAndDescription}" filterMatchMode="contains" priority="0">
                                                 <h:outputText value="#{row.handledItem.boxedItem.item.codeAndDescription}" />
                                             </p:column>
-                                            <p:column headerText="#{msg.warehouse_handledItem_quantity}" sortBy="#{row.handledItem.quantity}" priority="4">
+                                            <p:column headerText="#{msg.warehouse_handledItem_quantity}" priority="4">
                                                 <h:outputText value="#{row.handledItem.quantity}">
                                                     <f:convertNumber integerOnly="true" />
                                                 </h:outputText>
@@ -118,7 +118,7 @@
                                             <p:column headerText="#{msg.purchasing_box_name}" priority="4">
                                                 <h:outputText rendered="#{stk:isBoxed(row.handledItem.quantity, row.handledItem.boxedItem.box.quantity)}" value="#{stk:getFullBoxedQuantityStr(row.handledItem.quantity, row.handledItem.boxedItem)}" />
                                             </p:column>
-                                            <p:column headerText="#{msg.warehouse_handledItem_fromLocation}" sortBy="#{row.handledItem.fromLocation.name}" filterBy="#{row.handledItem.fromLocation.name}" filterMatchMode="contains" priority="4">
+                                            <p:column headerText="#{msg.warehouse_handledItem_fromLocation}" filterBy="#{row.handledItem.fromLocation.name}" filterMatchMode="contains" priority="4">
                                                 <h:outputText value="#{row.handledItem.fromLocation.name}" />
                                             </p:column>
                                             <p:column headerText="#{msg.actions}" style="width:72px; text-align:center" priority="0">

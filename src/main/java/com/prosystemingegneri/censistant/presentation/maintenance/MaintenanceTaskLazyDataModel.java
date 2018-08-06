@@ -79,8 +79,8 @@ public class MaintenanceTaskLazyDataModel extends LazyDataModel<MaintenanceTask>
             }
         }
         
-        List<MaintenanceTask> result = service.listMaintenanceTasks(first, pageSize, sortField, isAscending, system, description, isClosed, customerSupplierNamePlantNameAddress, maintenanceContract);
-        this.setRowCount(service.getMaintenanceTasksCount(system, description, isClosed, customerSupplierNamePlantNameAddress, maintenanceContract).intValue());
+        List<MaintenanceTask> result = service.listMaintenanceTasks(first, pageSize, sortField, isAscending, system, description, isClosed, customerSupplierNamePlantNameAddress, maintenanceContract, null);
+        this.setRowCount(service.getMaintenanceTasksCount(system, description, isClosed, customerSupplierNamePlantNameAddress, maintenanceContract, null).intValue());
         
         return result;
     }

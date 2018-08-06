@@ -60,6 +60,10 @@ public class MaintenanceContractListPresenter implements Serializable{
         else
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Missing selection", "Select a row before deleting"));
     }
+    
+    public boolean isMaintenanceContractCompleted(Long idMaintenanceContract) {
+        return service.isMaintenanceContractCompleted(idMaintenanceContract);
+    }
 
     public MaintenanceContractLazyDataModel getLazyMaintenanceContracts() {
         return lazyMaintenanceContracts;

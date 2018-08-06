@@ -16,15 +16,19 @@
  */
 package com.prosystemingegneri.censistant.business.maintenance.boundary;
 
+import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier_;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant_;
 import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceContract;
 import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceContract_;
 import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceTask;
 import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceTask_;
+import com.prosystemingegneri.censistant.business.maintenance.entity.ScheduledMaintenance;
 import com.prosystemingegneri.censistant.business.production.entity.System;
 import com.prosystemingegneri.censistant.business.production.entity.System_;
+import com.prosystemingegneri.censistant.business.sales.entity.Offer;
 import com.prosystemingegneri.censistant.business.sales.entity.Offer_;
+import com.prosystemingegneri.censistant.business.siteSurvey.boundary.WorkerService;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport_;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -32,17 +36,21 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.ListJoin;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -53,11 +61,19 @@ public class MaintenanceContractService implements Serializable{
     @PersistenceContext
     EntityManager em;
     
+    @Inject
+    MaintenanceTaskService maintenanceTaskService;
+    
+    @Inject
+    WorkerService workerService;
+    
     public MaintenanceContract saveMaintenanceContract(MaintenanceContract maintenanceContract) {
         if (maintenanceContract.getId() == null)
             em.persist(maintenanceContract);
         else
-            return em.merge(maintenanceContract);
+            maintenanceContract = em.merge(maintenanceContract);
+        
+        createMaintenanceTasks(maintenanceContract);
 
         return maintenanceContract;
     }
@@ -173,14 +189,103 @@ public class MaintenanceContractService implements Serializable{
         return conditions;
     }
     
-    public List<System> avaibleSystems(MaintenanceContract contract) {
+    public List<System> avaibleSystems(@NotNull MaintenanceContract contract, @NotNull CustomerSupplier customer) {
+        List<Predicate> conditions = new ArrayList<>();
+        
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<System> query = cb.createQuery(System.class);
         Root<System> root = query.from(System.class);
+        
+        ListJoin<System, Offer> offersRoot = root.join(System_.offers);
+        conditions.add(cb.isNotNull(offersRoot.get(Offer_.jobOrder)));
+        conditions.add(cb.equal(
+                offersRoot
+                .join(Offer_.siteSurveyReport)
+                .join(SiteSurveyReport_.plant)
+                .join(Plant_.customerSupplier), customer));
+        
         if (!contract.getSystems().isEmpty())
-            query.where(cb.not(root.in(contract.getSystems())));
+            conditions.add(cb.not(root.in(contract.getSystems())));
+        
+        query.where(conditions.toArray(new Predicate[conditions.size()]));
         query.select(root);
         
         return em.createQuery(query).getResultList();
+    }
+    
+    public boolean isMaintenanceContractCompleted(@NotNull Long idMaintenanceContract) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Long> query = cb.createQuery(Long.class);
+        Root<MaintenanceContract> root = query.from(MaintenanceContract.class);
+        CriteriaQuery<Long> select = query.select(cb.count(root));
+
+        Path<Object> path = root.get(MaintenanceTask_.id.getName()); // field to map with sub-query
+        Subquery<MaintenanceTask> subquery = query.subquery(MaintenanceTask.class);
+        Root<MaintenanceTask> subRoot = subquery.from(MaintenanceTask.class);
+        subquery.select(subRoot.get(MaintenanceTask_.maintenanceContract.getName()).get(MaintenanceTask_.id.getName())); // field to map with main-query
+        subquery.where(cb.isNull(subRoot.get(MaintenanceTask_.closed)));
+
+        query.where(
+                cb.equal(root.get(MaintenanceContract_.id), idMaintenanceContract),
+                cb.not(cb.in(path).value(subquery)));
+
+        Long result = em.createQuery(select).getSingleResult();
+        
+        return result <= 0;
+    }
+    
+    public MaintenanceContract createMaintenanceTasks(@NotNull MaintenanceContract maintenanceContract) {
+        Integer numberOfTasksToBeScheduled = 0;
+        for (ScheduledMaintenance scheduledMaintenance : maintenanceContract.getScheduledMaintenances())
+            numberOfTasksToBeScheduled += scheduledMaintenance.getQuantity();
+        
+        if (maintenanceTaskService.listMaintenanceTasks(0, 0, null, null, null, null, null, null, maintenanceContract, null).size() < (maintenanceContract.getSystems().size() * numberOfTasksToBeScheduled)) {
+            for (System system : maintenanceContract.getSystems())
+                if (maintenanceTaskService.listMaintenanceTasks(0, 0, null, null, system, null, null, null, maintenanceContract, null).size() < numberOfTasksToBeScheduled)
+                    for (ScheduledMaintenance scheduledMaintenance : maintenanceContract.getScheduledMaintenances()) {
+                        List<MaintenanceTask> maintenanceTasks = maintenanceTaskService.listMaintenanceTasks(0, 0, null, null, system, null, null, null, maintenanceContract, scheduledMaintenance.getPreventiveMaintenance());
+                        
+                        Integer tasksToBeCreated = scheduledMaintenance.getQuantity() - maintenanceTasks.size();
+                        Calendar lastTask = new GregorianCalendar();
+                        lastTask.setTime(maintenanceContract.getCreation());
+                        for (MaintenanceTask maintenanceTask : maintenanceTasks)
+                            if (maintenanceTask.getExpiry().compareTo(lastTask.getTime()) > 0)
+                                lastTask.setTime(maintenanceTask.getExpiry());
+                        Calendar contractExpiry = new GregorianCalendar();
+                        contractExpiry.setTime(maintenanceContract.getExpiry());
+                        long spanInDays = getDateDiff(lastTask.getTime(), contractExpiry.getTime(), TimeUnit.DAYS);
+                        
+                        Calendar taskExpiry = new GregorianCalendar();
+                        taskExpiry.setTime(lastTask.getTime());
+                        for (int i = 0; i < tasksToBeCreated; i++) {
+                            MaintenanceTask newMaintenanceTask = new MaintenanceTask();
+                            newMaintenanceTask.setDescription(scheduledMaintenance.getPreventiveMaintenance().getName());
+                            newMaintenanceTask.setInChargeWorker(workerService.listWorkers(null).get(0));
+                            newMaintenanceTask.setMaintenanceContract(maintenanceContract);
+                            newMaintenanceTask.setPreventiveMaintenance(scheduledMaintenance.getPreventiveMaintenance());
+                            newMaintenanceTask.setSystem(system);
+                            
+                            taskExpiry.add(Calendar.DAY_OF_YEAR, (int) (spanInDays / tasksToBeCreated));
+                            newMaintenanceTask.setExpiry(taskExpiry.getTime());
+                            
+                            maintenanceTaskService.saveMaintenanceTask(newMaintenanceTask);
+                        }
+                    }
+        }
+        
+        return maintenanceContract;
+    }
+    
+
+    /**
+     * Get a diff between two dates
+     * @param date1 the oldest date
+     * @param date2 the newest date
+     * @param timeUnit the unit in which you want the diff
+     * @return the diff value, in the provided unit
+     */
+    private static long getDateDiff(Date date1, Date date2, TimeUnit timeUnit) {
+        long diffInMillies = date2.getTime() - date1.getTime();
+        return timeUnit.convert(diffInMillies,TimeUnit.MILLISECONDS);
     }
 }

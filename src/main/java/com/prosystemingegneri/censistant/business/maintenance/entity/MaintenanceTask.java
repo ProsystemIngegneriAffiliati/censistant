@@ -93,6 +93,9 @@ public class MaintenanceTask extends BaseEntity<Long> {
     
     private String paymentNotes;
     
+    @ManyToOne
+    private PreventiveMaintenance preventiveMaintenance;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "maintenanceTask", orphanRemoval = true)
     private final List<InspectionDone> inspectionsDone;
     
@@ -224,6 +227,14 @@ public class MaintenanceTask extends BaseEntity<Long> {
     
     public List<InspectionDone> getInspectionsDone() {
         return inspectionsDone;
+    }
+
+    public PreventiveMaintenance getPreventiveMaintenance() {
+        return preventiveMaintenance;
+    }
+
+    public void setPreventiveMaintenance(PreventiveMaintenance preventiveMaintenance) {
+        this.preventiveMaintenance = preventiveMaintenance;
     }
 
 }
