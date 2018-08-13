@@ -63,6 +63,8 @@ public class SiteSurveyReportPresenter implements Serializable{
     
     private List<Plant> plants;
     
+    private Plant newPlant;
+    
     @PostConstruct
     public void init() {
         siteSurveyReport = (SiteSurveyReport) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("siteSurveyReport");
@@ -80,6 +82,7 @@ public class SiteSurveyReportPresenter implements Serializable{
                     siteSurveyReport.setPlant(mostRecentPlant);
                 }
             }
+            newPlant = new Plant();
         }
     }
     
@@ -100,6 +103,7 @@ public class SiteSurveyReportPresenter implements Serializable{
                 siteSurveyReport = service.createNewSiteSurveyReport();
             else
                 siteSurveyReport = service.readSiteSurveyReport(id);
+            newPlant = new Plant();
         }
     }
     
@@ -157,6 +161,17 @@ public class SiteSurveyReportPresenter implements Serializable{
         this.plants = plants;
     }
     
+    public void addNewPlantToCustomer() {
+        if (siteSurveyReport.getRequest() != null && siteSurveyReport.getRequest().getCustomer() != null && newPlant != null) {
+            siteSurveyReport.getRequest().getCustomer().addPlant(newPlant);
+            customerSupplierService.saveCustomerSupplier(siteSurveyReport.getRequest().getCustomer());
+        }
+    }
+    
+    public void clearNewPlant() {
+        newPlant = new Plant();
+    }
+    
     public void onSiteSurveyRequestSelect(SelectEvent event) {
         siteSurveyReport.addRequest((SiteSurveyRequest) event.getObject());
     }
@@ -183,6 +198,14 @@ public class SiteSurveyReportPresenter implements Serializable{
 
     public void setSelectedRequest(SiteSurveyRequest selectedRequest) {
         this.selectedRequest = selectedRequest;
+    }
+
+    public Plant getNewPlant() {
+        return newPlant;
+    }
+
+    public void setNewPlant(Plant newPlant) {
+        this.newPlant = newPlant;
     }
     
 }
