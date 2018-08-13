@@ -133,6 +133,10 @@ public class CustomerSupplierPresenter implements Serializable{
             customerSupplier.removePlant(plant);
     }
     
+    public void createNewReferee() {
+        customerSupplier.addReferee(new Referee());
+    }
+    
     public String detailReferee(Referee referee) {
         if (referee != null)
             FacesContext.getCurrentInstance().getExternalContext().getFlash().put("referee", referee);

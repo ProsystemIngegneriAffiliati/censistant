@@ -131,21 +131,26 @@
 
                                     <p:dataTable id="refereesTable"
                                                  var="referee"
-                                                 value="#{customerSupplierPresenter.customerSupplier.referees}">
+                                                 value="#{customerSupplierPresenter.customerSupplier.referees}"
+                                                 widgetVar="rfTbl"
+                                                 editable="true" editMode="cell">
                                         <f:facet name="header">
                                             <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
                                                 #{msg.customerSupplier_referees}
-                                                <p:commandButton title="#{msg.new}" icon="ui-icon-create" action="#{customerSupplierPresenter.detailReferee(null)}" ajax="false" />
+                                                <p:commandButton title="#{msg.new}" icon="ui-icon-create" actionListener="#{customerSupplierPresenter.createNewReferee()}" oncomplete="PF('rfTbl').addRow()" process="@this"/>
                                             </p:panelGrid>
                                         </f:facet>
                                         <p:column headerText="#{msg.customerSupplier_referee_name}" sortBy="#{referee.name}" filterBy="#{referee.name}" priority="0">
-                                            <h:outputText value="#{referee.name}" />
+                                            <p:cellEditor>
+                                                <f:facet name="output"><h:outputText value="#{referee.name}" /></f:facet>
+                                                <f:facet name="input"><p:inputText value="#{referee.name}" /></f:facet>
+                                            </p:cellEditor>
                                         </p:column>
                                         <p:column headerText="#{msg.customerSupplier_referee_email}" sortBy="#{referee.email}" filterBy="#{referee.email}" priority="4">
-                                            <h:outputText value="#{referee.email}" />
-                                        </p:column>
-                                        <p:column headerText="#{msg.customerSupplier_referee_notes}" sortBy="#{referee.notes}" filterBy="#{referee.notes}" priority="5">
-                                            <h:outputText value="#{referee.notes}" />
+                                            <p:cellEditor>
+                                                <f:facet name="output"><h:outputText value="#{referee.email}" /></f:facet>
+                                                <f:facet name="input"><p:inputText value="#{referee.email}" /></f:facet>
+                                            </p:cellEditor>
                                         </p:column>
                                         <p:column headerText="#{msg.actions}" style="width:72px; text-align:center" priority="0">
                                             <p:splitButton value="" icon="ui-icon-edit" action="#{customerSupplierPresenter.detailReferee(referee)}" ajax="false">
