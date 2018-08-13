@@ -73,17 +73,23 @@ public class SiteSurveyReportPresenter implements Serializable{
             if (idCustomer != null && idCustomer > 0) {
                 CustomerSupplier customer = customerSupplierService.readCustomerSupplier(idCustomer);
                 siteSurveyReport.getRequest().setCustomer(customer);
-                if (!customer.getPlants().isEmpty()) {
-                    Plant mostRecentPlant = customer.getPlants().get(0);
-                    for (Plant plant : customer.getPlants())
-                        if (plant.getId() != null && plant.getId() > mostRecentPlant.getId())
-                            mostRecentPlant = plant;
-                    
-                    siteSurveyReport.setPlant(mostRecentPlant);
-                }
+                siteSurveyReport.setPlant(getMostRecentPlant(customer));
             }
             newPlant = new Plant();
         }
+    }
+    
+    private Plant getMostRecentPlant(CustomerSupplier customer) {
+        if (!customer.getPlants().isEmpty()) {
+            Plant mostRecentPlant = customer.getPlants().get(0);
+            for (Plant plant : customer.getPlants())
+                if (plant.getId() != null && plant.getId() > mostRecentPlant.getId())
+                    mostRecentPlant = plant;
+
+            return mostRecentPlant;
+        }
+        
+        return null;
     }
     
     public String saveSiteSurveyReport() {
@@ -165,6 +171,9 @@ public class SiteSurveyReportPresenter implements Serializable{
         if (siteSurveyReport.getRequest() != null && siteSurveyReport.getRequest().getCustomer() != null && newPlant != null) {
             siteSurveyReport.getRequest().getCustomer().addPlant(newPlant);
             customerSupplierService.saveCustomerSupplier(siteSurveyReport.getRequest().getCustomer());
+            FacesContext.getCurrentInstance().getExternalContext().getFlash().put("siteSurveyReport", siteSurveyReport);
+            FacesContext.getCurrentInstance().getExternalContext().getFlash().put("idCustomer", siteSurveyReport.getRequest().getCustomer().getId());
+            init();
         }
     }
     

@@ -52,7 +52,8 @@
                             <div class="ui-g-4 ui-md-3">
                                 <p:commandButton value="#{msg.add}"
                                                  actionListener="#{siteSurveyReportPresenter.addNewPlantToCustomer()}"
-                                                 oncomplete="PF('addPlantDialog').hide()"/>
+                                                 oncomplete="PF('addPlantDialog').hide()"
+                                                 ajax="false"/>
                             </div>
                             <div class="ui-g-1 ui-md-2"></div>
                         </div>
