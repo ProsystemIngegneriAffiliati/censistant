@@ -34,11 +34,13 @@ public class CustomerSupplierLazyDataModel extends LazyDataModel<CustomerSupplie
     private final CustomerSupplierService service;
     private final Boolean isCustomer;
     private final Boolean isSupplier;
+    private final Boolean isPotentialCustomerDefault;
 
-    public CustomerSupplierLazyDataModel(CustomerSupplierService service, Boolean isCustomer, Boolean isSupplier) {
+    public CustomerSupplierLazyDataModel(CustomerSupplierService service, Boolean isCustomer, Boolean isSupplier, Boolean isPotentialCustomer) {
         this.service = service;
         this.isCustomer = isCustomer;
         this.isSupplier = isSupplier;
+        this.isPotentialCustomerDefault = isPotentialCustomer;
     }
 
     @Override
@@ -49,7 +51,7 @@ public class CustomerSupplierLazyDataModel extends LazyDataModel<CustomerSupplie
     @Override
     public List<CustomerSupplier> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
         Boolean isAscending = null;
-        Boolean isPotentialCustomer = null;
+        Boolean isPotentialCustomer = isPotentialCustomerDefault;
         String businessName = null;
         String name = null;
         String address = null;

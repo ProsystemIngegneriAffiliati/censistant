@@ -4,12 +4,18 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="/WEB-INF/template.xhtml"
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <f:metadata>
+        <f:viewParam name="isPotentialCustomer"
+                     value="#{customerSupplierListPresenter.isPotentialCustomer}"
+                     converter="javax.faces.Boolean"/>
+        <f:viewAction action="#{customerSupplierListPresenter.init()}"/>
+    </f:metadata>
     <ui:define name="content">
         <h:form id="customersForm">
             <div class="ui-g">
                 <div class="ui-g-12">
                     <div class="card card-w-title">
-                        <h1>#{msg.customerSupplier_customers}</h1>
+                        <h1>#{msg.customerSupplier_customers} <h:outputText rendered="#{not empty customerSupplierListPresenter.isPotentialCustomer and customerSupplierListPresenter.isPotentialCustomer}" value="#{msg.customerSupplier_customers_onlyPotentialCustomer}" /> <h:outputText rendered="#{not empty customerSupplierListPresenter.isPotentialCustomer and not customerSupplierListPresenter.isPotentialCustomer}" value="#{msg.customerSupplier_customers_onlyNoPotentialCustomer}" /> </h1>
                         <p:dataTable id="customersTable" widgetVar="customersTable" var="cust" value="#{customerSupplierListPresenter.lazyCustomers}"
                                      selectionMode="multiple" selection="#{customerSupplierListPresenter.selectedCustomerSuppliers}" rowKey="#{cust.id}"
                                      paginator="true" rows="10"
@@ -41,17 +47,7 @@
                             <p:column headerText="#{msg.customerSupplier_plant_address}" field="address" sortable="false" priority="3">
                                 <h:outputText value="#{cust.headOffice.address}"/>
                             </p:column>
-                            <p:column headerText="#{msg.customerSupplier_customerSupplier_isPotentialCustomer}"
-                                      field="isPotentialCustomer"
-                                      priority="4">
-                                <f:facet name="filter">
-                                    <p:selectOneButton onchange="PF('customersTable').filter()">
-                                        <f:converter converterId="javax.faces.Boolean" />
-                                        <f:selectItem itemLabel="#{msg.all}" itemValue="" />
-                                        <f:selectItem itemLabel="#{msg.customerSupplier_customers_onlyPotentialCustomer}" itemValue="true" />
-                                        <f:selectItem itemLabel="#{msg.customerSupplier_customers_onlyNoPotentialCustomer}" itemValue="false" />
-                                    </p:selectOneButton>
-                                </f:facet>
+                            <p:column headerText="#{msg.customerSupplier_customerSupplier_isPotentialCustomer}" priority="4">
                                 <h:outputText value="#{cust.isPotentialCustomer ? 'X' : ''}"/>
                             </p:column>
                             <p:column headerText="#{msg.actions}" style="width:64px; text-align:center" priority="0" exportable="false">

@@ -47,10 +47,12 @@ public class CustomerSupplierListPresenter implements Serializable{
     private List<CustomerSupplier> suppliers;
     private List<CustomerSupplier> customerSuppliers;
     
+    private Boolean isPotentialCustomer;
+    
     @PostConstruct
     public void init() {
-        lazyCustomers = new CustomerSupplierLazyDataModel(service, Boolean.TRUE, null);
-        lazySuppliers = new CustomerSupplierLazyDataModel(service, null, Boolean.TRUE);
+        lazyCustomers = new CustomerSupplierLazyDataModel(service, Boolean.TRUE, null, isPotentialCustomer);
+        lazySuppliers = new CustomerSupplierLazyDataModel(service, null, Boolean.TRUE, null);
     }
     
     public void deleteCustomerSupplier() {
@@ -129,6 +131,14 @@ public class CustomerSupplierListPresenter implements Serializable{
 
     public void setSelectedCustomerSuppliers(List<CustomerSupplier> selectedCustomerSupplier) {
         this.selectedCustomerSuppliers = selectedCustomerSupplier;
+    }
+
+    public Boolean getIsPotentialCustomer() {
+        return isPotentialCustomer;
+    }
+
+    public void setIsPotentialCustomer(Boolean isPotentialCustomer) {
+        this.isPotentialCustomer = isPotentialCustomer;
     }
     
 }
