@@ -25,17 +25,11 @@
                             <div class="card card-w-title">
                                 <h1>#{msg.customerSupplier_supplier}</h1>
                                 <p>#{msg.customerSupplier_supplier_tip}</p>
-                                <p:panelGrid columns="3" columnClasses="ui-grid-col-5,ui-grid-col-5,ui-grid-col-2" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                <p:panelGrid columns="2" columnClasses="ui-grid-col-10,ui-grid-col-2" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputText id="businessName" value="#{customerSupplierPresenter.customerSupplier.businessName}"/>
                                         <p:outputLabel for="businessName" value="#{msg.customerSupplier_customerSupplier_businessName}"/>
                                         <p:message for="businessName"/>
-                                    </h:panelGroup>
-
-                                    <h:panelGroup styleClass="md-inputfield">
-                                        <p:inputText id="name" value="#{customerSupplierPresenter.customerSupplier.name}"/>
-                                        <p:outputLabel for="name" value="#{msg.customerSupplier_customerSupplier_name}"/>
-                                        <p:message for="name"/>
                                     </h:panelGroup>
 
                                     <h:panelGroup>

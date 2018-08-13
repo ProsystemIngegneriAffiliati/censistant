@@ -25,17 +25,11 @@
                             <div class="card card-w-title">
                                 <h1>#{msg.customerSupplier_customer}</h1>
                                 <p>#{msg.customerSupplier_customer_tip}</p>
-                                <p:panelGrid columns="4" columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-2,ui-grid-col-2" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                <p:panelGrid columns="3" columnClasses="ui-grid-col-6,ui-grid-col-3,ui-grid-col-3" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputText id="businessName" value="#{customerSupplierPresenter.customerSupplier.businessName}"/>
                                         <p:outputLabel for="businessName" value="#{msg.customerSupplier_customerSupplier_businessName}"/>
                                         <p:message for="businessName"/>
-                                    </h:panelGroup>
-
-                                    <h:panelGroup styleClass="md-inputfield">
-                                        <p:inputText id="name" value="#{customerSupplierPresenter.customerSupplier.name}"/>
-                                        <p:outputLabel for="name" value="#{msg.customerSupplier_customerSupplier_name}"/>
-                                        <p:message for="name"/>
                                     </h:panelGroup>
 
                                     <h:panelGroup>
@@ -48,7 +42,7 @@
                                         <p:inputSwitch id="isSupplier" value="#{customerSupplierPresenter.customerSupplier.isSupplier}" />
                                     </h:panelGroup>
                                 </p:panelGrid>
-
+                                
                                 <p:panelGrid columns="3" columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputText id="vatRegistrationNumber" value="#{customerSupplierPresenter.customerSupplier.vatRegistrationNumber}"/>

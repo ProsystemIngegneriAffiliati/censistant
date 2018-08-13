@@ -119,6 +119,7 @@ public class CustomerSupplier extends BaseEntity<Long>{
 
     public void setBusinessName(String businessName) {
         this.businessName = businessName;
+        this.name = businessName;
     }
 
     public String getName() {
