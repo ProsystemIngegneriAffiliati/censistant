@@ -111,7 +111,7 @@
 					<font size="12"/>
 					<paragraph leftIndent="4" rightIndent="4"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{plant}.getNameAddress( true )]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{plant}.getAddress()]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="0" y="0" width="150" height="20" uuid="6acd73e9-ae41-460f-93f8-6206d41772c2"/>
@@ -156,7 +156,7 @@
 				<text><![CDATA[Indirizzo]]></text>
 			</staticText>
 			<staticText>
-				<reportElement positionType="Float" x="150" y="40" width="80" height="20" uuid="3f14f95a-a52e-42e6-a0f8-1726dbd70730"/>
+				<reportElement positionType="Float" x="150" y="40" width="40" height="20" uuid="3f14f95a-a52e-42e6-a0f8-1726dbd70730"/>
 				<box>
 					<pen lineColor="#808080"/>
 					<topPen lineWidth="1.0"/>
@@ -167,7 +167,7 @@
 					<font size="12" isBold="true"/>
 					<paragraph leftIndent="4" rightIndent="4"/>
 				</textElement>
-				<text><![CDATA[Telefono]]></text>
+				<text><![CDATA[Tel.]]></text>
 			</staticText>
 			<staticText>
 				<reportElement positionType="Float" x="150" y="60" width="135" height="20" uuid="c4b2b668-6c4d-4669-a852-27cf3c61a8d5"/>
@@ -209,10 +209,10 @@
 					<font size="11"/>
 					<paragraph leftIndent="4" rightIndent="4"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{plant}.getCustomerSupplier().getHeadOffice().getNameAddress( false )]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{plant}.getCustomerSupplier().getHeadOffice().getAddress()]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement positionType="Float" x="230" y="40" width="100" height="20" uuid="797d4475-8fd0-4a00-9210-6749ce5f4aa8"/>
+				<reportElement positionType="Float" x="190" y="40" width="140" height="20" uuid="797d4475-8fd0-4a00-9210-6749ce5f4aa8"/>
 				<box>
 					<pen lineColor="#808080"/>
 					<topPen lineWidth="1.0"/>
@@ -223,7 +223,7 @@
 					<font size="9"/>
 					<paragraph leftIndent="4" rightIndent="4"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{plant}.getPhone()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{plant}.getCustomerSupplier().getHeadOffice().getPhone()]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement positionType="Float" x="390" y="40" width="165" height="20" uuid="e58848cd-99ca-467e-addb-c41cec416090"/>
@@ -237,7 +237,7 @@
 					<font size="9"/>
 					<paragraph leftIndent="4" rightIndent="4"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{plant}.getEmail()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{plant}.getCustomerSupplier().getHeadOffice().getEmail()]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement positionType="Float" x="330" y="40" width="60" height="20" uuid="8ef67c27-2df8-4626-bf4e-bff8a1256a1d"/>
