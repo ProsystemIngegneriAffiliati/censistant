@@ -89,6 +89,18 @@ INSERT INTO placetype(name, version) VALUES('Abitazione privata', 0)
 INSERT INTO placetype(name, version) VALUES('Attività commerciale', 0)
 INSERT INTO placetype(name, version) VALUES('Altro', 0)
 
+INSERT INTO preventivemaintenance(name, version) VALUES('Manutezione preventiva', 0)
+INSERT INTO preventivemaintenance(name, version) VALUES('Telecontrollo', 0)
+
+INSERT INTO inspection(preventivemaintenance_id, name, inspections_order, version) VALUES (1, 'Alimentazione 220V', 0, 0)
+INSERT INTO inspection(preventivemaintenance_id, name, inspections_order, version) VALUES (1, 'Alimentazione 12V', 1, 0)
+INSERT INTO inspection(preventivemaintenance_id, name, inspections_order, version) VALUES (1, 'Accumulatori', 2, 0)
+INSERT INTO inspection(preventivemaintenance_id, name, inspections_order, version) VALUES (1, 'Prova sensori', 3, 0)
+INSERT INTO inspection(preventivemaintenance_id, name, inspections_order, version) VALUES (1, 'Dispositivi di allarme', 4, 0)
+INSERT INTO inspection(preventivemaintenance_id, name, inspections_order, version) VALUES (1, 'Collaudo sistema', 5, 0)
+INSERT INTO inspection(preventivemaintenance_id, name, inspections_order, version) VALUES (2, 'Connessione all''impianto', 0, 0)
+INSERT INTO inspection(preventivemaintenance_id, name, inspections_order, version) VALUES (2, 'Verifica parametri', 1, 0)
+
 INSERT INTO maintenancepayment(name, version) VALUES('Non fatturare - garanzia', 0)
 INSERT INTO maintenancepayment(name, version) VALUES('Inviare fattura', 0)
 INSERT INTO maintenancepayment(name, version) VALUES('Pagamento contante', 0)

@@ -75,7 +75,7 @@
 				<text><![CDATA[07P01]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="0" width="165" height="25" forecolor="#D90400" uuid="f7d26373-d195-4700-91eb-7c137003a85d"/>
+				<reportElement x="0" y="0" width="165" height="25" forecolor="#000000" uuid="f7d26373-d195-4700-91eb-7c137003a85d"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="13" isBold="false"/>
 				</textElement>
@@ -438,21 +438,21 @@
 				<reportElement x="10" y="45" width="20" height="15" uuid="534c99f6-f5f4-4a9b-a1c8-5c46701d5ad3"/>
 			</rectangle>
 			<line>
-				<reportElement x="5" y="75" width="140" height="1" uuid="b436e2c2-8626-43aa-a7a6-76c627240a66"/>
+				<reportElement x="5" y="75" width="140" height="1" forecolor="#B4B4B4" uuid="b436e2c2-8626-43aa-a7a6-76c627240a66"/>
 				<graphicElement>
-					<pen lineStyle="Dashed"/>
+					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="5" y="90" width="140" height="1" uuid="f676b52e-4091-4aa4-be34-ca0d6a58b79b"/>
+				<reportElement x="5" y="90" width="140" height="1" forecolor="#B4B4B4" uuid="f676b52e-4091-4aa4-be34-ca0d6a58b79b"/>
 				<graphicElement>
-					<pen lineStyle="Dashed"/>
+					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="5" y="105" width="140" height="1" uuid="f2748ad6-33a8-4b99-9564-f068e5b604a4"/>
+				<reportElement x="5" y="105" width="140" height="1" forecolor="#B4B4B4" uuid="f2748ad6-33a8-4b99-9564-f068e5b604a4"/>
 				<graphicElement>
-					<pen lineStyle="Dashed"/>
+					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<rectangle>
@@ -519,45 +519,45 @@
 				<text><![CDATA[Note]]></text>
 			</staticText>
 			<line>
-				<reportElement x="260" y="15" width="290" height="1" uuid="91e25798-14c9-4262-a6dd-dd4f9e8e0371"/>
+				<reportElement x="260" y="15" width="290" height="1" forecolor="#B4B4B4" uuid="91e25798-14c9-4262-a6dd-dd4f9e8e0371"/>
 				<graphicElement>
-					<pen lineStyle="Dashed"/>
+					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="330" y="30" width="220" height="1" uuid="ae8627e7-f4f1-4a26-bf1c-2b0ad70347d3"/>
+				<reportElement x="330" y="30" width="220" height="1" forecolor="#B4B4B4" uuid="ae8627e7-f4f1-4a26-bf1c-2b0ad70347d3"/>
 				<graphicElement>
-					<pen lineStyle="Dashed"/>
+					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="280" y="45" width="270" height="1" uuid="a938ce99-c2f4-4408-a1cb-8cdb5f4822df"/>
+				<reportElement x="280" y="45" width="270" height="1" forecolor="#B4B4B4" uuid="a938ce99-c2f4-4408-a1cb-8cdb5f4822df"/>
 				<graphicElement>
-					<pen lineStyle="Dashed"/>
+					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="210" y="60" width="340" height="1" uuid="ceb81ef5-2c34-4e19-abd4-70dab533690d"/>
+				<reportElement x="210" y="60" width="340" height="1" forecolor="#B4B4B4" uuid="ceb81ef5-2c34-4e19-abd4-70dab533690d"/>
 				<graphicElement>
-					<pen lineStyle="Dashed"/>
+					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="155" y="75" width="395" height="1" uuid="ea0bdbff-67d1-4565-8d6d-0c64a2d3d4af"/>
+				<reportElement x="155" y="75" width="395" height="1" forecolor="#B4B4B4" uuid="ea0bdbff-67d1-4565-8d6d-0c64a2d3d4af"/>
 				<graphicElement>
-					<pen lineStyle="Dashed"/>
+					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="155" y="90" width="395" height="1" uuid="fceab2e8-f575-4e87-b56a-dc9376d61dd4"/>
+				<reportElement x="155" y="90" width="395" height="1" forecolor="#B4B4B4" uuid="fceab2e8-f575-4e87-b56a-dc9376d61dd4"/>
 				<graphicElement>
-					<pen lineStyle="Dashed"/>
+					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="155" y="105" width="395" height="1" uuid="eb636e62-cc2d-4779-abb0-f37ac36659b8"/>
+				<reportElement x="155" y="105" width="395" height="1" forecolor="#B4B4B4" uuid="eb636e62-cc2d-4779-abb0-f37ac36659b8"/>
 				<graphicElement>
-					<pen lineStyle="Dashed"/>
+					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 		</band>
@@ -578,595 +578,595 @@
 				<text><![CDATA[Descrizione dei lavori - Schemi]]></text>
 			</staticText>
 			<line>
-				<reportElement x="0" y="50" width="550" height="1" forecolor="#808080" uuid="5cde829c-1de7-4937-8697-0102c0841a10"/>
+				<reportElement x="0" y="50" width="550" height="1" forecolor="#B4B4B4" uuid="5cde829c-1de7-4937-8697-0102c0841a10"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="0" y="60" width="550" height="1" forecolor="#808080" uuid="8ddfc34d-ffca-475e-b72c-c2f277ef4773"/>
+				<reportElement x="0" y="60" width="550" height="1" forecolor="#B4B4B4" uuid="8ddfc34d-ffca-475e-b72c-c2f277ef4773"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="0" y="80" width="550" height="1" forecolor="#808080" uuid="7fe32f58-7686-40da-ae65-49db8430ccf7"/>
+				<reportElement x="0" y="80" width="550" height="1" forecolor="#B4B4B4" uuid="7fe32f58-7686-40da-ae65-49db8430ccf7"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="0" y="70" width="550" height="1" forecolor="#808080" uuid="53f30acc-c767-4257-bb00-c331ac072417"/>
+				<reportElement x="0" y="70" width="550" height="1" forecolor="#B4B4B4" uuid="53f30acc-c767-4257-bb00-c331ac072417"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="0" y="90" width="550" height="1" forecolor="#808080" uuid="b4857709-3120-47f8-ae2a-643d517dfe8c"/>
+				<reportElement x="0" y="90" width="550" height="1" forecolor="#B4B4B4" uuid="b4857709-3120-47f8-ae2a-643d517dfe8c"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="0" y="100" width="550" height="1" forecolor="#808080" uuid="83fd36a7-8578-42ae-9db4-ca1435df22a3"/>
+				<reportElement x="0" y="100" width="550" height="1" forecolor="#B4B4B4" uuid="83fd36a7-8578-42ae-9db4-ca1435df22a3"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="0" y="120" width="550" height="1" forecolor="#808080" uuid="2c0f4eb9-e1ef-441d-9185-bd33cb4ea528"/>
+				<reportElement x="0" y="120" width="550" height="1" forecolor="#B4B4B4" uuid="2c0f4eb9-e1ef-441d-9185-bd33cb4ea528"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="0" y="110" width="550" height="1" forecolor="#808080" uuid="34cc5c72-9c9c-4671-a7de-1da779b13418"/>
+				<reportElement x="0" y="110" width="550" height="1" forecolor="#B4B4B4" uuid="34cc5c72-9c9c-4671-a7de-1da779b13418"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="0" y="140" width="550" height="1" forecolor="#808080" uuid="4eb3bff9-0b65-497c-a63d-15410fdbb234"/>
+				<reportElement x="0" y="140" width="550" height="1" forecolor="#B4B4B4" uuid="4eb3bff9-0b65-497c-a63d-15410fdbb234"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="0" y="150" width="550" height="1" forecolor="#808080" uuid="59bfc80a-6bab-4d62-9b39-1224fc4bfbf9"/>
+				<reportElement x="0" y="150" width="550" height="1" forecolor="#B4B4B4" uuid="59bfc80a-6bab-4d62-9b39-1224fc4bfbf9"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="0" y="170" width="550" height="1" forecolor="#808080" uuid="b82670cb-7ae0-4ad1-963b-69d740cc4560"/>
+				<reportElement x="0" y="170" width="550" height="1" forecolor="#B4B4B4" uuid="b82670cb-7ae0-4ad1-963b-69d740cc4560"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="0" y="160" width="550" height="1" forecolor="#808080" uuid="2305ca81-d5d8-458f-84c0-f284ccfb3acd"/>
+				<reportElement x="0" y="160" width="550" height="1" forecolor="#B4B4B4" uuid="2305ca81-d5d8-458f-84c0-f284ccfb3acd"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="0" y="180" width="550" height="1" forecolor="#808080" uuid="d7d2cbaa-c22f-4439-bbc8-af18f87fa58f"/>
+				<reportElement x="0" y="180" width="550" height="1" forecolor="#B4B4B4" uuid="d7d2cbaa-c22f-4439-bbc8-af18f87fa58f"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="0" y="190" width="550" height="1" forecolor="#808080" uuid="2f47122e-362f-43c4-a8f9-12f77635b0d1"/>
+				<reportElement x="0" y="190" width="550" height="1" forecolor="#B4B4B4" uuid="2f47122e-362f-43c4-a8f9-12f77635b0d1"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="0" y="210" width="550" height="1" forecolor="#808080" uuid="5c89d1e3-934e-408b-965e-d68f3ee81055"/>
+				<reportElement x="0" y="210" width="550" height="1" forecolor="#B4B4B4" uuid="5c89d1e3-934e-408b-965e-d68f3ee81055"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="0" y="200" width="550" height="1" forecolor="#808080" uuid="9c5e794f-5799-436f-8379-85f0d6d04d16"/>
+				<reportElement x="0" y="200" width="550" height="1" forecolor="#B4B4B4" uuid="9c5e794f-5799-436f-8379-85f0d6d04d16"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="0" y="130" width="550" height="1" forecolor="#808080" uuid="8c473daf-561d-45ab-af89-f97592f06591"/>
+				<reportElement x="0" y="130" width="550" height="1" forecolor="#B4B4B4" uuid="8c473daf-561d-45ab-af89-f97592f06591"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="0" y="220" width="550" height="1" forecolor="#808080" uuid="caab0007-ef7c-462d-9be1-ac378921f4c2"/>
+				<reportElement x="0" y="220" width="550" height="1" forecolor="#B4B4B4" uuid="caab0007-ef7c-462d-9be1-ac378921f4c2"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="0" y="230" width="550" height="1" forecolor="#808080" uuid="26d18dc5-f319-432c-818a-469d64992a06"/>
+				<reportElement x="0" y="230" width="550" height="1" forecolor="#B4B4B4" uuid="26d18dc5-f319-432c-818a-469d64992a06"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="0" y="250" width="550" height="1" forecolor="#808080" uuid="bd41eda0-dfef-49e0-be79-ae805a22a051"/>
+				<reportElement x="0" y="250" width="550" height="1" forecolor="#B4B4B4" uuid="bd41eda0-dfef-49e0-be79-ae805a22a051"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="0" y="240" width="550" height="1" forecolor="#808080" uuid="3eb0e8a2-7c8e-4a13-b445-a8158697d41e"/>
+				<reportElement x="0" y="240" width="550" height="1" forecolor="#B4B4B4" uuid="3eb0e8a2-7c8e-4a13-b445-a8158697d41e"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="0" y="260" width="550" height="1" forecolor="#808080" uuid="8e255960-313d-47e6-b2d1-3facdfd43bad"/>
+				<reportElement x="0" y="260" width="550" height="1" forecolor="#B4B4B4" uuid="8e255960-313d-47e6-b2d1-3facdfd43bad"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="0" y="270" width="550" height="1" forecolor="#808080" uuid="55957499-b81d-430b-bc35-6f3595caf5cd"/>
+				<reportElement x="0" y="270" width="550" height="1" forecolor="#B4B4B4" uuid="55957499-b81d-430b-bc35-6f3595caf5cd"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="0" y="290" width="550" height="1" forecolor="#808080" uuid="1539150f-3fe7-4b59-9710-e27f48a2eafe"/>
+				<reportElement x="0" y="290" width="550" height="1" forecolor="#B4B4B4" uuid="1539150f-3fe7-4b59-9710-e27f48a2eafe"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="0" y="280" width="550" height="1" forecolor="#808080" uuid="52a30d40-2526-407a-8143-17a153839ec1"/>
+				<reportElement x="0" y="280" width="550" height="1" forecolor="#B4B4B4" uuid="52a30d40-2526-407a-8143-17a153839ec1"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="0" y="310" width="550" height="1" forecolor="#808080" uuid="ce4917c9-5768-4041-867d-c8df44a5203f"/>
+				<reportElement x="0" y="310" width="550" height="1" forecolor="#B4B4B4" uuid="ce4917c9-5768-4041-867d-c8df44a5203f"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="0" y="320" width="550" height="1" forecolor="#808080" uuid="fbed7676-799e-4c01-bce3-d924b8e32b41"/>
+				<reportElement x="0" y="320" width="550" height="1" forecolor="#B4B4B4" uuid="fbed7676-799e-4c01-bce3-d924b8e32b41"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="0" y="340" width="550" height="1" forecolor="#808080" uuid="758f5b6d-b1f2-4046-bb73-2eee5290e253"/>
+				<reportElement x="0" y="340" width="550" height="1" forecolor="#B4B4B4" uuid="758f5b6d-b1f2-4046-bb73-2eee5290e253"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="0" y="330" width="550" height="1" forecolor="#808080" uuid="3787bf8f-8180-4e7f-a1d0-68771f015319"/>
+				<reportElement x="0" y="330" width="550" height="1" forecolor="#B4B4B4" uuid="3787bf8f-8180-4e7f-a1d0-68771f015319"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="0" y="350" width="550" height="1" forecolor="#808080" uuid="030c3d47-3c1e-4534-8f92-96a768f835a8"/>
+				<reportElement x="0" y="350" width="550" height="1" forecolor="#B4B4B4" uuid="030c3d47-3c1e-4534-8f92-96a768f835a8"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="0" y="360" width="550" height="1" forecolor="#808080" uuid="60ec9abf-87ac-4a8c-bab0-933b8b9d01a2"/>
+				<reportElement x="0" y="360" width="550" height="1" forecolor="#B4B4B4" uuid="60ec9abf-87ac-4a8c-bab0-933b8b9d01a2"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="0" y="380" width="550" height="1" forecolor="#808080" uuid="002906ea-6466-4738-84a7-be203e93b45d"/>
+				<reportElement x="0" y="380" width="550" height="1" forecolor="#B4B4B4" uuid="002906ea-6466-4738-84a7-be203e93b45d"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="0" y="370" width="550" height="1" forecolor="#808080" uuid="e75ee19a-2f8e-459e-8773-752e7f61426e"/>
+				<reportElement x="0" y="370" width="550" height="1" forecolor="#B4B4B4" uuid="e75ee19a-2f8e-459e-8773-752e7f61426e"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="0" y="300" width="550" height="1" forecolor="#808080" uuid="be18e34b-3f4e-4e45-b4e3-f4bc193d0ec5"/>
+				<reportElement x="0" y="300" width="550" height="1" forecolor="#B4B4B4" uuid="be18e34b-3f4e-4e45-b4e3-f4bc193d0ec5"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="0" y="390" width="550" height="1" forecolor="#808080" uuid="7e92e519-8097-488e-91bb-baea33c5c22a"/>
+				<reportElement x="0" y="390" width="550" height="1" forecolor="#B4B4B4" uuid="7e92e519-8097-488e-91bb-baea33c5c22a"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="0" y="470" width="550" height="1" forecolor="#808080" uuid="5ea055e5-c4c8-4d04-966e-e324e2cba015"/>
+				<reportElement x="0" y="470" width="550" height="1" forecolor="#B4B4B4" uuid="5ea055e5-c4c8-4d04-966e-e324e2cba015"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="0" y="50" width="1" height="420" forecolor="#808080" uuid="2282ae51-731c-4239-825b-a383b21b3034"/>
+				<reportElement x="0" y="50" width="1" height="420" forecolor="#B4B4B4" uuid="2282ae51-731c-4239-825b-a383b21b3034"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="10" y="50" width="1" height="420" forecolor="#808080" uuid="d73e6284-7c07-433a-99bc-2e7ad2cc9c0b"/>
+				<reportElement x="10" y="50" width="1" height="420" forecolor="#B4B4B4" uuid="d73e6284-7c07-433a-99bc-2e7ad2cc9c0b"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="20" y="50" width="1" height="420" forecolor="#808080" uuid="a2e62489-79bc-4020-911e-a2024e574c85"/>
+				<reportElement x="20" y="50" width="1" height="420" forecolor="#B4B4B4" uuid="a2e62489-79bc-4020-911e-a2024e574c85"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="30" y="50" width="1" height="420" forecolor="#808080" uuid="26748f1a-126f-490a-ad2f-4910e0e43863"/>
+				<reportElement x="30" y="50" width="1" height="420" forecolor="#B4B4B4" uuid="26748f1a-126f-490a-ad2f-4910e0e43863"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="70" y="50" width="1" height="420" forecolor="#808080" uuid="241b4a5c-99f8-478e-aa9f-a0488206261e"/>
+				<reportElement x="70" y="50" width="1" height="420" forecolor="#B4B4B4" uuid="241b4a5c-99f8-478e-aa9f-a0488206261e"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="50" y="50" width="1" height="420" forecolor="#808080" uuid="a4c6454e-5e69-4f08-96a2-9440c05c81b1"/>
+				<reportElement x="50" y="50" width="1" height="420" forecolor="#B4B4B4" uuid="a4c6454e-5e69-4f08-96a2-9440c05c81b1"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="40" y="50" width="1" height="420" forecolor="#808080" uuid="731fc0fa-41fb-4d69-bf2e-d67d7ca0a949"/>
+				<reportElement x="40" y="50" width="1" height="420" forecolor="#B4B4B4" uuid="731fc0fa-41fb-4d69-bf2e-d67d7ca0a949"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="60" y="50" width="1" height="420" forecolor="#808080" uuid="20b9e0d5-c61a-47c1-8685-4717a53ce47a"/>
+				<reportElement x="60" y="50" width="1" height="420" forecolor="#B4B4B4" uuid="20b9e0d5-c61a-47c1-8685-4717a53ce47a"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="150" y="50" width="1" height="420" forecolor="#808080" uuid="684f35e3-17bb-49e8-bd08-18dabe406a93"/>
+				<reportElement x="150" y="50" width="1" height="420" forecolor="#B4B4B4" uuid="684f35e3-17bb-49e8-bd08-18dabe406a93"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="110" y="50" width="1" height="420" forecolor="#808080" uuid="a6a73c90-6755-4ed2-b27d-9f4350c004f5"/>
+				<reportElement x="110" y="50" width="1" height="420" forecolor="#B4B4B4" uuid="a6a73c90-6755-4ed2-b27d-9f4350c004f5"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="140" y="50" width="1" height="420" forecolor="#808080" uuid="fca43a8c-6bfe-456f-a737-7673247d6837"/>
+				<reportElement x="140" y="50" width="1" height="420" forecolor="#B4B4B4" uuid="fca43a8c-6bfe-456f-a737-7673247d6837"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="90" y="50" width="1" height="420" forecolor="#808080" uuid="3c4571dc-2d08-4e58-b4e5-bc11a6fc5bba"/>
+				<reportElement x="90" y="50" width="1" height="420" forecolor="#B4B4B4" uuid="3c4571dc-2d08-4e58-b4e5-bc11a6fc5bba"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="80" y="50" width="1" height="420" forecolor="#808080" uuid="c1228857-5381-4f52-9ec6-d6e0077f701a"/>
+				<reportElement x="80" y="50" width="1" height="420" forecolor="#B4B4B4" uuid="c1228857-5381-4f52-9ec6-d6e0077f701a"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="130" y="50" width="1" height="420" forecolor="#808080" uuid="5d370839-eece-4d18-891c-e745cdc19d84"/>
+				<reportElement x="130" y="50" width="1" height="420" forecolor="#B4B4B4" uuid="5d370839-eece-4d18-891c-e745cdc19d84"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="120" y="50" width="1" height="420" forecolor="#808080" uuid="b6b1a03b-f01e-4867-8337-500567217efc"/>
+				<reportElement x="120" y="50" width="1" height="420" forecolor="#B4B4B4" uuid="b6b1a03b-f01e-4867-8337-500567217efc"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="100" y="50" width="1" height="420" forecolor="#808080" uuid="a6999ae9-09de-4639-99b6-64cf61a67210"/>
+				<reportElement x="100" y="50" width="1" height="420" forecolor="#B4B4B4" uuid="a6999ae9-09de-4639-99b6-64cf61a67210"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="230" y="50" width="1" height="420" forecolor="#808080" uuid="aa72360f-0f6d-4b4d-b5ac-f614572d2100"/>
+				<reportElement x="230" y="50" width="1" height="420" forecolor="#B4B4B4" uuid="aa72360f-0f6d-4b4d-b5ac-f614572d2100"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="190" y="50" width="1" height="420" forecolor="#808080" uuid="6a152ece-a94f-4f59-9f70-de6aca268f33"/>
+				<reportElement x="190" y="50" width="1" height="420" forecolor="#B4B4B4" uuid="6a152ece-a94f-4f59-9f70-de6aca268f33"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="290" y="50" width="1" height="420" forecolor="#808080" uuid="249d5187-2568-4582-9400-93af58674d22"/>
+				<reportElement x="290" y="50" width="1" height="420" forecolor="#B4B4B4" uuid="249d5187-2568-4582-9400-93af58674d22"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="260" y="50" width="1" height="420" forecolor="#808080" uuid="746181fe-9451-41c5-9f0f-ffcea1809d3a"/>
+				<reportElement x="260" y="50" width="1" height="420" forecolor="#B4B4B4" uuid="746181fe-9451-41c5-9f0f-ffcea1809d3a"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="220" y="50" width="1" height="420" forecolor="#808080" uuid="cd4e540e-d477-499b-b2ba-5e73b6bb6466"/>
+				<reportElement x="220" y="50" width="1" height="420" forecolor="#B4B4B4" uuid="cd4e540e-d477-499b-b2ba-5e73b6bb6466"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="280" y="50" width="1" height="420" forecolor="#808080" uuid="821ffc18-6113-4738-8d23-00c160d4e178"/>
+				<reportElement x="280" y="50" width="1" height="420" forecolor="#B4B4B4" uuid="821ffc18-6113-4738-8d23-00c160d4e178"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="270" y="50" width="1" height="420" forecolor="#808080" uuid="fb7bd5de-c547-4d50-8707-db2044951b0d"/>
+				<reportElement x="270" y="50" width="1" height="420" forecolor="#B4B4B4" uuid="fb7bd5de-c547-4d50-8707-db2044951b0d"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="170" y="50" width="1" height="420" forecolor="#808080" uuid="7c6cf0c4-11ff-44d0-946d-8d145109817e"/>
+				<reportElement x="170" y="50" width="1" height="420" forecolor="#B4B4B4" uuid="7c6cf0c4-11ff-44d0-946d-8d145109817e"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="160" y="50" width="1" height="420" forecolor="#808080" uuid="acd30070-6549-4af7-9847-e3921867e3ca"/>
+				<reportElement x="160" y="50" width="1" height="420" forecolor="#B4B4B4" uuid="acd30070-6549-4af7-9847-e3921867e3ca"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="210" y="50" width="1" height="420" forecolor="#808080" uuid="5474db6f-7f27-41cb-97b6-e63b0ac06186"/>
+				<reportElement x="210" y="50" width="1" height="420" forecolor="#B4B4B4" uuid="5474db6f-7f27-41cb-97b6-e63b0ac06186"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="300" y="50" width="1" height="420" forecolor="#808080" uuid="45f457a6-f6c1-4a95-af5e-29421fd23331"/>
+				<reportElement x="300" y="50" width="1" height="420" forecolor="#B4B4B4" uuid="45f457a6-f6c1-4a95-af5e-29421fd23331"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="240" y="50" width="1" height="420" forecolor="#808080" uuid="53251fcb-e2ed-4c39-adc0-d93aae17f950"/>
+				<reportElement x="240" y="50" width="1" height="420" forecolor="#B4B4B4" uuid="53251fcb-e2ed-4c39-adc0-d93aae17f950"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="310" y="50" width="1" height="420" forecolor="#808080" uuid="26ffcb3f-8cf1-43ef-b22b-bddcbd7d3452"/>
+				<reportElement x="310" y="50" width="1" height="420" forecolor="#B4B4B4" uuid="26ffcb3f-8cf1-43ef-b22b-bddcbd7d3452"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="250" y="50" width="1" height="420" forecolor="#808080" uuid="0aa54a23-789b-47ac-a6c4-19b8349638fa"/>
+				<reportElement x="250" y="50" width="1" height="420" forecolor="#B4B4B4" uuid="0aa54a23-789b-47ac-a6c4-19b8349638fa"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="200" y="50" width="1" height="420" forecolor="#808080" uuid="7aeef314-1da2-4d42-94aa-1c5e58eb8406"/>
+				<reportElement x="200" y="50" width="1" height="420" forecolor="#B4B4B4" uuid="7aeef314-1da2-4d42-94aa-1c5e58eb8406"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="180" y="50" width="1" height="420" forecolor="#808080" uuid="33095036-55ca-485d-9d37-8a482ae2bffb"/>
+				<reportElement x="180" y="50" width="1" height="420" forecolor="#B4B4B4" uuid="33095036-55ca-485d-9d37-8a482ae2bffb"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="550" y="50" width="1" height="420" forecolor="#808080" uuid="fa5cf984-d195-4004-9560-2093395e8c32"/>
+				<reportElement x="550" y="50" width="1" height="420" forecolor="#B4B4B4" uuid="fa5cf984-d195-4004-9560-2093395e8c32"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="390" y="50" width="1" height="420" forecolor="#808080" uuid="1b5d7bdc-6d0d-41a1-a113-378dbae43744"/>
+				<reportElement x="390" y="50" width="1" height="420" forecolor="#B4B4B4" uuid="1b5d7bdc-6d0d-41a1-a113-378dbae43744"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="350" y="50" width="1" height="420" forecolor="#808080" uuid="94259723-f2f8-4609-8e6f-8a55614462dd"/>
+				<reportElement x="350" y="50" width="1" height="420" forecolor="#B4B4B4" uuid="94259723-f2f8-4609-8e6f-8a55614462dd"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="450" y="50" width="1" height="420" forecolor="#808080" uuid="e9ba5606-fd80-4dd6-9c9f-4f859d3aa75d"/>
+				<reportElement x="450" y="50" width="1" height="420" forecolor="#B4B4B4" uuid="e9ba5606-fd80-4dd6-9c9f-4f859d3aa75d"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="420" y="50" width="1" height="420" forecolor="#808080" uuid="dd61b004-8143-4377-bce8-91b0b805cfee"/>
+				<reportElement x="420" y="50" width="1" height="420" forecolor="#B4B4B4" uuid="dd61b004-8143-4377-bce8-91b0b805cfee"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="380" y="50" width="1" height="420" forecolor="#808080" uuid="2cadb950-e53b-4059-94a0-e5d31ffc5224"/>
+				<reportElement x="380" y="50" width="1" height="420" forecolor="#B4B4B4" uuid="2cadb950-e53b-4059-94a0-e5d31ffc5224"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="440" y="50" width="1" height="420" forecolor="#808080" uuid="d13e43b7-ae36-40d4-b595-f256ec4dc336"/>
+				<reportElement x="440" y="50" width="1" height="420" forecolor="#B4B4B4" uuid="d13e43b7-ae36-40d4-b595-f256ec4dc336"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="520" y="50" width="1" height="420" forecolor="#808080" uuid="90aed352-839a-49d3-a0eb-b8e88f3099fc"/>
+				<reportElement x="520" y="50" width="1" height="420" forecolor="#B4B4B4" uuid="90aed352-839a-49d3-a0eb-b8e88f3099fc"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="480" y="50" width="1" height="420" forecolor="#808080" uuid="1689c2aa-6f46-4ad8-b03e-7d3a3a26c371"/>
+				<reportElement x="480" y="50" width="1" height="420" forecolor="#B4B4B4" uuid="1689c2aa-6f46-4ad8-b03e-7d3a3a26c371"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="430" y="50" width="1" height="420" forecolor="#808080" uuid="2a95bf98-6c93-416b-b3fa-1ddb16c3864a"/>
+				<reportElement x="430" y="50" width="1" height="420" forecolor="#B4B4B4" uuid="2a95bf98-6c93-416b-b3fa-1ddb16c3864a"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="510" y="50" width="1" height="420" forecolor="#808080" uuid="a805428e-bf95-4782-a76e-7494f36d87fe"/>
+				<reportElement x="510" y="50" width="1" height="420" forecolor="#B4B4B4" uuid="a805428e-bf95-4782-a76e-7494f36d87fe"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="330" y="50" width="1" height="420" forecolor="#808080" uuid="7fda24cb-254a-46ef-928a-7f86930dcf48"/>
+				<reportElement x="330" y="50" width="1" height="420" forecolor="#B4B4B4" uuid="7fda24cb-254a-46ef-928a-7f86930dcf48"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="320" y="50" width="1" height="420" forecolor="#808080" uuid="ec1660d2-b858-4cd1-a00b-c202bbfad79d"/>
+				<reportElement x="320" y="50" width="1" height="420" forecolor="#B4B4B4" uuid="ec1660d2-b858-4cd1-a00b-c202bbfad79d"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="370" y="50" width="1" height="420" forecolor="#808080" uuid="79a13000-4487-4096-a05d-27cd294bca58"/>
+				<reportElement x="370" y="50" width="1" height="420" forecolor="#B4B4B4" uuid="79a13000-4487-4096-a05d-27cd294bca58"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="460" y="50" width="1" height="420" forecolor="#808080" uuid="b999633e-0d01-42f2-9089-7164e10faf42"/>
+				<reportElement x="460" y="50" width="1" height="420" forecolor="#B4B4B4" uuid="b999633e-0d01-42f2-9089-7164e10faf42"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="500" y="50" width="1" height="420" forecolor="#808080" uuid="8d551a41-e64f-4bdb-a859-1d20db02a624"/>
+				<reportElement x="500" y="50" width="1" height="420" forecolor="#B4B4B4" uuid="8d551a41-e64f-4bdb-a859-1d20db02a624"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="400" y="50" width="1" height="420" forecolor="#808080" uuid="dbba3f23-aae8-45ce-a4da-5239e6efb6a9"/>
+				<reportElement x="400" y="50" width="1" height="420" forecolor="#B4B4B4" uuid="dbba3f23-aae8-45ce-a4da-5239e6efb6a9"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="470" y="50" width="1" height="420" forecolor="#808080" uuid="086c9a07-2df2-481b-830a-bb856c7cd6a2"/>
+				<reportElement x="470" y="50" width="1" height="420" forecolor="#B4B4B4" uuid="086c9a07-2df2-481b-830a-bb856c7cd6a2"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="410" y="50" width="1" height="420" forecolor="#808080" uuid="68198bc9-3ced-4640-95e6-d134c8fb6fe3"/>
+				<reportElement x="410" y="50" width="1" height="420" forecolor="#B4B4B4" uuid="68198bc9-3ced-4640-95e6-d134c8fb6fe3"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="540" y="50" width="1" height="420" forecolor="#808080" uuid="fbc489e5-54aa-4691-aaa0-1ede17ed9a24"/>
+				<reportElement x="540" y="50" width="1" height="420" forecolor="#B4B4B4" uuid="fbc489e5-54aa-4691-aaa0-1ede17ed9a24"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="360" y="50" width="1" height="420" forecolor="#808080" uuid="e043da4d-6061-43eb-b713-81e303043714"/>
+				<reportElement x="360" y="50" width="1" height="420" forecolor="#B4B4B4" uuid="e043da4d-6061-43eb-b713-81e303043714"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="490" y="50" width="1" height="420" forecolor="#808080" uuid="f56723e1-7cf3-40b4-ad71-30bedc1886f2"/>
+				<reportElement x="490" y="50" width="1" height="420" forecolor="#B4B4B4" uuid="f56723e1-7cf3-40b4-ad71-30bedc1886f2"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="530" y="50" width="1" height="420" forecolor="#808080" uuid="5c08f4f7-a7f1-4aef-b16e-692761ffc6ff"/>
+				<reportElement x="530" y="50" width="1" height="420" forecolor="#B4B4B4" uuid="5c08f4f7-a7f1-4aef-b16e-692761ffc6ff"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="340" y="50" width="1" height="420" forecolor="#808080" uuid="14cc9b53-c697-4353-86f8-c108952525d3"/>
+				<reportElement x="340" y="50" width="1" height="420" forecolor="#B4B4B4" uuid="14cc9b53-c697-4353-86f8-c108952525d3"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="0" y="410" width="550" height="1" forecolor="#808080" uuid="8046edc8-888d-43d8-bd16-b8ba82a82e22"/>
+				<reportElement x="0" y="410" width="550" height="1" forecolor="#B4B4B4" uuid="8046edc8-888d-43d8-bd16-b8ba82a82e22"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="0" y="420" width="550" height="1" forecolor="#808080" uuid="bc0442ab-08f8-4fbf-8978-bcb43a24c114"/>
+				<reportElement x="0" y="420" width="550" height="1" forecolor="#B4B4B4" uuid="bc0442ab-08f8-4fbf-8978-bcb43a24c114"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="0" y="430" width="550" height="1" forecolor="#808080" uuid="d621c813-585c-4ebf-8f60-2cfe93613718"/>
+				<reportElement x="0" y="430" width="550" height="1" forecolor="#B4B4B4" uuid="d621c813-585c-4ebf-8f60-2cfe93613718"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="0" y="440" width="550" height="1" forecolor="#808080" uuid="0e2b18f4-ea8b-46d5-937a-b8cc35b0315e"/>
+				<reportElement x="0" y="440" width="550" height="1" forecolor="#B4B4B4" uuid="0e2b18f4-ea8b-46d5-937a-b8cc35b0315e"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="0" y="450" width="550" height="1" forecolor="#808080" uuid="48b0b85c-4ebe-47dd-a5be-82095cf90fc9"/>
+				<reportElement x="0" y="450" width="550" height="1" forecolor="#B4B4B4" uuid="48b0b85c-4ebe-47dd-a5be-82095cf90fc9"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="0" y="460" width="550" height="1" forecolor="#808080" uuid="a710cf1b-2a04-45b3-a315-11e8965a9298"/>
+				<reportElement x="0" y="460" width="550" height="1" forecolor="#B4B4B4" uuid="a710cf1b-2a04-45b3-a315-11e8965a9298"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="0" y="400" width="550" height="1" forecolor="#808080" uuid="4e524272-1a2b-4c93-b226-60a8e748fdda"/>
+				<reportElement x="0" y="400" width="550" height="1" forecolor="#B4B4B4" uuid="4e524272-1a2b-4c93-b226-60a8e748fdda"/>
 				<graphicElement>
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
