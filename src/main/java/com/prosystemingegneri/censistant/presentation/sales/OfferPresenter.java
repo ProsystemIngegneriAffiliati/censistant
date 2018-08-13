@@ -168,7 +168,7 @@ public class OfferPresenter implements Serializable{
     }
     
     public String createCustomer() {
-        return prepareToOpenCustomer(customerSupplierService.createCustomer());
+        return prepareToOpenCustomer(customerSupplierService.createPotentialCustomer());
     }
     
     public String openCustomer() {

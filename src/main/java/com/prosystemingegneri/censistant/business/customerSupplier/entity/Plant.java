@@ -70,6 +70,7 @@ public class Plant extends BaseEntity<Long>{
     private int version;
 
     public Plant() {
+        isHeadOffice = Boolean.FALSE;
     }
 
     public Plant(Boolean isHeadOffice, String name, String address) {

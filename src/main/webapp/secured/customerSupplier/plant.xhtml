@@ -14,7 +14,7 @@
                             <div class="card card-w-title">
                                 <h1>#{msg.customerSupplier_plant}</h1>
                                 <p>#{msg.customerSupplier_plant_tip}</p>
-                                <p:panelGrid columns="3" columnClasses="ui-grid-col-4,ui-grid-col-5,ui-grid-col-3" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                <p:panelGrid columns="2" columnClasses="ui-grid-col-4,ui-grid-col-8" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputText id="name" value="#{plantPresenter.plant.name}"/>
                                         <p:outputLabel for="name" value="#{msg.customerSupplier_plant_name}"/>
@@ -25,12 +25,6 @@
                                         <p:inputTextarea id="address" value="#{plantPresenter.plant.address}" rows="3"/>
                                         <p:outputLabel for="address" value="#{msg.customerSupplier_plant_address}"/>
                                         <p:message for="address"/>
-                                    </h:panelGroup>
-
-                                    <h:panelGroup>
-                                        <p:outputLabel for="isHeadOffice" value="#{msg.customerSupplier_plant_isHeadOffice}"/>
-                                        <p:inputSwitch id="isHeadOffice" value="#{plantPresenter.plant.isHeadOffice}" />
-                                        <p:message for="isHeadOffice"/>
                                     </h:panelGroup>
                                 </p:panelGrid>
 

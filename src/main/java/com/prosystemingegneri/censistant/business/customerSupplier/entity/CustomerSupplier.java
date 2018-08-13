@@ -185,6 +185,16 @@ public class CustomerSupplier extends BaseEntity<Long>{
         return plants;
     }
     
+    public List<Plant> getPlantsNoHeadOffice() {
+        List<Plant> result = new ArrayList<>();
+        
+        for (Plant plant : plants)
+            if (!plant.getIsHeadOffice())
+                result.add(plant);
+        
+        return result;
+    }
+    
     public Plant getHeadOffice() {
         for (Plant plant : plants)
             if (plant.getIsHeadOffice())

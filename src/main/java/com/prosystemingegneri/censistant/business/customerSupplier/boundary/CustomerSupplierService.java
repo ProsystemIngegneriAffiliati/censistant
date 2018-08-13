@@ -48,11 +48,17 @@ public class CustomerSupplierService implements Serializable{
     EntityManager em;
     
     public CustomerSupplier createCustomer() {
-        return new CustomerSupplier(Boolean.FALSE, Boolean.TRUE, Boolean.FALSE);
+        CustomerSupplier customer = new CustomerSupplier(Boolean.FALSE, Boolean.TRUE, Boolean.FALSE);
+        customer.addPlant(new Plant(Boolean.TRUE, "head", null));
+        
+        return customer;
     }
     
     public CustomerSupplier createPotentialCustomer() {
-        return new CustomerSupplier(Boolean.TRUE, Boolean.TRUE, Boolean.FALSE);
+        CustomerSupplier potentialCustomer = new CustomerSupplier(Boolean.TRUE, Boolean.TRUE, Boolean.FALSE);
+        potentialCustomer.addPlant(new Plant(Boolean.TRUE, "head", null));
+        
+        return potentialCustomer;
     }
     
     public CustomerSupplier createSupplier() {

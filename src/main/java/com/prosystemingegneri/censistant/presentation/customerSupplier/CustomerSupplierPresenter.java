@@ -107,13 +107,17 @@ public class CustomerSupplierPresenter implements Serializable{
         if (customerSupplier == null && id != null) {
             if (id == 0) {
                 if (isCustomerView)
-                    customerSupplier = service.createCustomer();
+                    customerSupplier = service.createPotentialCustomer();
                 else
                     customerSupplier = service.createSupplier();
             }
             else
                 customerSupplier = service.readCustomerSupplier(id);
         }
+    }
+    
+    public void createNewPlant() {
+        customerSupplier.addPlant(new Plant());
     }
     
     public String detailPlant(Plant plant) {

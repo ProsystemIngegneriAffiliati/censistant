@@ -42,7 +42,31 @@
                                         <p:inputSwitch id="isSupplier" value="#{customerSupplierPresenter.customerSupplier.isSupplier}" />
                                     </h:panelGroup>
                                 </p:panelGrid>
-                                
+
+                                <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputTextarea id="address" value="#{customerSupplierPresenter.customerSupplier.headOffice.address}" rows="3"/>
+                                        <p:outputLabel for="address" value="#{msg.customerSupplier_plant_address}"/>
+                                        <p:message for="address"/>
+                                    </h:panelGroup>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="email" value="#{customerSupplierPresenter.customerSupplier.headOffice.email}" type="email"/>
+                                        <p:outputLabel for="email" value="#{msg.customerSupplier_plant_email}"/>
+                                        <p:message for="email"/>
+                                    </h:panelGroup>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="phone" value="#{customerSupplierPresenter.customerSupplier.headOffice.phone}"/>
+                                        <p:outputLabel for="phone" value="#{msg.customerSupplier_plant_phone}"/>
+                                        <p:message for="phone"/>
+                                    </h:panelGroup>
+
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="fax" value="#{customerSupplierPresenter.customerSupplier.headOffice.fax}"/>
+                                        <p:outputLabel for="fax" value="#{msg.customerSupplier_plant_fax}"/>
+                                        <p:message for="fax"/>
+                                    </h:panelGroup>
+                                </p:panelGrid>
+
                                 <p:panelGrid columns="3" columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputText id="vatRegistrationNumber" value="#{customerSupplierPresenter.customerSupplier.vatRegistrationNumber}"/>
@@ -75,21 +99,26 @@
                                 <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                     <p:dataTable id="plantsTable"
                                                  var="plant"
-                                                 value="#{customerSupplierPresenter.customerSupplier.plants}">
+                                                 value="#{customerSupplierPresenter.customerSupplier.plantsNoHeadOffice}"
+                                                 widgetVar="plTbl"
+                                                 editable="true" editMode="cell">
                                         <f:facet name="header">
                                             <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
                                                 #{msg.customerSupplier_plants}
-                                                <p:commandButton title="#{msg.new}" icon="ui-icon-create" action="#{customerSupplierPresenter.detailPlant(null)}" ajax="false" />
+                                                <p:commandButton title="#{msg.new}" icon="ui-icon-create" actionListener="#{customerSupplierPresenter.createNewPlant()}" oncomplete="PF('plTbl').addRow()" process="@this"/>
                                             </p:panelGrid>
                                         </f:facet>
-                                        <p:column headerText="#{msg.customerSupplier_plant_isHeadOffice}" priority="5">
-                                            <h:outputText value="#{plant.isHeadOffice ? 'X' : ''}" />
-                                        </p:column>
                                         <p:column headerText="#{msg.customerSupplier_plant_name}" sortBy="#{plant.name}" filterBy="#{plant.name}" priority="0">
-                                            <h:outputText value="#{plant.name}" />
+                                            <p:cellEditor>
+                                                <f:facet name="output"><h:outputText value="#{plant.name}" /></f:facet>
+                                                <f:facet name="input"><p:inputText value="#{plant.name}" /></f:facet>
+                                            </p:cellEditor>
                                         </p:column>
                                         <p:column headerText="#{msg.customerSupplier_plant_address}" sortBy="#{plant.address}" filterBy="#{plant.address}" priority="4">
-                                            <h:outputText value="#{plant.address}" />
+                                            <p:cellEditor>
+                                                <f:facet name="output"><h:outputText value="#{plant.address}" /></f:facet>
+                                                <f:facet name="input"><p:inputText value="#{plant.address}" /></f:facet>
+                                            </p:cellEditor>
                                         </p:column>
                                         <p:column headerText="#{msg.actions}" style="width:72px; text-align:center" priority="0">
                                             <p:splitButton value="" icon="ui-icon-edit" action="#{customerSupplierPresenter.detailPlant(plant)}" ajax="false">
