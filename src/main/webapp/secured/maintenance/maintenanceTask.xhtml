@@ -118,7 +118,8 @@
                                              rendered="#{not empty maintenanceTaskPresenter.maintenanceTask.inspectionsDone}"
                                              var="inspectionDone"
                                              value="#{maintenanceTaskPresenter.maintenanceTask.inspectionsDone}"
-                                             rowStyleClass="#{maintenanceTaskPresenter.calculateInspectionDoneResultColor(inspectionDone)}">
+                                             rowStyleClass="#{maintenanceTaskPresenter.calculateInspectionDoneResultColor(inspectionDone)}"
+                                             style="margin-bottom: 25px">
                                     <f:facet name="header">
                                         <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
                                             #{msg.maintenance_inspectionsDone}

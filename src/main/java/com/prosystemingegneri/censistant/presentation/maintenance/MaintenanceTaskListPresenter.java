@@ -64,7 +64,7 @@ public class MaintenanceTaskListPresenter implements Serializable{
     }
     
     public String calculateExpiryColor(MaintenanceTask maintenanceTask) {
-        if (maintenanceTask.getClosed() == null) {
+        if (maintenanceTask.getClosed() == null && maintenanceTask.getExpiry() != null) {
             GregorianCalendar oneMonthAhead = new GregorianCalendar();
             oneMonthAhead.add(Calendar.MONTH, 1);
 

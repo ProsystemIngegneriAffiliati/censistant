@@ -248,7 +248,7 @@ public class MaintenanceContractService implements Serializable{
                         Calendar lastTask = new GregorianCalendar();
                         lastTask.setTime(maintenanceContract.getCreation());
                         for (MaintenanceTask maintenanceTask : maintenanceTasks)
-                            if (maintenanceTask.getExpiry().compareTo(lastTask.getTime()) > 0)
+                            if (maintenanceTask.getExpiry() != null && lastTask.getTime().compareTo(maintenanceTask.getExpiry()) <= 0)
                                 lastTask.setTime(maintenanceTask.getExpiry());
                         Calendar contractExpiry = new GregorianCalendar();
                         contractExpiry.setTime(maintenanceContract.getExpiry());

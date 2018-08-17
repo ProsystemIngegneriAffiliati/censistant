@@ -83,8 +83,6 @@ public class MaintenanceTask extends BaseEntity<Long> {
     @Column(nullable = false)
     private Boolean isGuaranteeValid;
     
-    @NotNull
-    @Column(nullable = false)
     @Temporal(TemporalType.DATE)
     private Date expiry;
     
@@ -122,7 +120,6 @@ public class MaintenanceTask extends BaseEntity<Long> {
 
     public MaintenanceTask() {
         creation = new Date();
-        expiry = new Date();
         isGuaranteeValid = Boolean.FALSE;
         maintenancePayments = new ArrayList<>();
         inspectionsDone = new ArrayList<>();
