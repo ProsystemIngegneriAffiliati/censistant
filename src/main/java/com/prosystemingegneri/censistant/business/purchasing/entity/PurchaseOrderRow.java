@@ -54,7 +54,7 @@ public class PurchaseOrderRow extends BaseEntity<Long>{
     
     @Min(1)
     @NotNull
-    @Column(nullable = false)    
+    @Column(nullable = false)
     private Integer quantity;
     
     @NotNull

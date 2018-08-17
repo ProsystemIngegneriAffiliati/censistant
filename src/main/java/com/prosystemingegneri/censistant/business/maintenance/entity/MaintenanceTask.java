@@ -35,6 +35,7 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
@@ -102,6 +103,9 @@ public class MaintenanceTask extends BaseEntity<Long> {
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "maintenanceTask", orphanRemoval = true)
     private final List<InspectionDone> inspectionsDone;
+    
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "maintenanceTask", orphanRemoval = true)
+    private TaskPrice taskPrice;
     
     @Version
     private int version;
@@ -231,6 +235,23 @@ public class MaintenanceTask extends BaseEntity<Long> {
     
     public List<InspectionDone> getInspectionsDone() {
         return inspectionsDone;
+    }
+    
+    public void addTaskPrice(TaskPrice taskPrice) {
+        removeTaskPrice();  //so it reaplace with new task price
+        this.taskPrice = taskPrice;
+        taskPrice.setMaintenanceTask(this);
+    }
+    
+    public void removeTaskPrice() {
+        if (taskPrice != null) {
+            taskPrice.setMaintenanceTask(null);
+            taskPrice = null;
+        }
+    }
+
+    public TaskPrice getTaskPrice() {
+        return taskPrice;
     }
 
     public PreventiveMaintenance getPreventiveMaintenance() {
