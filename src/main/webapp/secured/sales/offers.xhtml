@@ -13,7 +13,7 @@
                         <h1>#{msg.sales_offers}</h1>
                         <p:dataTable id="offersTable" widgetVar="offersTable" var="offer" value="#{offerListPresenter.lazyOffers}"
                                      selectionMode="multiple" selection="#{offerListPresenter.selectedOffers}" rowKey="#{offer.id}"
-                                     paginator="true" rows="10"
+                                     paginator="true" rows="10" paginatorAlwaysVisible="false"
                                      paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                      rowsPerPageTemplate="10,25,50" lazy="true">
                             <f:facet name="header">

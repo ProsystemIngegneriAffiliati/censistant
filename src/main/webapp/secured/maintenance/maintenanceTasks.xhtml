@@ -12,7 +12,7 @@
                         <h1>#{msg.maintenance_maintenanceTasks}</h1>
                         <p:dataTable id="maintenanceTasksTable" widgetVar="maintenanceTasksTable" var="maintenanceTask" value="#{maintenanceTaskListPresenter.lazyMaintenanceTasks}"
                                      selectionMode="multiple" selection="#{maintenanceTaskListPresenter.selectedMaintenanceTasks}" rowKey="#{maintenanceTask.id}"
-                                     paginator="true" rows="10"
+                                     paginator="true" rows="10" paginatorAlwaysVisible="false"
                                      paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                      rowsPerPageTemplate="10,25,50" lazy="true"
                                      rowStyleClass="#{maintenanceTaskListPresenter.calculateExpiryColor(maintenanceTask)}">

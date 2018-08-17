@@ -37,16 +37,18 @@ public class HandledItemLazyDataModel extends LazyDataModel<HandledItem>{
     private Location fromLocation;
     private Location toLocation;
     private Boolean isAssociatedToDeliveryNoteRow;
+    private Boolean isAssociatedToReplacement;
 
     public HandledItemLazyDataModel(HandledItemService service) {
         this.service = service;
     }
 
-    public HandledItemLazyDataModel(HandledItemService service, Location fromLocation, Location toLocation, Boolean isLinkedToDeliveryNoteRow) {
+    public HandledItemLazyDataModel(HandledItemService service, Location fromLocation, Location toLocation, Boolean isLinkedToDeliveryNoteRow, Boolean isAssociatedToReplacement) {
         this.service = service;
         this.fromLocation = fromLocation;
         this.toLocation = toLocation;
         this.isAssociatedToDeliveryNoteRow = isLinkedToDeliveryNoteRow;
+        this.isAssociatedToReplacement = isAssociatedToReplacement;
     }
     
     @Override
@@ -92,8 +94,8 @@ public class HandledItemLazyDataModel extends LazyDataModel<HandledItem>{
             }
         }
         
-        List<HandledItem> result = service.listHandledItems(first, pageSize, sortField, isAscending, workerName, supplierItemCode, supplierItemDescription, fromLocation, fromLocationName, toLocation, toLocationName, null, null, null, isAssociatedToDeliveryNoteRow);
-        this.setRowCount(service.getHandledItemsCount(workerName, supplierItemCode, supplierItemDescription, fromLocation, fromLocationName, toLocation, toLocationName, null, null, null, isAssociatedToDeliveryNoteRow).intValue());
+        List<HandledItem> result = service.listHandledItems(first, pageSize, sortField, isAscending, workerName, supplierItemCode, supplierItemDescription, fromLocation, fromLocationName, toLocation, toLocationName, null, null, null, isAssociatedToDeliveryNoteRow, isAssociatedToReplacement);
+        this.setRowCount(service.getHandledItemsCount(workerName, supplierItemCode, supplierItemDescription, fromLocation, fromLocationName, toLocation, toLocationName, null, null, null, isAssociatedToDeliveryNoteRow, isAssociatedToReplacement).intValue());
         
         return result;
     }
@@ -129,6 +131,14 @@ public class HandledItemLazyDataModel extends LazyDataModel<HandledItem>{
 
     public void setIsAssociatedToDeliveryNoteRow(Boolean isAssociatedToDeliveryNoteRow) {
         this.isAssociatedToDeliveryNoteRow = isAssociatedToDeliveryNoteRow;
+    }
+
+    public Boolean getIsAssociatedToReplacement() {
+        return isAssociatedToReplacement;
+    }
+
+    public void setIsAssociatedToReplacement(Boolean isAssociatedToReplacement) {
+        this.isAssociatedToReplacement = isAssociatedToReplacement;
     }
     
 }

@@ -82,7 +82,7 @@ public class DeliveryNoteOutRowCreationPresenter implements Serializable {
     @PostConstruct
     public void init() {
         deliveryNote = (DeliveryNoteOut) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("deliveryNote");
-        lazyHandledItems = new HandledItemLazyDataModel(handledItemService, null, deliveryNote.getLocation(), Boolean.FALSE);
+        lazyHandledItems = new HandledItemLazyDataModel(handledItemService, null, deliveryNote.getLocation(), Boolean.FALSE, null);
         tempHandledItems = new ArrayList<>();
         lazyStock = new StockLazyDataModel(stockService);
         initPreparedStock();

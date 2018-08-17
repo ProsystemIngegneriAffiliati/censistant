@@ -22,7 +22,7 @@
                                     <p:tab title="#{msg.warehouse_handledItems}">
                                         <p:dataTable id="handledItemsTable" var="handledItem" value="#{deliveryNoteOutRowCreationPresenter.lazyHandledItems}"
                                                      selectionMode="multiple" selection="#{deliveryNoteOutRowCreationPresenter.selectedHandledItems}" rowKey="#{handledItem.id}"
-                                                     paginator="true" rows="10"
+                                                     paginator="true" rows="10" paginatorAlwaysVisible="false"
                                                      paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                                      rowsPerPageTemplate="10,25,50" lazy="true">
                                             <f:facet name="header">
@@ -91,7 +91,7 @@
                                         <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                             <p:dataTable id="warehouseStockTable" var="stock" value="#{deliveryNoteOutRowCreationPresenter.lazyStock}"
                                                          selectionMode="multiple" selection="#{deliveryNoteOutRowCreationPresenter.selectedStock}" rowKey="#{stock.id}"
-                                                         paginator="true" rows="10"
+                                                         paginator="true" rows="10" paginatorAlwaysVisible="false"
                                                          paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                                          rowsPerPageTemplate="10,25,50" lazy="true">
                                                 <f:facet name="header">
@@ -116,7 +116,7 @@
                                             </p:dataTable>
 
                                             <p:dataTable id="preparedStockForMovementTable" var="prepStock" value="#{deliveryNoteOutRowCreationPresenter.preparedStockForMovement}"
-                                                         paginator="true" rows="10"
+                                                         paginator="true" rows="10" paginatorAlwaysVisible="false"
                                                          paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                                          rowsPerPageTemplate="10,25,50"
                                                          editable="true" editMode="cell" >

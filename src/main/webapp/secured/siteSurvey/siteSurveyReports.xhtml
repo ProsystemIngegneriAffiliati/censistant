@@ -12,7 +12,7 @@
                         <h1>#{msg.siteSurvey_siteSurveyReports}</h1>
                         <p:dataTable id="siteSurveyReportsTable" widgetVar="siteSurveyReportsTable" var="rep" value="#{siteSurveyReportListPresenter.lazySiteSurveyReports}"
                                      selectionMode="multiple" selection="#{siteSurveyReportListPresenter.selectedSiteSurveyReports}" rowKey="#{rep.id}"
-                                     paginator="true" rows="10"
+                                     paginator="true" rows="10" paginatorAlwaysVisible="false"
                                      paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                      rowsPerPageTemplate="10,25,50" lazy="true">
                             <f:facet name="header">

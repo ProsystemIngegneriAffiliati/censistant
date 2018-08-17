@@ -12,7 +12,7 @@
                         <h1>#{msg.production_items}</h1>
                         <p:dataTable id="itemsTable" widgetVar="itemsTable" var="item" value="#{itemListPresenter.lazyItems}"
                                      selectionMode="multiple" selection="#{itemListPresenter.selectedItems}" rowKey="#{item.id}"
-                                     paginator="true" rows="10"
+                                     paginator="true" rows="10" paginatorAlwaysVisible="false"
                                      paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                      rowsPerPageTemplate="10,25,50" lazy="true">
                             <f:facet name="header">

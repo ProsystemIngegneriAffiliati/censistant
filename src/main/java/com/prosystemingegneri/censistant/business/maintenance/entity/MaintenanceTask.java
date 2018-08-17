@@ -21,7 +21,10 @@ import com.prosystemingegneri.censistant.business.maintenance.control.MandatoryI
 import com.prosystemingegneri.censistant.business.production.entity.System;
 import com.prosystemingegneri.censistant.business.maintenance.control.MandatoryNotesSignatureForClosedMaintenanceTask;
 import com.prosystemingegneri.censistant.business.maintenance.control.MandatoryPaymentsForClosedMaintenanceTask;
+import com.prosystemingegneri.censistant.business.maintenance.control.MandatorySuitableForOperationForClosedMaintenanceTask;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.Worker;
+import com.prosystemingegneri.censistant.business.warehouse.entity.HandledItem;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -49,6 +52,7 @@ import javax.validation.constraints.NotNull;
 @MandatoryNotesSignatureForClosedMaintenanceTask
 @MandatoryInspectionsDoneForClosedMaintenanceTask
 @MandatoryPaymentsForClosedMaintenanceTask
+@MandatorySuitableForOperationForClosedMaintenanceTask
 public class MaintenanceTask extends BaseEntity<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -108,6 +112,11 @@ public class MaintenanceTask extends BaseEntity<Long> {
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "maintenanceTask", orphanRemoval = true, optional = false)
     private TaskPrice taskPrice;
     
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "maintenanceTask", orphanRemoval = true)
+    private final List<Replacement> replacements;
+    
+    private Boolean isSuitableForOperation;
+    
     @Version
     private int version;
 
@@ -117,6 +126,7 @@ public class MaintenanceTask extends BaseEntity<Long> {
         isGuaranteeValid = Boolean.FALSE;
         maintenancePayments = new ArrayList<>();
         inspectionsDone = new ArrayList<>();
+        replacements = new ArrayList<>();
     }
 
     public MaintenanceTask(System system) {
@@ -267,5 +277,88 @@ public class MaintenanceTask extends BaseEntity<Long> {
     public void setPreventiveMaintenance(PreventiveMaintenance preventiveMaintenance) {
         this.preventiveMaintenance = preventiveMaintenance;
     }
+    
+    public void addReplacement(Replacement replacement) {
+        if (!replacements.contains(replacement)) {
+            replacements.add(replacement);
+            replacement.setMaintenanceTask(this);
+        }
+    }
+    
+    public void removeReplacement(Replacement replacement) {
+        if (replacements.contains(replacement)) {
+            replacements.remove(replacement);
+            replacement.setMaintenanceTask(null);
+        }
+    }
 
+    public List<Replacement> getReplacements() {
+        return replacements;
+    }
+    
+    public BigDecimal getReplacementsPrice() {
+        BigDecimal result = BigDecimal.ZERO;
+        for (Replacement replacement : replacements)
+            result = result.add(replacement.getTotalPrice());
+        
+        return result;
+    }
+    
+    public BigDecimal getPrice() {
+        return getReplacementsPrice().add(taskPrice.getPrice());
+    }
+    
+    public List<HandledItem> getReplacementHandledItems() {
+        List<HandledItem> result = new ArrayList<>();
+        
+        for (Replacement replacement : replacements)
+            result.add(replacement.getHandledItem());
+        
+        return result;
+    }
+    
+    public void setReplacementHandledItems(List<HandledItem> replacementHandledItems) {
+        //just for handledItemsTable selection
+    }
+
+    public boolean isHandledItemPresent(HandledItem handledItem) {
+        for (Replacement replacement : replacements)
+            if (replacement.getHandledItem().getId().equals(handledItem.getId()))
+                return true;
+        
+        return false;
+    }
+
+    public Boolean getIsSuitableForOperation() {
+        return isSuitableForOperation;
+    }
+
+    public void setIsSuitableForOperation(Boolean isSuitableForOperation) {
+        this.isSuitableForOperation = isSuitableForOperation;
+    }
+    
+    //only for p:triStateCheckbox
+    public String getIsSuitableForOperationStr() {
+        if (isSuitableForOperation == null)
+            return "0";
+        else {
+            if (isSuitableForOperation)
+                return "1";
+            else
+                return "2";
+        }
+    }
+
+    //only for p:triStateCheckbox
+    public void setIsSuitableForOperationStr(String isSuitableForOperationStr) {
+        if ("0".equals(isSuitableForOperationStr))
+            isSuitableForOperation = null;
+        else {
+            if ("1".equals(isSuitableForOperationStr))
+                isSuitableForOperation = Boolean.TRUE;
+            else
+                isSuitableForOperation = Boolean.FALSE;
+        }
+    }
+    
 }

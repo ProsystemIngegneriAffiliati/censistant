@@ -29,6 +29,7 @@ import javax.persistence.metamodel.StaticMetamodel;
  */
 @StaticMetamodel(HandledItem.class)
 public class HandledItem_ {
+    public static volatile SingularAttribute<HandledItem, Long> id;
     public static volatile SingularAttribute<HandledItem, Date> handlingTimestamp;
     public static volatile SingularAttribute<HandledItem, Worker> worker;
     public static volatile SingularAttribute<HandledItem, Integer> quantity;

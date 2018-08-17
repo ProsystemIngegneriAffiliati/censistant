@@ -12,7 +12,7 @@
                         <h1>#{msg.maintenance_maintenanceContracts}</h1>
                         <p:dataTable id="maintenanceContractsTable" widgetVar="maintenanceContractsTable" var="maintenanceContract" value="#{maintenanceContractListPresenter.lazyMaintenanceContracts}"
                                      selectionMode="multiple" selection="#{maintenanceContractListPresenter.selectedMaintenanceContracts}" rowKey="#{maintenanceContract.id}"
-                                     paginator="true" rows="10"
+                                     paginator="true" rows="10" paginatorAlwaysVisible="false"
                                      paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                      rowsPerPageTemplate="10,25,50" lazy="true">
                             <f:facet name="header">

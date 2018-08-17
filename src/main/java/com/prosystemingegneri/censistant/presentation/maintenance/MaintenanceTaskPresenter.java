@@ -18,10 +18,15 @@ package com.prosystemingegneri.censistant.presentation.maintenance;
 
 import com.prosystemingegneri.censistant.business.maintenance.boundary.MaintenanceTaskService;
 import com.prosystemingegneri.censistant.business.maintenance.entity.InspectionDone;
-import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenancePayment;
 import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceTask;
+import com.prosystemingegneri.censistant.business.maintenance.entity.Replacement;
 import com.prosystemingegneri.censistant.business.maintenance.entity.WorkingDuration;
+import com.prosystemingegneri.censistant.business.production.entity.System;
+import com.prosystemingegneri.censistant.business.warehouse.boundary.HandledItemService;
+import com.prosystemingegneri.censistant.business.warehouse.control.Stock;
+import com.prosystemingegneri.censistant.business.warehouse.entity.HandledItem;
 import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
+import com.prosystemingegneri.censistant.presentation.warehouse.HandledItemLazyDataModel;
 import java.io.Serializable;
 import javax.annotation.Resource;
 import javax.ejb.EJBException;
@@ -33,8 +38,8 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import javax.validation.groups.Default;
 import org.omnifaces.cdi.ViewScoped;
+import org.primefaces.event.SelectEvent;
 import org.primefaces.event.ToggleEvent;
-import org.primefaces.model.DualListModel;
 import org.primefaces.model.Visibility;
 
 
@@ -50,6 +55,10 @@ public class MaintenanceTaskPresenter implements Serializable{
     
     private MaintenanceTask maintenanceTask;
     private Long id;
+    
+    @Inject
+    HandledItemService handledItemService;
+    private HandledItemLazyDataModel lazyHandledItems;
     
     @Resource
     Validator validator;
@@ -127,5 +136,24 @@ public class MaintenanceTaskPresenter implements Serializable{
         if (event.getVisibility().equals(Visibility.VISIBLE))
             maintenanceTask.getTaskPrice().setTravelWorking(new WorkingDuration());
     }
+
+    public HandledItemLazyDataModel getLazyHandledItems() {
+        return lazyHandledItems;
+    }
+
+    public void setLazyHandledItems(HandledItemLazyDataModel lazyHandledItems) {
+        this.lazyHandledItems = lazyHandledItems;
+    }
     
+    public void onSystemSelect(SelectEvent event) {
+        System system = (System) event.getObject();
+        if (system != null)
+            lazyHandledItems = new HandledItemLazyDataModel(handledItemService, null, system, null, Boolean.FALSE);
+    }
+    
+    public void onHandledItemSelect(SelectEvent event) {
+        HandledItem handledItem = (HandledItem) event.getObject();
+        if (!maintenanceTask.isHandledItemPresent(handledItem))
+            maintenanceTask.addReplacement(new Replacement(handledItem));
+    }
 }

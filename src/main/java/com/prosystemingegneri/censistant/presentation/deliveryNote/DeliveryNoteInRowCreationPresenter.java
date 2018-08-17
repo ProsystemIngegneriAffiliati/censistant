@@ -92,7 +92,7 @@ public class DeliveryNoteInRowCreationPresenter implements Serializable {
     public void init() {
         deliveryNote = (DeliveryNoteIn) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("deliveryNote");
         plant = (Plant) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("plant");
-        lazyHandledItems = new HandledItemLazyDataModel(handledItemService, plant.getLocation(), null, Boolean.FALSE);
+        lazyHandledItems = new HandledItemLazyDataModel(handledItemService, plant.getLocation(), null, Boolean.FALSE, null);
         lazyPurchaseOrderRowsToBeDelivered = new PurchaseOrderRowToBeDeliveredLazyDataModel(purchaseOrderRowService, plant, Boolean.TRUE);
         preparedQuantities = new HashMap<>();
         tempPurchaseOrderRows = new ArrayList<>();

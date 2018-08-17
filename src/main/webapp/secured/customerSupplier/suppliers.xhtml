@@ -12,7 +12,7 @@
                         <h1>#{msg.customerSupplier_suppliers}</h1>
                         <p:dataTable id="suppliersTable" widgetVar="suppliersTable" var="suppl" value="#{customerSupplierListPresenter.lazySuppliers}"
                                      selectionMode="multiple" selection="#{customerSupplierListPresenter.selectedCustomerSuppliers}" rowKey="#{suppl.id}"
-                                     paginator="true" rows="10"
+                                     paginator="true" rows="10" paginatorAlwaysVisible="false"
                                      paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                      rowsPerPageTemplate="10,25,50" lazy="true">
                             <f:facet name="header">
