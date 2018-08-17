@@ -5,7 +5,8 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:oou="http://omnifaces.org/ui">
+      xmlns:oou="http://omnifaces.org/ui"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
     <f:metadata>
         <f:viewParam name="id"
                      value="#{maintenanceTaskPresenter.id}"
@@ -15,6 +16,7 @@
     <ui:composition template="/WEB-INF/template.xhtml">
         <ui:define name="content">
             <oou:importConstants type="com.prosystemingegneri.censistant.business.maintenance.control.ResultType" />
+            <oou:importConstants type="com.prosystemingegneri.censistant.business.maintenance.entity.TaskPrice"/>
             <oou:form id="maintenanceTaskForm">
                 <div class="ui-fluid">
                     <div class="ui-g">
@@ -22,7 +24,7 @@
                             <div class="card card-w-title">
                                 <h1>#{msg.maintenance_maintenanceTask}</h1>
                                 <p>#{msg.maintenance_maintenanceTask_tip}</p>
-                                <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:autoComplete id="system"
                                                         dropdown="true"
@@ -36,6 +38,13 @@
                                         </p:autoComplete>
                                         <p:outputLabel for="system" value="#{msg.production_system}"/>
                                         <p:message for="system"/>
+                                    </h:panelGroup>
+                                </p:panelGrid>
+                                <p:panelGrid columns="3" columnClasses="ui-grid-col-3,ui-grid-col-6,ui-grid-col-3" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:calendar id="creation" value="#{maintenanceTaskPresenter.maintenanceTask.creation}" locale="it" />
+                                        <p:outputLabel for="creation" value="#{msg.maintenance_maintenanceTask_creationForPrinting}"/>
+                                        <p:message for="creation"/>
                                     </h:panelGroup>
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:autoComplete id="inChargeWorker"
@@ -52,144 +61,291 @@
                                         <p:outputLabel for="inChargeWorker" value="#{msg.maintenance_maintenanceTask_inChargeWorker}"/>
                                         <p:message for="inChargeWorker"/>
                                     </h:panelGroup>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:calendar id="closed" value="#{maintenanceTaskPresenter.maintenanceTask.closed}" locale="it" />
+                                        <p:outputLabel for="closed" value="#{msg.maintenance_maintenanceTask_closedForPrinting}"/>
+                                        <p:message for="closed"/>
+                                    </h:panelGroup>
                                 </p:panelGrid>
-
-                                <p:tabView id="maintenanceContractTabs" dynamic="true">
-                                    <p:tab title="#{msg.maintenance_maintenanceTask_data}">
-                                        <p:panelGrid columns="3" columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group">
-                                            <h:panelGroup>
-                                                <p:outputLabel for="isGuaranteeValid" value="#{msg.maintenance_maintenanceTask_isGuaranteeValid}" />
-                                                <p:inputSwitch id="isGuaranteeValid" label="#{msg.maintenance_maintenanceTask_isGuaranteeValid}" value="#{maintenanceTaskPresenter.maintenanceTask.isGuaranteeValid}" />
-                                            </h:panelGroup>
-                                            <h:panelGroup styleClass="md-inputfield">
-                                                <p:autoComplete id="maintenanceContract"
-                                                                dropdown="true"
-                                                                value="#{maintenanceTaskPresenter.maintenanceTask.maintenanceContract}"
-                                                                completeMethod="#{maintenanceContractListPresenter.completeUnexpiredMaintenanceContract}"
-                                                                var="contract"
-                                                                itemLabel="#{contract.customerNameContractExpiry}"
-                                                                itemValue="#{contract}"
-                                                                forceSelection="true"
-                                                                >
-                                                    <oou:converter converterId="omnifaces.ListConverter" list="#{maintenanceContractListPresenter.unexpiredMaintenanceContracts}"/>
-                                                </p:autoComplete>
-                                                <p:outputLabel for="maintenanceContract" value="#{msg.maintenance_maintenanceContract}"/>
-                                                <p:message for="maintenanceContract"/>
-                                            </h:panelGroup>
-                                            <h:panelGroup>
-                                                <p:outputLabel for="isFullService" value="#{msg.maintenance_maintenanceContract_isFullService}" />
-                                                <p:inputSwitch id="isFullService" disabled="true" label="#{msg.maintenance_maintenanceContract_isFullService}" value="#{not empty maintenanceTaskPresenter.maintenanceTask.maintenanceContract and maintenanceTaskPresenter.maintenanceTask.maintenanceContract.isFullService}" />
-                                            </h:panelGroup>
-
-                                            <h:panelGroup styleClass="md-inputfield">
-                                                <p:calendar id="creation" value="#{maintenanceTaskPresenter.maintenanceTask.creation}" locale="it" />
-                                                <p:outputLabel for="creation" value="#{msg.maintenance_maintenanceTask_creation}"/>
-                                                <p:message for="creation"/>
-                                            </h:panelGroup>
-                                            <h:panelGroup styleClass="md-inputfield">
-                                                <p:calendar id="expiry" value="#{maintenanceTaskPresenter.maintenanceTask.expiry}" locale="it" />
-                                                <p:outputLabel for="expiry" value="#{msg.maintenance_maintenanceTask_expiry}"/>
-                                                <p:message for="expiry"/>
-                                            </h:panelGroup>
-                                            <h:panelGroup styleClass="md-inputfield">
-                                                <p:calendar id="closedRO" disabled="true" value="#{maintenanceTaskPresenter.maintenanceTask.closed}" locale="it" />
-                                                <p:outputLabel for="closedRO" value="#{msg.maintenance_maintenanceTask_closed}"/>
-                                                <p:message for="closedRO"/>
-                                            </h:panelGroup>
+                                <p:panelGrid columns="4" columnClasses="ui-grid-col-3,ui-grid-col-3,ui-grid-col-3,ui-grid-col-3" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                    <h:panelGroup>
+                                        <p:outputLabel for="isGuaranteeValid" value="#{msg.maintenance_maintenanceTask_isGuaranteeValid}" />
+                                        <p:inputSwitch id="isGuaranteeValid" label="#{msg.maintenance_maintenanceTask_isGuaranteeValid}" value="#{maintenanceTaskPresenter.maintenanceTask.isGuaranteeValid}" />
+                                    </h:panelGroup>
+                                    <h:panelGroup>
+                                        <p:outputLabel for="isFullService" value="#{msg.maintenance_maintenanceContract_isFullService}" />
+                                        <p:inputSwitch id="isFullService" disabled="true" label="#{msg.maintenance_maintenanceContract_isFullService}" value="#{not empty maintenanceTaskPresenter.maintenanceTask.maintenanceContract and maintenanceTaskPresenter.maintenanceTask.maintenanceContract.isFullService}" />
+                                    </h:panelGroup>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:autoComplete id="maintenanceContract"
+                                                        dropdown="true"
+                                                        value="#{maintenanceTaskPresenter.maintenanceTask.maintenanceContract}"
+                                                        completeMethod="#{maintenanceContractListPresenter.completeUnexpiredMaintenanceContract}"
+                                                        var="contract"
+                                                        itemLabel="#{contract.customerNameContractExpiry}"
+                                                        itemValue="#{contract}"
+                                                        forceSelection="true"
+                                                        >
+                                            <oou:converter converterId="omnifaces.ListConverter" list="#{maintenanceContractListPresenter.unexpiredMaintenanceContracts}"/>
+                                        </p:autoComplete>
+                                        <p:outputLabel for="maintenanceContract" value="#{msg.maintenance_maintenanceContract}"/>
+                                        <p:message for="maintenanceContract"/>
+                                    </h:panelGroup>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText readonly="true" id="expiry" value="#{maintenanceTaskPresenter.maintenanceTask.expiry}">
+                                            <f:convertDateTime locale="it" pattern="MMMM yy" />
+                                        </p:inputText>
+                                        <p:outputLabel for="expiry" value="#{msg.maintenance_maintenanceTask_expiryForPrinting}"/>
+                                        <p:message for="expiry"/>
+                                    </h:panelGroup>
+                                </p:panelGrid>
+                                <p:panelGrid columns="2" columnClasses="ui-grid-col-5,ui-grid-col-7" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputTextarea id="description" value="#{maintenanceTaskPresenter.maintenanceTask.description}" />
+                                        <p:outputLabel for="description" value="#{msg.maintenance_maintenanceTask_description}" />
+                                        <p:message for="description"/>
+                                    </h:panelGroup>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputTextarea id="closingNotes" value="#{maintenanceTaskPresenter.maintenanceTask.closingNotes}" />
+                                        <p:outputLabel for="closingNotes" value="#{msg.maintenance_maintenanceTask_closingNotes}" />
+                                        <p:message for="closingNotes"/>
+                                    </h:panelGroup>
+                                </p:panelGrid>
+                                <p:dataTable id="inspectionsDoneTable"
+                                             rendered="#{not empty maintenanceTaskPresenter.maintenanceTask.inspectionsDone}"
+                                             var="inspectionDone"
+                                             value="#{maintenanceTaskPresenter.maintenanceTask.inspectionsDone}"
+                                             rowStyleClass="#{maintenanceTaskPresenter.calculateInspectionDoneResultColor(inspectionDone)}">
+                                    <f:facet name="header">
+                                        <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
+                                            #{msg.maintenance_inspectionsDone}
+                                            <h:panelGroup />
                                         </p:panelGrid>
-                                    </p:tab>
-                                    <p:tab title="#{msg.maintenance_maintenanceTask_description}">
-                                        <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
-                                            <h:panelGroup styleClass="md-inputfield">
-                                                <p:inputTextarea id="description" value="#{maintenanceTaskPresenter.maintenanceTask.description}" />
-                                                <p:outputLabel for="description" value="#{msg.maintenance_maintenanceTask_description}" />
-                                                <p:message for="description"/>
-                                            </h:panelGroup>
+                                    </f:facet>
+                                    <p:column headerText="#{msg.maintenance_inspection_name}" filterBy="#{inspectionDone.inspection.name}" filterMatchMode="contains" priority="0">
+                                        <h:outputText value="#{inspectionDone.inspection.name}" />
+                                    </p:column>
+                                    <p:column headerText="#{msg.actions}" style="width:100px; text-align:center" priority="0">
+                                        <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
+                                            <p:commandButton icon="ui-icon-check" title="#{msg.maintenance_inspectionDone_result_OK}" actionListener="#{inspectionDone.setInspectionResult(ResultType.OK)}" update="inspectionsDoneTable" />
+                                            <p:commandButton icon="ui-icon-clear" title="#{msg.maintenance_inspectionDone_result_KO}" actionListener="#{inspectionDone.setInspectionResult(ResultType.KO)}" update="inspectionsDoneTable" />
                                         </p:panelGrid>
-                                    </p:tab>
-                                    <p:tab title="#{msg.maintenance_maintenanceTask_closed}">
-                                        <p:panelGrid columns="2" columnClasses="ui-grid-col-10,ui-grid-col-2" layout="grid" styleClass="ui-panelgrid-blank form-group">
-                                            <h:panelGroup styleClass="md-inputfield">
-                                                <p:inputTextarea id="closingNotes" value="#{maintenanceTaskPresenter.maintenanceTask.closingNotes}">
-                                                    <p:ajax update="maintenanceTaskForm:customerSignaturePanel" />
-                                                </p:inputTextarea>
-                                                <p:outputLabel for="closingNotes" value="#{msg.maintenance_maintenanceTask_closingNotes}" />
-                                                <p:message for="closingNotes"/>
-                                            </h:panelGroup>
-                                            <h:panelGroup styleClass="md-inputfield">
-                                                <p:calendar id="closed" value="#{maintenanceTaskPresenter.maintenanceTask.closed}" locale="it" />
-                                                <p:outputLabel for="closed" value="#{msg.maintenance_maintenanceTask_closed}"/>
-                                                <p:message for="closed"/>
-                                            </h:panelGroup>
-                                        </p:panelGrid>
-                                    </p:tab>
-                                    <p:tab title="#{msg.maintenance_inspectionsDone}" rendered="#{not empty maintenanceTaskPresenter.maintenanceTask.preventiveMaintenance}">
-                                        <p:dataTable id="inspectionsDoneTable"
-                                                     var="inspectionDone"
-                                                     value="#{maintenanceTaskPresenter.maintenanceTask.inspectionsDone}"
-                                                     editable="true" editMode="cell">
-                                            <f:facet name="header">
-                                                <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
-                                                    #{msg.maintenance_inspectionsDone_tip}
-                                                    <h:panelGroup />
-                                                </p:panelGrid>
-                                            </f:facet>
-                                            <p:column headerText="#{msg.maintenance_inspection_name}" filterBy="#{inspectionDone.inspection.name}" filterMatchMode="contains" priority="0">
-                                                <h:outputText value="#{inspectionDone.inspection.name}" />
-                                            </p:column>
-                                            <p:column headerText="#{msg.maintenance_inspectionDone_result}" priority="0">
-                                                <p:cellEditor>
-                                                    <f:facet name="output">
-                                                        <h:outputText value="#{msg['maintenance_inspectionDone_result_' += inspectionDone.inspectionResult]}" />
-                                                    </f:facet>
-                                                    <f:facet name="input">
-                                                        <h:selectOneMenu value="#{inspectionDone.inspectionResult}">
-                                                            <f:selectItems value="#{ResultType.values()}" var="resultType" 
-                                                                           itemValue="#{resultType}" itemLabel="#{msg['maintenance_inspectionDone_result_' += resultType]}" />
-                                                        </h:selectOneMenu>
-                                                    </f:facet>
-                                                </p:cellEditor>
-                                            </p:column>
-                                        </p:dataTable>
-                                    </p:tab>
-                                    <p:tab title="#{msg.maintenance_maintenancePayments}">
-                                        <p:pickList id="maintenancePayments"
-                                                    value="#{maintenanceTaskPresenter.payments}" var="payment"
-                                                    itemValue="#{payment}" itemLabel="#{payment.name}"
-                                                    responsive="true"
-                                                    showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains"
-                                                    style="margin-bottom: 20px">
-                                            <oou:converter converterId="omnifaces.ListConverter" list="#{maintenancePaymentListPresenter.maintenancePayments}"/>
-                                            <f:facet name="sourceCaption">#{msg.maintenance_maintenancePayments}</f:facet>
-                                            <f:facet name="targetCaption">#{msg.maintenance_maintenanceTask_maintenancePayments}</f:facet>
-                                        </p:pickList>
+                                    </p:column>
+                                </p:dataTable>
+                                <p:panel id="taskPricePanel" header="#{msg.maintenance_maintenanceTask_taskPrice}" style="margin-top: 25px; margin-bottom: 25px">
+                                    <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                         <h:panelGroup styleClass="md-inputfield">
-                                            <p:inputTextarea id="paymentNotes" value="#{maintenanceTaskPresenter.maintenanceTask.paymentNotes}" />
-                                            <p:outputLabel for="paymentNotes" value="#{msg.maintenance_maintenanceTask_paymentNotes}" />
-                                            <p:message for="paymentNotes"/>
+                                            <p:inputNumber readonly="true" id="devicesPrice" decimalPlaces="#{TaskPrice.SCALE_PRICE}" symbol="€ " value="0" />
+                                            <p:outputLabel for="devicesPrice" value="#{msg.maintenance_maintenanceTask_devicesPrice}" />
+                                            <p:message for="devicesPrice"/>
                                         </h:panelGroup>
-                                    </p:tab>
-                                </p:tabView>
-
-                                <h:panelGroup id="customerSignaturePanel">
-                                    <p:panelGrid rendered="#{not empty maintenanceTaskPresenter.maintenanceTask.closingNotes}" columns="2" columnClasses="ui-grid-col-11,ui-grid-col-1" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                         <h:panelGroup styleClass="md-inputfield">
-                                            <p:outputLabel for="customerSignature" value="#{msg.maintenance_maintenanceTask_customerSignature}" />
-                                            <p:signature id="customerSignature"
-                                                         value="#{maintenanceTaskPresenter.maintenanceTask.customerSignature}"
-                                                         guideline="true"
-                                                         style="width: 100%;height: 200px"
-                                                         readonly="#{not empty maintenanceTaskPresenter.maintenanceTask.customerSignature}" />
-                                            <p:message for="customerSignature"/>
+                                            <p:inputNumber id="fixedCallAmount" decimalPlaces="#{TaskPrice.SCALE_PRICE}" symbol="€ " value="#{maintenanceTaskPresenter.maintenanceTask.taskPrice.fixedCallAmount}">
+                                                <p:ajax update="price" />
+                                            </p:inputNumber>
+                                            <p:outputLabel for="fixedCallAmount" value="#{msg.maintenance_maintenanceTask_taskPrice_fixedCallAmount}" />
+                                            <p:message for="fixedCallAmount"/>
                                         </h:panelGroup>
-                                        <p:commandButton action="#{maintenanceTaskPresenter.clearCustomerSignature()}"
-                                                         title="#{msg.clear} #{msg.maintenance_maintenanceTask_customerSignature}"
-                                                         icon="ui-icon-clear"
-                                                         update="customerSignature">
-                                            <oou:ignoreValidationFailed />
-                                        </p:commandButton>
                                     </p:panelGrid>
-                                </h:panelGroup>
+                                    <p:panel header="#{msg.maintenance_maintenanceTask_taskPrice_normalWorking}" collapsed="#{empty maintenanceTaskPresenter.maintenanceTask.taskPrice.normalWorking}" toggleable="true" >
+                                        <p:ajax event="toggle" listener="#{maintenanceTaskPresenter.onNormalWorkingPanelToggle}" update="normalWorkingPanel" />
+                                        <h:panelGroup id="normalWorkingPanel">
+                                            <p:panelGrid rendered="#{not empty maintenanceTaskPresenter.maintenanceTask.taskPrice.normalWorking}" columns="6" columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                                <h:panelGroup styleClass="md-inputfield">
+                                                    <p:inputText id="normalWorkingStarted" pt:type="datetime-local" value="#{maintenanceTaskPresenter.maintenanceTask.taskPrice.normalWorking.started}">
+                                                        <f:convertDateTime pattern="yyyy-MM-dd'T'HH:mm" />
+                                                        <p:ajax update="normalWorkingDurationInHours normalWorkingPrice price" />
+                                                    </p:inputText>
+                                                    <p:outputLabel for="normalWorkingStarted" value="#{msg.maintenance_maintenanceTask_workingDuration_started}" />
+                                                    <p:message for="normalWorkingStarted"/>
+                                                </h:panelGroup>
+                                                <h:panelGroup styleClass="md-inputfield">
+                                                    <p:inputText id="normalWorkingEnded" pt:type="datetime-local" value="#{maintenanceTaskPresenter.maintenanceTask.taskPrice.normalWorking.ended}">
+                                                        <f:convertDateTime pattern="yyyy-MM-dd'T'HH:mm" />
+                                                        <p:ajax update="normalWorkingDurationInHours normalWorkingPrice price" />
+                                                    </p:inputText>
+                                                    <p:outputLabel for="normalWorkingEnded" value="#{msg.maintenance_maintenanceTask_workingDuration_ended}" />
+                                                    <p:message for="normalWorkingEnded"/>
+                                                </h:panelGroup>
+                                                <h:panelGroup styleClass="md-inputfield">
+                                                    <p:inputNumber id="normalWorkingWorkersNumber" decimalPlaces="0" value="#{maintenanceTaskPresenter.maintenanceTask.taskPrice.normalWorking.workersNumber}">
+                                                        <p:ajax update="normalWorkingPrice price" />
+                                                    </p:inputNumber>
+                                                    <p:outputLabel for="normalWorkingWorkersNumber" value="#{msg.maintenance_maintenanceTask_workingDuration_workersNumber}"/>
+                                                    <p:message for="normalWorkingWorkersNumber"/>
+                                                </h:panelGroup>
+                                                <h:panelGroup styleClass="md-inputfield">
+                                                    <p:inputNumber readonly="true" id="normalWorkingDurationInHours" decimalPlaces="#{TaskPrice.SCALE_PRICE}" value="#{maintenanceTaskPresenter.maintenanceTask.taskPrice.normalWorking.durationInHours}" />
+                                                    <p:outputLabel for="normalWorkingDurationInHours" value="#{msg.maintenance_maintenanceTask_workingDuration_durationInHours}"/>
+                                                    <p:message for="normalWorkingDurationInHours"/>
+                                                </h:panelGroup>
+                                                <h:panelGroup styleClass="md-inputfield">
+                                                    <p:inputNumber id="normalWorkingHourlyPrices" decimalPlaces="#{TaskPrice.SCALE_PRICE}" symbol="€ " value="#{maintenanceTaskPresenter.maintenanceTask.taskPrice.normalWorking.hourlyPrices}">
+                                                        <p:ajax update="normalWorkingPrice price" />
+                                                    </p:inputNumber>
+                                                    <p:outputLabel for="normalWorkingHourlyPrices" value="#{msg.maintenance_maintenanceTask_workingDuration_hourlyPrices}" />
+                                                    <p:message for="normalWorkingHourlyPrices"/>
+                                                </h:panelGroup>
+                                                <h:panelGroup styleClass="md-inputfield">
+                                                    <p:inputNumber readonly="true" id="normalWorkingPrice" decimalPlaces="#{TaskPrice.SCALE_PRICE}" symbol="€ " value="#{maintenanceTaskPresenter.maintenanceTask.taskPrice.normalWorking.price}" />
+                                                    <p:outputLabel for="normalWorkingPrice" value="#{msg.maintenance_maintenanceTask_workingDuration_price}" />
+                                                    <p:message for="normalWorkingPrice"/>
+                                                </h:panelGroup>
+                                            </p:panelGrid>
+                                        </h:panelGroup>
+                                    </p:panel>
+                                    <p:panel header="#{msg.maintenance_maintenanceTask_taskPrice_overtimeWorking}" collapsed="#{empty maintenanceTaskPresenter.maintenanceTask.taskPrice.overtimeWorking}" toggleable="true" >
+                                        <p:ajax event="toggle" listener="#{maintenanceTaskPresenter.onOvertimeWorkingPanelToggle}" update="overtimeWorkingPanel" />
+                                        <h:panelGroup id="overtimeWorkingPanel">
+                                            <p:panelGrid rendered="#{not empty maintenanceTaskPresenter.maintenanceTask.taskPrice.overtimeWorking}" columns="6" columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                                <h:panelGroup styleClass="md-inputfield">
+                                                    <p:inputText id="overtimeWorkingStarted" pt:type="datetime-local" value="#{maintenanceTaskPresenter.maintenanceTask.taskPrice.overtimeWorking.started}">
+                                                        <f:convertDateTime pattern="yyyy-MM-dd'T'HH:mm" />
+                                                        <p:ajax update="overtimeWorkingDurationInHours overtimeWorkingPrice price" />
+                                                    </p:inputText>
+                                                    <p:outputLabel for="overtimeWorkingStarted" value="#{msg.maintenance_maintenanceTask_workingDuration_started}" />
+                                                    <p:message for="overtimeWorkingStarted"/>
+                                                </h:panelGroup>
+                                                <h:panelGroup styleClass="md-inputfield">
+                                                    <p:inputText id="overtimeWorkingEnded" pt:type="datetime-local" value="#{maintenanceTaskPresenter.maintenanceTask.taskPrice.overtimeWorking.ended}">
+                                                        <f:convertDateTime pattern="yyyy-MM-dd'T'HH:mm" />
+                                                        <p:ajax update="overtimeWorkingDurationInHours overtimeWorkingPrice price" />
+                                                    </p:inputText>
+                                                    <p:outputLabel for="overtimeWorkingEnded" value="#{msg.maintenance_maintenanceTask_workingDuration_ended}" />
+                                                    <p:message for="overtimeWorkingEnded"/>
+                                                </h:panelGroup>
+                                                <h:panelGroup styleClass="md-inputfield">
+                                                    <p:inputNumber id="overtimeWorkingWorkersNumber" decimalPlaces="0" value="#{maintenanceTaskPresenter.maintenanceTask.taskPrice.overtimeWorking.workersNumber}">
+                                                        <p:ajax update="overtimeWorkingPrice price" />
+                                                    </p:inputNumber>
+                                                    <p:outputLabel for="overtimeWorkingWorkersNumber" value="#{msg.maintenance_maintenanceTask_workingDuration_workersNumber}"/>
+                                                    <p:message for="overtimeWorkingWorkersNumber"/>
+                                                </h:panelGroup>
+                                                <h:panelGroup styleClass="md-inputfield">
+                                                    <p:inputNumber readonly="true" id="overtimeWorkingDurationInHours" decimalPlaces="#{TaskPrice.SCALE_PRICE}" value="#{maintenanceTaskPresenter.maintenanceTask.taskPrice.overtimeWorking.durationInHours}" />
+                                                    <p:outputLabel for="overtimeWorkingDurationInHours" value="#{msg.maintenance_maintenanceTask_workingDuration_durationInHours}"/>
+                                                    <p:message for="overtimeWorkingDurationInHours"/>
+                                                </h:panelGroup>
+                                                <h:panelGroup styleClass="md-inputfield">
+                                                    <p:inputNumber id="overtimeWorkingHourlyPrices" decimalPlaces="#{TaskPrice.SCALE_PRICE}" symbol="€ " value="#{maintenanceTaskPresenter.maintenanceTask.taskPrice.overtimeWorking.hourlyPrices}">
+                                                        <p:ajax update="overtimeWorkingPrice price" />
+                                                    </p:inputNumber>
+                                                    <p:outputLabel for="overtimeWorkingHourlyPrices" value="#{msg.maintenance_maintenanceTask_workingDuration_hourlyPrices}" />
+                                                    <p:message for="overtimeWorkingHourlyPrices"/>
+                                                </h:panelGroup>
+                                                <h:panelGroup styleClass="md-inputfield">
+                                                    <p:inputNumber readonly="true" id="overtimeWorkingPrice" decimalPlaces="#{TaskPrice.SCALE_PRICE}" symbol="€ " value="#{maintenanceTaskPresenter.maintenanceTask.taskPrice.overtimeWorking.price}" />
+                                                    <p:outputLabel for="overtimeWorkingPrice" value="#{msg.maintenance_maintenanceTask_workingDuration_price}" />
+                                                    <p:message for="overtimeWorkingPrice"/>
+                                                </h:panelGroup>
+                                            </p:panelGrid>
+                                        </h:panelGroup>
+                                    </p:panel>
+                                    <p:panel header="#{msg.maintenance_maintenanceTask_taskPrice_travelWorking}" collapsed="#{empty maintenanceTaskPresenter.maintenanceTask.taskPrice.travelWorking}" toggleable="true" style="margin-bottom: 25px" >
+                                        <p:ajax event="toggle" listener="#{maintenanceTaskPresenter.onTravelWorkingPanelToggle}" update="travelWorkingPanel" />
+                                        <h:panelGroup id="travelWorkingPanel">
+                                            <p:panelGrid rendered="#{not empty maintenanceTaskPresenter.maintenanceTask.taskPrice.travelWorking}" columns="6" columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                                <h:panelGroup styleClass="md-inputfield">
+                                                    <p:inputText id="travelWorkingStarted" pt:type="datetime-local" value="#{maintenanceTaskPresenter.maintenanceTask.taskPrice.travelWorking.started}">
+                                                        <f:convertDateTime pattern="yyyy-MM-dd'T'HH:mm" />
+                                                        <p:ajax update="travelWorkingDurationInHours travelWorkingPrice price" />
+                                                    </p:inputText>
+                                                    <p:outputLabel for="travelWorkingStarted" value="#{msg.maintenance_maintenanceTask_workingDuration_started}" />
+                                                    <p:message for="travelWorkingStarted"/>
+                                                </h:panelGroup>
+                                                <h:panelGroup styleClass="md-inputfield">
+                                                    <p:inputText id="travelWorkingEnded" pt:type="datetime-local" value="#{maintenanceTaskPresenter.maintenanceTask.taskPrice.travelWorking.ended}">
+                                                        <f:convertDateTime pattern="yyyy-MM-dd'T'HH:mm" />
+                                                        <p:ajax update="travelWorkingDurationInHours travelWorkingPrice price" />
+                                                    </p:inputText>
+                                                    <p:outputLabel for="travelWorkingEnded" value="#{msg.maintenance_maintenanceTask_workingDuration_ended}" />
+                                                    <p:message for="travelWorkingEnded"/>
+                                                </h:panelGroup>
+                                                <h:panelGroup styleClass="md-inputfield">
+                                                    <p:inputNumber id="travelWorkingWorkersNumber" decimalPlaces="0" value="#{maintenanceTaskPresenter.maintenanceTask.taskPrice.travelWorking.workersNumber}">
+                                                        <p:ajax update="travelWorkingPrice price" />
+                                                    </p:inputNumber>
+                                                    <p:outputLabel for="travelWorkingWorkersNumber" value="#{msg.maintenance_maintenanceTask_workingDuration_workersNumber}"/>
+                                                    <p:message for="travelWorkingWorkersNumber"/>
+                                                </h:panelGroup>
+                                                <h:panelGroup styleClass="md-inputfield">
+                                                    <p:inputNumber readonly="true" id="travelWorkingDurationInHours" decimalPlaces="#{TaskPrice.SCALE_PRICE}" value="#{maintenanceTaskPresenter.maintenanceTask.taskPrice.travelWorking.durationInHours}" />
+                                                    <p:outputLabel for="travelWorkingDurationInHours" value="#{msg.maintenance_maintenanceTask_workingDuration_durationInHours}"/>
+                                                    <p:message for="travelWorkingDurationInHours"/>
+                                                </h:panelGroup>
+                                                <h:panelGroup styleClass="md-inputfield">
+                                                    <p:inputNumber id="travelWorkingHourlyPrices" decimalPlaces="#{TaskPrice.SCALE_PRICE}" symbol="€ " value="#{maintenanceTaskPresenter.maintenanceTask.taskPrice.travelWorking.hourlyPrices}">
+                                                        <p:ajax update="travelWorkingPrice price" />
+                                                    </p:inputNumber>
+                                                    <p:outputLabel for="travelWorkingHourlyPrices" value="#{msg.maintenance_maintenanceTask_workingDuration_hourlyPrices}" />
+                                                    <p:message for="travelWorkingHourlyPrices"/>
+                                                </h:panelGroup>
+                                                <h:panelGroup styleClass="md-inputfield">
+                                                    <p:inputNumber readonly="true" id="travelWorkingPrice" decimalPlaces="#{TaskPrice.SCALE_PRICE}" symbol="€ " value="#{maintenanceTaskPresenter.maintenanceTask.taskPrice.travelWorking.price}" />
+                                                    <p:outputLabel for="travelWorkingPrice" value="#{msg.maintenance_maintenanceTask_workingDuration_price}" />
+                                                    <p:message for="travelWorkingPrice"/>
+                                                </h:panelGroup>
+                                            </p:panelGrid>
+                                        </h:panelGroup>
+                                    </p:panel>
+                                    <p:panelGrid columns="3" columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:inputNumber id="kilometersTravelled" decimalPlaces="0" value="#{maintenanceTaskPresenter.maintenanceTask.taskPrice.kilometersTravelled}">
+                                                <p:ajax update="priceTravelled price" />
+                                            </p:inputNumber>
+                                            <p:outputLabel for="kilometersTravelled" value="#{msg.maintenance_maintenanceTask_taskPrice_kilometersTravelled}" />
+                                            <p:message for="kilometersTravelled"/>
+                                        </h:panelGroup>
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:inputNumber id="pricePerKilometer" decimalPlaces="#{TaskPrice.SCALE_PRICE}" symbol="€ " value="#{maintenanceTaskPresenter.maintenanceTask.taskPrice.pricePerKilometer}">
+                                                <p:ajax update="priceTravelled price" />
+                                            </p:inputNumber>
+                                            <p:outputLabel for="pricePerKilometer" value="#{msg.maintenance_maintenanceTask_taskPrice_pricePerKilometer}" />
+                                            <p:message for="pricePerKilometer"/>
+                                        </h:panelGroup>
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:inputNumber readonly="true" id="priceTravelled" decimalPlaces="#{TaskPrice.SCALE_PRICE}" symbol="€ " value="#{maintenanceTaskPresenter.maintenanceTask.taskPrice.priceTravelled}" />
+                                            <p:outputLabel for="priceTravelled" value="#{msg.maintenance_maintenanceTask_taskPrice_priceTravelled}" />
+                                            <p:message for="priceTravelled"/>
+                                        </h:panelGroup>
+                                    </p:panelGrid>
+                                    <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:inputNumber id="travelExpenses" decimalPlaces="#{TaskPrice.SCALE_PRICE}" symbol="€ " value="#{maintenanceTaskPresenter.maintenanceTask.taskPrice.travelExpenses}">
+                                                <p:ajax update="price" />
+                                            </p:inputNumber>
+                                            <p:outputLabel for="travelExpenses" value="#{msg.maintenance_maintenanceTask_taskPrice_travelExpenses}" />
+                                            <p:message for="travelExpenses"/>
+                                        </h:panelGroup>
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:inputNumber readonly="true" id="price" decimalPlaces="#{TaskPrice.SCALE_PRICE}" symbol="€ " value="#{maintenanceTaskPresenter.maintenanceTask.taskPrice.price}" />
+                                            <p:outputLabel for="price" value="#{msg.maintenance_maintenanceTask_taskPrice_price}" />
+                                            <p:message for="price"/>
+                                        </h:panelGroup>
+                                    </p:panelGrid>
+                                </p:panel>
+                                <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="form-group">
+                                    <p:dataTable id="maintenancePayments"
+                                                 var="payment"
+                                                 value="#{maintenancePaymentListPresenter.maintenancePayments}"
+                                                 selection="#{maintenanceTaskPresenter.maintenanceTask.maintenancePayments}" rowKey="#{payment.id}">
+                                        <f:facet name="header">
+                                            <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
+                                                #{msg.maintenance_maintenancePayments}
+                                                <h:panelGroup />
+                                            </p:panelGrid>
+                                        </f:facet>
+                                        <p:column headerText="#{msg.maintenance_maintenancePayment_name}">
+                                            <h:outputText value="#{payment.name}" />
+                                        </p:column>
+                                        <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
+                                    </p:dataTable>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputTextarea id="paymentNotes" value="#{maintenanceTaskPresenter.maintenanceTask.paymentNotes}" />
+                                        <p:outputLabel for="paymentNotes" value="#{msg.maintenance_maintenanceTask_paymentNotes}" />
+                                        <p:message for="paymentNotes"/>
+                                    </h:panelGroup>
+                                </p:panelGrid>
 
                                 <div class="ui-g">
                                     <div class="ui-g-1 ui-md-2"></div>

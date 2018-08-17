@@ -94,7 +94,7 @@ public class MaintenanceTask extends BaseEntity<Long> {
     private String customerSignature;
     
     @ManyToMany
-    private final List<MaintenancePayment> maintenancePayments;
+    private List<MaintenancePayment> maintenancePayments;
     
     private String paymentNotes;
     
@@ -104,7 +104,8 @@ public class MaintenanceTask extends BaseEntity<Long> {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "maintenanceTask", orphanRemoval = true)
     private final List<InspectionDone> inspectionsDone;
     
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "maintenanceTask", orphanRemoval = true)
+    @NotNull
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "maintenanceTask", orphanRemoval = true, optional = false)
     private TaskPrice taskPrice;
     
     @Version
@@ -112,6 +113,7 @@ public class MaintenanceTask extends BaseEntity<Long> {
 
     public MaintenanceTask() {
         creation = new Date();
+        expiry = new Date();
         isGuaranteeValid = Boolean.FALSE;
         maintenancePayments = new ArrayList<>();
         inspectionsDone = new ArrayList<>();
@@ -217,6 +219,10 @@ public class MaintenanceTask extends BaseEntity<Long> {
 
     public List<MaintenancePayment> getMaintenancePayments() {
         return maintenancePayments;
+    }
+
+    public void setMaintenancePayments(List<MaintenancePayment> maintenancePayments) {
+        this.maintenancePayments = maintenancePayments;
     }
 
     public void addInspectionDone(InspectionDone inspectionDone) {

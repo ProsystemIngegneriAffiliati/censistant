@@ -112,11 +112,17 @@ public class WorkingDuration extends BaseEntity<Long> {
     }
     
     public BigDecimal getDurationInHours() {
-        return new BigDecimal(TimeUnit.MILLISECONDS.toHours(ended.getTime() - started.getTime()));
+        try {
+            return new BigDecimal(TimeUnit.MILLISECONDS.toMinutes(ended.getTime() - started.getTime())).divide(BigDecimal.valueOf(60));
+        } catch (ArithmeticException e) {
+            return BigDecimal.ZERO;
+        }
     }
     
     public BigDecimal getPrice() {
-        return hourlyPrices.multiply(getDurationInHours());
+        return hourlyPrices
+                .multiply(BigDecimal.valueOf(workersNumber))
+                .multiply(getDurationInHours());
     }
     
 }

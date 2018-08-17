@@ -40,6 +40,10 @@ td.ui-panelgrid-cell:nth-child(1), td.ui-panelgrid-cell:nth-child(2){
     color: #ffffff!important;
 }
 
+.green-row {
+    background-color: #36F443!important;
+}
+
 .red-row {
     background-color: #F44336!important;
 }

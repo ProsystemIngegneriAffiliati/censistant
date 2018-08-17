@@ -17,8 +17,10 @@
 package com.prosystemingegneri.censistant.presentation.maintenance;
 
 import com.prosystemingegneri.censistant.business.maintenance.boundary.MaintenanceTaskService;
+import com.prosystemingegneri.censistant.business.maintenance.entity.InspectionDone;
 import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenancePayment;
 import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceTask;
+import com.prosystemingegneri.censistant.business.maintenance.entity.WorkingDuration;
 import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
 import java.io.Serializable;
 import javax.annotation.Resource;
@@ -31,7 +33,9 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import javax.validation.groups.Default;
 import org.omnifaces.cdi.ViewScoped;
+import org.primefaces.event.ToggleEvent;
 import org.primefaces.model.DualListModel;
+import org.primefaces.model.Visibility;
 
 
 /**
@@ -50,13 +54,8 @@ public class MaintenanceTaskPresenter implements Serializable{
     @Resource
     Validator validator;
     
-    private DualListModel<MaintenancePayment> payments = new DualListModel<>();
-    
     public String saveMaintenanceTask() {
         try {
-            maintenanceTask.getMaintenancePayments().clear();
-            maintenanceTask.getMaintenancePayments().addAll(payments.getTarget());
-            
             boolean isValidated = true;
             for (ConstraintViolation<MaintenanceTask> constraintViolation : validator.validate(maintenanceTask, Default.class)) {
                 isValidated = false;
@@ -77,7 +76,7 @@ public class MaintenanceTaskPresenter implements Serializable{
     public void detailMaintenanceTask() {
         if (maintenanceTask == null && id != null) {
             if (id == 0)
-                maintenanceTask = new MaintenanceTask();
+                maintenanceTask = service.createNewMaintenanceTask(null);
             else
                 maintenanceTask = service.readMaintenanceTask(id);
         }
@@ -102,18 +101,31 @@ public class MaintenanceTaskPresenter implements Serializable{
     public void setMaintenanceTask(MaintenanceTask maintenanceTask) {
         this.maintenanceTask = maintenanceTask;
     }
-
-    public DualListModel<MaintenancePayment> getPayments() {
-        if (payments.getSource().isEmpty() && payments.getTarget().isEmpty()) {
-            payments.setSource(service.avaibleMaintenancePayments(maintenanceTask));
-            payments.setTarget(maintenanceTask.getMaintenancePayments());
+    
+    public String calculateInspectionDoneResultColor(InspectionDone inspectionDone) {
+        switch (inspectionDone.getInspectionResult()) {
+            case OK:
+                return "green-row";
+            case KO:
+                return "red-row";
+            default:
+                return "";
         }
-        
-        return payments;
     }
-
-    public void setPayments(DualListModel<MaintenancePayment> payments) {
-        this.payments = payments;
+    
+    public void onNormalWorkingPanelToggle(ToggleEvent event) {
+        if (event.getVisibility().equals(Visibility.VISIBLE))
+            maintenanceTask.getTaskPrice().setNormalWorking(new WorkingDuration());
+    }
+    
+    public void onOvertimeWorkingPanelToggle(ToggleEvent event) {
+        if (event.getVisibility().equals(Visibility.VISIBLE))
+            maintenanceTask.getTaskPrice().setOvertimeWorking(new WorkingDuration());
+    }
+    
+    public void onTravelWorkingPanelToggle(ToggleEvent event) {
+        if (event.getVisibility().equals(Visibility.VISIBLE))
+            maintenanceTask.getTaskPrice().setTravelWorking(new WorkingDuration());
     }
     
 }

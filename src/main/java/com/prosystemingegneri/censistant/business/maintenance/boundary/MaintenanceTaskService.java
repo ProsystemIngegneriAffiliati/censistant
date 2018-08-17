@@ -27,6 +27,7 @@ import com.prosystemingegneri.censistant.business.production.entity.System_;
 import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceTask;
 import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceTask_;
 import com.prosystemingegneri.censistant.business.maintenance.entity.PreventiveMaintenance;
+import com.prosystemingegneri.censistant.business.maintenance.entity.TaskPrice;
 import com.prosystemingegneri.censistant.business.sales.entity.Offer_;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport_;
@@ -54,6 +55,13 @@ import javax.persistence.criteria.Root;
 public class MaintenanceTaskService implements Serializable{
     @PersistenceContext
     EntityManager em;
+    
+    public MaintenanceTask createNewMaintenanceTask(System system) {
+        MaintenanceTask maintenanceTask = new MaintenanceTask(system);
+        maintenanceTask.addTaskPrice(new TaskPrice());
+        
+        return maintenanceTask;
+    }
     
     public MaintenanceTask saveMaintenanceTask(MaintenanceTask maintenanceTask) {
         if (maintenanceTask.getId() == null)

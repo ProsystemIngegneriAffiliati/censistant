@@ -257,7 +257,7 @@ public class MaintenanceContractService implements Serializable{
                         Calendar taskExpiry = new GregorianCalendar();
                         taskExpiry.setTime(lastTask.getTime());
                         for (int i = 0; i < tasksToBeCreated; i++) {
-                            MaintenanceTask newMaintenanceTask = new MaintenanceTask();
+                            MaintenanceTask newMaintenanceTask = maintenanceTaskService.createNewMaintenanceTask(null);
                             newMaintenanceTask.setDescription(scheduledMaintenance.getPreventiveMaintenance().getName());
                             newMaintenanceTask.setInChargeWorker(workerService.listWorkers(null).get(0));
                             newMaintenanceTask.setMaintenanceContract(maintenanceContract);
