@@ -24,7 +24,12 @@
                             <div class="card card-w-title">
                                 <h1>#{msg.maintenance_maintenanceTask}</h1>
                                 <p>#{msg.maintenance_maintenanceTask_tip}</p>
-                                <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                <p:panelGrid columns="2" columnClasses="ui-grid-col-4,ui-grid-col-8" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputNumber id="number" value="#{maintenanceTaskPresenter.maintenanceTask.number}" decimalPlaces="0" />
+                                        <p:outputLabel for="number" value="#{msg.maintenance_maintenanceTask_number}" />
+                                        <p:message for="number"/>
+                                    </h:panelGroup>
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:autoComplete id="system"
                                                         dropdown="true"
@@ -40,8 +45,6 @@
                                         <p:outputLabel for="system" value="#{msg.production_system}"/>
                                         <p:message for="system"/>
                                     </h:panelGroup>
-                                </p:panelGrid>
-                                <p:panelGrid columns="2" columnClasses="ui-grid-col-4,ui-grid-col-8" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:calendar id="creation" value="#{maintenanceTaskPresenter.maintenanceTask.creation}" locale="it" />
                                         <p:outputLabel for="creation" value="#{msg.maintenance_maintenanceTask_creationForPrinting}"/>

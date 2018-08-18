@@ -33,9 +33,13 @@ import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyRe
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport_;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -57,10 +61,41 @@ public class MaintenanceTaskService implements Serializable{
     EntityManager em;
     
     public MaintenanceTask createNewMaintenanceTask(System system) {
-        MaintenanceTask maintenanceTask = new MaintenanceTask(system);
+        MaintenanceTask maintenanceTask = new MaintenanceTask(system, getNextNumber());
         maintenanceTask.addTaskPrice(new TaskPrice());
         
         return maintenanceTask;
+    }
+    
+    private Integer getNextNumber() {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Integer> query = cb.createQuery(Integer.class);
+        Root<MaintenanceTask> root = query.from(MaintenanceTask.class);
+        query.select(cb.greatest(root.get(MaintenanceTask_.number)));
+        
+        List<Predicate> conditions = new ArrayList<>();
+        
+        GregorianCalendar dateStart = new GregorianCalendar(new GregorianCalendar().get(Calendar.YEAR), 0, 01);
+        GregorianCalendar dateEnd = new GregorianCalendar(new GregorianCalendar().get(Calendar.YEAR), 11, 31);
+        
+        conditions.add(cb.between(root.<Date>get(MaintenanceTask_.creation), dateStart.getTime(), dateEnd.getTime()));
+
+        if (!conditions.isEmpty()) {
+            query.where(conditions.toArray(new Predicate[conditions.size()]));
+        }
+        
+        Integer result;
+        try {
+            result = em.createQuery(query).getSingleResult();
+            if (result != null)
+                result++;
+            else
+                result = 1;
+        } catch (NoResultException e) {
+            result = 1;
+        }
+        
+	return result;
     }
     
     public MaintenanceTask saveMaintenanceTask(MaintenanceTask maintenanceTask) {

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.6.0.final utlizzo versione della libreria JasperReports6.6.0  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="maintenanceTask" pageWidth="595" pageHeight="842" columnWidth="575" leftMargin="10" rightMargin="10" topMargin="10" bottomMargin="10" uuid="469dbe3b-ec1f-4869-b6a8-99d14aca6d98">
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="maintenanceContract" class="com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceContract"/>
+	<field name="system" class="com.prosystemingegneri.censistant.business.production.entity.System"/>
+	<field name="description" class="java.lang.String"/>
+	<field name="creation" class="java.util.Date"/>
+	<field name="inChargeWorker" class="com.prosystemingegneri.censistant.business.siteSurvey.entity.Worker"/>
+	<field name="maintenanceWorker" class="com.prosystemingegneri.censistant.business.siteSurvey.entity.Worker"/>
+	<field name="isGuaranteeValid" class="java.lang.Boolean"/>
+	<field name="expiry" class="java.util.Date"/>
+	<field name="closed" class="java.util.Date"/>
+	<field name="closingNotes" class="java.lang.String"/>
+	<field name="customerSignature" class="java.lang.String"/>
+	<field name="paymentNotes" class="java.lang.String"/>
+	<field name="preventiveMaintenance" class="com.prosystemingegneri.censistant.business.maintenance.entity.PreventiveMaintenance"/>
+	<field name="taskPrice" class="com.prosystemingegneri.censistant.business.maintenance.entity.TaskPrice"/>
+	<field name="isSuitableForOperation" class="java.lang.Boolean"/>
+	<detail>
+		<band height="125" splitType="Stretch">
+			<rectangle>
+				<reportElement x="359" y="0" width="216" height="50" uuid="accf497f-bdca-4e26-aff4-6a3d8323ce6f"/>
+			</rectangle>
+			<textField>
+				<reportElement x="359" y="37" width="216" height="30" uuid="9c6fe173-7859-4728-8c86-8aedd191db01"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1" spacingBefore="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA["RAPPORTO DI INTERVENTO n°"]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>
