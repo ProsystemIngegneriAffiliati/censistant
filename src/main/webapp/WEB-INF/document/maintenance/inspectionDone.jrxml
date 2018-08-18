@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.6.0.final utlizzo versione della libreria JasperReports6.6.0  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="inspectionsDone" pageWidth="288" pageHeight="842" columnWidth="288" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="75367bdc-1b9b-4a91-a0c6-3511f873e5e5">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="inspection" class="com.prosystemingegneri.censistant.business.maintenance.entity.Inspection"/>
+	<field name="inspectionResult" class="com.prosystemingegneri.censistant.business.maintenance.control.ResultType"/>
+	<columnHeader>
+		<band height="15">
+			<staticText>
+				<reportElement x="0" y="0" width="288" height="15" uuid="68ee7fd9-6bb6-435f-8aab-2192cfea296d"/>
+				<box>
+					<pen lineColor="#B4B4B4"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+					<paragraph leftIndent="4" rightIndent="4" spacingBefore="0" spacingAfter="0"/>
+				</textElement>
+				<text><![CDATA[CONTROLLI EFFETTUATI]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="180" height="15" uuid="2b83d86a-41b4-4170-8d64-9828790cd664"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Dotted" lineColor="#B4B4B4"/>
+					<topPen lineWidth="1.0" lineStyle="Dotted" lineColor="#B4B4B4"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+					<paragraph leftIndent="4" rightIndent="4"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{inspection}.getName()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="180" y="0" width="108" height="15" uuid="0e99df77-c207-4e03-9de3-e48360e66c0b"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Dotted" lineColor="#B4B4B4"/>
+					<topPen lineWidth="1.0" lineStyle="Dotted" lineColor="#B4B4B4"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+					<paragraph leftIndent="4" rightIndent="4"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{inspectionResult}.equals(com.prosystemingegneri.censistant.business.maintenance.control.ResultType.OK)?"POSITIVO":"NEGATIVO (vedi note)"]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="1">
+			<line>
+				<reportElement x="0" y="0" width="288" height="1" forecolor="#B4B4B4" uuid="6ddcfa34-7380-43aa-b5c6-25a4c2116242"/>
+			</line>
+		</band>
+	</columnFooter>
+</jasperReport>

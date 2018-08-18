@@ -459,6 +459,10 @@
                                     </p:panelGrid>
                                 </h:panelGroup>
 
+                                <p:commandButton title="#{msg.print}" icon="ui-icon-print" ajax="false">
+                                    <p:fileDownload value="#{maintenanceTaskPresenter.print()}" />
+                                </p:commandButton>
+
                                 <div class="ui-g">
                                     <div class="ui-g-1 ui-md-2"></div>
                                     <div class="ui-g-4 ui-md-3">

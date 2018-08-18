@@ -10,9 +10,11 @@
 	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<parameter name="subReportPath" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
+	<field name="number" class="java.lang.Integer"/>
 	<field name="maintenanceContract" class="com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceContract"/>
 	<field name="system" class="com.prosystemingegneri.censistant.business.production.entity.System"/>
 	<field name="description" class="java.lang.String"/>
@@ -24,23 +26,137 @@
 	<field name="closed" class="java.util.Date"/>
 	<field name="closingNotes" class="java.lang.String"/>
 	<field name="customerSignature" class="java.lang.String"/>
+	<field name="maintenancePayments" class="java.util.List"/>
 	<field name="paymentNotes" class="java.lang.String"/>
 	<field name="preventiveMaintenance" class="com.prosystemingegneri.censistant.business.maintenance.entity.PreventiveMaintenance"/>
+	<field name="inspectionsDone" class="java.util.List"/>
 	<field name="taskPrice" class="com.prosystemingegneri.censistant.business.maintenance.entity.TaskPrice"/>
+	<field name="replacements" class="java.util.List"/>
 	<field name="isSuitableForOperation" class="java.lang.Boolean"/>
 	<detail>
-		<band height="125" splitType="Stretch">
+		<band height="55" splitType="Stretch">
 			<rectangle>
-				<reportElement x="359" y="0" width="216" height="50" uuid="accf497f-bdca-4e26-aff4-6a3d8323ce6f"/>
+				<reportElement x="359" y="0" width="216" height="55" forecolor="#B4B4B4" uuid="accf497f-bdca-4e26-aff4-6a3d8323ce6f"/>
 			</rectangle>
 			<textField>
-				<reportElement x="359" y="37" width="216" height="30" uuid="9c6fe173-7859-4728-8c86-8aedd191db01"/>
+				<reportElement x="359" y="0" width="216" height="15" uuid="9c6fe173-7859-4728-8c86-8aedd191db01"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8"/>
-					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1" spacingBefore="1"/>
+					<font size="8" isBold="true"/>
+					<paragraph firstLineIndent="0" leftIndent="1" rightIndent="1" spacingBefore="1" spacingAfter="1"/>
 				</textElement>
-				<textFieldExpression><![CDATA["RAPPORTO DI INTERVENTO n°"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["RAPPORTO DI INTERVENTO n°"+$F{number}]]></textFieldExpression>
 			</textField>
+			<textField>
+				<reportElement x="359" y="15" width="108" height="10" uuid="87ac88ed-ae44-43a3-815d-0bf085da9a45"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="6" isBold="false"/>
+					<paragraph firstLineIndent="0" leftIndent="1" rightIndent="1" spacingBefore="1" spacingAfter="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA["RICHIESTO IL: " + new SimpleDateFormat("dd/MM/yyyy").format($F{creation})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="467" y="15" width="108" height="10" uuid="ef1de604-fc34-40fa-9867-cc7fa665ac01"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="6" isBold="false"/>
+					<paragraph firstLineIndent="0" leftIndent="1" rightIndent="1" spacingBefore="1" spacingAfter="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA["A: " + $F{inChargeWorker}.getInitials()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="467" y="25" width="108" height="10" uuid="5d6890bb-2dbb-4104-86ff-ad39ee109d2a"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="6" isBold="false"/>
+					<paragraph firstLineIndent="0" leftIndent="1" rightIndent="1" spacingBefore="1" spacingAfter="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA["TECNICO: " + ($F{maintenanceWorker}!= null?$F{maintenanceWorker}.getInitials():"")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="359" y="25" width="108" height="10" uuid="e96af905-038f-4a48-91bb-e25179c7703b"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="6" isBold="false"/>
+					<paragraph firstLineIndent="0" leftIndent="1" rightIndent="1" spacingBefore="1" spacingAfter="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA["INTERVENUTI IL: " + ($F{closed}!=null?new SimpleDateFormat("dd/MM/yyyy").format($F{closed}):"")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="359" y="35" width="108" height="10" uuid="b7e7e751-fd9f-4766-a145-7bf4d13809b0"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="6" isBold="false"/>
+					<paragraph firstLineIndent="0" leftIndent="1" rightIndent="1" spacingBefore="1" spacingAfter="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA["GARANZIA: " + ($F{isGuaranteeValid}?"SÌ":"NO")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="467" y="35" width="108" height="10" uuid="47ae50ba-e57b-40aa-91a9-0fd1883808ed"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="6" isBold="false"/>
+					<paragraph firstLineIndent="0" leftIndent="1" rightIndent="1" spacingBefore="1" spacingAfter="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA["CONTRATTO GARANZIA: " + (($F{maintenanceContract} != null && $F{maintenanceContract}.getIsFullService())?"SÌ":"NO")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="359" y="45" width="108" height="10" uuid="3681afe9-3e87-4367-9bd4-1d295e36cbb0"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="6" isBold="false"/>
+					<paragraph firstLineIndent="0" leftIndent="1" rightIndent="1" spacingBefore="1" spacingAfter="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA["CONTRATTO MANUTENZIONE: " + ($F{maintenanceContract}!=null?"SÌ":"NO")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="467" y="45" width="108" height="10" uuid="87c3a50e-7e41-4812-a4a2-e9704c120255"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="6" isBold="false"/>
+					<paragraph firstLineIndent="0" leftIndent="1" rightIndent="1" spacingBefore="1" spacingAfter="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA["INTERVENTO MESE: " + ($F{expiry}!=null?new SimpleDateFormat("MMMM yy").format($F{expiry}):"")]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="50"/>
+		<band height="51">
+			<textField isStretchWithOverflow="true">
+				<reportElement x="0" y="0" width="288" height="15" uuid="4719c048-bc6a-467d-854b-ce1d68266907"/>
+				<box>
+					<pen lineColor="#B4B4B4"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
+				</box>
+				<textElement verticalAlignment="Top">
+					<font size="8"/>
+					<paragraph firstLineIndent="0" leftIndent="4" rightIndent="4" spacingBefore="4" spacingAfter="4"/>
+				</textElement>
+				<textFieldExpression><![CDATA["DIFETTO COMUNICATO" + System.lineSeparator() + System.lineSeparator() + $F{description} + System.lineSeparator()]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="ContainerBottom" x="288" y="0" width="287" height="51" uuid="eed6ae78-f3df-4945-a98d-5e04c6c49b67"/>
+				<box>
+					<pen lineColor="#B4B4B4"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
+				</box>
+				<textElement verticalAlignment="Top">
+					<font size="8"/>
+					<paragraph firstLineIndent="0" leftIndent="4" rightIndent="4" spacingBefore="4" spacingAfter="4"/>
+				</textElement>
+				<textFieldExpression><![CDATA["LAVORO ESEGUITO / NOTE" + System.lineSeparator() + System.lineSeparator() + $F{closingNotes} + System.lineSeparator()]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="15" width="288" height="5" isRemoveLineWhenBlank="true" uuid="4d5815af-a92b-45b4-981c-01a78defc289">
+					<printWhenExpression><![CDATA[$F{inspectionsDone}!=null&&!$F{inspectionsDone}.isEmpty()]]></printWhenExpression>
+				</reportElement>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{inspectionsDone})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{subReportPath} + "inspectionDone.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="20" width="288" height="31" isRemoveLineWhenBlank="true" uuid="a243e8f1-a544-4434-8942-221f34b6ffcb">
+					<printWhenExpression><![CDATA[$F{replacements}!=null&&!$F{replacements}.isEmpty()]]></printWhenExpression>
+				</reportElement>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{replacements})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{subReportPath} + "replacement.jasper"]]></subreportExpression>
+			</subreport>
 		</band>
 	</detail>
 </jasperReport>

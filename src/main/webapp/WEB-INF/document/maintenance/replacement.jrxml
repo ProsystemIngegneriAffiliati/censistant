@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.6.0.final utlizzo versione della libreria JasperReports6.6.0  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="replacement" pageWidth="288" pageHeight="842" columnWidth="288" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="d56fff44-bc7d-43fd-9dc3-94e0becab607">
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="handledItem" class="com.prosystemingegneri.censistant.business.warehouse.entity.HandledItem"/>
+	<field name="price" class="java.math.BigDecimal"/>
+	<field name="currentReplacement" class="com.prosystemingegneri.censistant.business.maintenance.entity.Replacement">
+		<fieldDescription><![CDATA[_THIS]]></fieldDescription>
+	</field>
+	<columnHeader>
+		<band height="15" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="135" height="15" uuid="b3457b4e-9754-4e45-b4a1-0a3f990ed8ba"/>
+				<box>
+					<pen lineColor="#B4B4B4"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+					<paragraph leftIndent="4" rightIndent="0" spacingBefore="0" spacingAfter="0"/>
+				</textElement>
+				<text><![CDATA[PARTI DI RICAMBIO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="135" y="0" width="30" height="15" uuid="b6a2cc25-9d7b-4720-9b33-9c704a52c6a7"/>
+				<box>
+					<pen lineColor="#B4B4B4"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+					<paragraph leftIndent="0" rightIndent="0" spacingBefore="0" spacingAfter="0"/>
+				</textElement>
+				<text><![CDATA[Q.TÀ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="165" y="0" width="65" height="15" uuid="e164b5b0-2ee0-4b9f-9be8-5df25719183a"/>
+				<box>
+					<pen lineColor="#B4B4B4"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+					<paragraph leftIndent="0" rightIndent="4" spacingBefore="0" spacingAfter="0"/>
+				</textElement>
+				<text><![CDATA[PREZZO UN.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="230" y="0" width="58" height="15" uuid="2fdec67c-a116-461b-93d3-966f18ea9cd7"/>
+				<box>
+					<pen lineColor="#B4B4B4"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+					<paragraph leftIndent="0" rightIndent="4" spacingBefore="0" spacingAfter="0"/>
+				</textElement>
+				<text><![CDATA[TOTALE]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="ContainerHeight" x="0" y="0" width="135" height="15" uuid="4d7c22fb-dc9a-41cb-9408-4dc2aaadc897"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Dotted" lineColor="#B4B4B4"/>
+					<topPen lineWidth="1.0" lineStyle="Dotted" lineColor="#B4B4B4"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+					<paragraph leftIndent="4" rightIndent="4"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{handledItem}.getBoxedItem().getItem().getCodeAndDescription()]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="ContainerHeight" x="135" y="0" width="30" height="15" uuid="746f928e-9bb0-479d-8278-7d56c4b6b623"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Dotted" lineColor="#B4B4B4"/>
+					<topPen lineWidth="1.0" lineStyle="Dotted" lineColor="#B4B4B4"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+					<paragraph leftIndent="0" rightIndent="0"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{handledItem}.getQuantity()]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="ContainerHeight" x="165" y="0" width="65" height="15" uuid="99dca3e9-7324-42e3-8f1c-e27a541d57da"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Dotted" lineColor="#B4B4B4"/>
+					<topPen lineWidth="1.0" lineStyle="Dotted" lineColor="#B4B4B4"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+					<paragraph leftIndent="4" rightIndent="4"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{price}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="ContainerHeight" x="230" y="0" width="58" height="15" uuid="d4d8b982-ecda-4c08-b71c-82e222ba622c"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Dotted" lineColor="#B4B4B4"/>
+					<topPen lineWidth="1.0" lineStyle="Dotted" lineColor="#B4B4B4"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+					<paragraph leftIndent="4" rightIndent="4"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{currentReplacement}.getTotalPrice()]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="1" splitType="Stretch">
+			<line>
+				<reportElement x="0" y="0" width="288" height="1" forecolor="#B4B4B4" uuid="b9861f7d-e141-4752-a50b-7741e2565a2f"/>
+			</line>
+		</band>
+	</columnFooter>
+</jasperReport>
