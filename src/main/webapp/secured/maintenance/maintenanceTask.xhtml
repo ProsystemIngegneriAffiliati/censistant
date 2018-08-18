@@ -41,7 +41,7 @@
                                         <p:message for="system"/>
                                     </h:panelGroup>
                                 </p:panelGrid>
-                                <p:panelGrid columns="3" columnClasses="ui-grid-col-3,ui-grid-col-6,ui-grid-col-3" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                <p:panelGrid columns="2" columnClasses="ui-grid-col-4,ui-grid-col-8" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:calendar id="creation" value="#{maintenanceTaskPresenter.maintenanceTask.creation}" locale="it" />
                                         <p:outputLabel for="creation" value="#{msg.maintenance_maintenanceTask_creationForPrinting}"/>
@@ -66,6 +66,21 @@
                                         <p:calendar id="closed" value="#{maintenanceTaskPresenter.maintenanceTask.closed}" locale="it" />
                                         <p:outputLabel for="closed" value="#{msg.maintenance_maintenanceTask_closedForPrinting}"/>
                                         <p:message for="closed"/>
+                                    </h:panelGroup>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:autoComplete id="maintenanceWorker"
+                                                        dropdown="true"
+                                                        value="#{maintenanceTaskPresenter.maintenanceTask.maintenanceWorker}"
+                                                        completeMethod="#{workerListPresenter.completeWorkers}"
+                                                        var="worker"
+                                                        itemLabel="#{worker.name}"
+                                                        itemValue="#{worker}"
+                                                        forceSelection="true"
+                                                        >
+                                            <oou:converter converterId="omnifaces.ListConverter" list="#{workerListPresenter.workers}"/>
+                                        </p:autoComplete>
+                                        <p:outputLabel for="maintenanceWorker" value="#{msg.maintenance_maintenanceTask_maintenanceWorker}"/>
+                                        <p:message for="maintenanceWorker"/>
                                     </h:panelGroup>
                                 </p:panelGrid>
                                 <p:panelGrid columns="4" columnClasses="ui-grid-col-3,ui-grid-col-3,ui-grid-col-3,ui-grid-col-3" layout="grid" styleClass="ui-panelgrid-blank form-group">

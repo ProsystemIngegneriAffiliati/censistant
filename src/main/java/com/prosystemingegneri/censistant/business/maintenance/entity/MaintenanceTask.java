@@ -18,6 +18,7 @@ package com.prosystemingegneri.censistant.business.maintenance.entity;
 
 import com.prosystemingegneri.censistant.business.entity.BaseEntity;
 import com.prosystemingegneri.censistant.business.maintenance.control.MandatoryInspectionsDoneForClosedMaintenanceTask;
+import com.prosystemingegneri.censistant.business.maintenance.control.MandatoryMaintenanceWorkerForClosedMaintenanceTask;
 import com.prosystemingegneri.censistant.business.production.entity.System;
 import com.prosystemingegneri.censistant.business.maintenance.control.MandatoryNotesSignatureForClosedMaintenanceTask;
 import com.prosystemingegneri.censistant.business.maintenance.control.MandatoryPaymentsForClosedMaintenanceTask;
@@ -53,6 +54,7 @@ import javax.validation.constraints.NotNull;
 @MandatoryInspectionsDoneForClosedMaintenanceTask
 @MandatoryPaymentsForClosedMaintenanceTask
 @MandatorySuitableForOperationForClosedMaintenanceTask
+@MandatoryMaintenanceWorkerForClosedMaintenanceTask
 public class MaintenanceTask extends BaseEntity<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -78,6 +80,9 @@ public class MaintenanceTask extends BaseEntity<Long> {
     @NotNull
     @ManyToOne(optional = false)
     private Worker inChargeWorker;
+    
+    @ManyToOne
+    private Worker maintenanceWorker;
     
     @NotNull
     @Column(nullable = false)
@@ -356,6 +361,14 @@ public class MaintenanceTask extends BaseEntity<Long> {
             else
                 isSuitableForOperation = Boolean.FALSE;
         }
+    }
+
+    public Worker getMaintenanceWorker() {
+        return maintenanceWorker;
+    }
+
+    public void setMaintenanceWorker(Worker maintenanceWorker) {
+        this.maintenanceWorker = maintenanceWorker;
     }
     
 }
