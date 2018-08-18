@@ -158,5 +158,98 @@
 				<subreportExpression><![CDATA[$P{subReportPath} + "replacement.jasper"]]></subreportExpression>
 			</subreport>
 		</band>
+		<band height="221">
+			<subreport>
+				<reportElement x="0" y="0" width="230" height="60" uuid="4fe13e03-e75b-4645-96f3-b14a35779194"/>
+				<subreportParameter name="subReportPath">
+					<subreportParameterExpression><![CDATA[$P{subReportPath}]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource(Arrays.asList($F{taskPrice}))]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{subReportPath} + "taskPrice.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement x="230" y="0" width="117" height="15" uuid="96fcba15-d28e-45e2-8bf3-3c2d10c6b999"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{maintenancePayments})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{subReportPath} + "maintenancePayment.jasper"]]></subreportExpression>
+			</subreport>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" stretchType="ContainerBottom" x="230" y="15" width="117" height="45" uuid="cea76375-22f1-4029-96a1-6fe4e4817dfa">
+					<printWhenExpression><![CDATA[$F{paymentNotes}!=null && !$F{paymentNotes}.isEmpty()]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<leftPen lineWidth="1.0" lineColor="#B4B4B4"/>
+					<bottomPen lineWidth="1.0" lineColor="#B4B4B4"/>
+					<rightPen lineWidth="1.0" lineColor="#B4B4B4"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="8" isBold="false"/>
+					<paragraph leftIndent="4"/>
+				</textElement>
+				<textFieldExpression><![CDATA["NOTE" + System.lineSeparator() + System.lineSeparator() + $F{paymentNotes} + System.lineSeparator()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="347" y="0" width="228" height="15" uuid="058769f4-7835-443a-9301-10005c3a6ea6"/>
+				<box>
+					<topPen lineWidth="1.0" lineColor="#B4B4B4"/>
+					<leftPen lineWidth="1.0" lineColor="#B4B4B4"/>
+					<rightPen lineWidth="1.0" lineColor="#B4B4B4"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[AVVERTENZE IMPORTANTI]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="347" y="15" width="228" height="135" uuid="1c8d4272-5d27-4b6e-9441-0ac94911e83d"/>
+				<box>
+					<leftPen lineWidth="1.0" lineColor="#B4B4B4"/>
+					<rightPen lineWidth="1.0" lineColor="#B4B4B4"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font size="5" isBold="false"/>
+					<paragraph leftIndent="2" rightIndent="2"/>
+				</textElement>
+				<text><![CDATA[1) In caso di mancato pagamento il ns. centro di assistenza non effettuerà interventi fino a saldo dell’importo dovutoci. Il costo di intervento come sopra evidenziato ed accettato deve essere saldato per contanti contestualmente alla firma della presente a meno di preventiva pattuizione contraria. Il pagamento differito verrà maggiorato degli oneri di incasso. Sul ritardato pagamento verranno applicati gli interessi al TOP-RATE bancario maggiorato del 2%.
+
+2) I Sigg. Committenti sono pregati di controllare l'esatta annotazione delle ore di lavoro sui rapporti che verranno presentati alla firma.
+
+3) L’apposizione della forma vale anche come benestare delle spese di viaggio, trasferta, ecc.; e pertanto non potrà essere in seguito sollevata eccezione alcuna.
+
+4) La garanzia decorre dalla data del COLLAUDO ed è valida per 6 mesi.
+
+5) La garanzia decade immediatamente, come pura la nostra responsabilità sull’impianto in caso di manomissione di tutte o parte delle apparecchiature, di modifiche e riparazione eseguite da persone da noi non autorizzate, di cattiva manutenzione, di trascuratezza o dell’incapacità dell’utente.
+
+
+Confermiamo l’effettiva durata del lavoro e ci dichiariamo soddisfatti dell'intervento.]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="347" y="150" width="228" height="10" uuid="e1c5f533-389b-41b8-9bd2-eb990fdd4d2b"/>
+				<box>
+					<pen lineColor="#B4B4B4"/>
+					<leftPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="5"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Si dichiara che l'impianto " + ($F{isSuitableForOperation}?"è idoneo":"non è idoneo") + " al funzionamento"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement stretchType="ContainerHeight" x="0" y="60" width="135" height="15" uuid="16f64cfb-f894-424f-b5d9-0e9bc6e260cc"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Dotted" lineColor="#B4B4B4"/>
+					<topPen lineWidth="1.0" lineStyle="Dotted" lineColor="#B4B4B4"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+					<paragraph leftIndent="4" rightIndent="4"/>
+				</textElement>
+				<text><![CDATA[Oneri di trasferta]]></text>
+			</staticText>
+		</band>
 	</detail>
 </jasperReport>

@@ -1,5 +1,8 @@
 eclipse.preferences.version=1
 encoding//src/main/webapp/WEB-INF/document/maintenance/inspectionDone.jrxml=UTF-8
+encoding//src/main/webapp/WEB-INF/document/maintenance/maintenancePayment.jrxml=UTF-8
 encoding//src/main/webapp/WEB-INF/document/maintenance/maintenanceTask.jrxml=UTF-8
 encoding//src/main/webapp/WEB-INF/document/maintenance/replacement.jrxml=UTF-8
+encoding//src/main/webapp/WEB-INF/document/maintenance/taskPrice.jrxml=UTF-8
+encoding//src/main/webapp/WEB-INF/document/maintenance/workingDuration.jrxml=UTF-8
 encoding//src/main/webapp/WEB-INF/document/siteSurvey/siteSurveyReport.jrxml=UTF-8

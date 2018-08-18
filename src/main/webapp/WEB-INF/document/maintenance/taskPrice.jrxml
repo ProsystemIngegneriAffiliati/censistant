@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.6.0.final utlizzo versione della libreria JasperReports6.6.0  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="taskPrice" pageWidth="230" pageHeight="842" columnWidth="230" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="4a9099ff-53a9-4af0-9214-919f71ea0b26">
+	<parameter name="subReportPath" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="maintenanceTask" class="com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceTask"/>
+	<field name="fixedCallAmount" class="java.math.BigDecimal"/>
+	<field name="normalWorking" class="com.prosystemingegneri.censistant.business.maintenance.entity.WorkingDuration"/>
+	<field name="overtimeWorking" class="com.prosystemingegneri.censistant.business.maintenance.entity.WorkingDuration"/>
+	<field name="travelWorking" class="com.prosystemingegneri.censistant.business.maintenance.entity.WorkingDuration"/>
+	<field name="kilometersTravelled" class="java.lang.Integer"/>
+	<field name="pricePerKilometer" class="java.math.BigDecimal"/>
+	<field name="travelExpenses" class="java.math.BigDecimal"/>
+	<field name="currentTaskPrice" class="com.prosystemingegneri.censistant.business.maintenance.entity.TaskPrice">
+		<fieldDescription><![CDATA[_THIS]]></fieldDescription>
+	</field>
+	<columnHeader>
+		<band height="15" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="135" height="15" uuid="4aca6b61-603f-4d0a-b4f5-f864647d1f77"/>
+				<box>
+					<pen lineColor="#B4B4B4"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+					<paragraph leftIndent="4" rightIndent="0" spacingBefore="0" spacingAfter="0"/>
+				</textElement>
+				<text><![CDATA[RIEPILOGO COSTI]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="135" y="0" width="95" height="15" uuid="553f9c6c-82e4-44ad-9e7c-4835482986c8"/>
+				<box>
+					<pen lineColor="#B4B4B4"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+					<paragraph leftIndent="0" rightIndent="4" spacingBefore="0" spacingAfter="0"/>
+				</textElement>
+				<text><![CDATA[TOTALI]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<staticText>
+				<reportElement stretchType="ContainerHeight" x="0" y="0" width="135" height="15" uuid="6f77389a-dc3c-4600-a592-11f203c08458"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Dotted" lineColor="#B4B4B4"/>
+					<topPen lineWidth="1.0" lineStyle="Dotted" lineColor="#B4B4B4"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+					<paragraph leftIndent="4" rightIndent="4"/>
+				</textElement>
+				<text><![CDATA[Totale ricambi]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="ContainerHeight" x="135" y="0" width="95" height="15" uuid="471430c9-3ee3-4e69-a87f-b23bf01194ff"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Dotted" lineColor="#B4B4B4"/>
+					<topPen lineWidth="1.0" lineStyle="Dotted" lineColor="#B4B4B4"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+					<paragraph leftIndent="4" rightIndent="4"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{maintenanceTask}.getReplacementsPrice()]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="15">
+			<staticText>
+				<reportElement stretchType="ContainerHeight" x="0" y="0" width="135" height="15" uuid="b4f0baba-bc9f-4200-97a3-aee8b54c5721"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Dotted" lineColor="#B4B4B4"/>
+					<topPen lineWidth="1.0" lineStyle="Dotted" lineColor="#B4B4B4"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+					<paragraph leftIndent="4" rightIndent="4"/>
+				</textElement>
+				<text><![CDATA[Fisso di chiamata]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="ContainerHeight" x="135" y="0" width="95" height="15" uuid="0cb3900e-e535-434b-87f1-b03341c49abd"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Dotted" lineColor="#B4B4B4"/>
+					<topPen lineWidth="1.0" lineStyle="Dotted" lineColor="#B4B4B4"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+					<paragraph leftIndent="4" rightIndent="4"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fixedCallAmount}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="30">
+			<subreport>
+				<reportElement x="0" y="0" width="230" height="30" isRemoveLineWhenBlank="true" uuid="458df652-c1ff-4f2a-bcd0-fb639e8b0bc8">
+					<printWhenExpression><![CDATA[$F{normalWorking}!=null]]></printWhenExpression>
+				</reportElement>
+				<subreportParameter name="type">
+					<subreportParameterExpression><![CDATA["Ore lav. norm."]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource(Arrays.asList($F{normalWorking}))]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{subReportPath} + "workingDuration.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="30">
+			<subreport>
+				<reportElement x="0" y="0" width="230" height="30" isRemoveLineWhenBlank="true" uuid="3658d396-a882-4c06-9ddb-63f4ede18aaa">
+					<printWhenExpression><![CDATA[$F{overtimeWorking}!=null]]></printWhenExpression>
+				</reportElement>
+				<subreportParameter name="type">
+					<subreportParameterExpression><![CDATA["Ore straord."]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource(Arrays.asList($F{overtimeWorking}))]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{subReportPath} + "workingDuration.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="30">
+			<subreport>
+				<reportElement x="0" y="0" width="230" height="30" isRemoveLineWhenBlank="true" uuid="57d9d99b-f7e1-4109-952e-c99cab9aa2f2">
+					<printWhenExpression><![CDATA[$F{travelWorking}!=null]]></printWhenExpression>
+				</reportElement>
+				<subreportParameter name="type">
+					<subreportParameterExpression><![CDATA["Ore viaggio"]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource(Arrays.asList($F{travelWorking}))]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{subReportPath} + "workingDuration.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="15">
+			<textField>
+				<reportElement stretchType="ContainerHeight" x="0" y="0" width="135" height="15" uuid="98250a1a-c0ed-45f5-8626-cdf2169c8ba3"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Dotted" lineColor="#B4B4B4"/>
+					<topPen lineWidth="1.0" lineStyle="Dotted" lineColor="#B4B4B4"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+					<paragraph leftIndent="4" rightIndent="4"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Costo al km " + $F{pricePerKilometer} + " x km tot. " + $F{kilometersTravelled}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="ContainerHeight" x="135" y="0" width="95" height="15" uuid="606e8fc7-0415-43be-a1a1-aa95519e9f9c"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Dotted" lineColor="#B4B4B4"/>
+					<topPen lineWidth="1.0" lineStyle="Dotted" lineColor="#B4B4B4"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+					<paragraph leftIndent="4" rightIndent="4"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{currentTaskPrice}.getPriceTravelled()]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="15">
+			<staticText>
+				<reportElement stretchType="ContainerHeight" x="0" y="0" width="135" height="15" uuid="4c69a777-28fb-43d5-87d8-5344f56efb5a"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Dotted" lineColor="#B4B4B4"/>
+					<topPen lineWidth="1.0" lineStyle="Dotted" lineColor="#B4B4B4"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+					<paragraph leftIndent="4" rightIndent="4"/>
+				</textElement>
+				<text><![CDATA[Oneri di trasferta]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="ContainerHeight" x="135" y="0" width="95" height="15" uuid="f253af07-174a-4802-849e-2b0197f3aad5"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Dotted" lineColor="#B4B4B4"/>
+					<topPen lineWidth="1.0" lineStyle="Dotted" lineColor="#B4B4B4"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+					<paragraph leftIndent="4" rightIndent="4"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{travelExpenses}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="1" splitType="Stretch">
+			<line>
+				<reportElement x="0" y="0" width="230" height="1" forecolor="#B4B4B4" uuid="9203ceca-84b9-458b-9887-0e03a07b34f4"/>
+			</line>
+		</band>
+	</columnFooter>
+</jasperReport>
