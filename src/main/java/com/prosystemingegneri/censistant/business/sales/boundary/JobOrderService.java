@@ -16,6 +16,7 @@
  */
 package com.prosystemingegneri.censistant.business.sales.boundary;
 
+import com.prosystemingegneri.censistant.business.customerSupplier.boundary.CustomerSupplierService;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier_;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
@@ -59,6 +60,9 @@ import javax.persistence.criteria.Root;
 public class JobOrderService implements Serializable{
     @PersistenceContext
     EntityManager em;
+    
+    @Inject
+    CustomerSupplierService customerSupplierService;
     
     @Inject
     OfferService offerService;
@@ -120,7 +124,13 @@ public class JobOrderService implements Serializable{
             if (jobOrder.getId() == null)
                 em.persist(jobOrder);
             else
-                return em.merge(jobOrder);
+                jobOrder = em.merge(jobOrder);
+        }
+        
+        CustomerSupplier customer = jobOrder.getOffer().getSiteSurveyReport().getPlant().getCustomerSupplier();
+        if (customer.getIsPotentialCustomer()) {
+            customer.setIsPotentialCustomer(Boolean.FALSE);
+            customerSupplierService.saveCustomerSupplier(customer);
         }
         
         return jobOrder;
@@ -134,13 +144,13 @@ public class JobOrderService implements Serializable{
         em.remove(readJobOrder(id));
     }
 
-    public List<JobOrder> listJobOrders(int first, int pageSize, String sortField, Boolean isAscending, Integer number, String customerName, String plantAddress, String systemType) {
+    public List<JobOrder> listJobOrders(int first, int pageSize, String sortField, Boolean isAscending, Integer number, String customerName, CustomerSupplier customer, String plantAddress, String systemType) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<JobOrder> query = cb.createQuery(JobOrder.class);
         Root<JobOrder> root = query.from(JobOrder.class);
         CriteriaQuery<JobOrder> select = query.select(root).distinct(true);
         
-        List<Predicate> conditions = calculateConditions(cb, root, number, customerName, plantAddress, systemType);
+        List<Predicate> conditions = calculateConditions(cb, root, number, customerName, customer, plantAddress, systemType);
 
         if (!conditions.isEmpty())
             query.where(conditions.toArray(new Predicate[conditions.size()]));
@@ -183,21 +193,25 @@ public class JobOrderService implements Serializable{
         return typedQuery.getResultList();
     }
     
-    public Long getJobOrdersCount(Integer number, String customerName, String plantAddress, String systemType) {
+    public Long getJobOrdersCount(Integer number, String customerName, CustomerSupplier customer, String plantAddress, String systemType) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Long> query = cb.createQuery(Long.class);
         Root<JobOrder> root = query.from(JobOrder.class);
         CriteriaQuery<Long> select = query.select(cb.count(root));
 
-        List<Predicate> conditions = calculateConditions(cb, root, number, customerName, plantAddress, systemType);
+        List<Predicate> conditions = calculateConditions(cb, root, number, customerName, customer, plantAddress, systemType);
 
         if (!conditions.isEmpty())
             query.where(conditions.toArray(new Predicate[conditions.size()]));
 
-        return em.createQuery(select).getSingleResult();
+        try {
+            return em.createQuery(select).getSingleResult();
+        } catch (NoResultException e) {
+            return 0L;
+        }
     }
     
-    private List<Predicate> calculateConditions(CriteriaBuilder cb, Root<JobOrder> root, Integer number, String customerName, String plantAddress, String systemType) {
+    private List<Predicate> calculateConditions(CriteriaBuilder cb, Root<JobOrder> root, Integer number, String customerName, CustomerSupplier customer, String plantAddress, String systemType) {
         List<Predicate> conditions = new ArrayList<>();
 
         //number
@@ -212,6 +226,15 @@ public class JobOrderService implements Serializable{
             Join<Plant, CustomerSupplier> customerRoot = plantRoot.join(Plant_.customerSupplier);
             
             conditions.add(cb.like(cb.lower(customerRoot.get(CustomerSupplier_.name)), "%" + customerName.toLowerCase() + "%"));
+        }
+        
+        //customer
+        if (customer != null) {
+            Join<JobOrder, Offer> offerRoot = root.join(JobOrder_.offer);
+            Join<Offer, SiteSurveyReport> siteSurveyReportRoot = offerRoot.join(Offer_.siteSurveyReport);
+            Join<SiteSurveyReport, Plant> plantRoot = siteSurveyReportRoot.join(SiteSurveyReport_.plant);
+            
+            conditions.add(cb.equal(plantRoot.get(Plant_.customerSupplier), customer));
         }
         
         //plant's address

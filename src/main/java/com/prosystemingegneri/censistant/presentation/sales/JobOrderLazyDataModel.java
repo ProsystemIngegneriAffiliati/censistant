@@ -77,8 +77,8 @@ public class JobOrderLazyDataModel extends LazyDataModel<JobOrder>{
             }
         }
         
-        List<JobOrder> result = service.listJobOrders(first, pageSize, sortField, isAscending, number, customerName, plantAddress, systemType);
-        this.setRowCount(service.getJobOrdersCount(number, customerName, plantAddress, systemType).intValue());
+        List<JobOrder> result = service.listJobOrders(first, pageSize, sortField, isAscending, number, customerName, null, plantAddress, systemType);
+        this.setRowCount(service.getJobOrdersCount(number, customerName, null, plantAddress, systemType).intValue());
         
         return result;
     }

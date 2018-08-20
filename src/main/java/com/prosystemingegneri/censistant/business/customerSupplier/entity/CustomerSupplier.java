@@ -228,17 +228,5 @@ public class CustomerSupplier extends BaseEntity<Long>{
     public void setIsPotentialCustomer(Boolean isPotentialCustomer) {
         this.isPotentialCustomer = isPotentialCustomer;
     }
-
-    /**
-     * A potential customer cannot have an head office.
-     * If it has an head office, then uncheck the isPotentialCustomer
-     */
-    public void checkHeadOfficeOfPotentialCustomer() {
-        for (Plant plant : plants)
-            if (plant.getIsHeadOffice()) {
-                isPotentialCustomer = Boolean.FALSE;
-                break;
-            }
-    }
     
 }

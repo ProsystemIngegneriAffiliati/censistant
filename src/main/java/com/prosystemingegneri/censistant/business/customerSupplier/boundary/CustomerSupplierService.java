@@ -24,10 +24,12 @@ import com.prosystemingegneri.censistant.business.purchasing.entity.BoxedItem;
 import com.prosystemingegneri.censistant.business.purchasing.entity.BoxedItem_;
 import com.prosystemingegneri.censistant.business.purchasing.entity.SupplierItem;
 import com.prosystemingegneri.censistant.business.purchasing.entity.SupplierItem_;
+import com.prosystemingegneri.censistant.business.sales.boundary.JobOrderService;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -46,6 +48,9 @@ import javax.persistence.criteria.Root;
 public class CustomerSupplierService implements Serializable{
     @PersistenceContext
     EntityManager em;
+    
+    @Inject
+    JobOrderService jobOrderService;
     
     public CustomerSupplier createCustomer() {
         CustomerSupplier customer = new CustomerSupplier(Boolean.FALSE, Boolean.TRUE, Boolean.FALSE);
@@ -71,8 +76,6 @@ public class CustomerSupplierService implements Serializable{
     public CustomerSupplier saveCustomerSupplier(CustomerSupplier customerSupplier) {
         for (Plant plant : customerSupplier.getPlants())
             plant.checkSupplierPlantLocation();
-        
-        customerSupplier.checkHeadOfficeOfPotentialCustomer();
 
         if (customerSupplier.getId() == null)
             em.persist(customerSupplier);
