@@ -33,6 +33,10 @@
 	<field name="taskPrice" class="com.prosystemingegneri.censistant.business.maintenance.entity.TaskPrice"/>
 	<field name="replacements" class="java.util.List"/>
 	<field name="isSuitableForOperation" class="java.lang.Boolean"/>
+	<field name="customerSignatureImg" class="java.awt.Image"/>
+	<field name="currentMaintenanceTask" class="com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceTask">
+		<fieldDescription><![CDATA[_THIS]]></fieldDescription>
+	</field>
 	<detail>
 		<band height="55" splitType="Stretch">
 			<rectangle>
@@ -158,9 +162,9 @@
 				<subreportExpression><![CDATA[$P{subReportPath} + "replacement.jasper"]]></subreportExpression>
 			</subreport>
 		</band>
-		<band height="221">
+		<band height="200">
 			<subreport>
-				<reportElement x="0" y="0" width="230" height="60" uuid="4fe13e03-e75b-4645-96f3-b14a35779194"/>
+				<reportElement stretchType="ContainerHeight" x="0" y="0" width="230" height="175" uuid="4fe13e03-e75b-4645-96f3-b14a35779194"/>
 				<subreportParameter name="subReportPath">
 					<subreportParameterExpression><![CDATA[$P{subReportPath}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -168,12 +172,12 @@
 				<subreportExpression><![CDATA[$P{subReportPath} + "taskPrice.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport>
-				<reportElement x="230" y="0" width="117" height="15" uuid="96fcba15-d28e-45e2-8bf3-3c2d10c6b999"/>
+				<reportElement x="230" y="0" width="117" height="100" uuid="96fcba15-d28e-45e2-8bf3-3c2d10c6b999"/>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{maintenancePayments})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[$P{subReportPath} + "maintenancePayment.jasper"]]></subreportExpression>
 			</subreport>
 			<textField isStretchWithOverflow="true">
-				<reportElement positionType="Float" stretchType="ContainerBottom" x="230" y="15" width="117" height="45" uuid="cea76375-22f1-4029-96a1-6fe4e4817dfa">
+				<reportElement positionType="Float" stretchType="ContainerBottom" x="230" y="100" width="117" height="100" uuid="cea76375-22f1-4029-96a1-6fe4e4817dfa">
 					<printWhenExpression><![CDATA[$F{paymentNotes}!=null && !$F{paymentNotes}.isEmpty()]]></printWhenExpression>
 				</reportElement>
 				<box>
@@ -235,21 +239,84 @@ Confermiamo l’effettiva durata del lavoro e ci dichiariamo soddisfatti dell'in
 				</textElement>
 				<textFieldExpression><![CDATA["Si dichiara che l'impianto " + ($F{isSuitableForOperation}?"è idoneo":"non è idoneo") + " al funzionamento"]]></textFieldExpression>
 			</textField>
-			<staticText>
-				<reportElement stretchType="ContainerHeight" x="0" y="60" width="135" height="15" uuid="16f64cfb-f894-424f-b5d9-0e9bc6e260cc"/>
+			<textField>
+				<reportElement positionType="FixRelativeToBottom" stretchType="ContainerHeight" x="0" y="175" width="95" height="25" uuid="927215be-926c-41cd-a53e-2f17df8dc982"/>
 				<box>
-					<pen lineWidth="1.0" lineStyle="Dotted" lineColor="#B4B4B4"/>
-					<topPen lineWidth="1.0" lineStyle="Dotted" lineColor="#B4B4B4"/>
+					<pen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
-					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
 				</box>
 				<textElement verticalAlignment="Middle">
 					<font size="8"/>
 					<paragraph leftIndent="4" rightIndent="4"/>
 				</textElement>
-				<text><![CDATA[Oneri di trasferta]]></text>
+				<textFieldExpression><![CDATA["FIRMA DEL TECNICO" + System.lineSeparator() + $F{maintenanceWorker}.getName()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement positionType="FixRelativeToBottom" stretchType="ContainerHeight" x="135" y="175" width="95" height="15" uuid="8e5578dd-63ce-41e8-b8d1-98018ff766dd"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+					<paragraph leftIndent="4" rightIndent="4"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{currentMaintenanceTask}.getPrice()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="FixRelativeToBottom" stretchType="ContainerHeight" x="95" y="175" width="40" height="25" uuid="b908dbf9-1bcb-40a5-a78a-b39bb4d2c279"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+					<paragraph leftIndent="0" rightIndent="0"/>
+				</textElement>
+				<text><![CDATA[TOTALE]]></text>
 			</staticText>
+			<staticText>
+				<reportElement positionType="FixRelativeToBottom" stretchType="ContainerHeight" x="135" y="190" width="95" height="10" uuid="501fe9bf-05ca-4016-a9e0-9cc323404e47"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6" isBold="false"/>
+					<paragraph leftIndent="0" rightIndent="0"/>
+				</textElement>
+				<text><![CDATA[+ I.V.A.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="347" y="160" width="40" height="40" uuid="d70ba5d7-31d2-43d5-a1b1-50d21aa19721"/>
+				<box>
+					<pen lineColor="#B4B4B4"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0" lineColor="#B4B4B4"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="5"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[IL CLIENTE]]></text>
+			</staticText>
+			<image hAlign="Center" vAlign="Middle">
+				<reportElement x="387" y="160" width="188" height="40" uuid="f1b624fb-0b8a-4e6b-a760-296c5c053d75"/>
+				<box>
+					<bottomPen lineWidth="1.0" lineColor="#B4B4B4"/>
+					<rightPen lineWidth="1.0" lineColor="#B4B4B4"/>
+				</box>
+				<imageExpression><![CDATA[$F{customerSignatureImg}]]></imageExpression>
+			</image>
 		</band>
 	</detail>
 </jasperReport>

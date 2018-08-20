@@ -23,12 +23,19 @@ import com.prosystemingegneri.censistant.business.production.entity.System;
 import com.prosystemingegneri.censistant.business.maintenance.control.MandatoryNotesSignatureForClosedMaintenanceTask;
 import com.prosystemingegneri.censistant.business.maintenance.control.MandatoryPaymentsForClosedMaintenanceTask;
 import com.prosystemingegneri.censistant.business.maintenance.control.MandatorySuitableForOperationForClosedMaintenanceTask;
+import com.prosystemingegneri.censistant.business.maintenance.control.SigGen;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.Worker;
 import com.prosystemingegneri.censistant.business.warehouse.entity.HandledItem;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PipedInputStream;
+import java.io.PipedOutputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.imageio.ImageIO;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -42,6 +49,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.persistence.Version;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -105,6 +113,9 @@ public class MaintenanceTask extends BaseEntity<Long> {
     
     @Lob
     private String customerSignature;
+    
+    @Transient
+    private java.awt.Image customerSignatureImg;
     
     @ManyToMany
     private List<MaintenancePayment> maintenancePayments;
@@ -384,6 +395,37 @@ public class MaintenanceTask extends BaseEntity<Long> {
 
     public void setNumber(Integer number) {
         this.number = number;
+    }
+
+    public java.awt.Image getCustomerSignatureImg() {
+        try {
+            ByteArrayOutputStream customerSignatureOut = new ByteArrayOutputStream();
+            SigGen.generateSignature(customerSignature, customerSignatureOut);
+            
+            // take the copy of the stream and re-write it to an InputStream
+            PipedInputStream customerSignatureIn = new PipedInputStream();
+            final PipedOutputStream out = new PipedOutputStream(customerSignatureIn);
+            new Thread(new Runnable() {
+                public void run () {
+                    try {
+                        // write the original OutputStream to the PipedOutputStream
+                        customerSignatureOut.writeTo(out);
+                    } catch (IOException e) {
+                        // logging and exception handling should go here
+                    }
+                }
+            }).start();
+            
+            customerSignatureImg = ImageIO.read(customerSignatureIn);
+        } catch (IOException ex) {
+            return null;
+        }
+        
+        return customerSignatureImg;
+    }
+
+    public void setCustomerSignatureImg(java.awt.Image customerSignatureImg) {
+        this.customerSignatureImg = customerSignatureImg;
     }
     
 }
