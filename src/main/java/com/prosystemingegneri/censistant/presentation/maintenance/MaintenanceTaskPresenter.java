@@ -73,14 +73,19 @@ public class MaintenanceTaskPresenter implements Serializable{
     @Resource
     Validator validator;
     
+    private boolean isValid() {
+        boolean isValidated = true;
+        for (ConstraintViolation<MaintenanceTask> constraintViolation : validator.validate(maintenanceTask, Default.class)) {
+            isValidated = false;
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", constraintViolation.getMessage()));
+        }
+        
+        return isValidated;
+    }
+    
     public String saveMaintenanceTask() {
         try {
-            boolean isValidated = true;
-            for (ConstraintViolation<MaintenanceTask> constraintViolation : validator.validate(maintenanceTask, Default.class)) {
-                isValidated = false;
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", constraintViolation.getMessage()));
-            }
-            if (!isValidated)
+            if (!isValid())
                 return null;
 
             service.saveMaintenanceTask(maintenanceTask);
@@ -168,23 +173,28 @@ public class MaintenanceTaskPresenter implements Serializable{
     }
     
     public StreamedContent print() {
-        try {
-            List<MaintenanceTask> tempBean = new ArrayList<>();
-            tempBean.add(maintenanceTask);
-            Map<String, Object> params = new HashMap<>();
-            params.put("ReportTitle", "Rapporto di intervento");
-            params.put("subReportPath", FacesContext.getCurrentInstance().getExternalContext().getRealPath("/WEB-INF/document/maintenance/") + "/");
-            params.put("reportImagePath", FacesContext.getCurrentInstance().getExternalContext().getRealPath("/WEB-INF/document/images/") + "/");
-            
-            String reportPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/WEB-INF/document/maintenance/maintenanceTask.jasper");
-            JasperPrint jasperPrint = JasperFillManager.fillReport(reportPath, params, new JRBeanCollectionDataSource(tempBean));
-            
-            return new ByteArrayContent(JasperExportManager.exportReportToPdf(jasperPrint), "application/pdf", maintenanceTask.getNumber() + ".pdf");
-            
-        } catch (JRException ex) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Error during printing" + 
-                    java.lang.System.lineSeparator() +
-                    java.lang.System.lineSeparator() + ex.getLocalizedMessage()));
+        if (isValid()) {
+            try {
+                service.saveMaintenanceTask(maintenanceTask);
+                List<MaintenanceTask> tempBean = new ArrayList<>();
+                tempBean.add(maintenanceTask);
+                Map<String, Object> params = new HashMap<>();
+                params.put("ReportTitle", "Rapporto di intervento");
+                params.put("subReportPath", FacesContext.getCurrentInstance().getExternalContext().getRealPath("/WEB-INF/document/maintenance/") + "/");
+                params.put("reportImagePath", FacesContext.getCurrentInstance().getExternalContext().getRealPath("/WEB-INF/document/images/") + "/");
+
+                String reportPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/WEB-INF/document/maintenance/maintenanceTask.jasper");
+                JasperPrint jasperPrint = JasperFillManager.fillReport(reportPath, params, new JRBeanCollectionDataSource(tempBean));
+
+                return new ByteArrayContent(JasperExportManager.exportReportToPdf(jasperPrint), "application/pdf", maintenanceTask.getNumber() + ".pdf");
+                } catch (EJBException e) {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", ExceptionUtility.unwrap(e.getCausedByException()).getLocalizedMessage()));
+                    return null;
+                } catch (JRException ex) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Error during printing" + 
+                        java.lang.System.lineSeparator() +
+                        java.lang.System.lineSeparator() + ex.getLocalizedMessage()));
+            }
         }
         
         return null;
