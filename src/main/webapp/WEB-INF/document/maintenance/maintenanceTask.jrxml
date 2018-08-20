@@ -11,6 +11,7 @@
 	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
 	<parameter name="subReportPath" class="java.lang.String"/>
+	<parameter name="reportImagePath" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -114,6 +115,10 @@
 				</textElement>
 				<textFieldExpression><![CDATA["INTERVENTO MESE: " + ($F{expiry}!=null?new SimpleDateFormat("MMMM yy").format($F{expiry}):"")]]></textFieldExpression>
 			</textField>
+			<image hAlign="Center" vAlign="Middle">
+				<reportElement x="0" y="0" width="359" height="55" uuid="72ec7343-4bde-49d5-be9b-d7771e1ced2a"/>
+				<imageExpression><![CDATA[$P{reportImagePath} + "logoForMaintenanceTask.png"]]></imageExpression>
+			</image>
 		</band>
 		<band height="50"/>
 		<band height="51">
@@ -263,7 +268,7 @@ Confermiamo l’effettiva durata del lavoro e ci dichiariamo soddisfatti dell'in
 					<font size="8"/>
 					<paragraph leftIndent="4" rightIndent="4"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{currentMaintenanceTask}.getPrice()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[NumberFormat.getInstance(Locale.ITALY).getCurrencyInstance().format($F{currentMaintenanceTask}.getPrice())]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement positionType="FixRelativeToBottom" stretchType="ContainerHeight" x="95" y="175" width="40" height="25" uuid="b908dbf9-1bcb-40a5-a78a-b39bb4d2c279"/>
@@ -303,9 +308,9 @@ Confermiamo l’effettiva durata del lavoro e ci dichiariamo soddisfatti dell'in
 					<bottomPen lineWidth="1.0" lineColor="#B4B4B4"/>
 					<rightPen lineWidth="0.0"/>
 				</box>
-				<textElement verticalAlignment="Middle">
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="5"/>
-					<paragraph leftIndent="2"/>
+					<paragraph leftIndent="0"/>
 				</textElement>
 				<text><![CDATA[IL CLIENTE]]></text>
 			</staticText>

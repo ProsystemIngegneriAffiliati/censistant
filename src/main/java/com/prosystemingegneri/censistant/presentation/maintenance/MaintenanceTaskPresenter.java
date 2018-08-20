@@ -174,7 +174,7 @@ public class MaintenanceTaskPresenter implements Serializable{
             Map<String, Object> params = new HashMap<>();
             params.put("ReportTitle", "Rapporto di intervento");
             params.put("subReportPath", FacesContext.getCurrentInstance().getExternalContext().getRealPath("/WEB-INF/document/maintenance/") + "/");
-            //params.put("reportImagePath", FacesContext.getCurrentInstance().getExternalContext().getRealPath("/WEB-INF/document/images/") + "/");
+            params.put("reportImagePath", FacesContext.getCurrentInstance().getExternalContext().getRealPath("/WEB-INF/document/images/") + "/");
             
             String reportPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/WEB-INF/document/maintenance/maintenanceTask.jasper");
             JasperPrint jasperPrint = JasperFillManager.fillReport(reportPath, params, new JRBeanCollectionDataSource(tempBean));

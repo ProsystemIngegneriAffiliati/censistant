@@ -80,7 +80,7 @@
 					<font size="8"/>
 					<paragraph leftIndent="4" rightIndent="4"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{maintenanceTask}.getReplacementsPrice()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[NumberFormat.getInstance(Locale.ITALY).getCurrencyInstance().format($F{maintenanceTask}.getReplacementsPrice())]]></textFieldExpression>
 			</textField>
 		</band>
 		<band height="15">
@@ -112,7 +112,7 @@
 					<font size="8"/>
 					<paragraph leftIndent="4" rightIndent="4"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{fixedCallAmount}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[NumberFormat.getInstance(Locale.ITALY).getCurrencyInstance().format($F{fixedCallAmount})]]></textFieldExpression>
 			</textField>
 		</band>
 		<band height="30">
@@ -165,7 +165,7 @@
 					<font size="8"/>
 					<paragraph leftIndent="4" rightIndent="4"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Costo al km " + $F{pricePerKilometer} + " x km tot. " + $F{kilometersTravelled}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Costo al km " + NumberFormat.getInstance(Locale.ITALY).getCurrencyInstance().format($F{pricePerKilometer}) + " x km tot. " + $F{kilometersTravelled}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
 				<reportElement stretchType="ContainerHeight" x="135" y="0" width="95" height="15" uuid="606e8fc7-0415-43be-a1a1-aa95519e9f9c"/>
@@ -180,7 +180,7 @@
 					<font size="8"/>
 					<paragraph leftIndent="4" rightIndent="4"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{currentTaskPrice}.getPriceTravelled()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[NumberFormat.getInstance(Locale.ITALY).getCurrencyInstance().format($F{currentTaskPrice}.getPriceTravelled())]]></textFieldExpression>
 			</textField>
 		</band>
 		<band height="15">
@@ -212,7 +212,7 @@
 					<font size="8"/>
 					<paragraph leftIndent="4" rightIndent="4"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{travelExpenses}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[NumberFormat.getInstance(Locale.ITALY).getCurrencyInstance().format($F{travelExpenses})]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

@@ -127,7 +127,7 @@
 					<font size="8"/>
 					<paragraph leftIndent="4" rightIndent="4"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{price}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[NumberFormat.getInstance(Locale.ITALY).getCurrencyInstance().format($F{price})]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
 				<reportElement stretchType="ContainerHeight" x="230" y="0" width="58" height="15" uuid="d4d8b982-ecda-4c08-b71c-82e222ba622c"/>
@@ -142,7 +142,7 @@
 					<font size="8"/>
 					<paragraph leftIndent="4" rightIndent="4"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{currentReplacement}.getTotalPrice()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[NumberFormat.getInstance(Locale.ITALY).getCurrencyInstance().format($F{currentReplacement}.getTotalPrice())]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
