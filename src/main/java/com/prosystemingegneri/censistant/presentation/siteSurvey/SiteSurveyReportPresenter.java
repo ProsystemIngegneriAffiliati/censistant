@@ -40,6 +40,7 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.omnifaces.cdi.ViewScoped;
+import org.omnifaces.util.Messages;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.ByteArrayContent;
 import org.primefaces.model.StreamedContent;
@@ -102,6 +103,8 @@ public class SiteSurveyReportPresenter implements Serializable{
         
         if (id == null || id == 0)
             id = siteSurveyReport.getId();
+        
+        Messages.create("Successo").detail("Salvato con successo").flash().add();
         
         return FacesContext.getCurrentInstance().getViewRoot().getViewId() + "?faces-redirect=true&includeViewParams=true";
     }
