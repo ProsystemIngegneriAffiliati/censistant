@@ -57,7 +57,7 @@ public class SiteSurveyReport extends BaseEntity<Long>{
     private Date actual;
     
     @NotNull
-    @OneToOne(optional = false)
+    @OneToOne(optional = false, orphanRemoval = true)
     private SiteSurveyRequest request;
     
     @NotNull
