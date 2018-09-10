@@ -5,7 +5,8 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:oou="http://omnifaces.org/ui">
+      xmlns:oou="http://omnifaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <f:metadata>
         <f:viewParam name="id"
                      value="#{customerSupplierPresenter.id}"
@@ -23,7 +24,11 @@
                     <div class="ui-g">
                         <div class="ui-g-12">
                             <div class="card card-w-title">
-                                <h1>#{msg.customerSupplier_customer}</h1>
+                                <h1>#{msg.customerSupplier_customer}
+                                    <c:if test="#{customerSupplierPresenter.customerSupplier.isPotentialCustomer}">
+                                        #{msg.customerSupplier_customerSupplier_potential}
+                                    </c:if>
+                                </h1>
                                 <p>#{msg.customerSupplier_customer_tip}</p>
                                 <p:panelGrid columns="3" columnClasses="ui-grid-col-6,ui-grid-col-3,ui-grid-col-3" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                     <h:panelGroup styleClass="md-inputfield">
@@ -45,7 +50,7 @@
 
                                 <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                     <h:panelGroup styleClass="md-inputfield">
-                                        <p:inputTextarea id="address" value="#{customerSupplierPresenter.customerSupplier.headOffice.address}" rows="3"/>
+                                        <p:inputTextarea id="address" value="#{customerSupplierPresenter.customerSupplier.headOffice.address}" rows="2"/>
                                         <p:outputLabel for="address" value="#{msg.customerSupplier_plant_address}"/>
                                         <p:message for="address"/>
                                     </h:panelGroup>
@@ -164,7 +169,7 @@
 
                                 <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                     <h:panelGroup styleClass="md-inputfield">
-                                        <p:inputTextarea id="notes" value="#{customerSupplierPresenter.customerSupplier.notes}" rows="3"/>
+                                        <p:inputTextarea id="notes" value="#{customerSupplierPresenter.customerSupplier.notes}" rows="2"/>
                                         <p:outputLabel for="notes" value="#{msg.customerSupplier_customerSupplier_notes}"/>
                                         <p:message for="notes"/>
                                     </h:panelGroup>
