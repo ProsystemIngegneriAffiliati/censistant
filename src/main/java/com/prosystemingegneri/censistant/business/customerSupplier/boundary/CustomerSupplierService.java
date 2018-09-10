@@ -105,7 +105,7 @@ public class CustomerSupplierService implements Serializable{
             query.where(conditions.toArray(new Predicate[conditions.size()]));
         }
         
-        query.orderBy(cb.asc(root.get(CustomerSupplier_.businessName)));
+        query.orderBy(cb.desc(root.get(CustomerSupplier_.id)));
         if (isAscending != null && sortField != null && !sortField.isEmpty()) {
             if (isAscending)
                 query.orderBy(cb.asc(root.get(sortField)));
