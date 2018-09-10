@@ -52,6 +52,7 @@ public class CustomerSupplierLazyDataModel extends LazyDataModel<CustomerSupplie
     public List<CustomerSupplier> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
         Boolean isAscending = null;
         Boolean isPotentialCustomer = isPotentialCustomerDefault;
+        Boolean isOnlyInfo = null;
         String businessName = null;
         String name = null;
         String address = null;
@@ -73,6 +74,8 @@ public class CustomerSupplierLazyDataModel extends LazyDataModel<CustomerSupplie
                 if (!filterProperty.isEmpty()) {
                     if (filterProperty.equalsIgnoreCase("isPotentialCustomer"))
                         isPotentialCustomer = (Boolean) filters.get(filterProperty);
+                    if (filterProperty.equalsIgnoreCase("isOnlyInfo"))
+                        isOnlyInfo = (Boolean) filters.get(filterProperty);
                     if (filterProperty.equalsIgnoreCase("businessName"))
                         businessName = String.valueOf(filters.get(filterProperty));
                     if (filterProperty.equalsIgnoreCase("name"))
@@ -83,8 +86,8 @@ public class CustomerSupplierLazyDataModel extends LazyDataModel<CustomerSupplie
             }
         }
         
-        List<CustomerSupplier> result = service.listCustomerSuppliers(first, pageSize, sortField, isAscending, isPotentialCustomer, isCustomer, isSupplier, businessName, name, address);
-        this.setRowCount(service.getCustomerSuppliersCount(isPotentialCustomer, isCustomer, isSupplier, businessName, name, address).intValue());
+        List<CustomerSupplier> result = service.listCustomerSuppliers(first, pageSize, sortField, isAscending, isPotentialCustomer, isOnlyInfo, isCustomer, isSupplier, businessName, name, address);
+        this.setRowCount(service.getCustomerSuppliersCount(isPotentialCustomer, isOnlyInfo, isCustomer, isSupplier, businessName, name, address).intValue());
         
         return result;
     }

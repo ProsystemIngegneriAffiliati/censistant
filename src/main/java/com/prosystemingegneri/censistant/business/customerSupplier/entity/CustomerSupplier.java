@@ -50,6 +50,10 @@ public class CustomerSupplier extends BaseEntity<Long>{
     
     @Column(nullable = false)
     @NotNull
+    private Boolean isOnlyInfo;
+    
+    @Column(nullable = false)
+    @NotNull
     private Boolean isCustomer;
     
     @Column(nullable = false)
@@ -88,13 +92,15 @@ public class CustomerSupplier extends BaseEntity<Long>{
         isCustomer = Boolean.FALSE;
         isSupplier = Boolean.FALSE;
         isPotentialCustomer = Boolean.FALSE;
+        isOnlyInfo = Boolean.FALSE;
     }
 
-    public CustomerSupplier(Boolean isPotentialCustomer, Boolean isCustomer, Boolean isSupplier) {
+    public CustomerSupplier(Boolean isPotentialCustomer, Boolean isCustomer, Boolean isSupplier, Boolean isOnlyInfo) {
         this();
         this.isPotentialCustomer = isPotentialCustomer;
         this.isCustomer = isCustomer;
         this.isSupplier = isSupplier;
+        this.isOnlyInfo = isOnlyInfo;
     }
 
     public Boolean getIsCustomer() {
@@ -227,6 +233,14 @@ public class CustomerSupplier extends BaseEntity<Long>{
 
     public void setIsPotentialCustomer(Boolean isPotentialCustomer) {
         this.isPotentialCustomer = isPotentialCustomer;
+    }
+
+    public Boolean getIsOnlyInfo() {
+        return isOnlyInfo;
+    }
+
+    public void setIsOnlyInfo(Boolean isOnlyInfo) {
+        this.isOnlyInfo = isOnlyInfo;
     }
     
 }

@@ -70,42 +70,42 @@ public class CustomerSupplierListPresenter implements Serializable{
     }
     
     public List<CustomerSupplier> completeCustomer(String value) {
-        return service.listCustomerSuppliers(0, 10, "name", Boolean.TRUE, null, Boolean.TRUE, null, null, value, null);
+        return service.listCustomerSuppliers(0, 10, "name", Boolean.TRUE, null, null, Boolean.TRUE, null, null, value, null);
     }
 
     public List<CustomerSupplier> getCustomers() {
         if (customers == null || customers.isEmpty())
-            customers = service.listCustomerSuppliers(0, 0, "name", Boolean.TRUE, null, Boolean.TRUE, null, null, null, null);
+            customers = service.listCustomerSuppliers(0, 0, "name", Boolean.TRUE, null, null, Boolean.TRUE, null, null, null, null);
         return customers;
     }
     
     public List<CustomerSupplier> completeAcquiredCustomer(String value) {
-        return service.listCustomerSuppliers(0, 10, "name", Boolean.TRUE, Boolean.FALSE, Boolean.TRUE, null, null, value, null);
+        return service.listCustomerSuppliers(0, 10, "name", Boolean.TRUE, Boolean.FALSE, null, Boolean.TRUE, null, null, value, null);
     }
 
     public List<CustomerSupplier> getAcquiredCustomers() {
         if (customers == null || customers.isEmpty())
-            customers = service.listCustomerSuppliers(0, 0, "name", Boolean.TRUE, Boolean.FALSE, Boolean.TRUE, null, null, null, null);
+            customers = service.listCustomerSuppliers(0, 0, "name", Boolean.TRUE, Boolean.FALSE, null, Boolean.TRUE, null, null, null, null);
         return customers;
     }
     
     public List<CustomerSupplier> completeSupplier(String value) {
-        return service.listCustomerSuppliers(0, 10, "name", Boolean.TRUE, null, null, Boolean.TRUE, null, value, null);
+        return service.listCustomerSuppliers(0, 10, "name", Boolean.TRUE, null, null, null, Boolean.TRUE, null, value, null);
     }
     
     public List<CustomerSupplier> getSuppliers() {
         if (suppliers == null || suppliers.isEmpty())
-            suppliers = service.listCustomerSuppliers(0, 0, "name", Boolean.TRUE, null, null, Boolean.TRUE, null, null, null);
+            suppliers = service.listCustomerSuppliers(0, 0, "name", Boolean.TRUE, null, null, null, Boolean.TRUE, null, null, null);
         return suppliers;
     }
     
     public List<CustomerSupplier> completeCustomerSupplier(String value) {
-        return service.listCustomerSuppliers(0, 10, "name", Boolean.TRUE, Boolean.FALSE, null, null, null, value, null);
+        return service.listCustomerSuppliers(0, 10, "name", Boolean.TRUE, Boolean.FALSE, null, null, null, null, value, null);
     }
     
     public List<CustomerSupplier> getCustomerSuppliers() {
         if (customerSuppliers == null || customerSuppliers.isEmpty())
-            customerSuppliers = service.listCustomerSuppliers(0, 0, "name", Boolean.TRUE, null, null, null, null, null, null);
+            customerSuppliers = service.listCustomerSuppliers(0, 0, "name", Boolean.TRUE, null, null, null, null, null, null, null);
         return customerSuppliers;
     }
 

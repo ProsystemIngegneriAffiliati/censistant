@@ -53,21 +53,21 @@ public class CustomerSupplierService implements Serializable{
     JobOrderService jobOrderService;
     
     public CustomerSupplier createCustomer() {
-        CustomerSupplier customer = new CustomerSupplier(Boolean.FALSE, Boolean.TRUE, Boolean.FALSE);
+        CustomerSupplier customer = new CustomerSupplier(Boolean.FALSE, Boolean.TRUE, Boolean.FALSE, Boolean.FALSE);
         customer.addPlant(new Plant(Boolean.TRUE, "Sede", null));
         
         return customer;
     }
     
     public CustomerSupplier createPotentialCustomer() {
-        CustomerSupplier potentialCustomer = new CustomerSupplier(Boolean.TRUE, Boolean.TRUE, Boolean.FALSE);
+        CustomerSupplier potentialCustomer = new CustomerSupplier(Boolean.TRUE, Boolean.TRUE, Boolean.FALSE, Boolean.TRUE);
         potentialCustomer.addPlant(new Plant(Boolean.TRUE, "Sede", null));
         
         return potentialCustomer;
     }
     
     public CustomerSupplier createSupplier() {
-        CustomerSupplier supplier = new CustomerSupplier(Boolean.FALSE, Boolean.FALSE, Boolean.TRUE);
+        CustomerSupplier supplier = new CustomerSupplier(Boolean.FALSE, Boolean.FALSE, Boolean.TRUE, Boolean.FALSE);
         supplier.addPlant(new Plant(Boolean.TRUE, "Sede", "To be defined"));
         
         return supplier;
@@ -93,13 +93,13 @@ public class CustomerSupplierService implements Serializable{
         em.remove(readCustomerSupplier(id));
     }
 
-    public List<CustomerSupplier> listCustomerSuppliers(int first, int pageSize, String sortField, Boolean isAscending, Boolean isPotentialCustomer, Boolean isCustomer, Boolean isSupplier, String businessName, String name, String address) {
+    public List<CustomerSupplier> listCustomerSuppliers(int first, int pageSize, String sortField, Boolean isAscending, Boolean isPotentialCustomer, Boolean isOnlyInfo, Boolean isCustomer, Boolean isSupplier, String businessName, String name, String address) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<CustomerSupplier> query = cb.createQuery(CustomerSupplier.class);
         Root<CustomerSupplier> root = query.from(CustomerSupplier.class);
         CriteriaQuery<CustomerSupplier> select = query.select(root).distinct(true);
         
-        List<Predicate> conditions = calculateConditions(cb, root, isPotentialCustomer, isCustomer, isSupplier, businessName, name, address);
+        List<Predicate> conditions = calculateConditions(cb, root, isPotentialCustomer, isOnlyInfo, isCustomer, isSupplier, businessName, name, address);
 
         if (!conditions.isEmpty()) {
             query.where(conditions.toArray(new Predicate[conditions.size()]));
@@ -122,13 +122,13 @@ public class CustomerSupplierService implements Serializable{
         return typedQuery.getResultList();
     }
     
-    public Long getCustomerSuppliersCount(Boolean isPotentialCustomer, Boolean isCustomer, Boolean isSupplier, String businessName, String name, String address) {
+    public Long getCustomerSuppliersCount(Boolean isPotentialCustomer, Boolean isOnlyInfo, Boolean isCustomer, Boolean isSupplier, String businessName, String name, String address) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Long> query = cb.createQuery(Long.class);
         Root<CustomerSupplier> root = query.from(CustomerSupplier.class);
         CriteriaQuery<Long> select = query.select(cb.count(root));
 
-        List<Predicate> conditions = calculateConditions(cb, root, isPotentialCustomer, isCustomer, isSupplier, businessName, name, address);
+        List<Predicate> conditions = calculateConditions(cb, root, isPotentialCustomer, isOnlyInfo, isCustomer, isSupplier, businessName, name, address);
 
         if (!conditions.isEmpty()) {
             query.where(conditions.toArray(new Predicate[conditions.size()]));
@@ -137,12 +137,16 @@ public class CustomerSupplierService implements Serializable{
         return em.createQuery(select).getSingleResult();
     }
     
-    private List<Predicate> calculateConditions(CriteriaBuilder cb, Root<CustomerSupplier> root, Boolean isPotentialCustomer, Boolean isCustomer, Boolean isSupplier, String businessName, String name, String address) {
+    private List<Predicate> calculateConditions(CriteriaBuilder cb, Root<CustomerSupplier> root, Boolean isPotentialCustomer, Boolean isOnlyInfo, Boolean isCustomer, Boolean isSupplier, String businessName, String name, String address) {
         List<Predicate> conditions = new ArrayList<>();
 
         //is potential customer
         if (isPotentialCustomer != null)
             conditions.add(cb.equal(root.get(CustomerSupplier_.isPotentialCustomer), isPotentialCustomer));
+        
+        //is only info customer
+        if (isOnlyInfo != null)
+            conditions.add(cb.equal(root.get(CustomerSupplier_.isOnlyInfo), isOnlyInfo));
         
         //is customer
         if (isCustomer != null)
