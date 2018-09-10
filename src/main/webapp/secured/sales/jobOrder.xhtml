@@ -38,27 +38,8 @@
 
                                 <p:tabView id="jobOrderTabs" dynamic="true" activeIndex="#{jobOrderPresenter.activeIndex}">
                                     <p:tab title="#{msg.sales_jobOrder_customerData}">
-                                        <p:panel header="#{msg.sales_offer} #{msg.or_conjunction} #{msg.siteSurvey_siteSurveyReport}" style="margin-bottom: 25px">
-                                            <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group" rendered="#{jobOrderPresenter.jobOrder.offer.id == null}">
-                                                <h:panelGroup id="offerPanelGroup">
-                                                    <h:panelGroup styleClass="md-inputfield" rendered="#{jobOrderPresenter.dummyReport == null}">
-                                                        <p:autoComplete id="offer"
-                                                                        dropdown="true"
-                                                                        value="#{jobOrderPresenter.dummyOffer}"
-                                                                        completeMethod="#{offerListPresenter.completeOffersNotAssociatedToJobOrder}"
-                                                                        var="off"
-                                                                        itemLabel="#{off.siteSurveyReport.plant.customerSupplier.name} - #{of:formatDate(off.creation, 'dd/MM/yyyy')} - #{off.siteSurveyReport.request.systemType.name}"
-                                                                        itemValue="#{off}"
-                                                                        forceSelection="true"
-                                                                        >
-                                                            <oou:converter converterId="omnifaces.ListConverter" list="#{offerListPresenter.offersNotAssociatedToJobOrder}"/>
-                                                            <p:ajax event="itemSelect" listener="#{jobOrderPresenter.onOfferSelect}" update="reportPanelGroup offerAndReportData" />
-                                                        </p:autoComplete>
-                                                        <p:outputLabel for="offer" value="#{msg.sales_offers}"/>
-                                                        <p:message for="offer"/>
-                                                    </h:panelGroup>
-                                                </h:panelGroup>
-                                                
+                                        <p:panel header="#{msg.siteSurvey_siteSurveyReport}" style="margin-bottom: 25px">
+                                            <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group" rendered="#{jobOrderPresenter.jobOrder.offer.id == null}">
                                                 <h:panelGroup id="reportPanelGroup">
                                                     <h:panelGroup styleClass="md-inputfield" rendered="#{jobOrderPresenter.dummyOffer == null}">
                                                         <p:autoComplete id="report"
@@ -71,7 +52,7 @@
                                                                         forceSelection="true"
                                                                         >
                                                             <oou:converter converterId="omnifaces.ListConverter" list="#{siteSurveyReportListPresenter.reportsNotAssociatedToOffer}"/>
-                                                            <p:ajax event="itemSelect" listener="#{jobOrderPresenter.onSiteSurveyReportSelect}" update="offerPanelGroup offerAndReportData" />
+                                                            <p:ajax event="itemSelect" listener="#{jobOrderPresenter.onSiteSurveyReportSelect}" update="offerAndReportData" />
                                                         </p:autoComplete>
                                                         <p:outputLabel for="report" value="#{msg.siteSurvey_siteSurveyReports}"/>
                                                         <p:message for="report"/>
