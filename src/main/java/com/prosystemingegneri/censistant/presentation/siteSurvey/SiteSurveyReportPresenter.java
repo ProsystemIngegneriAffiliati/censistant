@@ -100,7 +100,10 @@ public class SiteSurveyReportPresenter implements Serializable{
             return null;
         }
         
-        return "/secured/siteSurvey/siteSurveyReports?faces-redirect=true";
+        if (id == null || id == 0)
+            id = siteSurveyReport.getId();
+        
+        return FacesContext.getCurrentInstance().getViewRoot().getViewId() + "?faces-redirect=true&includeViewParams=true";
     }
     
     public void detailSiteSurveyReport() {
@@ -132,6 +135,8 @@ public class SiteSurveyReportPresenter implements Serializable{
     
     public StreamedContent print() {
         try {
+            siteSurveyReport = service.saveSiteSurveyReport(siteSurveyReport);
+            
             List<SiteSurveyReport> tempBean = new ArrayList<>();
             tempBean.add(siteSurveyReport);
             Map<String, Object> params = new HashMap<>();
@@ -148,6 +153,9 @@ public class SiteSurveyReportPresenter implements Serializable{
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Error during printing" + 
                     System.lineSeparator() +
                     System.lineSeparator() + ex.getLocalizedMessage()));
+        } catch (EJBException e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", ExceptionUtility.unwrap(e.getCausedByException()).getLocalizedMessage()));
+            return null;
         }
         
         return null;

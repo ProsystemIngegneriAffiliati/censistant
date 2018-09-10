@@ -109,7 +109,7 @@ public class SiteSurveyReportService implements Serializable{
         else
             return em.merge(siteSurveyReport);
         
-        return null;
+        return siteSurveyReport;
     }
     
     public SiteSurveyReport readSiteSurveyReport(Long id) {
