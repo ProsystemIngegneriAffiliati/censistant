@@ -56,7 +56,7 @@
                                                         value="#{maintenanceTaskPresenter.maintenanceTask.inChargeWorker}"
                                                         completeMethod="#{workerListPresenter.completeWorkers}"
                                                         var="worker"
-                                                        itemLabel="#{worker.name}"
+                                                        itemLabel="#{worker.initials}"
                                                         itemValue="#{worker}"
                                                         forceSelection="true"
                                                         >
@@ -76,7 +76,7 @@
                                                         value="#{maintenanceTaskPresenter.maintenanceTask.maintenanceWorker}"
                                                         completeMethod="#{workerListPresenter.completeWorkers}"
                                                         var="worker"
-                                                        itemLabel="#{worker.name}"
+                                                        itemLabel="#{worker.initials}"
                                                         itemValue="#{worker}"
                                                         forceSelection="true"
                                                         >

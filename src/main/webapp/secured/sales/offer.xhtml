@@ -147,7 +147,7 @@
                                                                     value="#{offerPresenter.offer.siteSurveyReport.seller}"
                                                                     completeMethod="#{workerListPresenter.completeWorkers}"
                                                                     var="worker"
-                                                                    itemLabel="#{worker.name}"
+                                                                    itemLabel="#{worker.initials}"
                                                                     itemValue="#{worker}"
                                                                     forceSelection="true">
                                                         <oou:converter converterId="omnifaces.ListConverter" list="#{workerListPresenter.workers}"/>
