@@ -66,6 +66,8 @@ public class CustomerSupplierService implements Serializable{
         return potentialCustomer;
     }
     
+    
+    
     public CustomerSupplier createSupplier() {
         CustomerSupplier supplier = new CustomerSupplier(Boolean.FALSE, Boolean.FALSE, Boolean.TRUE, Boolean.FALSE);
         supplier.addPlant(new Plant(Boolean.TRUE, "Sede", "To be defined"));

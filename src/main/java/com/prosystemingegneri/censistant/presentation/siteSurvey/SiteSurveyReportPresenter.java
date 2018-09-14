@@ -64,6 +64,7 @@ public class SiteSurveyReportPresenter implements Serializable{
     
     private List<Plant> plants;
     
+    private CustomerSupplier newCustomer;
     private Plant newPlant;
     
     @PostConstruct
@@ -76,7 +77,8 @@ public class SiteSurveyReportPresenter implements Serializable{
                 siteSurveyReport.getRequest().setCustomer(customer);
                 siteSurveyReport.setPlant(getMostRecentPlant(customer));
             }
-            newPlant = new Plant();
+            clearNewCustomer();
+            clearNewPlant();
         }
     }
     
@@ -115,7 +117,8 @@ public class SiteSurveyReportPresenter implements Serializable{
                 siteSurveyReport = service.createNewSiteSurveyReport();
             else
                 siteSurveyReport = service.readSiteSurveyReport(id);
-            newPlant = new Plant();
+            clearNewCustomer();
+            clearNewPlant();
         }
     }
     
@@ -178,6 +181,33 @@ public class SiteSurveyReportPresenter implements Serializable{
         this.plants = plants;
     }
     
+    public void addNewCustomer() {
+        if (newPlant.getName() == null ||newPlant.getName().isEmpty()) {
+            FacesContext.getCurrentInstance().addMessage("name", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Not null"));
+            return;
+        }
+        if (newPlant.getAddress() == null ||newPlant.getAddress().isEmpty()) {
+            FacesContext.getCurrentInstance().addMessage("address", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Not null"));
+            return;
+        }
+        if (siteSurveyReport.getRequest().getCustomer() == null) {
+            if (newCustomer.getBusinessName() == null ||newCustomer.getBusinessName().isEmpty()) {
+                FacesContext.getCurrentInstance().addMessage("businessName", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Not null"));
+                return;
+            }
+            if (newCustomer.getProvenance() == null) {
+                FacesContext.getCurrentInstance().addMessage("provenance", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Not null"));
+                return;
+            }
+            newPlant.setIsHeadOffice(Boolean.TRUE);
+            newCustomer.addPlant(newPlant);
+            siteSurveyReport.getRequest().setCustomer(newCustomer);
+        }
+        siteSurveyReport.getRequest().getCustomer().addPlant(newPlant);
+        siteSurveyReport.setPlant(newPlant);
+        customerSupplierService.saveCustomerSupplier(siteSurveyReport.getRequest().getCustomer());
+    }
+    
     public void addNewPlantToCustomer() {
         if (siteSurveyReport.getRequest() != null && siteSurveyReport.getRequest().getCustomer() != null && newPlant != null) {
             siteSurveyReport.getRequest().getCustomer().addPlant(newPlant);
@@ -186,6 +216,10 @@ public class SiteSurveyReportPresenter implements Serializable{
             FacesContext.getCurrentInstance().getExternalContext().getFlash().put("idCustomer", siteSurveyReport.getRequest().getCustomer().getId());
             init();
         }
+    }
+    
+    public void clearNewCustomer() {
+        newCustomer = new CustomerSupplier(Boolean.TRUE, Boolean.TRUE, Boolean.FALSE, Boolean.FALSE);
     }
     
     public void clearNewPlant() {
@@ -226,6 +260,14 @@ public class SiteSurveyReportPresenter implements Serializable{
 
     public void setNewPlant(Plant newPlant) {
         this.newPlant = newPlant;
+    }
+
+    public CustomerSupplier getNewCustomer() {
+        return newCustomer;
+    }
+
+    public void setNewCustomer(CustomerSupplier newCustomer) {
+        this.newCustomer = newCustomer;
     }
     
 }
