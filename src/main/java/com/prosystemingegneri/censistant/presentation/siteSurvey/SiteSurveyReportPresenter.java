@@ -40,7 +40,6 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.omnifaces.cdi.ViewScoped;
-import org.omnifaces.util.Messages;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.ByteArrayContent;
 import org.primefaces.model.StreamedContent;

@@ -35,7 +35,7 @@
                                                         forceSelection="true"
                                                         disabled="#{siteSurveyReportPresenter.siteSurveyReport.request.id != null}">
                                             <oou:converter converterId="omnifaces.ListConverter" list="#{customerSupplierListPresenter.customers}"/>
-                                            <p:ajax event="itemSelect" update="plant" />
+                                            <p:ajax event="itemSelect" update="plant newCustomerPanel" />
                                         </p:autoComplete>
                                         <p:outputLabel for="requestCustomer" value="#{msg.siteSurvey_siteSurveyRequest_customer}"/>
                                         <p:message for="requestCustomer"/>
@@ -50,13 +50,16 @@
                                                         itemValue="#{plant}"
                                                         forceSelection="true">
                                             <oou:converter converterId="omnifaces.ListConverter" list="#{siteSurveyReportPresenter.plants}"/>
+                                            <p:ajax event="itemSelect" update="newCustomerPanel" />
                                         </p:autoComplete>
                                         <p:outputLabel for="plant" value="#{msg.siteSurvey_siteSurveyReport_constructionSite}"/>
                                         <p:message for="plant"/>
                                     </h:panelGroup>
                                 </p:panelGrid>
-                                <c:if test="false">
-                                    <p:fieldset id="newCustomerPanel" legend="#{msg.new} #{msg.customerSupplier_customer}" toggleable="true" collapsed="true" style="margin-bottom: 25px">
+                                <h:panelGroup id="newCustomerPanel" styleClass="md-inputfield">
+                                    <p:fieldset rendered="#{empty siteSurveyReportPresenter.siteSurveyReport.plant}"
+                                                legend="#{msg.create} #{msg.customerSupplier_customerSupplier_isPotentialCustomer} #{msg.or_conjunction} #{msg.customerSupplier_plant}"
+                                                toggleable="true" collapsed="true" style="margin-bottom: 25px">
                                         <p:panelGrid rendered="#{empty siteSurveyReportPresenter.siteSurveyReport.request.customer}" columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                             <h:panelGroup styleClass="md-inputfield">
                                                 <p:inputText id="businessName" value="#{siteSurveyReportPresenter.newCustomer.businessName}"/>
@@ -91,14 +94,22 @@
                                                 <p:message for="address"/>
                                             </h:panelGroup>
                                         </p:panelGrid>
-                                        <p:commandButton action="#{siteSurveyReportPresenter.addNewCustomer()}"
-                                                         value="#{msg.add} #{msg.customerSupplier_customer}"
+                                        <p:commandButton rendered="#{empty siteSurveyReportPresenter.siteSurveyReport.request.customer}"
+                                                         action="#{siteSurveyReportPresenter.addNewCustomer()}"
+                                                         value="#{msg.add} #{msg.customerSupplier_customerSupplier_isPotentialCustomer}"
+                                                         icon="ui-icon-create"
+                                                         update="newCustomerPanel requestCustomer plant">
+                                            <oou:ignoreValidationFailed />
+                                        </p:commandButton>
+                                        <p:commandButton rendered="#{not empty siteSurveyReportPresenter.siteSurveyReport.request.customer}"
+                                                         action="#{siteSurveyReportPresenter.addNewCustomer()}"
+                                                         value="#{msg.add} #{msg.customerSupplier_plant}"
                                                          icon="ui-icon-create"
                                                          update="newCustomerPanel requestCustomer plant">
                                             <oou:ignoreValidationFailed />
                                         </p:commandButton>
                                     </p:fieldset>
-                                </c:if>
+                                </h:panelGroup>
 
                                 <p:panelGrid id="requestData" columns="3" columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                     <h:panelGroup styleClass="md-inputfield">
