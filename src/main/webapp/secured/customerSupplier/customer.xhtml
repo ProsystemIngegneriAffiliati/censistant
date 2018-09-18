@@ -33,8 +33,8 @@
                                 <c:if test="false">
                                     <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                         <h:panelGroup id="isSiteSurveyRequestPresent">
-                                            <p:commandButton icon="ui-icon-check-box" value="#{msg.siteSurvey_siteSurveyRequest_isInfo}" title="#{customerSupplierPresenter.siteSurveyRequestCreation}" rendered="#{not empty customerSupplierPresenter.siteSurveyRequestCreation}" action="#{customerSupplierPresenter.createNewSiteSurveyRequestOnlyInfo()}" update="isSiteSurveyRequestPresent" />
-                                            <p:commandButton icon="ui-icon-check-box-outline-blank" value="#{msg.siteSurvey_siteSurveyRequest_isInfo}" rendered="#{empty customerSupplierPresenter.siteSurveyRequestCreation}" action="#{customerSupplierPresenter.createNewSiteSurveyRequestOnlyInfo()}" update="isSiteSurveyRequestPresent" />
+                                            <p:commandButton icon="ui-icon-check-box" value="#{msg.siteSurvey_siteSurveyRequest_isInfo}" title="#{customerSupplierPresenter.siteSurveyRequestOnlyInfoCreation}" rendered="#{not empty customerSupplierPresenter.siteSurveyRequestOnlyInfoCreation}" action="#{customerSupplierPresenter.createNewSiteSurveyRequestOnlyInfo()}" update="isSiteSurveyRequestPresent" />
+                                            <p:commandButton icon="ui-icon-check-box-outline-blank" value="#{msg.siteSurvey_siteSurveyRequest_isInfo}" rendered="#{empty customerSupplierPresenter.siteSurveyRequestOnlyInfoCreation}" action="#{customerSupplierPresenter.createNewSiteSurveyRequestOnlyInfo()}" update="isSiteSurveyRequestPresent" />
                                         </h:panelGroup>
 
                                         <h:panelGroup>
@@ -57,12 +57,12 @@
                                     <h:panelGroup>
                                         <p:outputLabel for="isOnlyInfo" value="#{msg.siteSurvey_siteSurveyRequest_isInfo}" />
                                         <p:inputSwitch id="isOnlyInfo" value="#{customerSupplierPresenter.isOnlyInfo}">
-                                            <p:ajax listener="#{customerSupplierPresenter.createNewSiteSurveyRequestOnlyInfo()}" />
+                                            <p:ajax listener="#{customerSupplierPresenter.createNewSiteSurveyRequestOnlyInfo()}" process="@form" update="@form" />
                                         </p:inputSwitch>
                                     </h:panelGroup>
 
                                     <h:panelGroup id="siteSurveyReportPanel">
-                                        <p:commandButton icon="ui-icon-event-note" value="#{msg.siteSurvey_siteSurveyReport}" action="#{customerSupplierPresenter.createNewSiteSurveyReport()}" ajax="false" />
+                                        <p:commandButton icon="ui-icon-event-note" value="#{msg.siteSurvey_siteSurveyReport}" title="#{msg.create} #{msg.new} #{msg.siteSurvey_siteSurveyReport}" action="#{customerSupplierPresenter.createNewSiteSurveyReport()}" ajax="false" />
                                     </h:panelGroup>
                                 </p:panelGrid>
 

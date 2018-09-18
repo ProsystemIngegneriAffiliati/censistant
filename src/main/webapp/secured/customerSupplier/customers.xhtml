@@ -60,7 +60,7 @@
                                             <f:selectItem itemLabel="#{msg.siteSurvey_siteSurveyRequests_onlyNoInfo}" itemValue="false" />
                                         </p:selectOneButton>
                                     </f:facet>
-                                    <h:outputText value="#{cust.isOnlyInfo ? 'X' : ''}"/>
+                                    <h:outputText value="#{customerSupplierListPresenter.getIsInfo(cust) ? 'X' : ''}"/>
                                 </p:column>
                             </c:if>
                             <p:column headerText="#{msg.actions}" style="width:64px; text-align:center" priority="0" exportable="false">

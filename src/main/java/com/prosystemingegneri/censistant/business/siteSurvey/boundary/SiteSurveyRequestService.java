@@ -120,12 +120,14 @@ public class SiteSurveyRequestService implements Serializable{
         em.remove(readSiteSurveyRequest(id));
     }
     
-    public Date getMostRecentSiteSurveyRequestCreation(@NotNull CustomerSupplier customer) {
+    public Date getMostRecentSiteSurveyRequestOnlyInfoCreation(@NotNull CustomerSupplier customer) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Date> query = cb.createQuery(Date.class);
         Root<SiteSurveyRequest> root = query.from(SiteSurveyRequest.class);
         query.select(cb.greatest(root.get(SiteSurveyRequest_.creation)));
-        query.where(cb.equal(root.get(SiteSurveyRequest_.customer), customer));
+        query.where(cb.and(
+                cb.equal(root.get(SiteSurveyRequest_.customer), customer),
+                cb.equal(root.get(SiteSurveyRequest_.isInfo), Boolean.TRUE)));
         
         Date result = null;
         try {

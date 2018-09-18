@@ -18,6 +18,7 @@ package com.prosystemingegneri.censistant.presentation.customerSupplier;
 
 import com.prosystemingegneri.censistant.business.customerSupplier.boundary.CustomerSupplierService;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
+import com.prosystemingegneri.censistant.business.siteSurvey.boundary.SiteSurveyRequestService;
 import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
 import java.io.Serializable;
 import java.util.List;
@@ -49,10 +50,17 @@ public class CustomerSupplierListPresenter implements Serializable{
     
     private Boolean isPotentialCustomer;
     
+    @Inject
+    private SiteSurveyRequestService siteSurveyRequestService;
+    
     @PostConstruct
     public void init() {
         lazyCustomers = new CustomerSupplierLazyDataModel(service, Boolean.TRUE, null, isPotentialCustomer);
         lazySuppliers = new CustomerSupplierLazyDataModel(service, null, Boolean.TRUE, null);
+    }
+    
+    public boolean getIsInfo(CustomerSupplier customer) {
+        return siteSurveyRequestService.getMostRecentSiteSurveyRequestOnlyInfoCreation(customer) != null;
     }
     
     public void deleteCustomerSupplier() {

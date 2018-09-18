@@ -25,6 +25,8 @@ import com.prosystemingegneri.censistant.business.purchasing.entity.BoxedItem_;
 import com.prosystemingegneri.censistant.business.purchasing.entity.SupplierItem;
 import com.prosystemingegneri.censistant.business.purchasing.entity.SupplierItem_;
 import com.prosystemingegneri.censistant.business.sales.boundary.JobOrderService;
+import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyRequest;
+import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyRequest_;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,8 +39,10 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.ListJoin;
+import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Subquery;
 
 /**
  *
@@ -60,7 +64,7 @@ public class CustomerSupplierService implements Serializable{
     }
     
     public CustomerSupplier createPotentialCustomer() {
-        CustomerSupplier potentialCustomer = new CustomerSupplier(Boolean.TRUE, Boolean.TRUE, Boolean.FALSE, Boolean.TRUE);
+        CustomerSupplier potentialCustomer = new CustomerSupplier(Boolean.TRUE, Boolean.TRUE, Boolean.FALSE, Boolean.FALSE);
         potentialCustomer.addPlant(new Plant(Boolean.TRUE, "Sede", null));
         
         return potentialCustomer;
@@ -101,7 +105,7 @@ public class CustomerSupplierService implements Serializable{
         Root<CustomerSupplier> root = query.from(CustomerSupplier.class);
         CriteriaQuery<CustomerSupplier> select = query.select(root).distinct(true);
         
-        List<Predicate> conditions = calculateConditions(cb, root, isPotentialCustomer, isOnlyInfo, isCustomer, isSupplier, businessName, name, address);
+        List<Predicate> conditions = calculateConditions(cb, query.subquery(CustomerSupplier.class), root, isPotentialCustomer, isOnlyInfo, isCustomer, isSupplier, businessName, name, address);
 
         if (!conditions.isEmpty()) {
             query.where(conditions.toArray(new Predicate[conditions.size()]));
@@ -130,7 +134,7 @@ public class CustomerSupplierService implements Serializable{
         Root<CustomerSupplier> root = query.from(CustomerSupplier.class);
         CriteriaQuery<Long> select = query.select(cb.count(root));
 
-        List<Predicate> conditions = calculateConditions(cb, root, isPotentialCustomer, isOnlyInfo, isCustomer, isSupplier, businessName, name, address);
+        List<Predicate> conditions = calculateConditions(cb, query.subquery(CustomerSupplier.class), root, isPotentialCustomer, isOnlyInfo, isCustomer, isSupplier, businessName, name, address);
 
         if (!conditions.isEmpty()) {
             query.where(conditions.toArray(new Predicate[conditions.size()]));
@@ -139,16 +143,22 @@ public class CustomerSupplierService implements Serializable{
         return em.createQuery(select).getSingleResult();
     }
     
-    private List<Predicate> calculateConditions(CriteriaBuilder cb, Root<CustomerSupplier> root, Boolean isPotentialCustomer, Boolean isOnlyInfo, Boolean isCustomer, Boolean isSupplier, String businessName, String name, String address) {
+    private List<Predicate> calculateConditions(CriteriaBuilder cb, Subquery<CustomerSupplier> subquery, Root<CustomerSupplier> root, Boolean isPotentialCustomer, Boolean isOnlyInfo, Boolean isCustomer, Boolean isSupplier, String businessName, String name, String address) {
         List<Predicate> conditions = new ArrayList<>();
 
         //is potential customer
         if (isPotentialCustomer != null)
             conditions.add(cb.equal(root.get(CustomerSupplier_.isPotentialCustomer), isPotentialCustomer));
         
-        //is only info customer
-        if (isOnlyInfo != null)
-            conditions.add(cb.equal(root.get(CustomerSupplier_.isOnlyInfo), isOnlyInfo));
+        //has (the customer) an only-info site survey request
+        if (isOnlyInfo != null) {
+            Path<Object> path = root.get(CustomerSupplier_.id.getName()); // field to map with sub-query
+            Root<SiteSurveyRequest> subRoot = subquery.from(SiteSurveyRequest.class);
+            subquery.select(subRoot.get(SiteSurveyRequest_.customer.getName()).get(CustomerSupplier_.id.getName())); // field to map with main-query
+            subquery.where(cb.equal(subRoot.get(SiteSurveyRequest_.isInfo), isOnlyInfo));
+
+            conditions.add(cb.in(path).value(subquery));
+        }
         
         //is customer
         if (isCustomer != null)

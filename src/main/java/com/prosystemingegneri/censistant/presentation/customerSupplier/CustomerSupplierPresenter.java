@@ -56,7 +56,7 @@ public class CustomerSupplierPresenter implements Serializable{
     private Boolean isCustomerView;
     private String returnPage;
     
-    private Date siteSurveyRequestCreation;
+    private Date siteSurveyRequestOnlyInfoCreation;
     private SiteSurveyRequest siteSurveyRequest;
     private SiteSurveyReport siteSurveyReport;
     
@@ -126,11 +126,15 @@ public class CustomerSupplierPresenter implements Serializable{
             else
                 customerSupplier = service.readCustomerSupplier(id);
         }
-        siteSurveyRequestCreation = siteSurveyRequestService.getMostRecentSiteSurveyRequestCreation(customerSupplier);
+        siteSurveyRequestOnlyInfoCreation = siteSurveyRequestService.getMostRecentSiteSurveyRequestOnlyInfoCreation(customerSupplier);
     }
     
     public void createNewSiteSurveyRequestOnlyInfo() {
-        siteSurveyRequestCreation = siteSurveyRequestService.createNewSiteSurveyRequestOnlyInfo(customerSupplier).getCreation();
+        if (customerSupplier.getId() == null)
+            if (!onlySaveCustomerSupplier())
+                return;
+        
+        siteSurveyRequestOnlyInfoCreation = siteSurveyRequestService.createNewSiteSurveyRequestOnlyInfo(customerSupplier).getCreation();
     }
     
     public String createNewSiteSurveyReport() {
@@ -228,12 +232,12 @@ public class CustomerSupplierPresenter implements Serializable{
         this.returnPage = returnPage;
     }
 
-    public Date getSiteSurveyRequestCreation() {
-        return siteSurveyRequestCreation;
+    public Date getSiteSurveyRequestOnlyInfoCreation() {
+        return siteSurveyRequestOnlyInfoCreation;
     }
 
     public Boolean getIsOnlyInfo() {
-        return siteSurveyRequestCreation != null;
+        return siteSurveyRequestOnlyInfoCreation != null;
     }
 
     public void setIsOnlyInfo(Boolean isOnlyInfo) {
