@@ -5,7 +5,8 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:oou="http://omnifaces.org/ui">
+      xmlns:oou="http://omnifaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <f:metadata>
         <f:viewParam name="id"
                      value="#{siteSurveyReportPresenter.id}"
@@ -34,7 +35,7 @@
                                                         forceSelection="true"
                                                         disabled="#{siteSurveyReportPresenter.siteSurveyReport.request.id != null}">
                                             <oou:converter converterId="omnifaces.ListConverter" list="#{customerSupplierListPresenter.customers}"/>
-                                            <p:ajax event="itemSelect" update="plant newCustomerPanel" />
+                                            <p:ajax event="itemSelect" update="plant" />
                                         </p:autoComplete>
                                         <p:outputLabel for="requestCustomer" value="#{msg.siteSurvey_siteSurveyRequest_customer}"/>
                                         <p:message for="requestCustomer"/>
@@ -54,48 +55,50 @@
                                         <p:message for="plant"/>
                                     </h:panelGroup>
                                 </p:panelGrid>
-                                <p:fieldset id="newCustomerPanel" legend="#{msg.new} #{msg.customerSupplier_customer}" toggleable="true" collapsed="true" style="margin-bottom: 25px">
-                                    <p:panelGrid rendered="#{empty siteSurveyReportPresenter.siteSurveyReport.request.customer}" columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
-                                        <h:panelGroup styleClass="md-inputfield">
-                                            <p:inputText id="businessName" value="#{siteSurveyReportPresenter.newCustomer.businessName}"/>
-                                            <p:outputLabel for="businessName" value="#{msg.customerSupplier_customerSupplier_businessName}"/>
-                                            <p:message for="businessName"/>
-                                        </h:panelGroup>
-                                        <h:panelGroup styleClass="md-inputfield">
-                                            <p:autoComplete id="provenance"
-                                                            dropdown="true"
-                                                            value="#{siteSurveyReportPresenter.newCustomer.provenance}"
-                                                            completeMethod="#{provenanceListPresenter.completeProvenances}"
-                                                            var="prov"
-                                                            itemLabel="#{prov.name}"
-                                                            itemValue="#{prov}"
-                                                            forceSelection="true">
-                                                <oou:converter converterId="omnifaces.ListConverter" list="#{provenanceListPresenter.provenances}"/>
-                                            </p:autoComplete>
-                                            <p:outputLabel for="provenance" value="#{msg.customerSupplier_provenance}"/>
-                                            <p:message for="provenance"/>
-                                        </h:panelGroup>
-                                    </p:panelGrid>
-                                    <p:panelGrid columns="2" columnClasses="ui-grid-col-4,ui-grid-col-8" layout="grid" styleClass="ui-panelgrid-blank form-group">
-                                        <h:panelGroup styleClass="md-inputfield">
-                                            <p:inputText id="name" value="#{siteSurveyReportPresenter.newPlant.name}"/>
-                                            <p:outputLabel for="name" value="#{msg.customerSupplier_plant_name}"/>
-                                            <p:message for="name"/>
-                                        </h:panelGroup>
+                                <c:if test="false">
+                                    <p:fieldset id="newCustomerPanel" legend="#{msg.new} #{msg.customerSupplier_customer}" toggleable="true" collapsed="true" style="margin-bottom: 25px">
+                                        <p:panelGrid rendered="#{empty siteSurveyReportPresenter.siteSurveyReport.request.customer}" columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                            <h:panelGroup styleClass="md-inputfield">
+                                                <p:inputText id="businessName" value="#{siteSurveyReportPresenter.newCustomer.businessName}"/>
+                                                <p:outputLabel for="businessName" value="#{msg.customerSupplier_customerSupplier_businessName}"/>
+                                                <p:message for="businessName"/>
+                                            </h:panelGroup>
+                                            <h:panelGroup styleClass="md-inputfield">
+                                                <p:autoComplete id="provenance"
+                                                                dropdown="true"
+                                                                value="#{siteSurveyReportPresenter.newCustomer.provenance}"
+                                                                completeMethod="#{provenanceListPresenter.completeProvenances}"
+                                                                var="prov"
+                                                                itemLabel="#{prov.name}"
+                                                                itemValue="#{prov}"
+                                                                forceSelection="true">
+                                                    <oou:converter converterId="omnifaces.ListConverter" list="#{provenanceListPresenter.provenances}"/>
+                                                </p:autoComplete>
+                                                <p:outputLabel for="provenance" value="#{msg.customerSupplier_provenance}"/>
+                                                <p:message for="provenance"/>
+                                            </h:panelGroup>
+                                        </p:panelGrid>
+                                        <p:panelGrid columns="2" columnClasses="ui-grid-col-4,ui-grid-col-8" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                            <h:panelGroup styleClass="md-inputfield">
+                                                <p:inputText id="name" value="#{siteSurveyReportPresenter.newPlant.name}"/>
+                                                <p:outputLabel for="name" value="#{msg.customerSupplier_plant_name}"/>
+                                                <p:message for="name"/>
+                                            </h:panelGroup>
 
-                                        <h:panelGroup styleClass="md-inputfield">
-                                            <p:inputTextarea id="address" value="#{siteSurveyReportPresenter.newPlant.address}" rows="3"/>
-                                            <p:outputLabel for="address" value="#{msg.customerSupplier_plant_address}"/>
-                                            <p:message for="address"/>
-                                        </h:panelGroup>
-                                    </p:panelGrid>
-                                    <p:commandButton action="#{siteSurveyReportPresenter.addNewCustomer()}"
-                                                     value="#{msg.add} #{msg.customerSupplier_customer}"
-                                                     icon="ui-icon-create"
-                                                     update="newCustomerPanel requestCustomer plant">
-                                        <oou:ignoreValidationFailed />
-                                    </p:commandButton>
-                                </p:fieldset>
+                                            <h:panelGroup styleClass="md-inputfield">
+                                                <p:inputTextarea id="address" value="#{siteSurveyReportPresenter.newPlant.address}" rows="3"/>
+                                                <p:outputLabel for="address" value="#{msg.customerSupplier_plant_address}"/>
+                                                <p:message for="address"/>
+                                            </h:panelGroup>
+                                        </p:panelGrid>
+                                        <p:commandButton action="#{siteSurveyReportPresenter.addNewCustomer()}"
+                                                         value="#{msg.add} #{msg.customerSupplier_customer}"
+                                                         icon="ui-icon-create"
+                                                         update="newCustomerPanel requestCustomer plant">
+                                            <oou:ignoreValidationFailed />
+                                        </p:commandButton>
+                                    </p:fieldset>
+                                </c:if>
 
                                 <p:panelGrid id="requestData" columns="3" columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                     <h:panelGroup styleClass="md-inputfield">

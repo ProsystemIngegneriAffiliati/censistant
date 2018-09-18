@@ -30,7 +30,19 @@
                                     </c:if>
                                 </h1>
                                 <p>#{msg.customerSupplier_customer_tip}</p>
-                                <p:panelGrid columns="3" columnClasses="ui-grid-col-6,ui-grid-col-3,ui-grid-col-3" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                <c:if test="false">
+                                    <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                        <h:panelGroup id="isSiteSurveyRequestPresent">
+                                            <p:commandButton icon="ui-icon-check-box" value="#{msg.siteSurvey_siteSurveyRequest_isInfo}" title="#{customerSupplierPresenter.siteSurveyRequestCreation}" rendered="#{not empty customerSupplierPresenter.siteSurveyRequestCreation}" action="#{customerSupplierPresenter.createNewSiteSurveyRequestOnlyInfo()}" update="isSiteSurveyRequestPresent" />
+                                            <p:commandButton icon="ui-icon-check-box-outline-blank" value="#{msg.siteSurvey_siteSurveyRequest_isInfo}" rendered="#{empty customerSupplierPresenter.siteSurveyRequestCreation}" action="#{customerSupplierPresenter.createNewSiteSurveyRequestOnlyInfo()}" update="isSiteSurveyRequestPresent" />
+                                        </h:panelGroup>
+
+                                        <h:panelGroup>
+                                        </h:panelGroup>
+                                    </p:panelGrid>
+                                </c:if>
+
+                                <p:panelGrid columns="4" columnClasses="ui-grid-col-5,ui-grid-col-2,ui-grid-col-2,ui-grid-col-3" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputText id="businessName" value="#{customerSupplierPresenter.customerSupplier.businessName}"/>
                                         <p:outputLabel for="businessName" value="#{msg.customerSupplier_customerSupplier_businessName}"/>
@@ -39,12 +51,18 @@
 
                                     <h:panelGroup>
                                         <p:outputLabel for="isPotentialCustomer" value="#{msg.customerSupplier_customerSupplier_isPotentialCustomer}" />
-                                        <p:inputSwitch id="isPotentialCustomer" label="Maina" value="#{customerSupplierPresenter.customerSupplier.isPotentialCustomer}" />
+                                        <p:inputSwitch id="isPotentialCustomer" label="" value="#{customerSupplierPresenter.customerSupplier.isPotentialCustomer}" />
                                     </h:panelGroup>
 
                                     <h:panelGroup>
                                         <p:outputLabel for="isOnlyInfo" value="#{msg.siteSurvey_siteSurveyRequest_isInfo}" />
-                                        <p:inputSwitch id="isOnlyInfo" value="#{customerSupplierPresenter.customerSupplier.isOnlyInfo}" />
+                                        <p:inputSwitch id="isOnlyInfo" value="#{customerSupplierPresenter.isOnlyInfo}">
+                                            <p:ajax listener="#{customerSupplierPresenter.createNewSiteSurveyRequestOnlyInfo()}" />
+                                        </p:inputSwitch>
+                                    </h:panelGroup>
+
+                                    <h:panelGroup id="siteSurveyReportPanel">
+                                        <p:commandButton icon="ui-icon-event-note" value="#{msg.siteSurvey_siteSurveyReport}" action="#{customerSupplierPresenter.createNewSiteSurveyReport()}" ajax="false" />
                                     </h:panelGroup>
                                 </p:panelGrid>
 

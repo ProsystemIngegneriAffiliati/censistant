@@ -21,13 +21,14 @@ import com.prosystemingegneri.censistant.business.customerSupplier.entity.Custom
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Referee;
 import com.prosystemingegneri.censistant.business.deliveryNote.entity.DeliveryNoteCommon;
-import com.prosystemingegneri.censistant.business.deliveryNote.entity.DeliveryNoteIn;
 import com.prosystemingegneri.censistant.business.sales.entity.JobOrder;
 import com.prosystemingegneri.censistant.business.sales.entity.Offer;
+import com.prosystemingegneri.censistant.business.siteSurvey.boundary.SiteSurveyRequestService;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyRequest;
 import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
 import java.io.Serializable;
+import java.util.Date;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.ejb.EJBException;
@@ -55,8 +56,12 @@ public class CustomerSupplierPresenter implements Serializable{
     private Boolean isCustomerView;
     private String returnPage;
     
+    private Date siteSurveyRequestCreation;
     private SiteSurveyRequest siteSurveyRequest;
     private SiteSurveyReport siteSurveyReport;
+    
+    @Inject
+    private SiteSurveyRequestService siteSurveyRequestService;
     
     private Offer offer;
     private JobOrder jobOrder;
@@ -81,7 +86,7 @@ public class CustomerSupplierPresenter implements Serializable{
         deliveryNote = (DeliveryNoteCommon) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("deliveryNote");
     }
     
-    public String saveCustomerSupplier() {
+    private boolean onlySaveCustomerSupplier() {
         try {
             boolean isValidated = true;
             for (ConstraintViolation<CustomerSupplier> constraintViolation : validator.validate(customerSupplier, Default.class)) {
@@ -89,13 +94,20 @@ public class CustomerSupplierPresenter implements Serializable{
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", constraintViolation.getMessage()));
             }
             if (!isValidated)
-                return null;
+                return false;
             
             customerSupplier = service.saveCustomerSupplier(customerSupplier);
         } catch (EJBException e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", ExceptionUtility.unwrap(e.getCausedByException()).getLocalizedMessage()));
-            return null;
+            return false;
         }
+        
+        return true;
+    }
+    
+    public String saveCustomerSupplier() {
+        if (!onlySaveCustomerSupplier())
+            return null;
         
         putMinimalExternalContext();
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("idCustomer", customerSupplier.getId());
@@ -114,6 +126,19 @@ public class CustomerSupplierPresenter implements Serializable{
             else
                 customerSupplier = service.readCustomerSupplier(id);
         }
+        siteSurveyRequestCreation = siteSurveyRequestService.getMostRecentSiteSurveyRequestCreation(customerSupplier);
+    }
+    
+    public void createNewSiteSurveyRequestOnlyInfo() {
+        siteSurveyRequestCreation = siteSurveyRequestService.createNewSiteSurveyRequestOnlyInfo(customerSupplier).getCreation();
+    }
+    
+    public String createNewSiteSurveyReport() {
+        if (!onlySaveCustomerSupplier())
+            return null;
+        
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("idCustomer", customerSupplier.getId());
+        return "/secured/siteSurvey/siteSurveyReport?faces-redirect=true";
     }
     
     public void createNewPlant() {
@@ -201,6 +226,17 @@ public class CustomerSupplierPresenter implements Serializable{
 
     public void setReturnPage(String returnPage) {
         this.returnPage = returnPage;
+    }
+
+    public Date getSiteSurveyRequestCreation() {
+        return siteSurveyRequestCreation;
+    }
+
+    public Boolean getIsOnlyInfo() {
+        return siteSurveyRequestCreation != null;
+    }
+
+    public void setIsOnlyInfo(Boolean isOnlyInfo) {
     }
     
 }

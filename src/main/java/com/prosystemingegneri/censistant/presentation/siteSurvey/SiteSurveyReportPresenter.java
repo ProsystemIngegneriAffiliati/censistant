@@ -106,7 +106,8 @@ public class SiteSurveyReportPresenter implements Serializable{
         if (id == null || id == 0)
             id = siteSurveyReport.getId();
         
-        Messages.create("Successo").detail("Salvato con successo").flash().add();
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Successo", "Salvato con successo"));
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
         
         return FacesContext.getCurrentInstance().getViewRoot().getViewId() + "?faces-redirect=true&includeViewParams=true";
     }
@@ -117,9 +118,20 @@ public class SiteSurveyReportPresenter implements Serializable{
                 siteSurveyReport = service.createNewSiteSurveyReport();
             else
                 siteSurveyReport = service.readSiteSurveyReport(id);
-            clearNewCustomer();
-            clearNewPlant();
         }
+        
+        if (siteSurveyReport == null && id == null) {
+            siteSurveyReport = service.createNewSiteSurveyReport();
+            Long idCustomer = (Long) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("idCustomer");
+            if (idCustomer != null && idCustomer > 0) {
+                CustomerSupplier customer = customerSupplierService.readCustomerSupplier(idCustomer);
+                siteSurveyReport.getRequest().setCustomer(customer);
+                siteSurveyReport.setPlant(getMostRecentPlant(customer));
+            }
+        }
+        
+        clearNewCustomer();
+        clearNewPlant();
     }
     
     public String createPotentialCustomer() {

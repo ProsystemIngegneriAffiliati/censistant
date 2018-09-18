@@ -31,6 +31,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -43,6 +44,7 @@ import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -53,8 +55,21 @@ public class SiteSurveyRequestService implements Serializable{
     @PersistenceContext
     EntityManager em;
     
+    @Inject
+    private SystemTypeService systemTypeService;
+    
     public SiteSurveyRequest createNewSiteSurveyRequest() {
         return new SiteSurveyRequest(getNextNumber());
+    }
+    
+    public SiteSurveyRequest createNewSiteSurveyRequestOnlyInfo(CustomerSupplier customer) {
+        SiteSurveyRequest siteSurveyRequest = createNewSiteSurveyRequest();
+        siteSurveyRequest.setCustomer(customer);
+        siteSurveyRequest.setIsInfo(Boolean.TRUE);
+        siteSurveyRequest.setSystemType(systemTypeService.listSystemTypes(null).get(0));    //TODO add default system type
+        em.persist(siteSurveyRequest);
+        
+        return siteSurveyRequest;
     }
     
     private Integer getNextNumber() {
@@ -103,6 +118,22 @@ public class SiteSurveyRequestService implements Serializable{
     
     public void deleteSiteSurveyRequest(Long id) {
         em.remove(readSiteSurveyRequest(id));
+    }
+    
+    public Date getMostRecentSiteSurveyRequestCreation(@NotNull CustomerSupplier customer) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Date> query = cb.createQuery(Date.class);
+        Root<SiteSurveyRequest> root = query.from(SiteSurveyRequest.class);
+        query.select(cb.greatest(root.get(SiteSurveyRequest_.creation)));
+        query.where(cb.equal(root.get(SiteSurveyRequest_.customer), customer));
+        
+        Date result = null;
+        try {
+            result = em.createQuery(query).getSingleResult();
+        } catch (NoResultException e) {
+        }
+        
+	return result;
     }
 
     public List<SiteSurveyRequest> listSiteSurveyRequests(int first, int pageSize, String sortField, Boolean isAscending, Integer number, Date start, Date end, String customer, String systemType, Boolean isInfo, Boolean isReportPresent) {
