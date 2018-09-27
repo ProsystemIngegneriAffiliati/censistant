@@ -47,7 +47,25 @@ public class SystemService implements Serializable{
     @PersistenceContext
     EntityManager em;
     
-    public System saveSystem(System system) {        
+    /**
+     * Compose system description, so it can be hid from user
+     * @param system System whos description must be composed
+     * @return System with, as description, customer's name and job order's (string) number
+     */
+    public System composeSystemDescription(System system) {
+        system.setDescription(
+                system.getOffers().get(system.getOffers().size() - 1).getSiteSurveyReport().getRequest().getCustomer().getName()
+                +
+                " - "
+                +
+                system.getOffers().get(system.getOffers().size() - 1).getJobOrder().getJobOrderNumberAddress());
+        
+        return system;
+    }
+    
+    public System saveSystem(System system) {
+        system = composeSystemDescription(system);
+        
         if (system.getId() == null)
             em.persist(system);
         else

@@ -199,16 +199,7 @@ public class System extends Location {
 
     @Override
     public String getName() {
-        String delimiter = DELIMITATOR;
-        String offerNumber = "";
-        String customerName = "";
-        
-        if (offers != null && !offers.isEmpty()) {
-            offerNumber = offers.get(offers.size() - 1).getNumber().toString() + delimiter;
-            customerName = offers.get(offers.size() - 1).getSiteSurveyReport().getPlant().getCustomerSupplier().getName() + delimiter;
-        }
-        
-        return customerName + offerNumber + description;
+        return description;
     }
 
     @Override

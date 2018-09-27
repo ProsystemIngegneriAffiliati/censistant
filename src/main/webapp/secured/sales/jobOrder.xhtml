@@ -169,30 +169,6 @@
                                     </p:tab>
                                     <p:tab title="#{msg.sales_jobOrder_systemData}">
                                         <h:panelGroup id="systemData">
-                                            <p:panelGrid columns="2" columnClasses="ui-grid-col-8,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group">
-                                                <h:panelGroup styleClass="md-inputfield">
-                                                    <p:inputText id="systemDescription" value="#{jobOrderPresenter.jobOrder.offer.system.description}"/>
-                                                    <p:outputLabel for="systemDescription" value="#{msg.production_system_description}"/>
-                                                    <p:message for="systemDescription"/>
-                                                </h:panelGroup>
-
-                                                <h:panelGroup styleClass="md-inputfield">
-                                                    <p:autoComplete id="system"
-                                                                    dropdown="true"
-                                                                    value="#{jobOrderPresenter.system}"
-                                                                    completeMethod="#{systemListPresenter.completeSystems}"
-                                                                    var="system"
-                                                                    itemLabel="#{system.description}"
-                                                                    itemValue="#{system}"
-                                                                    forceSelection="true">
-                                                        <oou:converter converterId="omnifaces.ListConverter" list="#{systemListPresenter.systems}"/>
-                                                        <p:ajax event="itemSelect" listener="#{jobOrderPresenter.onSystemSelect}" update="systemData systemDevices areaList" />
-                                                    </p:autoComplete>
-                                                    <p:outputLabel for="system" value="#{msg.sales_jobOrder_chooseSystem}"/>
-                                                    <p:message for="system"/>
-                                                </h:panelGroup>
-                                            </p:panelGrid>
-
                                             <p:dialog header="#{msg.production_systemAttachment_add_tip}"
                                                       widgetVar="addSystemAttachmentDialog"
                                                       modal="true"
