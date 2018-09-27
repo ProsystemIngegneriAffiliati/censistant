@@ -24,26 +24,10 @@
                             <div class="card card-w-title">
                                 <h1>#{msg.maintenance_maintenanceTask}</h1>
                                 <p>#{msg.maintenance_maintenanceTask_tip}</p>
-                                <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
-                                    <h:panelGroup styleClass="md-inputfield">
-                                        <p:autoComplete id="system"
-                                                        dropdown="true"
-                                                        value="#{maintenanceTaskPresenter.maintenanceTask.system}"
-                                                        completeMethod="#{systemListPresenter.completeSystems}"
-                                                        var="sys"
-                                                        itemLabel="#{sys.name}"
-                                                        itemValue="#{sys}"
-                                                        forceSelection="true">
-                                            <oou:converter converterId="omnifaces.ListConverter" list="#{systemListPresenter.systems}"/>
-                                            <p:ajax event="itemSelect" listener="#{maintenanceTaskPresenter.onSystemSelect}" update="replacementsPanel newSystemPanel" />
-                                        </p:autoComplete>
-                                        <p:outputLabel for="system" value="#{msg.production_system}"/>
-                                        <p:message for="system"/>
-                                    </h:panelGroup>
-
+                                <p:panelGrid columns="2" columnClasses="ui-grid-col-8,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                     <h:panelGroup id="newSystemPanel">
                                         <p:fieldset rendered="#{empty maintenanceTaskPresenter.maintenanceTask.system}"
-                                                    legend="#{msg.create} #{msg.production_system}"
+                                                    legend="#{msg.production_system_ToBeCreated}"
                                                     toggleable="true" collapsed="true" style="margin-bottom: 25px">
                                             <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                                 <h:panelGroup styleClass="md-inputfield">
@@ -184,6 +168,22 @@
                                                 <oou:ignoreValidationFailed />
                                             </p:commandButton>
                                         </p:fieldset>
+                                    </h:panelGroup>
+                                    
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:autoComplete id="system"
+                                                        dropdown="true"
+                                                        value="#{maintenanceTaskPresenter.maintenanceTask.system}"
+                                                        completeMethod="#{systemListPresenter.completeSystems}"
+                                                        var="sys"
+                                                        itemLabel="#{sys.name}"
+                                                        itemValue="#{sys}"
+                                                        forceSelection="true">
+                                            <oou:converter converterId="omnifaces.ListConverter" list="#{systemListPresenter.systems}"/>
+                                            <p:ajax event="itemSelect" listener="#{maintenanceTaskPresenter.onSystemSelect}" update="replacementsPanel newSystemPanel" />
+                                        </p:autoComplete>
+                                        <p:outputLabel for="system" value="#{msg.production_system_InDb}"/>
+                                        <p:message for="system"/>
                                     </h:panelGroup>
                                 </p:panelGrid>
 
