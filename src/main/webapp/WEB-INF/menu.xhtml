@@ -12,10 +12,10 @@
                 <div class="nano-content menu-scroll-content">
                     <pu:menu widgetVar="me">
                         <p:submenu id="customerMenu" label="#{msg.customerSupplier_customers}" icon="&#xE7FC;">
-                            <p:menuitem id="potentialCustomersMenu" value="#{msg.customerSupplier_customers} #{msg.customerSupplier_customers_onlyPotentialCustomer}" icon="&#xE8A3;" outcome="/secured/customerSupplier/customers">
+                            <p:menuitem id="potentialCustomersMenu" value="#{msg.customerSupplier_customers_onlyPotentialCustomer}" icon="&#xE8A3;" outcome="/secured/customerSupplier/customers">
                                 <f:param name="isPotentialCustomer" value="true" />
                             </p:menuitem>
-                            <p:menuitem id="noPotentialCustomersMenu" value="#{msg.customerSupplier_customers} #{msg.customerSupplier_customers_onlyNoPotentialCustomer}" icon="&#xE8A3;" outcome="/secured/customerSupplier/customers">
+                            <p:menuitem id="noPotentialCustomersMenu" value="#{msg.customerSupplier_customers_onlyNoPotentialCustomer}" icon="&#xE8A3;" outcome="/secured/customerSupplier/customers">
                                 <f:param name="isPotentialCustomer" value="false" />
                             </p:menuitem>
                             <p:submenu id="customersUtils" label="#{msg.utils}" icon="&#xE149;">

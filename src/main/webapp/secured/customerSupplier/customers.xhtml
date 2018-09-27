@@ -16,7 +16,11 @@
             <div class="ui-g">
                 <div class="ui-g-12">
                     <div class="card card-w-title">
-                        <h1>#{msg.customerSupplier_customers} <h:outputText rendered="#{not empty customerSupplierListPresenter.isPotentialCustomer and customerSupplierListPresenter.isPotentialCustomer}" value="#{msg.customerSupplier_customers_onlyPotentialCustomer}" /> <h:outputText rendered="#{not empty customerSupplierListPresenter.isPotentialCustomer and not customerSupplierListPresenter.isPotentialCustomer}" value="#{msg.customerSupplier_customers_onlyNoPotentialCustomer}" /> </h1>
+                        <h1>
+                            <h:outputText rendered="#{not empty customerSupplierListPresenter.isPotentialCustomer and customerSupplierListPresenter.isPotentialCustomer}" value="#{msg.customerSupplier_customers_onlyPotentialCustomer}" />
+                            <h:outputText rendered="#{not empty customerSupplierListPresenter.isPotentialCustomer and not customerSupplierListPresenter.isPotentialCustomer}" value="#{msg.customerSupplier_customers_onlyNoPotentialCustomer}" />
+                            <h:outputText rendered="#{empty customerSupplierListPresenter.isPotentialCustomer}" value="#{msg.customerSupplier_customers_onlyPotentialCustomer} #{msg.or_conjunction} #{msg.customerSupplier_customers_onlyNoPotentialCustomer}" />
+                        </h1>
                         <p:dataTable id="customersTable" widgetVar="customersTable" var="cust" value="#{customerSupplierListPresenter.lazyCustomers}"
                                      selectionMode="multiple" selection="#{customerSupplierListPresenter.selectedCustomerSuppliers}" rowKey="#{cust.id}"
                                      paginator="true" rows="10" paginatorAlwaysVisible="false"
@@ -45,7 +49,7 @@
                             <p:column headerText="#{msg.customerSupplier_plant_address}" field="address" sortable="false" priority="3">
                                 <h:outputText value="#{cust.headOffice.address}"/>
                             </p:column>
-                            <p:column headerText="#{msg.customerSupplier_customerSupplier_isPotentialCustomer}" priority="4">
+                            <p:column headerText="#{msg.customerSupplier_customerSupplier_isPotentialCustomer}" rendered="#{empty customerSupplierListPresenter.isPotentialCustomer}" priority="4">
                                 <h:outputText value="#{cust.isPotentialCustomer ? 'X' : ''}"/>
                             </p:column>
                             <c:if test="#{not empty customerSupplierListPresenter.isPotentialCustomer and customerSupplierListPresenter.isPotentialCustomer}">
