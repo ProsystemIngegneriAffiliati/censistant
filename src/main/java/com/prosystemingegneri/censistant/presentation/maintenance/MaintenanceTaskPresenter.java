@@ -175,7 +175,7 @@ public class MaintenanceTaskPresenter implements Serializable{
     public StreamedContent print() {
         if (isValid()) {
             try {
-                service.saveMaintenanceTask(maintenanceTask);
+                maintenanceTask = service.saveMaintenanceTask(maintenanceTask);
                 List<MaintenanceTask> tempBean = new ArrayList<>();
                 tempBean.add(maintenanceTask);
                 Map<String, Object> params = new HashMap<>();
@@ -196,6 +196,9 @@ public class MaintenanceTaskPresenter implements Serializable{
                         java.lang.System.lineSeparator() + ex.getLocalizedMessage()));
             }
         }
+        
+        if (id == 0L)
+            id = maintenanceTask.getId();
         
         return null;
     }
