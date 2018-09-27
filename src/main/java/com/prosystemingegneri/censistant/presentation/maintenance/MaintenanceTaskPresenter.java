@@ -16,12 +16,18 @@
  */
 package com.prosystemingegneri.censistant.presentation.maintenance;
 
+import com.prosystemingegneri.censistant.business.customerSupplier.boundary.CustomerSupplierService;
+import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
+import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
 import com.prosystemingegneri.censistant.business.maintenance.boundary.MaintenanceTaskService;
 import com.prosystemingegneri.censistant.business.maintenance.entity.InspectionDone;
 import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceTask;
 import com.prosystemingegneri.censistant.business.maintenance.entity.Replacement;
 import com.prosystemingegneri.censistant.business.maintenance.entity.WorkingDuration;
 import com.prosystemingegneri.censistant.business.production.entity.System;
+import com.prosystemingegneri.censistant.business.sales.entity.PlaceType;
+import com.prosystemingegneri.censistant.business.siteSurvey.entity.SystemType;
+import com.prosystemingegneri.censistant.business.siteSurvey.entity.Worker;
 import com.prosystemingegneri.censistant.business.warehouse.boundary.HandledItemService;
 import com.prosystemingegneri.censistant.business.warehouse.entity.HandledItem;
 import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
@@ -73,6 +79,17 @@ public class MaintenanceTaskPresenter implements Serializable{
     @Resource
     Validator validator;
     
+    //userful for creating a new job order and system
+    @Inject
+    private CustomerSupplierService customerSupplierService;
+    private CustomerSupplier customer;
+    private CustomerSupplier newCustomer;
+    private Plant plant;
+    private Plant newPlant;
+    private SystemType systemType;
+    private PlaceType placeType;
+    private Worker seller;
+    
     private boolean isValid() {
         boolean isValidated = true;
         for (ConstraintViolation<MaintenanceTask> constraintViolation : validator.validate(maintenanceTask, Default.class)) {
@@ -104,6 +121,9 @@ public class MaintenanceTaskPresenter implements Serializable{
             else
                 maintenanceTask = service.readMaintenanceTask(id);
         }
+        
+        clearNewCustomer();
+        clearNewPlant();
     }
     
     public void clearCustomerSignature() {
@@ -186,7 +206,7 @@ public class MaintenanceTaskPresenter implements Serializable{
                 String reportPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/WEB-INF/document/maintenance/maintenanceTask.jasper");
                 JasperPrint jasperPrint = JasperFillManager.fillReport(reportPath, params, new JRBeanCollectionDataSource(tempBean));
 
-                return new ByteArrayContent(JasperExportManager.exportReportToPdf(jasperPrint), "application/pdf", maintenanceTask.getNumber() + ".pdf");
+                return new ByteArrayContent(JasperExportManager.exportReportToPdf(jasperPrint), "application/pdf", maintenanceTask.getId() + ".pdf");
                 } catch (EJBException e) {
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", ExceptionUtility.unwrap(e.getCausedByException()).getLocalizedMessage()));
                     return null;
@@ -201,5 +221,129 @@ public class MaintenanceTaskPresenter implements Serializable{
             id = maintenanceTask.getId();
         
         return null;
+    }
+
+    public CustomerSupplier getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(CustomerSupplier customer) {
+        this.customer = customer;
+    }
+
+    public Plant getPlant() {
+        return plant;
+    }
+
+    public void setPlant(Plant plant) {
+        this.plant = plant;
+    }
+
+    public SystemType getSystemType() {
+        return systemType;
+    }
+
+    public void setSystemType(SystemType systemType) {
+        this.systemType = systemType;
+    }
+
+    public PlaceType getPlaceType() {
+        return placeType;
+    }
+
+    public void setPlaceType(PlaceType placeType) {
+        this.placeType = placeType;
+    }
+
+    public Worker getSeller() {
+        return seller;
+    }
+
+    public void setSeller(Worker seller) {
+        this.seller = seller;
+    }
+    
+    public List<Plant> completePlant(String value) {
+        return customerSupplierService.listPlants(0, 10, "address", Boolean.TRUE, customer, null, value);
+    }
+
+    public List<Plant> getPlants() {
+        return customerSupplierService.listPlants(0, 0, "address", Boolean.TRUE, customer, null, null);
+    }
+
+    public CustomerSupplier getNewCustomer() {
+        return newCustomer;
+    }
+
+    public void setNewCustomer(CustomerSupplier newCustomer) {
+        this.newCustomer = newCustomer;
+    }
+
+    public Plant getNewPlant() {
+        return newPlant;
+    }
+
+    public void setNewPlant(Plant newPlant) {
+        this.newPlant = newPlant;
+    }
+    
+    public void addNewCustomer() {
+        if (newPlant.getName() == null ||newPlant.getName().isEmpty()) {
+            FacesContext.getCurrentInstance().addMessage("name", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Not null"));
+            return;
+        }
+        if (newPlant.getAddress() == null ||newPlant.getAddress().isEmpty()) {
+            FacesContext.getCurrentInstance().addMessage("address", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Not null"));
+            return;
+        }
+        if (customer == null) {
+            if (newCustomer.getBusinessName() == null ||newCustomer.getBusinessName().isEmpty()) {
+                FacesContext.getCurrentInstance().addMessage("businessName", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Not null"));
+                return;
+            }
+            if (newCustomer.getProvenance() == null) {
+                FacesContext.getCurrentInstance().addMessage("provenance", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Not null"));
+                return;
+            }
+            newPlant.setIsHeadOffice(Boolean.TRUE);
+            newCustomer.addPlant(newPlant);
+            customer = newCustomer;
+        }
+        customer.addPlant(newPlant);
+        plant = newPlant;
+        customerSupplierService.saveCustomerSupplier(customer);
+    }
+    
+    public void createNewJobOrder() {
+        if (plant == null) {
+            FacesContext.getCurrentInstance().addMessage("plant", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Not null"));
+            return;
+        }
+        if (customer == null) {
+            FacesContext.getCurrentInstance().addMessage("customer", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Not null"));
+            return;
+        }
+        if (systemType == null) {
+            FacesContext.getCurrentInstance().addMessage("systemType", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Not null"));
+            return;
+        }
+        if (placeType == null) {
+            FacesContext.getCurrentInstance().addMessage("placeType", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Not null"));
+            return;
+        }
+        if (seller == null) {
+            FacesContext.getCurrentInstance().addMessage("seller", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Not null"));
+            return;
+        }
+        
+        maintenanceTask.setSystem(service.createNewJobOrder(plant, systemType, placeType, seller).getOffer().getSystem());
+    }
+    
+    public void clearNewCustomer() {
+        newCustomer = new CustomerSupplier(Boolean.FALSE, Boolean.TRUE, Boolean.FALSE, Boolean.FALSE);
+    }
+    
+    public void clearNewPlant() {
+        newPlant = new Plant();
     }
 }

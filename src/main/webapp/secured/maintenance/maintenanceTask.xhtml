@@ -24,12 +24,7 @@
                             <div class="card card-w-title">
                                 <h1>#{msg.maintenance_maintenanceTask}</h1>
                                 <p>#{msg.maintenance_maintenanceTask_tip}</p>
-                                <p:panelGrid columns="2" columnClasses="ui-grid-col-4,ui-grid-col-8" layout="grid" styleClass="ui-panelgrid-blank form-group">
-                                    <h:panelGroup styleClass="md-inputfield">
-                                        <p:inputNumber id="number" value="#{maintenanceTaskPresenter.maintenanceTask.number}" decimalPlaces="0" />
-                                        <p:outputLabel for="number" value="#{msg.maintenance_maintenanceTask_number}" />
-                                        <p:message for="number"/>
-                                    </h:panelGroup>
+                                <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:autoComplete id="system"
                                                         dropdown="true"
@@ -40,11 +35,159 @@
                                                         itemValue="#{sys}"
                                                         forceSelection="true">
                                             <oou:converter converterId="omnifaces.ListConverter" list="#{systemListPresenter.systems}"/>
-                                            <p:ajax event="itemSelect" listener="#{maintenanceTaskPresenter.onSystemSelect}" update="replacementsPanel" />
+                                            <p:ajax event="itemSelect" listener="#{maintenanceTaskPresenter.onSystemSelect}" update="replacementsPanel newSystemPanel" />
                                         </p:autoComplete>
                                         <p:outputLabel for="system" value="#{msg.production_system}"/>
                                         <p:message for="system"/>
                                     </h:panelGroup>
+
+                                    <h:panelGroup id="newSystemPanel">
+                                        <p:fieldset rendered="#{empty maintenanceTaskPresenter.maintenanceTask.system}"
+                                                    legend="#{msg.create} #{msg.production_system}"
+                                                    toggleable="true" collapsed="true" style="margin-bottom: 25px">
+                                            <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                                <h:panelGroup styleClass="md-inputfield">
+                                                    <p:autoComplete id="customer"
+                                                                    dropdown="true"
+                                                                    value="#{maintenanceTaskPresenter.customer}"
+                                                                    completeMethod="#{customerSupplierListPresenter.completeCustomer}"
+                                                                    var="cust"
+                                                                    itemLabel="#{cust.name}"
+                                                                    itemValue="#{cust}"
+                                                                    forceSelection="true">
+                                                        <oou:converter converterId="omnifaces.ListConverter" list="#{customerSupplierListPresenter.customers}"/>
+                                                        <p:ajax event="itemSelect" update="plant newCustomerPanel" />
+                                                    </p:autoComplete>
+                                                    <p:outputLabel for="customer" value="#{msg.customerSupplier_customer}"/>
+                                                    <p:message for="customer"/>
+                                                </h:panelGroup>
+                                                <h:panelGroup styleClass="md-inputfield">
+                                                    <p:autoComplete id="plant"
+                                                                    dropdown="true"
+                                                                    value="#{maintenanceTaskPresenter.plant}"
+                                                                    completeMethod="#{maintenanceTaskPresenter.completePlant}"
+                                                                    var="plant"
+                                                                    itemLabel="#{plant.getNameAddress(false)}"
+                                                                    itemValue="#{plant}"
+                                                                    forceSelection="true">
+                                                        <oou:converter converterId="omnifaces.ListConverter" list="#{maintenanceTaskPresenter.plants}"/>
+                                                        <p:ajax event="itemSelect" update="newCustomerPanel" />
+                                                    </p:autoComplete>
+                                                    <p:outputLabel for="plant" value="#{msg.siteSurvey_siteSurveyReport_constructionSite}"/>
+                                                    <p:message for="plant"/>
+                                                </h:panelGroup>
+                                            </p:panelGrid>
+
+                                            <h:panelGroup id="newCustomerPanel">
+                                                <p:fieldset rendered="#{empty maintenanceTaskPresenter.plant}"
+                                                            legend="#{msg.create} #{msg.customerSupplier_customer} #{msg.or_conjunction} #{msg.customerSupplier_plant}"
+                                                            toggleable="true" collapsed="true" style="margin-bottom: 25px">
+                                                    <p:panelGrid rendered="#{empty maintenanceTaskPresenter.customer}" columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                                        <h:panelGroup styleClass="md-inputfield">
+                                                            <p:inputText id="businessName" value="#{maintenanceTaskPresenter.newCustomer.businessName}"/>
+                                                            <p:outputLabel for="businessName" value="#{msg.customerSupplier_customerSupplier_businessName}"/>
+                                                            <p:message for="businessName"/>
+                                                        </h:panelGroup>
+                                                        <h:panelGroup styleClass="md-inputfield">
+                                                            <p:autoComplete id="provenance"
+                                                                            dropdown="true"
+                                                                            value="#{maintenanceTaskPresenter.newCustomer.provenance}"
+                                                                            completeMethod="#{provenanceListPresenter.completeProvenances}"
+                                                                            var="prov"
+                                                                            itemLabel="#{prov.name}"
+                                                                            itemValue="#{prov}"
+                                                                            forceSelection="true">
+                                                                <oou:converter converterId="omnifaces.ListConverter" list="#{provenanceListPresenter.provenances}"/>
+                                                            </p:autoComplete>
+                                                            <p:outputLabel for="provenance" value="#{msg.customerSupplier_provenance}"/>
+                                                            <p:message for="provenance"/>
+                                                        </h:panelGroup>
+                                                    </p:panelGrid>
+                                                    <p:panelGrid columns="2" columnClasses="ui-grid-col-4,ui-grid-col-8" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                                        <h:panelGroup styleClass="md-inputfield">
+                                                            <p:inputText id="name" value="#{maintenanceTaskPresenter.newPlant.name}"/>
+                                                            <p:outputLabel for="name" value="#{msg.customerSupplier_plant_name}"/>
+                                                            <p:message for="name"/>
+                                                        </h:panelGroup>
+
+                                                        <h:panelGroup styleClass="md-inputfield">
+                                                            <p:inputTextarea id="address" value="#{maintenanceTaskPresenter.newPlant.address}" rows="3"/>
+                                                            <p:outputLabel for="address" value="#{msg.customerSupplier_plant_address}"/>
+                                                            <p:message for="address"/>
+                                                        </h:panelGroup>
+                                                    </p:panelGrid>
+                                                    <p:commandButton rendered="#{empty maintenanceTaskPresenter.customer}"
+                                                                     action="#{maintenanceTaskPresenter.addNewCustomer()}"
+                                                                     value="#{msg.add} #{msg.customerSupplier_customer}"
+                                                                     icon="ui-icon-create"
+                                                                     update="newCustomerPanel customer plant">
+                                                        <oou:ignoreValidationFailed />
+                                                    </p:commandButton>
+                                                    <p:commandButton rendered="#{not empty maintenanceTaskPresenter.customer}"
+                                                                     action="#{maintenanceTaskPresenter.addNewCustomer()}"
+                                                                     value="#{msg.add} #{msg.customerSupplier_plant}"
+                                                                     icon="ui-icon-create"
+                                                                     update="newCustomerPanel customer plant">
+                                                        <oou:ignoreValidationFailed />
+                                                    </p:commandButton>
+                                                </p:fieldset>
+                                            </h:panelGroup>
+
+                                            <p:panelGrid columns="3" columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                                <h:panelGroup styleClass="md-inputfield">
+                                                    <p:autoComplete id="systemType"
+                                                                    dropdown="true"
+                                                                    value="#{maintenanceTaskPresenter.systemType}"
+                                                                    completeMethod="#{systemTypeListPresenter.completeSystemTypes}"
+                                                                    var="syst"
+                                                                    itemLabel="#{syst.name}"
+                                                                    itemValue="#{syst}"
+                                                                    forceSelection="true">
+                                                        <oou:converter converterId="omnifaces.ListConverter" list="#{systemTypeListPresenter.systemTypes}"/>
+                                                    </p:autoComplete>
+                                                    <p:outputLabel for="systemType" value="#{msg.siteSurvey_systemType_name}"/>
+                                                    <p:message for="systemType"/>
+                                                </h:panelGroup>
+                                                <h:panelGroup styleClass="md-inputfield">
+                                                    <p:autoComplete id="placeType"
+                                                                    dropdown="true"
+                                                                    value="#{maintenanceTaskPresenter.placeType}"
+                                                                    completeMethod="#{placeTypeListPresenter.completePlaceTypes}"
+                                                                    var="placeType"
+                                                                    itemLabel="#{placeType.name}"
+                                                                    itemValue="#{placeType}"
+                                                                    forceSelection="true">
+                                                        <oou:converter converterId="omnifaces.ListConverter" list="#{placeTypeListPresenter.placeTypes}"/>
+                                                    </p:autoComplete>
+                                                    <p:outputLabel for="placeType" value="#{msg.sales_placeType}"/>
+                                                    <p:message for="placeType"/>
+                                                </h:panelGroup>
+                                                <h:panelGroup styleClass="md-inputfield">
+                                                    <p:autoComplete id="seller"
+                                                                    dropdown="true"
+                                                                    value="#{maintenanceTaskPresenter.seller}"
+                                                                    completeMethod="#{workerListPresenter.completeWorkers}"
+                                                                    var="worker"
+                                                                    itemLabel="#{worker.initials}"
+                                                                    itemValue="#{worker}"
+                                                                    forceSelection="true">
+                                                        <oou:converter converterId="omnifaces.ListConverter" list="#{workerListPresenter.workers}"/>
+                                                    </p:autoComplete>
+                                                    <p:outputLabel for="seller" value="#{msg.siteSurvey_siteSurveyReport_seller}"/>
+                                                    <p:message for="seller"/>
+                                                </h:panelGroup>
+                                            </p:panelGrid>
+                                            <p:commandButton action="#{maintenanceTaskPresenter.createNewJobOrder()}"
+                                                             value="#{msg.add} #{msg.production_system}"
+                                                             icon="ui-icon-create"
+                                                             update="system newSystemPanel">
+                                                <oou:ignoreValidationFailed />
+                                            </p:commandButton>
+                                        </p:fieldset>
+                                    </h:panelGroup>
+                                </p:panelGrid>
+
+                                <p:panelGrid columns="2" columnClasses="ui-grid-col-4,ui-grid-col-8" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:calendar id="creation" value="#{maintenanceTaskPresenter.maintenanceTask.creation}" locale="it" />
                                         <p:outputLabel for="creation" value="#{msg.maintenance_maintenanceTask_creationForPrinting}"/>

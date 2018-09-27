@@ -28,7 +28,6 @@ import com.prosystemingegneri.censistant.business.siteSurvey.entity.Worker;
 import com.prosystemingegneri.censistant.business.warehouse.entity.HandledItem;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.math.BigDecimal;
@@ -51,7 +50,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.persistence.Version;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -68,11 +66,6 @@ public class MaintenanceTask extends BaseEntity<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-    @Min(1)
-    @NotNull
-    @Column(nullable = false)
-    private Integer number;
     
     @ManyToOne
     private MaintenanceContract maintenanceContract;
@@ -148,10 +141,9 @@ public class MaintenanceTask extends BaseEntity<Long> {
         replacements = new ArrayList<>();
     }
 
-    public MaintenanceTask(System system, Integer number) {
+    public MaintenanceTask(System system) {
         this();
         this.system = system;
-        this.number = number;
     }
 
     public MaintenanceContract getMaintenanceContract() {
@@ -387,14 +379,6 @@ public class MaintenanceTask extends BaseEntity<Long> {
 
     public void setMaintenanceWorker(Worker maintenanceWorker) {
         this.maintenanceWorker = maintenanceWorker;
-    }
-
-    public Integer getNumber() {
-        return number;
-    }
-
-    public void setNumber(Integer number) {
-        this.number = number;
     }
 
     public java.awt.Image getCustomerSignatureImg() {

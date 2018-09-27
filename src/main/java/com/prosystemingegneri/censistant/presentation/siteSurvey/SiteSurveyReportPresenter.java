@@ -219,7 +219,7 @@ public class SiteSurveyReportPresenter implements Serializable{
         customerSupplierService.saveCustomerSupplier(siteSurveyReport.getRequest().getCustomer());
     }
     
-    public void addNewPlantToCustomer() {
+    /*public void addNewPlantToCustomer() {
         if (siteSurveyReport.getRequest() != null && siteSurveyReport.getRequest().getCustomer() != null && newPlant != null) {
             siteSurveyReport.getRequest().getCustomer().addPlant(newPlant);
             customerSupplierService.saveCustomerSupplier(siteSurveyReport.getRequest().getCustomer());
@@ -227,7 +227,7 @@ public class SiteSurveyReportPresenter implements Serializable{
             FacesContext.getCurrentInstance().getExternalContext().getFlash().put("idCustomer", siteSurveyReport.getRequest().getCustomer().getId());
             init();
         }
-    }
+    }*/
     
     public void clearNewCustomer() {
         newCustomer = new CustomerSupplier(Boolean.TRUE, Boolean.TRUE, Boolean.FALSE, Boolean.FALSE);
