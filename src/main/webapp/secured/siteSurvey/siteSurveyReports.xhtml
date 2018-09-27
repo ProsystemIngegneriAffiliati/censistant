@@ -30,8 +30,11 @@
                                     </p:outputPanel>
                                 </p:panelGrid>
                             </f:facet>
-                            <p:column headerText="#{msg.siteSurvey_siteSurveyReport_number}" field="number" priority="5">
+                            <p:column headerText="#{msg.siteSurvey_siteSurveyReport_number}" field="number" filterable="false" style="width:75px" priority="5">
                                 <h:outputText value="#{rep.number}"/>
+                            </p:column>
+                            <p:column headerText="#{msg.customerSupplier_customerSupplier_isPotentialCustomer}" style="width:75px" priority="4">
+                                <h:outputText value="#{rep.request.customer.isPotentialCustomer ? 'X' : ''}"/>
                             </p:column>
                             <p:column headerText="#{msg.siteSurvey_siteSurveyReport_expected}" sortBy="#{rep.expected}" priority="4">
                                 <h:outputText value="#{rep.expected}">
