@@ -53,6 +53,7 @@ public class SiteSurveyReportLazyDataModel extends LazyDataModel<SiteSurveyRepor
         String seller = null;
         Integer number = null;
         String nameAddressPlant = null;
+        Boolean isOfferAccepted = null;
         
         switch (sortOrder) {
             case ASCENDING:
@@ -83,12 +84,14 @@ public class SiteSurveyReportLazyDataModel extends LazyDataModel<SiteSurveyRepor
                         seller = String.valueOf(filters.get(filterProperty));
                     if (filterProperty.equalsIgnoreCase("nameAddressPlant"))
                         nameAddressPlant = String.valueOf(filters.get(filterProperty));
+                    if (filterProperty.equalsIgnoreCase("isOfferAccepted"))
+                        isOfferAccepted = (Boolean) filters.get(filterProperty);
                 }
             }
         }
         
-        List<SiteSurveyReport> result = service.listSiteSurveyReports(first, pageSize, sortField, isAscending, number, start, end, customer, systemType, seller, nameAddressPlant, null);
-        this.setRowCount(service.getSiteSurveyReportsCount(number, start, end, customer, systemType, seller, nameAddressPlant, null).intValue());
+        List<SiteSurveyReport> result = service.listSiteSurveyReports(first, pageSize, sortField, isAscending, number, start, end, customer, systemType, seller, nameAddressPlant, null, isOfferAccepted);
+        this.setRowCount(service.getSiteSurveyReportsCount(number, start, end, customer, systemType, seller, nameAddressPlant, null, isOfferAccepted).intValue());
         
         return result;
     }

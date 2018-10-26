@@ -63,6 +63,17 @@
                             <p:column headerText="#{msg.siteSurvey_siteSurveyReport_seller}" field="seller" priority="4">
                                 <h:outputText value="#{rep.seller.initials}"/>
                             </p:column>
+                            <p:column headerText="#{msg.siteSurvey_siteSurveyReport_isOfferAccepted}" field="isOfferAccepted" priority="6">
+                                    <f:facet name="filter">
+                                        <p:selectOneButton onchange="PF('siteSurveyReportsTable').filter()">
+                                            <f:converter converterId="javax.faces.Boolean" />
+                                            <f:selectItem itemLabel="#{msg.all_female}" itemValue="" />
+                                            <f:selectItem itemLabel="#{msg.siteSurvey_siteSurveyReport_isOfferAccepted_true}" itemValue="true" />
+                                            <f:selectItem itemLabel="#{msg.siteSurvey_siteSurveyReport_isOfferAccepted_false}" itemValue="false" />
+                                        </p:selectOneButton>
+                                    </f:facet>
+                                <h:outputText value="#{rep.isOfferAccepted ? 'X' : ''}"/>
+                            </p:column>
                             <p:column headerText="#{msg.actions}" style="width:64px; text-align:center" priority="0" exportable="false">
                                 <p:button title="#{msg.edit}" icon="ui-icon-edit" styleClass="AquaButton" outcome="/secured/siteSurvey/siteSurveyReport">
                                     <f:param name="id" value="#{rep.id}" />
