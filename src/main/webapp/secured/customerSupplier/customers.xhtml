@@ -70,6 +70,11 @@
                                     <h:outputText value="#{customerSupplierListPresenter.getIsInfo(cust) ? 'X' : ''}"/>
                                 </p:column>
                             </c:if>
+                            <p:column headerText="#{msg.siteSurvey_siteSurveyReport_emailSent_last}" priority="4">
+                                <h:outputText value="#{cust.lastEmailSent}">
+                                    <f:convertDateTime pattern="dd/MM/YYYY" />
+                                </h:outputText>
+                            </p:column>
                             <p:column headerText="#{msg.actions}" style="width:64px; text-align:center" priority="0" exportable="false">
                                 <p:button title="#{msg.edit}" icon="ui-icon-edit" styleClass="AquaButton" outcome="/secured/customerSupplier/customer">
                                     <f:param name="id" value="#{cust.id}" />

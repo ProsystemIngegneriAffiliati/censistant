@@ -20,6 +20,7 @@ import com.prosystemingegneri.censistant.business.customerSupplier.controller.Ma
 import com.prosystemingegneri.censistant.business.customerSupplier.controller.MandatoryProvenanceForCustomer;
 import com.prosystemingegneri.censistant.business.entity.BaseEntity;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -29,6 +30,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
@@ -82,6 +84,9 @@ public class CustomerSupplier extends BaseEntity<Long>{
     private Provenance provenance;
     
     private String notes;
+    
+    @Transient
+    private Date lastEmailSent;
     
     @Version
     private int version;
@@ -241,6 +246,14 @@ public class CustomerSupplier extends BaseEntity<Long>{
 
     public void setIsOnlyInfo(Boolean isOnlyInfo) {
         this.isOnlyInfo = isOnlyInfo;
+    }
+
+    public Date getLastEmailSent() {
+        return lastEmailSent;
+    }
+
+    public void setLastEmailSent(Date lastEmailSent) {
+        this.lastEmailSent = lastEmailSent;
     }
     
 }

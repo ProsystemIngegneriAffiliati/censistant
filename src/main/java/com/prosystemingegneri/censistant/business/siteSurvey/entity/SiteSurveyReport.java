@@ -71,6 +71,9 @@ public class SiteSurveyReport extends BaseEntity<Long>{
     @OneToOne(mappedBy = "siteSurveyReport")
     private Offer offer;
     
+    @Temporal(TemporalType.DATE)
+    private Date emailSent;
+    
     private String notes;
     
     @Version
@@ -152,6 +155,14 @@ public class SiteSurveyReport extends BaseEntity<Long>{
 
     public void setOffer(Offer offer) {
         this.offer = offer;
+    }
+
+    public Date getEmailSent() {
+        return emailSent;
+    }
+
+    public void setEmailSent(Date emailSent) {
+        this.emailSent = emailSent;
     }
     
 }

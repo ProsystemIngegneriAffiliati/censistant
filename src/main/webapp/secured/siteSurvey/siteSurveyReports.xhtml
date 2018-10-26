@@ -55,8 +55,13 @@
                             <p:column headerText="#{msg.siteSurvey_systemType}" field="systemType" priority="2">
                                 <h:outputText value="#{rep.request.systemType.name}"/>
                             </p:column>
+                            <p:column headerText="#{msg.siteSurvey_siteSurveyReport_emailSent}" priority="4">
+                                <h:outputText value="#{rep.emailSent}">
+                                    <f:convertDateTime pattern="dd/MM/YYYY" />
+                                </h:outputText>
+                            </p:column>
                             <p:column headerText="#{msg.siteSurvey_siteSurveyReport_seller}" field="seller" priority="4">
-                                <h:outputText value="#{rep.seller.name}"/>
+                                <h:outputText value="#{rep.seller.initials}"/>
                             </p:column>
                             <p:column headerText="#{msg.actions}" style="width:64px; text-align:center" priority="0" exportable="false">
                                 <p:button title="#{msg.edit}" icon="ui-icon-edit" styleClass="AquaButton" outcome="/secured/siteSurvey/siteSurveyReport">

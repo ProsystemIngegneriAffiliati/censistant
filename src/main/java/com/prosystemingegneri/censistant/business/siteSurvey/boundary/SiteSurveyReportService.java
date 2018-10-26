@@ -232,4 +232,28 @@ public class SiteSurveyReportService implements Serializable{
         
         return conditions;
     }
+    
+    public Date getLastEmailSent(CustomerSupplier customer) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Date> query = cb.createQuery(Date.class);
+        Root<SiteSurveyReport> root = query.from(SiteSurveyReport.class);
+        query.select(cb.greatest(root.get(SiteSurveyReport_.emailSent)));
+        
+        List<Predicate> conditions = new ArrayList<>();
+        
+        if (customer != null)
+            conditions.add(cb.equal(root.join(SiteSurveyReport_.plant).get(Plant_.customerSupplier), customer));
+
+        if (!conditions.isEmpty())
+            query.where(conditions.toArray(new Predicate[conditions.size()]));
+        
+        Date result;
+        try {
+            result = em.createQuery(query).getSingleResult();
+        } catch (NoResultException e) {
+            result = null;
+        }
+        
+	return result;
+    }
 }

@@ -25,10 +25,13 @@ import com.prosystemingegneri.censistant.business.purchasing.entity.BoxedItem_;
 import com.prosystemingegneri.censistant.business.purchasing.entity.SupplierItem;
 import com.prosystemingegneri.censistant.business.purchasing.entity.SupplierItem_;
 import com.prosystemingegneri.censistant.business.sales.boundary.JobOrderService;
+import com.prosystemingegneri.censistant.business.siteSurvey.boundary.SiteSurveyReportService;
+import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyRequest;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyRequest_;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -55,6 +58,9 @@ public class CustomerSupplierService implements Serializable{
     
     @Inject
     JobOrderService jobOrderService;
+    
+    @Inject
+    private SiteSurveyReportService siteSurveyReportService;
     
     public CustomerSupplier createCustomer() {
         CustomerSupplier customer = new CustomerSupplier(Boolean.FALSE, Boolean.TRUE, Boolean.FALSE, Boolean.FALSE);
@@ -124,8 +130,12 @@ public class CustomerSupplierService implements Serializable{
             typedQuery.setMaxResults(pageSize);
             typedQuery.setFirstResult(first);   
         }
+        
+        List<CustomerSupplier> result = typedQuery.getResultList();
+        for (CustomerSupplier customerSupplier : result)
+            customerSupplier.setLastEmailSent(siteSurveyReportService.getLastEmailSent(customerSupplier));
 
-        return typedQuery.getResultList();
+        return result;
     }
     
     public Long getCustomerSuppliersCount(Boolean isPotentialCustomer, Boolean isOnlyInfo, Boolean isCustomer, Boolean isSupplier, String businessName, String name, String address) {

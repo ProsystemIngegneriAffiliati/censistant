@@ -139,7 +139,7 @@
                                     </h:panelGroup>
                                 </p:panelGrid>
 
-                                <p:panelGrid columns="4" columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-3,ui-grid-col-1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                <p:panelGrid columns="3" columnClasses="ui-grid-col-5,ui-grid-col-5,ui-grid-col-2" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:calendar id="expected" value="#{siteSurveyReportPresenter.siteSurveyReport.expected}" locale="it" />
                                         <p:outputLabel for="expected" value="#{msg.siteSurvey_siteSurveyReport_expected}"/>
@@ -150,6 +150,12 @@
                                         <p:outputLabel for="actual" value="#{msg.siteSurvey_siteSurveyReport_actual}"/>
                                         <p:message for="actual"/>
                                     </h:panelGroup>
+                                    <p:commandButton value="#{msg.print}" icon="ui-icon-print" ajax="false">
+                                        <p:fileDownload value="#{siteSurveyReportPresenter.print()}" />
+                                    </p:commandButton>
+                                </p:panelGrid>
+
+                                <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:autoComplete id="seller"
                                                         dropdown="true"
@@ -164,9 +170,11 @@
                                         <p:outputLabel for="seller" value="#{msg.siteSurvey_siteSurveyReport_seller}"/>
                                         <p:message for="seller"/>
                                     </h:panelGroup>
-                                    <p:commandButton title="#{msg.print}" icon="ui-icon-print" ajax="false">
-                                        <p:fileDownload value="#{siteSurveyReportPresenter.print()}" />
-                                    </p:commandButton>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:calendar id="emailSent" value="#{siteSurveyReportPresenter.siteSurveyReport.emailSent}" locale="it" />
+                                        <p:outputLabel for="emailSent" value="#{msg.siteSurvey_siteSurveyReport_emailSent}"/>
+                                        <p:message for="emailSent"/>
+                                    </h:panelGroup>
                                 </p:panelGrid>
 
                                 <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
@@ -180,7 +188,7 @@
                                 <div class="ui-g">
                                     <div class="ui-g-1 ui-md-2"></div>
                                     <div class="ui-g-4 ui-md-3">
-                                        <p:button value="#{msg.cancel}" outcome="/secured/siteSurvey/siteSurveyReports" styleClass="secondary"/>
+                                        <p:button value="#{msg.cancelBack}" outcome="/secured/siteSurvey/siteSurveyReports" styleClass="secondary"/>
                                     </div>
                                     <div class="ui-g-2 ui-md-2"></div>
                                     <div class="ui-g-4 ui-md-3">
