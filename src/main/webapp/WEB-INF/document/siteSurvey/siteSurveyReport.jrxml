@@ -503,21 +503,6 @@
 				</textElement>
 				<text><![CDATA[Visto del cliente]]></text>
 			</staticText>
-			<staticText>
-				<reportElement x="155" y="50" width="40" height="15" uuid="7bb14615-8886-46a4-8784-fd6876a088f1"/>
-				<box>
-					<pen lineColor="#808080"/>
-					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font size="10" isBold="false"/>
-					<paragraph leftIndent="4" rightIndent="4"/>
-				</textElement>
-				<text><![CDATA[Note]]></text>
-			</staticText>
 			<line>
 				<reportElement x="260" y="15" width="290" height="1" forecolor="#B4B4B4" uuid="91e25798-14c9-4262-a6dd-dd4f9e8e0371"/>
 				<graphicElement>
@@ -560,6 +545,29 @@
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
+			<textField isBlankWhenNull="true">
+				<reportElement x="154" y="50" width="396" height="70" uuid="b209435e-20b0-49e0-8807-683f1b5bae75"/>
+				<textElement>
+					<font isBold="true"/>
+					<paragraph lineSpacing="Proportional" lineSpacingSize="1.4" firstLineIndent="50" leftIndent="4" rightIndent="4"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{notes}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="155" y="50" width="50" height="15" uuid="31f89190-d845-4d9d-bef5-d22515c08f8a"/>
+				<box>
+					<pen lineColor="#808080"/>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="10" isBold="false"/>
+					<paragraph leftIndent="4" rightIndent="4"/>
+				</textElement>
+				<text><![CDATA[Note]]></text>
+			</staticText>
 		</band>
 		<band height="480">
 			<staticText>
