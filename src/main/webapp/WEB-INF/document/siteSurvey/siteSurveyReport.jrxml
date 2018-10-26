@@ -98,9 +98,9 @@
 		</band>
 	</pageHeader>
 	<detail>
-		<band height="80" splitType="Stretch">
+		<band height="75" splitType="Stretch">
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="ContainerHeight" x="0" y="20" width="150" height="60" uuid="ea2a406d-a800-4d04-a25c-4ad1e6a425fb"/>
+				<reportElement stretchType="ContainerHeight" x="0" y="15" width="150" height="60" uuid="ea2a406d-a800-4d04-a25c-4ad1e6a425fb"/>
 				<box>
 					<pen lineColor="#808080"/>
 					<leftPen lineWidth="1.0"/>
@@ -114,7 +114,7 @@
 				<textFieldExpression><![CDATA[$F{plant}.getAddress()]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="0" width="150" height="20" uuid="6acd73e9-ae41-460f-93f8-6206d41772c2"/>
+				<reportElement x="0" y="0" width="150" height="15" uuid="6acd73e9-ae41-460f-93f8-6206d41772c2"/>
 				<box>
 					<pen lineColor="#808080"/>
 					<topPen lineWidth="1.0"/>
@@ -128,7 +128,7 @@
 				<text><![CDATA[Cantiere]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="150" y="0" width="80" height="20" uuid="40103f45-bb7a-4323-b41c-d4c8aa60936c"/>
+				<reportElement x="150" y="0" width="80" height="15" uuid="40103f45-bb7a-4323-b41c-d4c8aa60936c"/>
 				<box>
 					<pen lineColor="#808080"/>
 					<topPen lineWidth="1.0"/>
@@ -136,13 +136,13 @@
 					<bottomPen lineWidth="1.0"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font size="12" isBold="false"/>
+					<font size="11" isBold="false"/>
 					<paragraph leftIndent="4" rightIndent="4"/>
 				</textElement>
 				<text><![CDATA[Cliente]]></text>
 			</staticText>
 			<staticText>
-				<reportElement positionType="Float" x="150" y="20" width="80" height="20" uuid="3400d463-cafa-456d-b157-14a088861ccf"/>
+				<reportElement positionType="Float" x="150" y="15" width="80" height="15" uuid="3400d463-cafa-456d-b157-14a088861ccf"/>
 				<box>
 					<pen lineColor="#808080"/>
 					<topPen lineWidth="1.0"/>
@@ -150,13 +150,13 @@
 					<bottomPen lineWidth="1.0"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font size="12" isBold="false"/>
+					<font size="11" isBold="false"/>
 					<paragraph leftIndent="4" rightIndent="4"/>
 				</textElement>
 				<text><![CDATA[Indirizzo]]></text>
 			</staticText>
 			<staticText>
-				<reportElement positionType="Float" x="150" y="40" width="40" height="20" uuid="3f14f95a-a52e-42e6-a0f8-1726dbd70730"/>
+				<reportElement positionType="Float" x="150" y="30" width="35" height="30" uuid="3f14f95a-a52e-42e6-a0f8-1726dbd70730"/>
 				<box>
 					<pen lineColor="#808080"/>
 					<topPen lineWidth="1.0"/>
@@ -164,13 +164,13 @@
 					<bottomPen lineWidth="1.0"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font size="12" isBold="false"/>
+					<font size="11" isBold="false"/>
 					<paragraph leftIndent="4" rightIndent="4"/>
 				</textElement>
 				<text><![CDATA[Tel.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement positionType="Float" x="150" y="60" width="135" height="20" uuid="c4b2b668-6c4d-4669-a852-27cf3c61a8d5"/>
+				<reportElement positionType="Float" x="150" y="60" width="135" height="15" uuid="c4b2b668-6c4d-4669-a852-27cf3c61a8d5"/>
 				<box>
 					<pen lineColor="#808080"/>
 					<topPen lineWidth="1.0"/>
@@ -178,13 +178,13 @@
 					<bottomPen lineWidth="1.0"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font size="12" isBold="false"/>
+					<font size="11" isBold="false"/>
 					<paragraph leftIndent="4" rightIndent="4"/>
 				</textElement>
 				<text><![CDATA[Canale di arrivo]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="230" y="0" width="325" height="20" uuid="1f7440fe-e148-4074-a0bc-479778e575a6"/>
+				<reportElement x="230" y="0" width="325" height="15" uuid="1f7440fe-e148-4074-a0bc-479778e575a6"/>
 				<box>
 					<pen lineColor="#808080"/>
 					<topPen lineWidth="1.0"/>
@@ -198,7 +198,7 @@
 				<textFieldExpression><![CDATA[$F{plant}.getCustomerSupplier().getBusinessName()]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement positionType="Float" x="230" y="20" width="325" height="20" uuid="26cac63f-a36d-43b3-90e7-5c6aa329ca58"/>
+				<reportElement positionType="Float" x="230" y="15" width="325" height="15" uuid="26cac63f-a36d-43b3-90e7-5c6aa329ca58"/>
 				<box>
 					<pen lineColor="#808080"/>
 					<topPen lineWidth="1.0"/>
@@ -206,13 +206,13 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font size="11" isBold="true"/>
+					<font size="10" isBold="true"/>
 					<paragraph leftIndent="4" rightIndent="4"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{plant}.getCustomerSupplier().getHeadOffice().getAddress()]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement positionType="Float" x="190" y="40" width="140" height="20" uuid="797d4475-8fd0-4a00-9210-6749ce5f4aa8"/>
+				<reportElement positionType="Float" x="185" y="30" width="145" height="30" uuid="797d4475-8fd0-4a00-9210-6749ce5f4aa8"/>
 				<box>
 					<pen lineColor="#808080"/>
 					<topPen lineWidth="1.0"/>
@@ -226,7 +226,7 @@
 				<textFieldExpression><![CDATA[$F{plant}.getCustomerSupplier().getHeadOffice().getPhone()]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement positionType="Float" x="390" y="40" width="165" height="20" uuid="e58848cd-99ca-467e-addb-c41cec416090"/>
+				<reportElement positionType="Float" x="380" y="30" width="175" height="30" uuid="e58848cd-99ca-467e-addb-c41cec416090"/>
 				<box>
 					<pen lineColor="#808080"/>
 					<topPen lineWidth="1.0"/>
@@ -240,7 +240,7 @@
 				<textFieldExpression><![CDATA[$F{plant}.getCustomerSupplier().getHeadOffice().getEmail()]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement positionType="Float" x="330" y="40" width="60" height="20" uuid="8ef67c27-2df8-4626-bf4e-bff8a1256a1d"/>
+				<reportElement positionType="Float" x="330" y="30" width="50" height="30" uuid="8ef67c27-2df8-4626-bf4e-bff8a1256a1d"/>
 				<box>
 					<pen lineColor="#808080"/>
 					<topPen lineWidth="1.0"/>
@@ -248,13 +248,13 @@
 					<bottomPen lineWidth="1.0"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font size="12" isBold="false"/>
+					<font size="11" isBold="false"/>
 					<paragraph leftIndent="4" rightIndent="4"/>
 				</textElement>
 				<text><![CDATA[E-mail]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement positionType="Float" x="285" y="60" width="270" height="20" uuid="1031b228-8e72-42e8-81a8-8fb03162b0c0"/>
+				<reportElement positionType="Float" x="285" y="60" width="270" height="15" uuid="1031b228-8e72-42e8-81a8-8fb03162b0c0"/>
 				<box>
 					<pen lineColor="#808080"/>
 					<topPen lineWidth="1.0"/>
@@ -292,7 +292,7 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement verticalAlignment="Top">
-					<font size="12" isBold="true"/>
+					<font size="10" isBold="true"/>
 					<paragraph leftIndent="4" rightIndent="4"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{request}.getSystemType().getName()]]></textFieldExpression>
@@ -320,7 +320,7 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font size="12" isBold="true"/>
+					<font size="10" isBold="true"/>
 					<paragraph leftIndent="4" rightIndent="4"/>
 				</textElement>
 				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format($F{request}.getCreation())]]></textFieldExpression>
@@ -348,7 +348,7 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font size="12" isBold="true"/>
+					<font size="10" isBold="true"/>
 					<paragraph leftIndent="4" rightIndent="4"/>
 				</textElement>
 				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format($F{expected})]]></textFieldExpression>
@@ -376,7 +376,7 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font size="12" isBold="true"/>
+					<font size="10" isBold="true"/>
 					<paragraph leftIndent="4" rightIndent="4"/>
 				</textElement>
 				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format($F{actual})]]></textFieldExpression>
