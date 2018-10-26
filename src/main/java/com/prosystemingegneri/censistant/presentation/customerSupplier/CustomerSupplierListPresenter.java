@@ -59,10 +59,6 @@ public class CustomerSupplierListPresenter implements Serializable{
         lazySuppliers = new CustomerSupplierLazyDataModel(service, null, Boolean.TRUE, null);
     }
     
-    public boolean getIsInfo(CustomerSupplier customer) {
-        return siteSurveyRequestService.getMostRecentSiteSurveyRequestOnlyInfoCreation(customer) != null;
-    }
-    
     public void deleteCustomerSupplier() {
         if (selectedCustomerSuppliers != null && !selectedCustomerSuppliers.isEmpty()) {
             for (CustomerSupplier customerSupplierTemp : selectedCustomerSuppliers) {

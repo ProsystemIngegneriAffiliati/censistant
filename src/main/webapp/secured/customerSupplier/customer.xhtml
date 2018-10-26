@@ -56,39 +56,41 @@
 
                                     <h:panelGroup>
                                         <p:outputLabel for="isOnlyInfo" value="#{msg.siteSurvey_siteSurveyRequest_isInfo}" />
-                                        <p:inputSwitch id="isOnlyInfo" value="#{customerSupplierPresenter.isOnlyInfo}">
-                                            <p:ajax listener="#{customerSupplierPresenter.createNewSiteSurveyRequestOnlyInfo()}" process="@form" update="@form" />
+                                        <p:inputSwitch id="isOnlyInfo" value="#{customerSupplierPresenter.customerSupplier.isOnlyInfo}">
+                                            <p:ajax listener="#{customerSupplierPresenter.onIsOnlyInfoChanged()}" update="addressPanel siteSurveyReportPanel" />
                                         </p:inputSwitch>
                                     </h:panelGroup>
 
                                     <h:panelGroup id="siteSurveyReportPanel">
-                                        <p:commandButton icon="ui-icon-event-note" value="#{msg.siteSurvey_siteSurveyReport}" title="#{msg.create} #{msg.new} #{msg.siteSurvey_siteSurveyReport}" action="#{customerSupplierPresenter.createNewSiteSurveyReport()}" ajax="false" />
+                                        <p:commandButton disabled="#{empty customerSupplierPresenter.customerSupplier.headOffice}" icon="ui-icon-event-note" value="#{msg.siteSurvey_siteSurveyReport}" title="#{msg.create} #{msg.new} #{msg.siteSurvey_siteSurveyReport}" action="#{customerSupplierPresenter.createNewSiteSurveyReport()}" ajax="false" />
                                     </h:panelGroup>
                                 </p:panelGrid>
 
-                                <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
-                                    <h:panelGroup styleClass="md-inputfield">
-                                        <p:inputTextarea id="address" value="#{customerSupplierPresenter.customerSupplier.headOffice.address}" rows="2"/>
-                                        <p:outputLabel for="address" value="#{msg.customerSupplier_plant_address}"/>
-                                        <p:message for="address"/>
-                                    </h:panelGroup>
-                                    <h:panelGroup styleClass="md-inputfield">
-                                        <p:inputText id="email" value="#{customerSupplierPresenter.customerSupplier.headOffice.email}" type="email"/>
-                                        <p:outputLabel for="email" value="#{msg.customerSupplier_plant_email}"/>
-                                        <p:message for="email"/>
-                                    </h:panelGroup>
-                                    <h:panelGroup styleClass="md-inputfield">
-                                        <p:inputText id="phone" value="#{customerSupplierPresenter.customerSupplier.headOffice.phone}"/>
-                                        <p:outputLabel for="phone" value="#{msg.customerSupplier_plant_phone}"/>
-                                        <p:message for="phone"/>
-                                    </h:panelGroup>
+                                <h:panelGroup id="addressPanel">
+                                    <p:panelGrid rendered="#{not empty customerSupplierPresenter.customerSupplier.headOffice}" columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:inputTextarea id="address" value="#{customerSupplierPresenter.customerSupplier.headOffice.address}" rows="2"/>
+                                            <p:outputLabel for="address" value="#{msg.customerSupplier_plant_address}"/>
+                                            <p:message for="address"/>
+                                        </h:panelGroup>
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:inputText id="email" value="#{customerSupplierPresenter.customerSupplier.headOffice.email}" type="email"/>
+                                            <p:outputLabel for="email" value="#{msg.customerSupplier_plant_email}"/>
+                                            <p:message for="email"/>
+                                        </h:panelGroup>
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:inputText id="phone" value="#{customerSupplierPresenter.customerSupplier.headOffice.phone}"/>
+                                            <p:outputLabel for="phone" value="#{msg.customerSupplier_plant_phone}"/>
+                                            <p:message for="phone"/>
+                                        </h:panelGroup>
 
-                                    <h:panelGroup styleClass="md-inputfield">
-                                        <p:inputText id="fax" value="#{customerSupplierPresenter.customerSupplier.headOffice.fax}"/>
-                                        <p:outputLabel for="fax" value="#{msg.customerSupplier_plant_fax}"/>
-                                        <p:message for="fax"/>
-                                    </h:panelGroup>
-                                </p:panelGrid>
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:inputText id="fax" value="#{customerSupplierPresenter.customerSupplier.headOffice.fax}"/>
+                                            <p:outputLabel for="fax" value="#{msg.customerSupplier_plant_fax}"/>
+                                            <p:message for="fax"/>
+                                        </h:panelGroup>
+                                    </p:panelGrid>
+                                </h:panelGroup>
 
                                 <p:panelGrid columns="3" columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                     <h:panelGroup styleClass="md-inputfield">

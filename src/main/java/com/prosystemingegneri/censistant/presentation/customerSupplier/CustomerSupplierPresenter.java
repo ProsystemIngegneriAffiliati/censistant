@@ -56,7 +56,6 @@ public class CustomerSupplierPresenter implements Serializable{
     private Boolean isCustomerView;
     private String returnPage;
     
-    private Date siteSurveyRequestOnlyInfoCreation;
     private SiteSurveyRequest siteSurveyRequest;
     private SiteSurveyReport siteSurveyReport;
     
@@ -126,15 +125,15 @@ public class CustomerSupplierPresenter implements Serializable{
             else
                 customerSupplier = service.readCustomerSupplier(id);
         }
-        siteSurveyRequestOnlyInfoCreation = siteSurveyRequestService.getMostRecentSiteSurveyRequestOnlyInfoCreation(customerSupplier);
     }
     
-    public void createNewSiteSurveyRequestOnlyInfo() {
-        if (customerSupplier.getId() == null)
-            if (!onlySaveCustomerSupplier())
-                return;
-        
-        siteSurveyRequestOnlyInfoCreation = siteSurveyRequestService.createNewSiteSurveyRequestOnlyInfo(customerSupplier).getCreation();
+    public void onIsOnlyInfoChanged() {
+        if (customerSupplier.getIsOnlyInfo() && (customerSupplier.getHeadOffice() != null && (customerSupplier.getHeadOffice().getAddress() == null || customerSupplier.getHeadOffice().getAddress().isEmpty())))
+            customerSupplier.removePlant(customerSupplier.getHeadOffice());
+        else {
+            if (!customerSupplier.getIsOnlyInfo() && customerSupplier.getHeadOffice() == null)
+                customerSupplier.addPlant(new Plant(Boolean.TRUE, "Sede", null));
+        }
     }
     
     public String createNewSiteSurveyReport() {
@@ -230,14 +229,6 @@ public class CustomerSupplierPresenter implements Serializable{
 
     public void setReturnPage(String returnPage) {
         this.returnPage = returnPage;
-    }
-
-    public Date getSiteSurveyRequestOnlyInfoCreation() {
-        return siteSurveyRequestOnlyInfoCreation;
-    }
-
-    public Boolean getIsOnlyInfo() {
-        return siteSurveyRequestOnlyInfoCreation != null;
     }
 
     public void setIsOnlyInfo(Boolean isOnlyInfo) {

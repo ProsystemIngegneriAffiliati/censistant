@@ -160,6 +160,11 @@ public class CustomerSupplierService implements Serializable{
         if (isPotentialCustomer != null)
             conditions.add(cb.equal(root.get(CustomerSupplier_.isPotentialCustomer), isPotentialCustomer));
         
+        //is the customer an only info one
+        if (isOnlyInfo != null)
+            conditions.add(cb.equal(root.get(CustomerSupplier_.isOnlyInfo), isOnlyInfo));
+        
+        /*
         //has (the customer) an only-info site survey request
         if (isOnlyInfo != null) {
             Path<Object> path = root.get(CustomerSupplier_.id.getName()); // field to map with sub-query
@@ -168,7 +173,7 @@ public class CustomerSupplierService implements Serializable{
             subquery.where(cb.equal(subRoot.get(SiteSurveyRequest_.isInfo), isOnlyInfo));
 
             conditions.add(cb.in(path).value(subquery));
-        }
+        }*/
         
         //is customer
         if (isCustomer != null)
