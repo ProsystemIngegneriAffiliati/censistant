@@ -3,20 +3,18 @@
     xmlns:h="http://java.sun.com/jsf/html"
     xmlns:ui="http://java.sun.com/jsf/facelets"
     xmlns:p="http://primefaces.org/ui">
-    <p:panelGrid columns="3" columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group">
-        <h:panelGroup styleClass="md-inputfield">
-            <p:calendar readonly="true" id="expected" value="#{businessCommunication.report.expected}" locale="it" />
-            <p:outputLabel for="expected" value="#{msg.siteSurvey_siteSurveyReport_expected} #{msg.siteSurvey_siteSurveyReport}"/>
-            <p:message for="expected"/>
+    <h:panelGroup rendered="#{empty businessCommunication.report}" styleClass="md-inputfield">
+            <p:calendar readonly="true" id="expectedSiteSurveyReport" value="#{businessCommunication.report.expected}" locale="it" />
+            <p:outputLabel for="expectedSiteSurveyReport" value="#{msg.siteSurvey_siteSurveyReport_expected} #{msg.siteSurvey_siteSurveyReport}"/>
+            <p:message for="expectedSiteSurveyReport"/>
         </h:panelGroup>
-        <h:panelGroup styleClass="md-inputfield">
-            <p:calendar id="emailSent" value="#{businessCommunication.emailSent}" locale="it" />
-            <p:outputLabel for="emailSent" value="#{msg.sales_businessCommunication_emailSent}"/>
-            <p:message for="emailSent"/>
-        </h:panelGroup>
-        <h:panelGroup>
-            <p:outputLabel for="isOfferAccepted" value="#{msg.sales_businessCommunication_isOfferAccepted}" />
-            <p:inputSwitch id="isOfferAccepted" label="" value="#{businessCommunication.isOfferAccepted}" />
-        </h:panelGroup>
-    </p:panelGrid>
+    <h:panelGroup styleClass="md-inputfield">
+        <p:calendar id="emailSent" value="#{businessCommunication.emailSent}" locale="it" />
+        <p:outputLabel for="emailSent" value="#{msg.sales_businessCommunication_emailSent}"/>
+        <p:message for="emailSent"/>
+    </h:panelGroup>
+    <h:panelGroup>
+        <p:outputLabel for="isOfferAccepted" value="#{msg.sales_businessCommunication_isOfferAccepted}" />
+        <p:inputSwitch id="isOfferAccepted" label="" value="#{businessCommunication.isOfferAccepted}" />
+    </h:panelGroup>
 </ui:composition>

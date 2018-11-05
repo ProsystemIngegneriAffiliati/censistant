@@ -56,9 +56,11 @@
                                             </h:panelGroup>
                                         </p:panelGrid>
 
-                                        <ui:include src="/secured/sales/businessCommunicationTemplate.xhtml">
-                                            <ui:param name="businessCommunication" value="#{customerSupplierPresenter.populateBusinessCommunication()}"/>
-                                        </ui:include>
+                                        <p:panelGrid columns="3" columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                            <ui:include src="/secured/sales/businessCommunicationTemplate.xhtml">
+                                                <ui:param name="businessCommunication" value="#{customerSupplierPresenter.lastBusinessCommunication}"/>
+                                            </ui:include>
+                                        </p:panelGrid>
 
                                         <h:panelGroup id="addressPanel">
                                             <p:panelGrid rendered="#{not empty customerSupplierPresenter.customerSupplier.headOffice}" columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">

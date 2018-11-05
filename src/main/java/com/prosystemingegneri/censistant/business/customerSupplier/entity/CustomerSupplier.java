@@ -285,9 +285,16 @@ public class CustomerSupplier extends BaseEntity<Long>{
         for (BusinessCommunication businessCommunication : businessCommunications) {
             if (result == null)
                 result = businessCommunication;
-            else
-                if (result.getEmailSent().before(businessCommunication.getEmailSent()))
+            else {
+                if (result.getEmailSent() == null && businessCommunication.getEmailSent() != null)
                     result = businessCommunication;
+                else {
+                    if (result.getEmailSent() != null && businessCommunication.getEmailSent() != null) {
+                        if (result.getEmailSent().before(businessCommunication.getEmailSent()))
+                            result = businessCommunication;
+                    }
+                }
+            }
         }
         
         return result;

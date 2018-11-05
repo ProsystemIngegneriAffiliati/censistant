@@ -108,7 +108,7 @@ public class SiteSurveyReportService implements Serializable{
     
     public SiteSurveyReport saveSiteSurveyReport(SiteSurveyReport siteSurveyReport) {
         CustomerSupplier customer = siteSurveyReport.getRequest().getCustomer();
-        if (siteSurveyReport.getIsOfferAccepted() && customer.getIsPotentialCustomer()) {
+        if (siteSurveyReport.getBusinessCommunication().getIsOfferAccepted() && customer.getIsPotentialCustomer()) {
             customer.setIsPotentialCustomer(Boolean.FALSE);
             customerSupplierService.saveCustomerSupplier(customer);
         }
@@ -132,13 +132,13 @@ public class SiteSurveyReportService implements Serializable{
         em.remove(readSiteSurveyReport(id));
     }
 
-    public List<SiteSurveyReport> listSiteSurveyReports(int first, int pageSize, String sortField, Boolean isAscending, Integer number, Date start, Date end, String customerName, CustomerSupplier customer, String systemType, String seller, String nameAddressPlant, Boolean isAssociatedToOffer, Boolean isOfferAccepted) {
+    public List<SiteSurveyReport> listSiteSurveyReports(int first, int pageSize, String sortField, Boolean isAscending, Integer number, Date start, Date end, String customerName, CustomerSupplier customer, String systemType, String seller, String nameAddressPlant, Boolean isAssociatedToOffer) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<SiteSurveyReport> query = cb.createQuery(SiteSurveyReport.class);
         Root<SiteSurveyReport> root = query.from(SiteSurveyReport.class);
         CriteriaQuery<SiteSurveyReport> select = query.select(root).distinct(true);
         
-        List<Predicate> conditions = calculateConditions(cb, root, number, start, end, customerName, customer, systemType, seller, nameAddressPlant, isAssociatedToOffer, isOfferAccepted);
+        List<Predicate> conditions = calculateConditions(cb, root, number, start, end, customerName, customer, systemType, seller, nameAddressPlant, isAssociatedToOffer);
 
         if (!conditions.isEmpty())
             query.where(conditions.toArray(new Predicate[conditions.size()]));
@@ -160,9 +160,6 @@ public class SiteSurveyReportService implements Serializable{
                 case "nameAddressPlant":
                     path = root.get(SiteSurveyReport_.plant).get(Plant_.address);
                     break;
-                case "isOfferAccepted":
-                    path = root.get(SiteSurveyReport_.isOfferAccepted);
-                    break;
                 default:
                     path = root.get(sortField);
             }
@@ -182,13 +179,13 @@ public class SiteSurveyReportService implements Serializable{
         return typedQuery.getResultList();
     }
     
-    public Long getSiteSurveyReportsCount(Integer number, Date start, Date end, String customerName, CustomerSupplier customer, String systemType, String seller, String nameAddressPlant, Boolean isAssociatedToOffer, Boolean isOfferAccepted) {
+    public Long getSiteSurveyReportsCount(Integer number, Date start, Date end, String customerName, CustomerSupplier customer, String systemType, String seller, String nameAddressPlant, Boolean isAssociatedToOffer) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Long> query = cb.createQuery(Long.class);
         Root<SiteSurveyReport> root = query.from(SiteSurveyReport.class);
         CriteriaQuery<Long> select = query.select(cb.count(root));
 
-        List<Predicate> conditions = calculateConditions(cb, root, number, start, end, customerName, customer, systemType, seller, nameAddressPlant, isAssociatedToOffer, isOfferAccepted);
+        List<Predicate> conditions = calculateConditions(cb, root, number, start, end, customerName, customer, systemType, seller, nameAddressPlant, isAssociatedToOffer);
 
         if (!conditions.isEmpty())
             query.where(conditions.toArray(new Predicate[conditions.size()]));
@@ -196,7 +193,7 @@ public class SiteSurveyReportService implements Serializable{
         return em.createQuery(select).getSingleResult();
     }
     
-    private List<Predicate> calculateConditions(CriteriaBuilder cb, Root<SiteSurveyReport> root, Integer number, Date start, Date end, String customerName, CustomerSupplier customer, String systemType, String seller, String nameAddressPlant, Boolean isAssociatedToOffer, Boolean isOfferAccepted) {
+    private List<Predicate> calculateConditions(CriteriaBuilder cb, Root<SiteSurveyReport> root, Integer number, Date start, Date end, String customerName, CustomerSupplier customer, String systemType, String seller, String nameAddressPlant, Boolean isAssociatedToOffer) {
         List<Predicate> conditions = new ArrayList<>();
 
         //number
@@ -251,34 +248,6 @@ public class SiteSurveyReportService implements Serializable{
                 conditions.add(cb.isNull(offerRoot));
         }
         
-        //is offer accepted
-        if (isOfferAccepted != null)
-            conditions.add(cb.equal(root.get(SiteSurveyReport_.isOfferAccepted), isOfferAccepted));
-        
         return conditions;
-    }
-    
-    public Date getLastEmailSent(CustomerSupplier customer) {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Date> query = cb.createQuery(Date.class);
-        Root<SiteSurveyReport> root = query.from(SiteSurveyReport.class);
-        query.select(cb.greatest(root.get(SiteSurveyReport_.emailSent)));
-        
-        List<Predicate> conditions = new ArrayList<>();
-        
-        if (customer != null)
-            conditions.add(cb.equal(root.join(SiteSurveyReport_.plant).get(Plant_.customerSupplier), customer));
-
-        if (!conditions.isEmpty())
-            query.where(conditions.toArray(new Predicate[conditions.size()]));
-        
-        Date result;
-        try {
-            result = em.createQuery(query).getSingleResult();
-        } catch (NoResultException e) {
-            result = null;
-        }
-        
-	return result;
     }
 }

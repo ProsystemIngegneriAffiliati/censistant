@@ -72,6 +72,8 @@ public class CustomerSupplierPresenter implements Serializable{
     
     private DeliveryNoteCommon deliveryNote;
     
+    private BusinessCommunication lastBusinessCommunication;
+    
     @Resource
     Validator validator;
     
@@ -134,6 +136,8 @@ public class CustomerSupplierPresenter implements Serializable{
             
             lazySiteSurveyReports = new SiteSurveyReportLazyDataModel(siteSurveyReportService, customerSupplier);
         }
+        
+        populateBusinessCommunication();
     }
     
     public void onIsOnlyInfoChanged() {
@@ -208,11 +212,11 @@ public class CustomerSupplierPresenter implements Serializable{
             customerSupplier.removeReferee(referee);
     }
 
-    public BusinessCommunication populateBusinessCommunication() {
+    public void populateBusinessCommunication() {
         if (customerSupplier.getLastBusinessCommunication() == null)
             customerSupplier.addBusinessCommunication(new BusinessCommunication());
         
-        return customerSupplier.getLastBusinessCommunication();
+        lastBusinessCommunication = customerSupplier.getLastBusinessCommunication();
     }
     
     public Long getId() {
@@ -260,6 +264,14 @@ public class CustomerSupplierPresenter implements Serializable{
 
     public SiteSurveyReportListPresenter getSiteSurveyReportListPresenter() {
         return siteSurveyReportListPresenter;
+    }
+
+    public BusinessCommunication getLastBusinessCommunication() {
+        return lastBusinessCommunication;
+    }
+
+    public void setLastBusinessCommunication(BusinessCommunication lastBusinessCommunication) {
+        this.lastBusinessCommunication = lastBusinessCommunication;
     }
     
 }

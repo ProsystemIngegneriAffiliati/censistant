@@ -88,6 +88,8 @@ public class BusinessCommunication extends BaseEntity<Long> {
 
     public void setIsOfferAccepted(Boolean isOfferAccepted) {
         this.isOfferAccepted = isOfferAccepted;
+        if (this.isOfferAccepted)
+            customer.setIsPotentialCustomer(Boolean.FALSE);
     }
 
     public CustomerSupplier getCustomer() {

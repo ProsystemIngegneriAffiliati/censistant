@@ -77,20 +77,12 @@ public class SiteSurveyReport extends BaseEntity<Long>{
     @OneToOne(mappedBy = "siteSurveyReport")
     private Offer offer;
     
-    @Temporal(TemporalType.DATE)
-    private Date emailSent;
-    
     private String notes;
-    
-    @NotNull
-    @Column(nullable = false)
-    private Boolean isOfferAccepted;
     
     @Version
     private int version;
 
     public SiteSurveyReport() {
-        isOfferAccepted = Boolean.FALSE;
         businessCommunication = new BusinessCommunication();
     }
 
@@ -167,26 +159,6 @@ public class SiteSurveyReport extends BaseEntity<Long>{
 
     public void setOffer(Offer offer) {
         this.offer = offer;
-        if (this.offer != null)
-            setIsOfferAccepted(Boolean.TRUE);
-    }
-
-    public Date getEmailSent() {
-        return emailSent;
-    }
-
-    public void setEmailSent(Date emailSent) {
-        this.emailSent = emailSent;
-    }
-
-    public Boolean getIsOfferAccepted() {
-        return isOfferAccepted;
-    }
-
-    public void setIsOfferAccepted(Boolean isOfferAccepted) {
-        this.isOfferAccepted = isOfferAccepted;
-        if (this.isOfferAccepted)
-            plant.getCustomerSupplier().setIsPotentialCustomer(Boolean.FALSE);
     }
     
     public void addBusinessCommunication(BusinessCommunication businessCommunication) {

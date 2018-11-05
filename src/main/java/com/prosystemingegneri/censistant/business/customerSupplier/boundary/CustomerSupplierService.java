@@ -24,14 +24,10 @@ import com.prosystemingegneri.censistant.business.purchasing.entity.BoxedItem;
 import com.prosystemingegneri.censistant.business.purchasing.entity.BoxedItem_;
 import com.prosystemingegneri.censistant.business.purchasing.entity.SupplierItem;
 import com.prosystemingegneri.censistant.business.purchasing.entity.SupplierItem_;
+import com.prosystemingegneri.censistant.business.sales.boundary.BusinessCommunicationService;
 import com.prosystemingegneri.censistant.business.sales.boundary.JobOrderService;
-import com.prosystemingegneri.censistant.business.siteSurvey.boundary.SiteSurveyReportService;
-import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport;
-import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyRequest;
-import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyRequest_;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -42,7 +38,6 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.ListJoin;
-import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
@@ -60,7 +55,7 @@ public class CustomerSupplierService implements Serializable{
     JobOrderService jobOrderService;
     
     @Inject
-    private SiteSurveyReportService siteSurveyReportService;
+    private BusinessCommunicationService businessCommunicationService;
     
     public CustomerSupplier createCustomer() {
         CustomerSupplier customer = new CustomerSupplier(Boolean.FALSE, Boolean.TRUE, Boolean.FALSE, Boolean.FALSE);
@@ -133,7 +128,7 @@ public class CustomerSupplierService implements Serializable{
         
         List<CustomerSupplier> result = typedQuery.getResultList();
         for (CustomerSupplier customerSupplier : result)
-            customerSupplier.setLastEmailSent(siteSurveyReportService.getLastEmailSent(customerSupplier));
+            customerSupplier.setLastEmailSent(businessCommunicationService.getLastEmailSent(customerSupplier));
 
         return result;
     }

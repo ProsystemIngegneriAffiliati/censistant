@@ -35,6 +35,4 @@ public class SiteSurveyReport_ {
     public static volatile SingularAttribute<SiteSurveyReport, Plant> plant;
     public static volatile SingularAttribute<SiteSurveyReport, Worker> seller;
     public static volatile SingularAttribute<SiteSurveyReport, Offer> offer;
-    public static volatile SingularAttribute<SiteSurveyReport, Date> emailSent;
-    public static volatile SingularAttribute<SiteSurveyReport, Boolean> isOfferAccepted;
 }

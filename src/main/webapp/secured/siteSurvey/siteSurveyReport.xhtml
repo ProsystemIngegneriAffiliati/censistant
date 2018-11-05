@@ -138,7 +138,7 @@
                                     </h:panelGroup>
                                 </p:panelGrid>
 
-                                <p:panelGrid columns="3" columnClasses="ui-grid-col-4,ui-grid-col-5,ui-grid-col-3" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:calendar id="expected" value="#{siteSurveyReportPresenter.siteSurveyReport.expected}" locale="it" />
                                         <p:outputLabel for="expected" value="#{msg.siteSurvey_siteSurveyReport_expected}"/>
@@ -149,9 +149,6 @@
                                         <p:outputLabel for="actual" value="#{msg.siteSurvey_siteSurveyReport_actual}"/>
                                         <p:message for="actual"/>
                                     </h:panelGroup>
-                                    <p:commandButton value="#{msg.print}" icon="ui-icon-print" ajax="false">
-                                        <p:fileDownload value="#{siteSurveyReportPresenter.print()}" />
-                                    </p:commandButton>
 
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:autoComplete id="seller"
@@ -167,15 +164,13 @@
                                         <p:outputLabel for="seller" value="#{msg.siteSurvey_siteSurveyReport_seller}"/>
                                         <p:message for="seller"/>
                                     </h:panelGroup>
-                                    <h:panelGroup styleClass="md-inputfield">
-                                        <p:calendar id="emailSent" value="#{siteSurveyReportPresenter.siteSurveyReport.emailSent}" locale="it" />
-                                        <p:outputLabel for="emailSent" value="#{msg.siteSurvey_siteSurveyReport_emailSent}"/>
-                                        <p:message for="emailSent"/>
-                                    </h:panelGroup>
-                                    <h:panelGroup>
-                                        <p:outputLabel for="isOfferAccepted" value="#{msg.siteSurvey_siteSurveyReport_isOfferAccepted}" />
-                                        <p:inputSwitch id="isOfferAccepted" label="" value="#{siteSurveyReportPresenter.siteSurveyReport.isOfferAccepted}" />
-                                    </h:panelGroup>
+                                    <p:commandButton value="#{msg.print}" icon="ui-icon-print" ajax="false">
+                                        <p:fileDownload value="#{siteSurveyReportPresenter.print()}" />
+                                    </p:commandButton>
+
+                                    <ui:include src="/secured/sales/businessCommunicationTemplate.xhtml">
+                                        <ui:param name="businessCommunication" value="#{siteSurveyReportPresenter.siteSurveyReport.businessCommunication}"/>
+                                    </ui:include>
                                 </p:panelGrid>
 
                                 <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">

@@ -65,12 +65,12 @@ public class SiteSurveyReportListPresenter implements Serializable{
     }
     
     public List<SiteSurveyReport> completeReportsNotAssociatedToOffer(String name) {
-        return service.listSiteSurveyReports(0, 10, "expected", Boolean.FALSE, null, null, null, name, null, null, null, null, Boolean.FALSE, null);
+        return service.listSiteSurveyReports(0, 10, "expected", Boolean.FALSE, null, null, null, name, null, null, null, null, Boolean.FALSE);
     }
 
     public List<SiteSurveyReport> getReportsNotAssociatedToOffer() {
         if (reportsNotAssociatedToOffer == null || reportsNotAssociatedToOffer.isEmpty())
-            reportsNotAssociatedToOffer = service.listSiteSurveyReports(0, 0, null, Boolean.FALSE, null, null, null, null, null, null, null, null, Boolean.FALSE, null);
+            reportsNotAssociatedToOffer = service.listSiteSurveyReports(0, 0, null, Boolean.FALSE, null, null, null, null, null, null, null, null, Boolean.FALSE);
         return reportsNotAssociatedToOffer;
     }
 
