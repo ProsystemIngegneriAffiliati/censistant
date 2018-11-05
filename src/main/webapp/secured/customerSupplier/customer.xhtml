@@ -56,10 +56,13 @@
                                             </h:panelGroup>
                                         </p:panelGrid>
 
-                                        <p:panelGrid columns="3" columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                        <p:panelGrid id="businessCommunicationPanel" columns="4" columnClasses="ui-grid-col-3,ui-grid-col-3,ui-grid-col-3,ui-grid-col-3" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                             <ui:include src="/secured/sales/businessCommunicationTemplate.xhtml">
                                                 <ui:param name="businessCommunication" value="#{customerSupplierPresenter.lastBusinessCommunication}"/>
                                             </ui:include>
+                                            <h:panelGroup id="newBusinessCommunicationPanel">
+                                                <p:commandButton disabled="#{empty customerSupplierPresenter.lastBusinessCommunication.emailSent}" value="#{msg.clear}" action="#{customerSupplierPresenter.createNewBusinessCommunication()}" update="businessCommunicationPanel" />
+                                            </h:panelGroup>
                                         </p:panelGrid>
 
                                         <h:panelGroup id="addressPanel">

@@ -219,6 +219,13 @@ public class CustomerSupplierPresenter implements Serializable{
         lastBusinessCommunication = customerSupplier.getLastBusinessCommunication();
     }
     
+    public void createNewBusinessCommunication() {
+        BusinessCommunication businessCommunication = new BusinessCommunication();
+        customerSupplier.addBusinessCommunication(businessCommunication);
+        
+        lastBusinessCommunication = businessCommunication;
+    }
+    
     public Long getId() {
         return id;
     }

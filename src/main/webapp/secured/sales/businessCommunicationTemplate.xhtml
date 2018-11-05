@@ -2,12 +2,15 @@
     xmlns="http://www.w3.org/1999/xhtml"
     xmlns:h="http://java.sun.com/jsf/html"
     xmlns:ui="http://java.sun.com/jsf/facelets"
-    xmlns:p="http://primefaces.org/ui">
-    <h:panelGroup rendered="#{empty businessCommunication.report}" styleClass="md-inputfield">
-            <p:calendar readonly="true" id="expectedSiteSurveyReport" value="#{businessCommunication.report.expected}" locale="it" />
-            <p:outputLabel for="expectedSiteSurveyReport" value="#{msg.siteSurvey_siteSurveyReport_expected} #{msg.siteSurvey_siteSurveyReport}"/>
-            <p:message for="expectedSiteSurveyReport"/>
-        </h:panelGroup>
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:panelGroup rendered="#{empty report}" styleClass="md-inputfield">
+        <p:inputText readonly="true" id="expectedSiteSurveyReport" value="#{businessCommunication.report.expected}">
+            <f:convertDateTime pattern="dd/MM/yyyy" />
+        </p:inputText>
+        <p:outputLabel for="expectedSiteSurveyReport" value="#{msg.siteSurvey_siteSurveyReport}"/>
+        <p:message for="expectedSiteSurveyReport"/>
+    </h:panelGroup>
     <h:panelGroup styleClass="md-inputfield">
         <p:calendar id="emailSent" value="#{businessCommunication.emailSent}" locale="it" />
         <p:outputLabel for="emailSent" value="#{msg.sales_businessCommunication_emailSent}"/>

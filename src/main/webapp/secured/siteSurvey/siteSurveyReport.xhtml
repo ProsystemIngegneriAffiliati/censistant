@@ -170,6 +170,7 @@
 
                                     <ui:include src="/secured/sales/businessCommunicationTemplate.xhtml">
                                         <ui:param name="businessCommunication" value="#{siteSurveyReportPresenter.siteSurveyReport.businessCommunication}"/>
+                                        <ui:param name="report" value="true" />
                                     </ui:include>
                                 </p:panelGrid>
 
@@ -184,7 +185,9 @@
                                 <div class="ui-g">
                                     <div class="ui-g-1 ui-md-2"></div>
                                     <div class="ui-g-4 ui-md-3">
-                                        <p:button value="#{msg.cancelBack}" outcome="/secured/customerSupplier/customers" styleClass="secondary"/>
+                                        <p:button value="#{msg.cancelBack}" outcome="/secured/customerSupplier/customer" styleClass="secondary">
+                                            <f:param name="id" value="#{siteSurveyReportPresenter.siteSurveyReport.request.customer.id}" />
+                                        </p:button>
                                     </div>
                                     <div class="ui-g-2 ui-md-2"></div>
                                     <div class="ui-g-4 ui-md-3">

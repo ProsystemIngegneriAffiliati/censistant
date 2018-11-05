@@ -110,8 +110,11 @@ public class SiteSurveyReportService implements Serializable{
         CustomerSupplier customer = siteSurveyReport.getRequest().getCustomer();
         if (siteSurveyReport.getBusinessCommunication().getIsOfferAccepted() && customer.getIsPotentialCustomer()) {
             customer.setIsPotentialCustomer(Boolean.FALSE);
-            customerSupplierService.saveCustomerSupplier(customer);
         }
+        if (customer.getBusinessCommunications().contains(siteSurveyReport.getBusinessCommunication()))
+            customer.removeBusinessCommunication(siteSurveyReport.getBusinessCommunication());
+        customer.addBusinessCommunication(siteSurveyReport.getBusinessCommunication());
+        customerSupplierService.saveCustomerSupplier(customer);
         
         if (siteSurveyReport.getId() == null) {
             if (siteSurveyReport.getRequest().getId() == null)
