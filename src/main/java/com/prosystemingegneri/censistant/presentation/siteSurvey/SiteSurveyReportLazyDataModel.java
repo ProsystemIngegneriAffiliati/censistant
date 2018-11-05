@@ -16,6 +16,7 @@
  */
 package com.prosystemingegneri.censistant.presentation.siteSurvey;
 
+import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
 import com.prosystemingegneri.censistant.business.siteSurvey.boundary.SiteSurveyReportService;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport;
 import java.util.Date;
@@ -33,11 +34,17 @@ import static org.primefaces.model.SortOrder.DESCENDING;
  */
 public class SiteSurveyReportLazyDataModel extends LazyDataModel<SiteSurveyReport>{
     private final SiteSurveyReportService service;
+    private CustomerSupplier customer;
     private Date start;
     private Date end;
 
     public SiteSurveyReportLazyDataModel(SiteSurveyReportService service) {
         this.service = service;
+    }
+
+    public SiteSurveyReportLazyDataModel(SiteSurveyReportService service, CustomerSupplier customer) {
+        this.service = service;
+        this.customer = customer;
     }
     
     @Override
@@ -48,7 +55,7 @@ public class SiteSurveyReportLazyDataModel extends LazyDataModel<SiteSurveyRepor
     @Override
     public List<SiteSurveyReport> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
         Boolean isAscending = null;
-        String customer = null;
+        String customerName = null;
         String systemType = null;
         String seller = null;
         Integer number = null;
@@ -76,8 +83,8 @@ public class SiteSurveyReportLazyDataModel extends LazyDataModel<SiteSurveyRepor
                         } catch (NumberFormatException e) {
                         }
                     }
-                    if (filterProperty.equalsIgnoreCase("customer"))
-                        customer = String.valueOf(filters.get(filterProperty));
+                    if (filterProperty.equalsIgnoreCase("customerName"))
+                        customerName = String.valueOf(filters.get(filterProperty));
                     if (filterProperty.equalsIgnoreCase("systemType"))
                         systemType = String.valueOf(filters.get(filterProperty));
                     if (filterProperty.equalsIgnoreCase("seller"))
@@ -90,8 +97,8 @@ public class SiteSurveyReportLazyDataModel extends LazyDataModel<SiteSurveyRepor
             }
         }
         
-        List<SiteSurveyReport> result = service.listSiteSurveyReports(first, pageSize, sortField, isAscending, number, start, end, customer, systemType, seller, nameAddressPlant, null, isOfferAccepted);
-        this.setRowCount(service.getSiteSurveyReportsCount(number, start, end, customer, systemType, seller, nameAddressPlant, null, isOfferAccepted).intValue());
+        List<SiteSurveyReport> result = service.listSiteSurveyReports(first, pageSize, sortField, isAscending, number, start, end, customerName, customer, systemType, seller, nameAddressPlant, null, isOfferAccepted);
+        this.setRowCount(service.getSiteSurveyReportsCount(number, start, end, customerName, customer, systemType, seller, nameAddressPlant, null, isOfferAccepted).intValue());
         
         return result;
     }
@@ -119,6 +126,14 @@ public class SiteSurveyReportLazyDataModel extends LazyDataModel<SiteSurveyRepor
 
     public void setEnd(Date end) {
         this.end = end;
+    }
+
+    public CustomerSupplier getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(CustomerSupplier customer) {
+        this.customer = customer;
     }
     
 }

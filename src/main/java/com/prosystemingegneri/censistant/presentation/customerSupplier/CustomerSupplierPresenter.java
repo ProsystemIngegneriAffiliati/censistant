@@ -23,12 +23,13 @@ import com.prosystemingegneri.censistant.business.customerSupplier.entity.Refere
 import com.prosystemingegneri.censistant.business.deliveryNote.entity.DeliveryNoteCommon;
 import com.prosystemingegneri.censistant.business.sales.entity.JobOrder;
 import com.prosystemingegneri.censistant.business.sales.entity.Offer;
-import com.prosystemingegneri.censistant.business.siteSurvey.boundary.SiteSurveyRequestService;
+import com.prosystemingegneri.censistant.business.siteSurvey.boundary.SiteSurveyReportService;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyRequest;
 import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
+import com.prosystemingegneri.censistant.presentation.siteSurvey.SiteSurveyReportLazyDataModel;
+import com.prosystemingegneri.censistant.presentation.siteSurvey.SiteSurveyReportListPresenter;
 import java.io.Serializable;
-import java.util.Date;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.ejb.EJBException;
@@ -60,7 +61,10 @@ public class CustomerSupplierPresenter implements Serializable{
     private SiteSurveyReport siteSurveyReport;
     
     @Inject
-    private SiteSurveyRequestService siteSurveyRequestService;
+    private SiteSurveyReportService siteSurveyReportService;
+    @Inject
+    SiteSurveyReportListPresenter siteSurveyReportListPresenter;
+    private SiteSurveyReportLazyDataModel lazySiteSurveyReports;
     
     private Offer offer;
     private JobOrder jobOrder;
@@ -78,6 +82,8 @@ public class CustomerSupplierPresenter implements Serializable{
         
         siteSurveyRequest = (SiteSurveyRequest) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("siteSurveyRequest");
         siteSurveyReport = (SiteSurveyReport) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("siteSurveyReport");
+        
+        lazySiteSurveyReports = new SiteSurveyReportLazyDataModel(siteSurveyReportService, customerSupplier);
         
         offer = (Offer) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("offer");
         jobOrder = (JobOrder) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("jobOrder");
@@ -124,6 +130,8 @@ public class CustomerSupplierPresenter implements Serializable{
             }
             else
                 customerSupplier = service.readCustomerSupplier(id);
+            
+            lazySiteSurveyReports = new SiteSurveyReportLazyDataModel(siteSurveyReportService, customerSupplier);
         }
     }
     
@@ -232,6 +240,18 @@ public class CustomerSupplierPresenter implements Serializable{
     }
 
     public void setIsOnlyInfo(Boolean isOnlyInfo) {
+    }
+
+    public SiteSurveyReportLazyDataModel getLazySiteSurveyReports() {
+        return lazySiteSurveyReports;
+    }
+
+    public void setLazySiteSurveyReports(SiteSurveyReportLazyDataModel lazySiteSurveyReports) {
+        this.lazySiteSurveyReports = lazySiteSurveyReports;
+    }
+
+    public SiteSurveyReportListPresenter getSiteSurveyReportListPresenter() {
+        return siteSurveyReportListPresenter;
     }
     
 }

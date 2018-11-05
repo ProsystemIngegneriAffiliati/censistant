@@ -30,170 +30,209 @@
                                     </c:if>
                                 </h1>
                                 <p>#{msg.customerSupplier_customer_tip}</p>
-                                <c:if test="false">
-                                    <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
-                                        <h:panelGroup id="isSiteSurveyRequestPresent">
-                                            <p:commandButton icon="ui-icon-check-box" value="#{msg.siteSurvey_siteSurveyRequest_isInfo}" title="#{customerSupplierPresenter.siteSurveyRequestOnlyInfoCreation}" rendered="#{not empty customerSupplierPresenter.siteSurveyRequestOnlyInfoCreation}" action="#{customerSupplierPresenter.createNewSiteSurveyRequestOnlyInfo()}" update="isSiteSurveyRequestPresent" />
-                                            <p:commandButton icon="ui-icon-check-box-outline-blank" value="#{msg.siteSurvey_siteSurveyRequest_isInfo}" rendered="#{empty customerSupplierPresenter.siteSurveyRequestOnlyInfoCreation}" action="#{customerSupplierPresenter.createNewSiteSurveyRequestOnlyInfo()}" update="isSiteSurveyRequestPresent" />
-                                        </h:panelGroup>
+                                <p:tabView id="customerTabs" dynamic="true">
+                                    <p:tab title="#{msg.generalData}">
+                                        <p:panelGrid columns="4" columnClasses="ui-grid-col-5,ui-grid-col-2,ui-grid-col-2,ui-grid-col-3" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                            <h:panelGroup styleClass="md-inputfield">
+                                                <p:inputText id="businessName" value="#{customerSupplierPresenter.customerSupplier.businessName}"/>
+                                                <p:outputLabel for="businessName" value="#{msg.customerSupplier_customerSupplier_businessName}"/>
+                                                <p:message for="businessName"/>
+                                            </h:panelGroup>
 
-                                        <h:panelGroup>
-                                        </h:panelGroup>
-                                    </p:panelGrid>
-                                </c:if>
+                                            <h:panelGroup>
+                                                <p:outputLabel for="isPotentialCustomer" value="#{msg.customerSupplier_customerSupplier_isPotentialCustomer}" />
+                                                <p:inputSwitch id="isPotentialCustomer" label="" value="#{customerSupplierPresenter.customerSupplier.isPotentialCustomer}" />
+                                            </h:panelGroup>
 
-                                <p:panelGrid columns="4" columnClasses="ui-grid-col-5,ui-grid-col-2,ui-grid-col-2,ui-grid-col-3" layout="grid" styleClass="ui-panelgrid-blank form-group">
-                                    <h:panelGroup styleClass="md-inputfield">
-                                        <p:inputText id="businessName" value="#{customerSupplierPresenter.customerSupplier.businessName}"/>
-                                        <p:outputLabel for="businessName" value="#{msg.customerSupplier_customerSupplier_businessName}"/>
-                                        <p:message for="businessName"/>
-                                    </h:panelGroup>
+                                            <h:panelGroup>
+                                                <p:outputLabel for="isOnlyInfo" value="#{msg.siteSurvey_siteSurveyRequest_isInfo}" />
+                                                <p:inputSwitch id="isOnlyInfo" value="#{customerSupplierPresenter.customerSupplier.isOnlyInfo}">
+                                                    <p:ajax listener="#{customerSupplierPresenter.onIsOnlyInfoChanged()}" update="addressPanel siteSurveyReportPanel" />
+                                                </p:inputSwitch>
+                                            </h:panelGroup>
 
-                                    <h:panelGroup>
-                                        <p:outputLabel for="isPotentialCustomer" value="#{msg.customerSupplier_customerSupplier_isPotentialCustomer}" />
-                                        <p:inputSwitch id="isPotentialCustomer" label="" value="#{customerSupplierPresenter.customerSupplier.isPotentialCustomer}" />
-                                    </h:panelGroup>
+                                            <h:panelGroup id="siteSurveyReportPanel">
+                                                <p:commandButton disabled="#{empty customerSupplierPresenter.customerSupplier.headOffice}" icon="ui-icon-event-note" value="#{msg.siteSurvey_siteSurveyReport}" title="#{msg.create} #{msg.new} #{msg.siteSurvey_siteSurveyReport}" action="#{customerSupplierPresenter.createNewSiteSurveyReport()}" ajax="false" />
+                                            </h:panelGroup>
+                                        </p:panelGrid>
 
-                                    <h:panelGroup>
-                                        <p:outputLabel for="isOnlyInfo" value="#{msg.siteSurvey_siteSurveyRequest_isInfo}" />
-                                        <p:inputSwitch id="isOnlyInfo" value="#{customerSupplierPresenter.customerSupplier.isOnlyInfo}">
-                                            <p:ajax listener="#{customerSupplierPresenter.onIsOnlyInfoChanged()}" update="addressPanel siteSurveyReportPanel" />
-                                        </p:inputSwitch>
-                                    </h:panelGroup>
+                                        <h:panelGroup id="addressPanel">
+                                            <p:panelGrid rendered="#{not empty customerSupplierPresenter.customerSupplier.headOffice}" columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                                <h:panelGroup styleClass="md-inputfield">
+                                                    <p:inputTextarea id="address" value="#{customerSupplierPresenter.customerSupplier.headOffice.address}" rows="2"/>
+                                                    <p:outputLabel for="address" value="#{msg.customerSupplier_plant_address}"/>
+                                                    <p:message for="address"/>
+                                                </h:panelGroup>
+                                                <h:panelGroup styleClass="md-inputfield">
+                                                    <p:inputText id="email" value="#{customerSupplierPresenter.customerSupplier.headOffice.email}" type="email"/>
+                                                    <p:outputLabel for="email" value="#{msg.customerSupplier_plant_email}"/>
+                                                    <p:message for="email"/>
+                                                </h:panelGroup>
+                                                <h:panelGroup styleClass="md-inputfield">
+                                                    <p:inputText id="phone" value="#{customerSupplierPresenter.customerSupplier.headOffice.phone}"/>
+                                                    <p:outputLabel for="phone" value="#{msg.customerSupplier_plant_phone}"/>
+                                                    <p:message for="phone"/>
+                                                </h:panelGroup>
 
-                                    <h:panelGroup id="siteSurveyReportPanel">
-                                        <p:commandButton disabled="#{empty customerSupplierPresenter.customerSupplier.headOffice}" icon="ui-icon-event-note" value="#{msg.siteSurvey_siteSurveyReport}" title="#{msg.create} #{msg.new} #{msg.siteSurvey_siteSurveyReport}" action="#{customerSupplierPresenter.createNewSiteSurveyReport()}" ajax="false" />
-                                    </h:panelGroup>
-                                </p:panelGrid>
-
-                                <h:panelGroup id="addressPanel">
-                                    <p:panelGrid rendered="#{not empty customerSupplierPresenter.customerSupplier.headOffice}" columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
-                                        <h:panelGroup styleClass="md-inputfield">
-                                            <p:inputTextarea id="address" value="#{customerSupplierPresenter.customerSupplier.headOffice.address}" rows="2"/>
-                                            <p:outputLabel for="address" value="#{msg.customerSupplier_plant_address}"/>
-                                            <p:message for="address"/>
-                                        </h:panelGroup>
-                                        <h:panelGroup styleClass="md-inputfield">
-                                            <p:inputText id="email" value="#{customerSupplierPresenter.customerSupplier.headOffice.email}" type="email"/>
-                                            <p:outputLabel for="email" value="#{msg.customerSupplier_plant_email}"/>
-                                            <p:message for="email"/>
-                                        </h:panelGroup>
-                                        <h:panelGroup styleClass="md-inputfield">
-                                            <p:inputText id="phone" value="#{customerSupplierPresenter.customerSupplier.headOffice.phone}"/>
-                                            <p:outputLabel for="phone" value="#{msg.customerSupplier_plant_phone}"/>
-                                            <p:message for="phone"/>
-                                        </h:panelGroup>
-
-                                        <h:panelGroup styleClass="md-inputfield">
-                                            <p:inputText id="fax" value="#{customerSupplierPresenter.customerSupplier.headOffice.fax}"/>
-                                            <p:outputLabel for="fax" value="#{msg.customerSupplier_plant_fax}"/>
-                                            <p:message for="fax"/>
-                                        </h:panelGroup>
-                                    </p:panelGrid>
-                                </h:panelGroup>
-
-                                <p:panelGrid columns="3" columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group">
-                                    <h:panelGroup styleClass="md-inputfield">
-                                        <p:inputText id="vatRegistrationNumber" value="#{customerSupplierPresenter.customerSupplier.vatRegistrationNumber}"/>
-                                        <p:outputLabel for="vatRegistrationNumber" value="#{msg.customerSupplier_customerSupplier_vatRegistrationNumber}"/>
-                                        <p:message for="vatRegistrationNumber"/>
-                                    </h:panelGroup>
-
-                                    <h:panelGroup styleClass="md-inputfield">
-                                        <p:inputText id="taxCode" value="#{customerSupplierPresenter.customerSupplier.taxCode}"/>
-                                        <p:outputLabel for="taxCode" value="#{msg.customerSupplier_customerSupplier_taxCode}"/>
-                                        <p:message for="taxCode"/>
-                                    </h:panelGroup>
-
-                                    <h:panelGroup styleClass="md-inputfield">
-                                        <p:autoComplete id="provenance"
-                                                        dropdown="true"
-                                                        value="#{customerSupplierPresenter.customerSupplier.provenance}"
-                                                        completeMethod="#{provenanceListPresenter.completeProvenances}"
-                                                        var="prov"
-                                                        itemLabel="#{prov.name}"
-                                                        itemValue="#{prov}"
-                                                        forceSelection="true">
-                                            <oou:converter converterId="omnifaces.ListConverter" list="#{provenanceListPresenter.provenances}"/>
-                                        </p:autoComplete>
-                                        <p:outputLabel for="provenance" value="#{msg.customerSupplier_provenance}"/>
-                                        <p:message for="provenance"/>
-                                    </h:panelGroup>
-                                </p:panelGrid>
-
-                                <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
-                                    <p:dataTable id="plantsTable"
-                                                 var="plant"
-                                                 value="#{customerSupplierPresenter.customerSupplier.plantsNoHeadOffice}"
-                                                 widgetVar="plTbl"
-                                                 editable="true" editMode="cell">
-                                        <f:facet name="header">
-                                            <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
-                                                #{msg.customerSupplier_plants}
-                                                <p:commandButton title="#{msg.new}" icon="ui-icon-create" actionListener="#{customerSupplierPresenter.createNewPlant()}" oncomplete="PF('plTbl').addRow()" process="@this"/>
+                                                <h:panelGroup styleClass="md-inputfield">
+                                                    <p:inputText id="fax" value="#{customerSupplierPresenter.customerSupplier.headOffice.fax}"/>
+                                                    <p:outputLabel for="fax" value="#{msg.customerSupplier_plant_fax}"/>
+                                                    <p:message for="fax"/>
+                                                </h:panelGroup>
                                             </p:panelGrid>
-                                        </f:facet>
-                                        <p:column headerText="#{msg.customerSupplier_plant_name}" sortBy="#{plant.name}" filterBy="#{plant.name}" priority="0">
-                                            <p:cellEditor>
-                                                <f:facet name="output"><h:outputText value="#{plant.name}" /></f:facet>
-                                                <f:facet name="input"><p:inputText value="#{plant.name}" /></f:facet>
-                                            </p:cellEditor>
-                                        </p:column>
-                                        <p:column headerText="#{msg.customerSupplier_plant_address}" sortBy="#{plant.address}" filterBy="#{plant.address}" priority="4">
-                                            <p:cellEditor>
-                                                <f:facet name="output"><h:outputText value="#{plant.address}" /></f:facet>
-                                                <f:facet name="input"><p:inputText value="#{plant.address}" /></f:facet>
-                                            </p:cellEditor>
-                                        </p:column>
-                                        <p:column headerText="#{msg.actions}" style="width:72px; text-align:center" priority="0">
-                                            <p:splitButton value="" icon="ui-icon-edit" action="#{customerSupplierPresenter.detailPlant(plant)}" ajax="false">
-                                                <p:menuitem  value="#{msg.delete}" icon="ui-icon-delete" actionListener="#{customerSupplierPresenter.deletePlant(plant)}" update="plantsTable">
-                                                    <p:confirm header="#{msg.customerSupplier_plants_delete}" message="#{msg.customerSupplier_plants_delete_tip}" icon="ui-icon-alert"/>
-                                                </p:menuitem>
-                                            </p:splitButton>
-                                        </p:column>
-                                    </p:dataTable>
+                                        </h:panelGroup>
 
-                                    <p:dataTable id="refereesTable"
-                                                 var="referee"
-                                                 value="#{customerSupplierPresenter.customerSupplier.referees}"
-                                                 widgetVar="rfTbl"
-                                                 editable="true" editMode="cell">
-                                        <f:facet name="header">
-                                            <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
-                                                #{msg.customerSupplier_referees}
-                                                <p:commandButton title="#{msg.new}" icon="ui-icon-create" actionListener="#{customerSupplierPresenter.createNewReferee()}" oncomplete="PF('rfTbl').addRow()" process="@this"/>
-                                            </p:panelGrid>
-                                        </f:facet>
-                                        <p:column headerText="#{msg.customerSupplier_referee_name}" sortBy="#{referee.name}" filterBy="#{referee.name}" priority="0">
-                                            <p:cellEditor>
-                                                <f:facet name="output"><h:outputText value="#{referee.name}" /></f:facet>
-                                                <f:facet name="input"><p:inputText value="#{referee.name}" /></f:facet>
-                                            </p:cellEditor>
-                                        </p:column>
-                                        <p:column headerText="#{msg.customerSupplier_referee_email}" sortBy="#{referee.email}" filterBy="#{referee.email}" priority="4">
-                                            <p:cellEditor>
-                                                <f:facet name="output"><h:outputText value="#{referee.email}" /></f:facet>
-                                                <f:facet name="input"><p:inputText value="#{referee.email}" /></f:facet>
-                                            </p:cellEditor>
-                                        </p:column>
-                                        <p:column headerText="#{msg.actions}" style="width:72px; text-align:center" priority="0">
-                                            <p:splitButton value="" icon="ui-icon-edit" action="#{customerSupplierPresenter.detailReferee(referee)}" ajax="false">
-                                                <p:menuitem  value="#{msg.delete}" icon="ui-icon-delete" actionListener="#{customerSupplierPresenter.deleteReferee(referee)}" update="refereesTable">
-                                                    <p:confirm header="#{msg.customerSupplier_referees_delete}" message="#{msg.customerSupplier_referees_delete_tip}" icon="ui-icon-alert"/>
-                                                </p:menuitem>
-                                            </p:splitButton>
-                                        </p:column>
-                                    </p:dataTable>
-                                </p:panelGrid>
+                                        <p:panelGrid columns="3" columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                            <h:panelGroup styleClass="md-inputfield">
+                                                <p:inputText id="vatRegistrationNumber" value="#{customerSupplierPresenter.customerSupplier.vatRegistrationNumber}"/>
+                                                <p:outputLabel for="vatRegistrationNumber" value="#{msg.customerSupplier_customerSupplier_vatRegistrationNumber}"/>
+                                                <p:message for="vatRegistrationNumber"/>
+                                            </h:panelGroup>
 
-                                <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
-                                    <h:panelGroup styleClass="md-inputfield">
-                                        <p:inputTextarea id="notes" value="#{customerSupplierPresenter.customerSupplier.notes}" rows="2"/>
-                                        <p:outputLabel for="notes" value="#{msg.customerSupplier_customerSupplier_notes}"/>
-                                        <p:message for="notes"/>
-                                    </h:panelGroup>
-                                </p:panelGrid>
+                                            <h:panelGroup styleClass="md-inputfield">
+                                                <p:inputText id="taxCode" value="#{customerSupplierPresenter.customerSupplier.taxCode}"/>
+                                                <p:outputLabel for="taxCode" value="#{msg.customerSupplier_customerSupplier_taxCode}"/>
+                                                <p:message for="taxCode"/>
+                                            </h:panelGroup>
+
+                                            <h:panelGroup styleClass="md-inputfield">
+                                                <p:autoComplete id="provenance"
+                                                                dropdown="true"
+                                                                value="#{customerSupplierPresenter.customerSupplier.provenance}"
+                                                                completeMethod="#{provenanceListPresenter.completeProvenances}"
+                                                                var="prov"
+                                                                itemLabel="#{prov.name}"
+                                                                itemValue="#{prov}"
+                                                                forceSelection="true">
+                                                    <oou:converter converterId="omnifaces.ListConverter" list="#{provenanceListPresenter.provenances}"/>
+                                                </p:autoComplete>
+                                                <p:outputLabel for="provenance" value="#{msg.customerSupplier_provenance}"/>
+                                                <p:message for="provenance"/>
+                                            </h:panelGroup>
+                                        </p:panelGrid>
+
+                                        <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                            <p:dataTable id="plantsTable"
+                                                         var="plant"
+                                                         value="#{customerSupplierPresenter.customerSupplier.plantsNoHeadOffice}"
+                                                         widgetVar="plTbl"
+                                                         editable="true" editMode="cell">
+                                                <f:facet name="header">
+                                                    <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
+                                                        #{msg.customerSupplier_plants}
+                                                        <p:commandButton title="#{msg.new}" icon="ui-icon-create" actionListener="#{customerSupplierPresenter.createNewPlant()}" oncomplete="PF('plTbl').addRow()" process="@this"/>
+                                                    </p:panelGrid>
+                                                </f:facet>
+                                                <p:column headerText="#{msg.customerSupplier_plant_name}" sortBy="#{plant.name}" filterBy="#{plant.name}" priority="0">
+                                                    <p:cellEditor>
+                                                        <f:facet name="output"><h:outputText value="#{plant.name}" /></f:facet>
+                                                        <f:facet name="input"><p:inputText value="#{plant.name}" /></f:facet>
+                                                    </p:cellEditor>
+                                                </p:column>
+                                                <p:column headerText="#{msg.customerSupplier_plant_address}" sortBy="#{plant.address}" filterBy="#{plant.address}" priority="4">
+                                                    <p:cellEditor>
+                                                        <f:facet name="output"><h:outputText value="#{plant.address}" /></f:facet>
+                                                        <f:facet name="input"><p:inputText value="#{plant.address}" /></f:facet>
+                                                    </p:cellEditor>
+                                                </p:column>
+                                                <p:column headerText="#{msg.actions}" style="width:72px; text-align:center" priority="0">
+                                                    <p:splitButton value="" icon="ui-icon-edit" action="#{customerSupplierPresenter.detailPlant(plant)}" ajax="false">
+                                                        <p:menuitem  value="#{msg.delete}" icon="ui-icon-delete" actionListener="#{customerSupplierPresenter.deletePlant(plant)}" update="plantsTable">
+                                                            <p:confirm header="#{msg.customerSupplier_plants_delete}" message="#{msg.customerSupplier_plants_delete_tip}" icon="ui-icon-alert"/>
+                                                        </p:menuitem>
+                                                    </p:splitButton>
+                                                </p:column>
+                                            </p:dataTable>
+
+                                            <p:dataTable id="refereesTable"
+                                                         var="referee"
+                                                         value="#{customerSupplierPresenter.customerSupplier.referees}"
+                                                         widgetVar="rfTbl"
+                                                         editable="true" editMode="cell">
+                                                <f:facet name="header">
+                                                    <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
+                                                        #{msg.customerSupplier_referees}
+                                                        <p:commandButton title="#{msg.new}" icon="ui-icon-create" actionListener="#{customerSupplierPresenter.createNewReferee()}" oncomplete="PF('rfTbl').addRow()" process="@this"/>
+                                                    </p:panelGrid>
+                                                </f:facet>
+                                                <p:column headerText="#{msg.customerSupplier_referee_name}" sortBy="#{referee.name}" filterBy="#{referee.name}" priority="0">
+                                                    <p:cellEditor>
+                                                        <f:facet name="output"><h:outputText value="#{referee.name}" /></f:facet>
+                                                        <f:facet name="input"><p:inputText value="#{referee.name}" /></f:facet>
+                                                    </p:cellEditor>
+                                                </p:column>
+                                                <p:column headerText="#{msg.customerSupplier_referee_email}" sortBy="#{referee.email}" filterBy="#{referee.email}" priority="4">
+                                                    <p:cellEditor>
+                                                        <f:facet name="output"><h:outputText value="#{referee.email}" /></f:facet>
+                                                        <f:facet name="input"><p:inputText value="#{referee.email}" /></f:facet>
+                                                    </p:cellEditor>
+                                                </p:column>
+                                                <p:column headerText="#{msg.actions}" style="width:72px; text-align:center" priority="0">
+                                                    <p:splitButton value="" icon="ui-icon-edit" action="#{customerSupplierPresenter.detailReferee(referee)}" ajax="false">
+                                                        <p:menuitem  value="#{msg.delete}" icon="ui-icon-delete" actionListener="#{customerSupplierPresenter.deleteReferee(referee)}" update="refereesTable">
+                                                            <p:confirm header="#{msg.customerSupplier_referees_delete}" message="#{msg.customerSupplier_referees_delete_tip}" icon="ui-icon-alert"/>
+                                                        </p:menuitem>
+                                                    </p:splitButton>
+                                                </p:column>
+                                            </p:dataTable>
+                                        </p:panelGrid>
+
+                                        <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                            <h:panelGroup styleClass="md-inputfield">
+                                                <p:inputTextarea id="notes" value="#{customerSupplierPresenter.customerSupplier.notes}" rows="2"/>
+                                                <p:outputLabel for="notes" value="#{msg.customerSupplier_customerSupplier_notes}"/>
+                                                <p:message for="notes"/>
+                                            </h:panelGroup>
+                                        </p:panelGrid>
+                                    </p:tab>
+                                    <p:tab title="#{msg.siteSurvey_siteSurveyReports}">
+                                        <p:dataTable id="siteSurveyReportsTable" widgetVar="siteSurveyReportsTable" var="rep" value="#{customerSupplierPresenter.lazySiteSurveyReports}"
+                                                     selectionMode="multiple" selection="#{customerSupplierPresenter.siteSurveyReportListPresenter.selectedSiteSurveyReports}" rowKey="#{rep.id}"
+                                                     paginator="true" rows="10" paginatorAlwaysVisible="false"
+                                                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                                     rowsPerPageTemplate="10,25,50" lazy="true">
+                                            <f:facet name="header">
+                                                <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
+                                                    #{msg.siteSurvey_siteSurveyReports_tip}
+                                                    <p:outputPanel>
+                                                        <p:outputPanel style="display: inline-block">
+                                                            <p:commandButton title="#{msg.delete}" icon="ui-icon-delete" actionListener="#{customerSupplierPresenter.siteSurveyReportListPresenter.deleteSiteSurveyReport()}" update="siteSurveyReportsTable">
+                                                                <p:confirm header="#{msg.siteSurvey_siteSurveyReports_delete}" message="#{msg.siteSurvey_siteSurveyReports_delete_tip}" icon="ui-icon-alert"/>
+                                                            </p:commandButton>
+                                                        </p:outputPanel>
+                                                    </p:outputPanel>
+                                                </p:panelGrid>
+                                            </f:facet>
+                                            <p:column headerText="#{msg.siteSurvey_siteSurveyReport_number}" field="number" filterable="false" style="width:75px" priority="5">
+                                                <h:outputText value="#{rep.number}"/>
+                                            </p:column>
+                                            <p:column headerText="#{msg.siteSurvey_siteSurveyReport_expected}" sortBy="#{rep.expected}" priority="4">
+                                                <h:outputText value="#{rep.expected}">
+                                                    <f:convertDateTime pattern="dd/MM/YYYY" />
+                                                </h:outputText>
+                                            </p:column>
+                                            <p:column headerText="#{msg.siteSurvey_siteSurveyReport_actual}" sortBy="#{rep.actual}" priority="2">
+                                                <h:outputText value="#{rep.actual}">
+                                                    <f:convertDateTime pattern="dd/MM/YYYY" />
+                                                </h:outputText>
+                                            </p:column>
+                                            <p:column headerText="#{msg.siteSurvey_siteSurveyReport_constructionSite}" field="nameAddressPlant" priority="1">
+                                                <h:outputText value="#{rep.plant.getNameAddress(false)}"/>
+                                            </p:column>
+                                            <p:column headerText="#{msg.siteSurvey_systemType}" field="systemType" priority="2">
+                                                <h:outputText value="#{rep.request.systemType.name}"/>
+                                            </p:column>
+                                            <p:column headerText="#{msg.siteSurvey_siteSurveyReport_seller}" field="seller" priority="4">
+                                                <h:outputText value="#{rep.seller.initials}"/>
+                                            </p:column>
+                                            <p:column headerText="#{msg.actions}" style="width:64px; text-align:center" priority="0" exportable="false">
+                                                <p:button title="#{msg.edit}" icon="ui-icon-edit" styleClass="AquaButton" outcome="/secured/siteSurvey/siteSurveyReport">
+                                                    <f:param name="id" value="#{rep.id}" />
+                                                </p:button>
+                                            </p:column>
+                                        </p:dataTable>
+                                    </p:tab>
+                                </p:tabView>
 
                                 <div class="ui-g">
                                     <div class="ui-g-1 ui-md-2"></div>
