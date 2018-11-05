@@ -56,6 +56,10 @@
                                             </h:panelGroup>
                                         </p:panelGrid>
 
+                                        <ui:include src="/secured/sales/businessCommunicationTemplate.xhtml">
+                                            <ui:param name="businessCommunication" value="#{customerSupplierPresenter.populateBusinessCommunication()}"/>
+                                        </ui:include>
+
                                         <h:panelGroup id="addressPanel">
                                             <p:panelGrid rendered="#{not empty customerSupplierPresenter.customerSupplier.headOffice}" columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                                 <h:panelGroup styleClass="md-inputfield">

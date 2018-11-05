@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 Prosystem Ingegneri Affiliati
+ * Copyright (C) 2018 Prosystem Ingegneri Affiliati.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -14,10 +14,11 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.prosystemingegneri.censistant.business.siteSurvey.entity;
+package com.prosystemingegneri.censistant.business.sales.entity;
 
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
 import com.prosystemingegneri.censistant.business.entity.BaseEntity;
+import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -29,73 +30,64 @@ import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 /**
  *
- * @author Davide Mainardi <ingmainardi@live.com>
+ * @author Davide Mainardi <ingmainardi at live.com>
  */
 @Entity
-public class SiteSurveyRequest extends BaseEntity<Long>{
+public class BusinessCommunication extends BaseEntity<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @NotNull
-    @Min(1)
-    @Column(nullable = false)
-    private Integer number;
+    @Temporal(TemporalType.DATE)
+    private Date emailSent;
     
     @NotNull
     @Column(nullable = false)
-    @Temporal(TemporalType.DATE)
-    private Date creation;
+    private Boolean isOfferAccepted;
     
     @NotNull
     @ManyToOne(optional = false)
     private CustomerSupplier customer;
     
-    @NotNull
-    @ManyToOne(optional = false)
-    private SystemType systemType;
-    
-    @NotNull
-    @Column(nullable = false)
-    private Boolean isInfo;
-    
-    @OneToOne(mappedBy = "request")
+    @OneToOne
     private SiteSurveyReport report;
-    
-    private String notes;
     
     @Version
     private int version;
 
-    public SiteSurveyRequest() {
-        creation = new Date();
-        isInfo = Boolean.FALSE; 
+    public BusinessCommunication() {
+        isOfferAccepted = Boolean.FALSE;
     }
 
-    public SiteSurveyRequest(Integer number) {
+    public BusinessCommunication(CustomerSupplier customer) {
         this();
-        this.number = number;
+        this.customer = customer;
     }
 
-    public Integer getNumber() {
-        return number;
+    public BusinessCommunication(CustomerSupplier customer, SiteSurveyReport report) {
+        this();
+        this.customer = customer;
+        this.report = report;
     }
 
-    public void setNumber(Integer number) {
-        this.number = number;
+    public Date getEmailSent() {
+        return emailSent;
     }
 
-    public Date getCreation() {
-        return creation;
+    public void setEmailSent(Date emailSent) {
+        this.emailSent = emailSent;
     }
 
-    public void setCreation(Date creation) {
-        this.creation = creation;
+    public Boolean getIsOfferAccepted() {
+        return isOfferAccepted;
+    }
+
+    public void setIsOfferAccepted(Boolean isOfferAccepted) {
+        this.isOfferAccepted = isOfferAccepted;
     }
 
     public CustomerSupplier getCustomer() {
@@ -104,24 +96,6 @@ public class SiteSurveyRequest extends BaseEntity<Long>{
 
     public void setCustomer(CustomerSupplier customer) {
         this.customer = customer;
-        if (this.report != null && this.report.getBusinessCommunication() != null)
-            this.report.getBusinessCommunication().setCustomer(customer);
-    }
-
-    public SystemType getSystemType() {
-        return systemType;
-    }
-
-    public void setSystemType(SystemType systemType) {
-        this.systemType = systemType;
-    }
-
-    public Boolean getIsInfo() {
-        return isInfo;
-    }
-
-    public void setIsInfo(Boolean isInfo) {
-        this.isInfo = isInfo;
     }
 
     public SiteSurveyReport getReport() {
@@ -135,14 +109,6 @@ public class SiteSurveyRequest extends BaseEntity<Long>{
     @Override
     public Long getId() {
         return id;
-    }
-
-    public String getNotes() {
-        return notes;
-    }
-
-    public void setNotes(String notes) {
-        this.notes = notes;
     }
     
 }

@@ -21,6 +21,7 @@ import com.prosystemingegneri.censistant.business.customerSupplier.entity.Custom
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Referee;
 import com.prosystemingegneri.censistant.business.deliveryNote.entity.DeliveryNoteCommon;
+import com.prosystemingegneri.censistant.business.sales.entity.BusinessCommunication;
 import com.prosystemingegneri.censistant.business.sales.entity.JobOrder;
 import com.prosystemingegneri.censistant.business.sales.entity.Offer;
 import com.prosystemingegneri.censistant.business.siteSurvey.boundary.SiteSurveyReportService;
@@ -207,6 +208,13 @@ public class CustomerSupplierPresenter implements Serializable{
             customerSupplier.removeReferee(referee);
     }
 
+    public BusinessCommunication populateBusinessCommunication() {
+        if (customerSupplier.getLastBusinessCommunication() == null)
+            customerSupplier.addBusinessCommunication(new BusinessCommunication());
+        
+        return customerSupplier.getLastBusinessCommunication();
+    }
+    
     public Long getId() {
         return id;
     }

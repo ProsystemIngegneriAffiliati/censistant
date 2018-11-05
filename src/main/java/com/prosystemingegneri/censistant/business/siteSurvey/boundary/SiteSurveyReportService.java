@@ -21,6 +21,7 @@ import com.prosystemingegneri.censistant.business.customerSupplier.entity.Custom
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier_;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant_;
+import com.prosystemingegneri.censistant.business.sales.entity.BusinessCommunication;
 import com.prosystemingegneri.censistant.business.sales.entity.Offer;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport_;
@@ -69,6 +70,7 @@ public class SiteSurveyReportService implements Serializable{
     public SiteSurveyReport createNewSiteSurveyReport() {
         SiteSurveyReport report = new SiteSurveyReport(getNextNumber());
         report.addRequest(siteSurveyRequestService.createNewSiteSurveyRequest());
+        report.addBusinessCommunication(new BusinessCommunication());
         
         return report;
     }

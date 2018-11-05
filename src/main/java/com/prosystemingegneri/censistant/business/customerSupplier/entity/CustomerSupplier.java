@@ -19,6 +19,7 @@ package com.prosystemingegneri.censistant.business.customerSupplier.entity;
 import com.prosystemingegneri.censistant.business.customerSupplier.controller.MandatoryHeadOffice;
 import com.prosystemingegneri.censistant.business.customerSupplier.controller.MandatoryProvenanceForCustomer;
 import com.prosystemingegneri.censistant.business.entity.BaseEntity;
+import com.prosystemingegneri.censistant.business.sales.entity.BusinessCommunication;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -85,6 +86,9 @@ public class CustomerSupplier extends BaseEntity<Long>{
     
     private String notes;
     
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "customer", orphanRemoval = true)
+    private List<BusinessCommunication> businessCommunications;
+    
     @Transient
     private Date lastEmailSent;
     
@@ -98,6 +102,7 @@ public class CustomerSupplier extends BaseEntity<Long>{
         isSupplier = Boolean.FALSE;
         isPotentialCustomer = Boolean.FALSE;
         isOnlyInfo = Boolean.FALSE;
+        businessCommunications = new ArrayList<>();
     }
 
     public CustomerSupplier(Boolean isPotentialCustomer, Boolean isCustomer, Boolean isSupplier, Boolean isOnlyInfo) {
@@ -256,4 +261,35 @@ public class CustomerSupplier extends BaseEntity<Long>{
         this.lastEmailSent = lastEmailSent;
     }
     
+    public void addBusinessCommunication(BusinessCommunication businessCommunication) {
+        if (!businessCommunications.contains(businessCommunication)) {
+            businessCommunications.add(businessCommunication);
+            businessCommunication.setCustomer(this);
+        }
+    }
+    
+    public void removeBusinessCommunication(BusinessCommunication businessCommunication) {
+        if (businessCommunications.contains(businessCommunication)) {
+            businessCommunications.remove(businessCommunication);
+            businessCommunication.setCustomer(null);
+        }
+    }
+    
+    public List<BusinessCommunication> getBusinessCommunications() {
+        return businessCommunications;
+    }
+    
+    public BusinessCommunication getLastBusinessCommunication() {
+        BusinessCommunication result = null;
+        
+        for (BusinessCommunication businessCommunication : businessCommunications) {
+            if (result == null)
+                result = businessCommunication;
+            else
+                if (result.getEmailSent().before(businessCommunication.getEmailSent()))
+                    result = businessCommunication;
+        }
+        
+        return result;
+    }
 }
