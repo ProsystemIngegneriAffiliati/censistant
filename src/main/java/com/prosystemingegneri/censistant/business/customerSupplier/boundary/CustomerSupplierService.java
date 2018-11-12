@@ -28,6 +28,7 @@ import com.prosystemingegneri.censistant.business.sales.boundary.BusinessCommuni
 import com.prosystemingegneri.censistant.business.sales.boundary.JobOrderService;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -178,13 +179,19 @@ public class CustomerSupplierService implements Serializable{
         if (isSupplier != null)
             conditions.add(cb.equal(root.get(CustomerSupplier_.isSupplier), isSupplier));
 
-        //business name
-        if (businessName != null && !businessName.isEmpty())
-            conditions.add(cb.like(cb.lower(root.get(CustomerSupplier_.businessName)), "%" + String.valueOf(businessName).toLowerCase() + "%"));
+        //business name (in any order)
+        if (businessName != null && !businessName.isEmpty()) {
+            List<String> words = Arrays.asList(businessName.split(" "));
+            for (String word : words)
+                conditions.add(cb.like(cb.lower(root.get(CustomerSupplier_.businessName)), "%" + String.valueOf(word).toLowerCase() + "%"));
+        }
         
-        //name
-        if (name != null && !name.isEmpty())
-            conditions.add(cb.like(cb.lower(root.get(CustomerSupplier_.name)), "%" + String.valueOf(name).toLowerCase() + "%"));
+        //name (in any order)
+        if (name != null && !name.isEmpty()) {
+            List<String> words = Arrays.asList(name.split(" "));
+            for (String word : words)
+                conditions.add(cb.like(cb.lower(root.get(CustomerSupplier_.name)), "%" + String.valueOf(word).toLowerCase() + "%"));
+        }
         
         //plant's address
         if (address != null && !address.isEmpty()) {
