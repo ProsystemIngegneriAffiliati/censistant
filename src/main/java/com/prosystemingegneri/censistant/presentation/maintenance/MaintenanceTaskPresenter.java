@@ -336,7 +336,13 @@ public class MaintenanceTaskPresenter implements Serializable{
             return;
         }
         
-        maintenanceTask.setSystem(service.createNewJobOrder(plant, systemType, placeType, seller).getOffer().getSystem());
+        boolean isValidated = true;
+        for (ConstraintViolation<CustomerSupplier> constraintViolation : validator.validate(customer, Default.class)) {
+            isValidated = false;
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", constraintViolation.getMessage()));
+        }
+        if (isValidated)
+            maintenanceTask.setSystem(service.createNewJobOrder(plant, systemType, placeType, seller).getOffer().getSystem());
     }
     
     public void clearNewCustomer() {

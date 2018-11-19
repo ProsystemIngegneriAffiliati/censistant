@@ -27,13 +27,13 @@
                                         <p:autoComplete id="requestCustomer"
                                                         dropdown="true"
                                                         value="#{siteSurveyReportPresenter.siteSurveyReport.request.customer}"
-                                                        completeMethod="#{customerSupplierListPresenter.completeCustomer}"
+                                                        completeMethod="#{siteSurveyReportPresenter.completeCustomer}"
                                                         var="cust"
                                                         itemLabel="#{cust.name}"
                                                         itemValue="#{cust}"
                                                         forceSelection="true"
                                                         disabled="#{siteSurveyReportPresenter.siteSurveyReport.request.id != null}">
-                                            <oou:converter converterId="omnifaces.ListConverter" list="#{customerSupplierListPresenter.customers}"/>
+                                            <oou:converter converterId="omnifaces.ListConverter" list="#{siteSurveyReportPresenter.customers}"/>
                                             <p:ajax event="itemSelect" update="plant newCustomerPanel" />
                                         </p:autoComplete>
                                         <p:outputLabel for="requestCustomer" value="#{msg.siteSurvey_siteSurveyRequest_customer}"/>

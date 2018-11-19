@@ -63,6 +63,8 @@ public class SiteSurveyReportPresenter implements Serializable{
     
     private List<Plant> plants;
     
+    private List<CustomerSupplier> customers;
+    
     private CustomerSupplier newCustomer;
     private Plant newPlant;
     
@@ -96,7 +98,7 @@ public class SiteSurveyReportPresenter implements Serializable{
     
     public String saveSiteSurveyReport() {
         try {
-            service.saveSiteSurveyReport(siteSurveyReport);
+            siteSurveyReport = service.saveSiteSurveyReport(siteSurveyReport);
         } catch (EJBException e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", ExceptionUtility.unwrap(e.getCausedByException()).getLocalizedMessage()));
             return null;
@@ -176,6 +178,19 @@ public class SiteSurveyReportPresenter implements Serializable{
         }
         
         return null;
+    }
+    
+    public List<CustomerSupplier> completeCustomer(String value) {
+        customers = customerSupplierService.listCustomerSuppliers(0, 10, "name", Boolean.TRUE, null, null, Boolean.TRUE, null, null, value, null);
+        return customers;
+    }
+
+    public List<CustomerSupplier> getCustomers() {
+        if (customers == null) {
+            customers = new ArrayList<>();
+            customers.add(siteSurveyReport.getRequest().getCustomer());
+        }
+        return customers;
     }
     
     public List<Plant> completePlant(String value) {
