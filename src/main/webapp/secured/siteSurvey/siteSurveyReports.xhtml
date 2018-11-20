@@ -55,7 +55,7 @@
                             <p:column headerText="#{msg.siteSurvey_systemType}" field="systemType" priority="2">
                                 <h:outputText value="#{rep.request.systemType.name}"/>
                             </p:column>
-                            <p:column headerText="#{msg.siteSurvey_siteSurveyReport_emailSent}" priority="4">
+                            <p:column headerText="#{msg.customerSupplier_customer_emailSent}" priority="4">
                                 <h:outputText value="#{rep.emailSent}">
                                     <f:convertDateTime pattern="dd/MM/YYYY" />
                                 </h:outputText>
@@ -63,13 +63,13 @@
                             <p:column headerText="#{msg.siteSurvey_siteSurveyReport_seller}" field="seller" priority="4">
                                 <h:outputText value="#{rep.seller.initials}"/>
                             </p:column>
-                            <p:column headerText="#{msg.siteSurvey_siteSurveyReport_isOfferAccepted}" field="isOfferAccepted" priority="6">
+                            <p:column headerText="#{msg.customerSupplier_customer_isOfferAccepted}" field="isOfferAccepted" priority="6">
                                     <f:facet name="filter">
                                         <p:selectOneButton onchange="PF('siteSurveyReportsTable').filter()">
                                             <f:converter converterId="javax.faces.Boolean" />
                                             <f:selectItem itemLabel="#{msg.all_female}" itemValue="" />
-                                            <f:selectItem itemLabel="#{msg.siteSurvey_siteSurveyReport_isOfferAccepted_true}" itemValue="true" />
-                                            <f:selectItem itemLabel="#{msg.siteSurvey_siteSurveyReport_isOfferAccepted_false}" itemValue="false" />
+                                            <f:selectItem itemLabel="#{msg.customerSupplier_customer_isOfferAccepted_true}" itemValue="true" />
+                                            <f:selectItem itemLabel="#{msg.customerSupplier_customer_isOfferAccepted_false}" itemValue="false" />
                                         </p:selectOneButton>
                                     </f:facet>
                                 <h:outputText value="#{rep.isOfferAccepted ? 'X' : ''}"/>

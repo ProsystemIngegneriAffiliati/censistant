@@ -104,8 +104,6 @@ public class SiteSurveyRequest extends BaseEntity<Long>{
 
     public void setCustomer(CustomerSupplier customer) {
         this.customer = customer;
-        if (this.report != null && this.report.getBusinessCommunication() != null)
-            this.report.getBusinessCommunication().setCustomer(customer);
     }
 
     public SystemType getSystemType() {

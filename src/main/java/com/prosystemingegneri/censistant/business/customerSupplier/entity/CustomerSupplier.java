@@ -19,7 +19,6 @@ package com.prosystemingegneri.censistant.business.customerSupplier.entity;
 import com.prosystemingegneri.censistant.business.customerSupplier.controller.MandatoryHeadOffice;
 import com.prosystemingegneri.censistant.business.customerSupplier.controller.MandatoryProvenanceForCustomer;
 import com.prosystemingegneri.censistant.business.entity.BaseEntity;
-import com.prosystemingegneri.censistant.business.sales.entity.BusinessCommunication;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -31,7 +30,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.Transient;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
@@ -86,11 +86,12 @@ public class CustomerSupplier extends BaseEntity<Long>{
     
     private String notes;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "customer", orphanRemoval = true)
-    private List<BusinessCommunication> businessCommunications;
+    @Temporal(TemporalType.DATE)
+    private Date emailSent;
     
-    @Transient
-    private Date lastEmailSent;
+    @NotNull
+    @Column(nullable = false)
+    private Boolean isOfferAccepted;
     
     @Version
     private int version;
@@ -102,7 +103,7 @@ public class CustomerSupplier extends BaseEntity<Long>{
         isSupplier = Boolean.FALSE;
         isPotentialCustomer = Boolean.FALSE;
         isOnlyInfo = Boolean.FALSE;
-        businessCommunications = new ArrayList<>();
+        isOfferAccepted = Boolean.FALSE;
     }
 
     public CustomerSupplier(Boolean isPotentialCustomer, Boolean isCustomer, Boolean isSupplier, Boolean isOnlyInfo) {
@@ -253,50 +254,20 @@ public class CustomerSupplier extends BaseEntity<Long>{
         this.isOnlyInfo = isOnlyInfo;
     }
 
-    public Date getLastEmailSent() {
-        return lastEmailSent;
+    public Date getEmailSent() {
+        return emailSent;
     }
 
-    public void setLastEmailSent(Date lastEmailSent) {
-        this.lastEmailSent = lastEmailSent;
+    public void setEmailSent(Date emailSent) {
+        this.emailSent = emailSent;
+    }
+
+    public Boolean getIsOfferAccepted() {
+        return isOfferAccepted;
+    }
+
+    public void setIsOfferAccepted(Boolean isOfferAccepted) {
+        this.isOfferAccepted = isOfferAccepted;
     }
     
-    public void addBusinessCommunication(BusinessCommunication businessCommunication) {
-        if (!businessCommunications.contains(businessCommunication)) {
-            businessCommunications.add(businessCommunication);
-            businessCommunication.setCustomer(this);
-        }
-    }
-    
-    public void removeBusinessCommunication(BusinessCommunication businessCommunication) {
-        if (businessCommunications.contains(businessCommunication)) {
-            businessCommunications.remove(businessCommunication);
-            businessCommunication.setCustomer(null);
-        }
-    }
-    
-    public List<BusinessCommunication> getBusinessCommunications() {
-        return businessCommunications;
-    }
-    
-    public BusinessCommunication getLastBusinessCommunication() {
-        BusinessCommunication result = null;
-        
-        for (BusinessCommunication businessCommunication : businessCommunications) {
-            if (result == null)
-                result = businessCommunication;
-            else {
-                if (result.getEmailSent() == null && businessCommunication.getEmailSent() != null)
-                    result = businessCommunication;
-                else {
-                    if (result.getEmailSent() != null && businessCommunication.getEmailSent() != null) {
-                        if (result.getEmailSent().before(businessCommunication.getEmailSent()))
-                            result = businessCommunication;
-                    }
-                }
-            }
-        }
-        
-        return result;
-    }
 }

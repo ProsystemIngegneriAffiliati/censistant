@@ -21,7 +21,6 @@ import com.prosystemingegneri.censistant.business.customerSupplier.entity.Custom
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Referee;
 import com.prosystemingegneri.censistant.business.deliveryNote.entity.DeliveryNoteCommon;
-import com.prosystemingegneri.censistant.business.sales.entity.BusinessCommunication;
 import com.prosystemingegneri.censistant.business.sales.entity.JobOrder;
 import com.prosystemingegneri.censistant.business.sales.entity.Offer;
 import com.prosystemingegneri.censistant.business.siteSurvey.boundary.SiteSurveyReportService;
@@ -71,8 +70,6 @@ public class CustomerSupplierPresenter implements Serializable{
     private JobOrder jobOrder;
     
     private DeliveryNoteCommon deliveryNote;
-    
-    private BusinessCommunication lastBusinessCommunication;
     
     @Resource
     Validator validator;
@@ -136,8 +133,6 @@ public class CustomerSupplierPresenter implements Serializable{
             
             lazySiteSurveyReports = new SiteSurveyReportLazyDataModel(siteSurveyReportService, customerSupplier);
         }
-        
-        populateBusinessCommunication();
     }
     
     public void onIsOnlyInfoChanged() {
@@ -211,20 +206,6 @@ public class CustomerSupplierPresenter implements Serializable{
         if (referee != null)
             customerSupplier.removeReferee(referee);
     }
-
-    public void populateBusinessCommunication() {
-        if (customerSupplier.getLastBusinessCommunication() == null)
-            customerSupplier.addBusinessCommunication(new BusinessCommunication());
-        
-        lastBusinessCommunication = customerSupplier.getLastBusinessCommunication();
-    }
-    
-    public void createNewBusinessCommunication() {
-        BusinessCommunication businessCommunication = new BusinessCommunication();
-        customerSupplier.addBusinessCommunication(businessCommunication);
-        
-        lastBusinessCommunication = businessCommunication;
-    }
     
     public Long getId() {
         return id;
@@ -271,14 +252,6 @@ public class CustomerSupplierPresenter implements Serializable{
 
     public SiteSurveyReportListPresenter getSiteSurveyReportListPresenter() {
         return siteSurveyReportListPresenter;
-    }
-
-    public BusinessCommunication getLastBusinessCommunication() {
-        return lastBusinessCommunication;
-    }
-
-    public void setLastBusinessCommunication(BusinessCommunication lastBusinessCommunication) {
-        this.lastBusinessCommunication = lastBusinessCommunication;
     }
     
 }

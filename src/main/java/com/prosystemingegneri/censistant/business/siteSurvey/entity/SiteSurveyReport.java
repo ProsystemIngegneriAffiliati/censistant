@@ -18,10 +18,8 @@ package com.prosystemingegneri.censistant.business.siteSurvey.entity;
 
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
 import com.prosystemingegneri.censistant.business.entity.BaseEntity;
-import com.prosystemingegneri.censistant.business.sales.entity.BusinessCommunication;
 import com.prosystemingegneri.censistant.business.sales.entity.Offer;
 import java.util.Date;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -62,9 +60,12 @@ public class SiteSurveyReport extends BaseEntity<Long>{
     @OneToOne(optional = false, orphanRemoval = true)
     private SiteSurveyRequest request;
     
+    @Temporal(TemporalType.DATE)
+    private Date emailSent;
+    
     @NotNull
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "report", optional = false, orphanRemoval = true)
-    private BusinessCommunication businessCommunication;
+    @Column(nullable = false)
+    private Boolean isOfferAccepted;
     
     @NotNull
     @ManyToOne(optional = false)
@@ -83,7 +84,7 @@ public class SiteSurveyReport extends BaseEntity<Long>{
     private int version;
 
     public SiteSurveyReport() {
-        businessCommunication = new BusinessCommunication();
+        isOfferAccepted = Boolean.FALSE;
     }
 
     public SiteSurveyReport(Integer number) {
@@ -160,14 +161,21 @@ public class SiteSurveyReport extends BaseEntity<Long>{
     public void setOffer(Offer offer) {
         this.offer = offer;
     }
-    
-    public void addBusinessCommunication(BusinessCommunication businessCommunication) {
-        businessCommunication.setReport(this);
-        this.businessCommunication = businessCommunication;
+
+    public Date getEmailSent() {
+        return emailSent;
     }
 
-    public BusinessCommunication getBusinessCommunication() {
-        return businessCommunication;
+    public void setEmailSent(Date emailSent) {
+        this.emailSent = emailSent;
+    }
+
+    public Boolean getIsOfferAccepted() {
+        return isOfferAccepted;
+    }
+
+    public void setIsOfferAccepted(Boolean isOfferAccepted) {
+        this.isOfferAccepted = isOfferAccepted;
     }
     
 }

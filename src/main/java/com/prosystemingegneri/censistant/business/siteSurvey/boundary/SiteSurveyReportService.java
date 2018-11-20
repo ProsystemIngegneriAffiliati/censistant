@@ -21,7 +21,6 @@ import com.prosystemingegneri.censistant.business.customerSupplier.entity.Custom
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier_;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant_;
-import com.prosystemingegneri.censistant.business.sales.entity.BusinessCommunication;
 import com.prosystemingegneri.censistant.business.sales.entity.Offer;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport_;
@@ -70,7 +69,6 @@ public class SiteSurveyReportService implements Serializable{
     public SiteSurveyReport createNewSiteSurveyReport() {
         SiteSurveyReport report = new SiteSurveyReport(getNextNumber());
         report.addRequest(siteSurveyRequestService.createNewSiteSurveyRequest());
-        report.addBusinessCommunication(new BusinessCommunication());
         
         return report;
     }
@@ -108,12 +106,10 @@ public class SiteSurveyReportService implements Serializable{
     
     public SiteSurveyReport saveSiteSurveyReport(SiteSurveyReport siteSurveyReport) {
         CustomerSupplier customer = siteSurveyReport.getRequest().getCustomer();
-        if (siteSurveyReport.getBusinessCommunication().getIsOfferAccepted() && customer.getIsPotentialCustomer()) {
+        if (siteSurveyReport.getIsOfferAccepted() && customer.getIsPotentialCustomer())
             customer.setIsPotentialCustomer(Boolean.FALSE);
-        }
-        if (customer.getBusinessCommunications().contains(siteSurveyReport.getBusinessCommunication()))
-            customer.removeBusinessCommunication(siteSurveyReport.getBusinessCommunication());
-        customer.addBusinessCommunication(siteSurveyReport.getBusinessCommunication());
+        customer.setEmailSent(siteSurveyReport.getEmailSent());
+        customer.setIsOfferAccepted(siteSurveyReport.getIsOfferAccepted());
         customerSupplierService.saveCustomerSupplier(customer);
         
         if (siteSurveyReport.getId() == null) {

@@ -56,12 +56,15 @@
                                             </h:panelGroup>
                                         </p:panelGrid>
 
-                                        <p:panelGrid id="businessCommunicationPanel" columns="4" columnClasses="ui-grid-col-3,ui-grid-col-3,ui-grid-col-3,ui-grid-col-3" layout="grid" styleClass="ui-panelgrid-blank form-group">
-                                            <ui:include src="/secured/sales/businessCommunicationTemplate.xhtml">
-                                                <ui:param name="businessCommunication" value="#{customerSupplierPresenter.lastBusinessCommunication}"/>
-                                            </ui:include>
-                                            <h:panelGroup id="newBusinessCommunicationPanel">
-                                                <p:commandButton disabled="#{empty customerSupplierPresenter.lastBusinessCommunication.emailSent}" value="#{msg.clear}" action="#{customerSupplierPresenter.createNewBusinessCommunication()}" update="businessCommunicationPanel" />
+                                        <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                            <h:panelGroup styleClass="md-inputfield">
+                                                <p:calendar id="emailSent" value="#{customerSupplierPresenter.customerSupplier.emailSent}" locale="it" />
+                                                <p:outputLabel for="emailSent" value="#{msg.customerSupplier_customer_emailSent}"/>
+                                                <p:message for="emailSent"/>
+                                            </h:panelGroup>
+                                            <h:panelGroup>
+                                                <p:outputLabel for="isOfferAccepted" value="#{msg.customerSupplier_customer_isOfferAccepted}" />
+                                                <p:inputSwitch id="isOfferAccepted" label="" value="#{customerSupplierPresenter.customerSupplier.isOfferAccepted}" />
                                             </h:panelGroup>
                                         </p:panelGrid>
 

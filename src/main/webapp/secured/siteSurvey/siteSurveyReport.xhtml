@@ -168,10 +168,15 @@
                                         <p:fileDownload value="#{siteSurveyReportPresenter.print()}" />
                                     </p:commandButton>
 
-                                    <ui:include src="/secured/sales/businessCommunicationTemplate.xhtml">
-                                        <ui:param name="businessCommunication" value="#{siteSurveyReportPresenter.siteSurveyReport.businessCommunication}"/>
-                                        <ui:param name="report" value="true" />
-                                    </ui:include>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:calendar id="emailSent" value="#{siteSurveyReportPresenter.siteSurveyReport.emailSent}" locale="it" />
+                                        <p:outputLabel for="emailSent" value="#{msg.customerSupplier_customer_emailSent}"/>
+                                        <p:message for="emailSent"/>
+                                    </h:panelGroup>
+                                    <h:panelGroup>
+                                        <p:outputLabel for="isOfferAccepted" value="#{msg.customerSupplier_customer_isOfferAccepted}" />
+                                        <p:inputSwitch id="isOfferAccepted" label="" value="#{siteSurveyReportPresenter.siteSurveyReport.isOfferAccepted}" />
+                                    </h:panelGroup>
                                 </p:panelGrid>
 
                                 <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">

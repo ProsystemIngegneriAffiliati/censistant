@@ -24,7 +24,6 @@ import com.prosystemingegneri.censistant.business.purchasing.entity.BoxedItem;
 import com.prosystemingegneri.censistant.business.purchasing.entity.BoxedItem_;
 import com.prosystemingegneri.censistant.business.purchasing.entity.SupplierItem;
 import com.prosystemingegneri.censistant.business.purchasing.entity.SupplierItem_;
-import com.prosystemingegneri.censistant.business.sales.boundary.BusinessCommunicationService;
 import com.prosystemingegneri.censistant.business.sales.boundary.JobOrderService;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -55,9 +54,6 @@ public class CustomerSupplierService implements Serializable{
     @Inject
     JobOrderService jobOrderService;
     
-    @Inject
-    private BusinessCommunicationService businessCommunicationService;
-    
     public CustomerSupplier createCustomer() {
         CustomerSupplier customer = new CustomerSupplier(Boolean.FALSE, Boolean.TRUE, Boolean.FALSE, Boolean.FALSE);
         customer.addPlant(new Plant(Boolean.TRUE, "Sede", null));
@@ -84,6 +80,9 @@ public class CustomerSupplierService implements Serializable{
     public CustomerSupplier saveCustomerSupplier(CustomerSupplier customerSupplier) {
         for (Plant plant : customerSupplier.getPlants())
             plant.checkSupplierPlantLocation();
+        
+        if (customerSupplier.getIsOfferAccepted())
+            customerSupplier.setIsPotentialCustomer(Boolean.FALSE);
 
         if (customerSupplier.getId() == null)
             em.persist(customerSupplier);
@@ -126,12 +125,8 @@ public class CustomerSupplierService implements Serializable{
             typedQuery.setMaxResults(pageSize);
             typedQuery.setFirstResult(first);   
         }
-        
-        List<CustomerSupplier> result = typedQuery.getResultList();
-        for (CustomerSupplier customerSupplier : result)
-            customerSupplier.setLastEmailSent(businessCommunicationService.getLastEmailSent(customerSupplier));
 
-        return result;
+        return typedQuery.getResultList();
     }
     
     public Long getCustomerSuppliersCount(Boolean isPotentialCustomer, Boolean isOnlyInfo, Boolean isCustomer, Boolean isSupplier, String businessName, String name, String address) {

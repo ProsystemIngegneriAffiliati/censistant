@@ -70,19 +70,13 @@
                                     <h:outputText value="#{cust.isOnlyInfo ? 'X' : ''}"/>
                                 </p:column>
                             </c:if>
-                            <p:column headerText="#{msg.sales_businessCommunication_emailSent_last}" priority="4">
-                                <h:outputText value="#{cust.lastEmailSent}">
+                            <p:column headerText="#{msg.customerSupplier_customer_emailSent_last}" priority="4">
+                                <h:outputText value="#{cust.emailSent}">
                                     <f:convertDateTime pattern="dd/MM/YYYY" />
                                 </h:outputText>
-                                <h:panelGroup rendered="#{not empty cust.lastBusinessCommunication.report}">
-                                    <h:outputText value=" #{msg.siteSurvey_siteSurveyReport_short} " />
-                                    <h:outputText value="#{cust.lastBusinessCommunication.report.expected}">
-                                        <f:convertDateTime pattern="dd/MM/YYYY" />
-                                    </h:outputText>
-                                </h:panelGroup>
                             </p:column>
-                            <p:column headerText="#{msg.sales_businessCommunication_isOfferAccepted}" priority="6">
-                                <h:outputText value="#{cust.lastBusinessCommunication.isOfferAccepted ? 'X' : ''}"/>
+                            <p:column headerText="#{msg.customerSupplier_customer_isOfferAccepted}" priority="6">
+                                <h:outputText value="#{cust.isOfferAccepted ? 'X' : ''}"/>
                             </p:column>
                             <p:column headerText="#{msg.customerSupplier_customerSupplier_notes}" priority="6">
                                 <h:outputText value="#{cust.notes}" />
