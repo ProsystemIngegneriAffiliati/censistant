@@ -22,6 +22,7 @@ import com.prosystemingegneri.censistant.business.purchasing.entity.BoxedItem;
 import com.prosystemingegneri.censistant.business.purchasing.entity.PurchaseOrder;
 import com.prosystemingegneri.censistant.business.purchasing.entity.PurchaseOrderRow;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
@@ -44,6 +45,7 @@ public class PurchaseOrderRowPresenter implements Serializable {
     private CustomerSupplierService service;
     
     private CustomerSupplier supplier;
+    private List<CustomerSupplier> suppliers;
     private List<BoxedItem> items;
     
     @PostConstruct
@@ -91,6 +93,19 @@ public class PurchaseOrderRowPresenter implements Serializable {
 
     public void setRow(PurchaseOrderRow row) {
         this.row = row;
+    }
+    
+    public List<CustomerSupplier> completeSupplier(String value) {
+        suppliers = service.listCustomerSuppliers(0, 10, "name", Boolean.TRUE, null, null, null, Boolean.TRUE, null, value, null);
+        return suppliers;
+    }
+
+    public List<CustomerSupplier> getSuppliers() {
+        if (suppliers == null) {
+            suppliers = new ArrayList<>();
+            suppliers.add(supplier);
+        }
+        return suppliers;
     }
 
     public PurchaseOrder getPurchaseOrder() {

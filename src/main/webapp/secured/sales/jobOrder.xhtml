@@ -74,13 +74,13 @@
                                                     <p:autoComplete id="requestCustomer"
                                                                     dropdown="true"
                                                                     value="#{jobOrderPresenter.jobOrder.offer.siteSurveyReport.request.customer}"
-                                                                    completeMethod="#{customerSupplierListPresenter.completeCustomer}"
+                                                                    completeMethod="#{jobOrderPresenter.completeCustomer}"
                                                                     var="cust"
                                                                     itemLabel="#{cust.name}"
                                                                     itemValue="#{cust}"
                                                                     forceSelection="true"
                                                                     disabled="#{jobOrderPresenter.jobOrder.offer.siteSurveyReport.request.id != null}">
-                                                        <oou:converter converterId="omnifaces.ListConverter" list="#{customerSupplierListPresenter.customers}"/>
+                                                        <oou:converter converterId="omnifaces.ListConverter" list="#{jobOrderPresenter.customers}"/>
                                                         <p:ajax event="itemSelect" listener="#{jobOrderPresenter.onRequestCustomerSelect}" update="newCustomer openCustomer plant" />
                                                     </p:autoComplete>
                                                     <p:outputLabel for="requestCustomer" value="#{msg.customerSupplier_customer}"/>

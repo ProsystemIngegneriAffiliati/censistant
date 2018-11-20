@@ -45,12 +45,12 @@
                                         <p:autoComplete id="customer"
                                                         dropdown="true"
                                                         value="#{siteSurveyRequestPresenter.siteSurveyRequest.customer}"
-                                                        completeMethod="#{customerSupplierListPresenter.completeCustomer}"
+                                                        completeMethod="#{siteSurveyRequestPresenter.completeCustomer}"
                                                         var="cust"
                                                         itemLabel="#{cust.name}"
                                                         itemValue="#{cust}"
                                                         forceSelection="true">
-                                            <oou:converter converterId="omnifaces.ListConverter" list="#{customerSupplierListPresenter.customers}"/>
+                                            <oou:converter converterId="omnifaces.ListConverter" list="#{siteSurveyRequestPresenter.customers}"/>
                                         </p:autoComplete>
                                         <p:outputLabel for="customer" value="#{msg.customerSupplier_customer}"/>
                                         <p:message for="customer"/>

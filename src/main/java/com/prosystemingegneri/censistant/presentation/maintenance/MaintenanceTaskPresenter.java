@@ -76,6 +76,8 @@ public class MaintenanceTaskPresenter implements Serializable{
     HandledItemService handledItemService;
     private HandledItemLazyDataModel lazyHandledItems;
     
+    private List<CustomerSupplier> customers;
+    
     @Resource
     Validator validator;
     
@@ -345,5 +347,18 @@ public class MaintenanceTaskPresenter implements Serializable{
     
     public void clearNewPlant() {
         newPlant = new Plant();
+    }
+    
+    public List<CustomerSupplier> completeCustomer(String value) {
+        customers = customerSupplierService.listCustomerSuppliers(0, 10, "name", Boolean.TRUE, null, null, Boolean.TRUE, null, null, value, null);
+        return customers;
+    }
+
+    public List<CustomerSupplier> getCustomers() {
+        if (customers == null) {
+            customers = new ArrayList<>();
+            customers.add(customer);
+        }
+        return customers;
     }
 }

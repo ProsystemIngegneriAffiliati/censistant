@@ -55,12 +55,12 @@
                                         <p:autoComplete id="supplier"
                                                         dropdown="true"
                                                         value="#{supplierItemPresenter.supplierItem.supplier}"
-                                                        completeMethod="#{customerSupplierListPresenter.completeSupplier}"
+                                                        completeMethod="#{supplierItemPresenter.completeSupplier}"
                                                         var="supplier"
                                                         itemLabel="#{supplier.name}"
                                                         itemValue="#{supplier}"
                                                         forceSelection="true">
-                                            <oou:converter converterId="omnifaces.ListConverter" list="#{customerSupplierListPresenter.suppliers}"/>
+                                            <oou:converter converterId="omnifaces.ListConverter" list="#{supplierItemPresenter.suppliers}"/>
                                         </p:autoComplete>
                                         <p:outputLabel for="supplier" value="#{msg.customerSupplier_supplier}"/>
                                         <p:message for="supplier"/>

@@ -49,12 +49,6 @@ public class CustomerSupplierListPresenter implements Serializable{
     @Inject
     private SiteSurveyRequestService siteSurveyRequestService;
     
-    private final int customersListed = 10;
-    private List<CustomerSupplier> customers;
-    private List<CustomerSupplier> acquiredCustomers;
-    private List<CustomerSupplier> suppliers;
-    private List<CustomerSupplier> customerSuppliers;
-    
     @PostConstruct
     public void init() {
         lazyCustomers = new CustomerSupplierLazyDataModel(service, Boolean.TRUE, null, isPotentialCustomer);
@@ -73,42 +67,6 @@ public class CustomerSupplierListPresenter implements Serializable{
         }
         else
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Missing selection", "Select a row before deleting"));
-    }
-    
-    public List<CustomerSupplier> completeCustomer(String value) {
-        customers = service.listCustomerSuppliers(0, customersListed, "name", Boolean.TRUE, null, null, Boolean.TRUE, null, null, value, null);
-        return customers;
-    }
-
-    public List<CustomerSupplier> getCustomers() {
-        return customers;
-    }
-    
-    public List<CustomerSupplier> completeAcquiredCustomer(String value) {
-        acquiredCustomers = service.listCustomerSuppliers(0, customersListed, "name", Boolean.TRUE, Boolean.FALSE, null, Boolean.TRUE, null, null, value, null);
-        return acquiredCustomers;
-    }
-
-    public List<CustomerSupplier> getAcquiredCustomers() {
-        return acquiredCustomers;
-    }
-    
-    public List<CustomerSupplier> completeSupplier(String value) {
-        suppliers = service.listCustomerSuppliers(0, customersListed, "name", Boolean.TRUE, null, null, null, Boolean.TRUE, null, value, null);
-        return suppliers;
-    }
-    
-    public List<CustomerSupplier> getSuppliers() {
-        return suppliers;
-    }
-    
-    public List<CustomerSupplier> completeCustomerSupplier(String value) {
-        customerSuppliers = service.listCustomerSuppliers(0, customersListed, "name", Boolean.TRUE, Boolean.FALSE, null, null, null, null, value, null);
-        return customerSuppliers;
-    }
-    
-    public List<CustomerSupplier> getCustomerSuppliers() {
-        return customerSuppliers;
     }
 
     public CustomerSupplierLazyDataModel getLazyCustomers() {

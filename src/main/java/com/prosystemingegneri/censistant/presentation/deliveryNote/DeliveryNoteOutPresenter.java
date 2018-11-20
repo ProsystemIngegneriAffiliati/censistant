@@ -27,6 +27,7 @@ import com.prosystemingegneri.censistant.business.warehouse.entity.Location;
 import com.prosystemingegneri.censistant.business.warehouse.entity.SupplierPlantLocation;
 import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -60,6 +61,7 @@ public class DeliveryNoteOutPresenter implements Serializable{
     private Integer activeIndex;    //useful for keep tab opened when reloading a page
     
     private CustomerSupplier customerSupplierTemp;
+    private List<CustomerSupplier> customerSuppliers;
     
     @Resource
     Validator validator;
@@ -188,6 +190,19 @@ public class DeliveryNoteOutPresenter implements Serializable{
     public void deleteRow(DeliveryNoteRow row) {
         if (row != null)
             deliveryNoteOut.removeRow(row);
+    }
+    
+    public List<CustomerSupplier> completeCustomerSupplier(String value) {
+        customerSuppliers = customerSupplierService.listCustomerSuppliers(0, 10, "name", Boolean.TRUE, Boolean.FALSE, null, null, null, null, value, null);
+        return customerSuppliers;
+    }
+
+    public List<CustomerSupplier> getCustomerSuppliers() {
+        if (customerSuppliers == null) {
+            customerSuppliers = new ArrayList<>();
+            customerSuppliers.add(customerSupplierTemp);
+        }
+        return customerSuppliers;
     }
 
     public DeliveryNoteOut getDeliveryNoteOut() {

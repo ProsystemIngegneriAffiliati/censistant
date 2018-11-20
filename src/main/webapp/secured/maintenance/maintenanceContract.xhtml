@@ -26,12 +26,12 @@
                                         <p:autoComplete id="tempCustomer"
                                                         dropdown="true"
                                                         value="#{maintenanceContractPresenter.tempCustomer}"
-                                                        completeMethod="#{customerSupplierListPresenter.completeAcquiredCustomer}"
+                                                        completeMethod="#{maintenanceContractPresenter.completeAcquiredCustomer}"
                                                         var="cust"
                                                         itemLabel="#{cust.name}"
                                                         itemValue="#{cust}"
                                                         forceSelection="true">
-                                            <oou:converter converterId="omnifaces.ListConverter" list="#{customerSupplierListPresenter.acquiredCustomers}"/>
+                                            <oou:converter converterId="omnifaces.ListConverter" list="#{maintenanceContractPresenter.acquiredCustomers}"/>
                                             <p:ajax event="itemSelect" listener="#{maintenanceContractPresenter.onTempCustomerSelect}" update="maintenanceContractTabs:systems" />
                                         </p:autoComplete>
                                         <p:outputLabel for="tempCustomer" value="#{msg.customerSupplier_customer}"/>

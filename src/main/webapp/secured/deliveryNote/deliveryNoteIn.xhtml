@@ -56,12 +56,12 @@
                                         <p:autoComplete id="suppliers"
                                                         dropdown="true"
                                                         value="#{deliveryNoteInPresenter.supplierTemp}"
-                                                        completeMethod="#{customerSupplierListPresenter.completeSupplier}"
+                                                        completeMethod="#{deliveryNoteInPresenter.completeSupplier}"
                                                         var="supplier"
                                                         itemLabel="#{supplier.name}"
                                                         itemValue="#{supplier}"
                                                         forceSelection="true">
-                                            <oou:converter converterId="omnifaces.ListConverter" list="#{customerSupplierListPresenter.suppliers}"/>
+                                            <oou:converter converterId="omnifaces.ListConverter" list="#{deliveryNoteInPresenter.suppliers}"/>
                                             <p:ajax event="itemSelect" listener="#{deliveryNoteInPresenter.onSupplierSelect}" update="plant newSupplier openSupplier deliveryNoteInRowsTable:createNewRowButton" />
                                         </p:autoComplete>
                                         <p:outputLabel for="suppliers" value="#{msg.customerSupplier_supplier}"/>

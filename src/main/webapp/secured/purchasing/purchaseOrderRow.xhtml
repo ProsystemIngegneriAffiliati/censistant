@@ -25,12 +25,12 @@
                                                 <p:autoComplete id="supplier"
                                                                 dropdown="true"
                                                                 value="#{purchaseOrderRowPresenter.supplier}"
-                                                                completeMethod="#{customerSupplierListPresenter.completeSupplier}"
+                                                                completeMethod="#{purchaseOrderRowPresenter.completeSupplier}"
                                                                 var="supplier"
                                                                 itemLabel="#{supplier.name}"
                                                                 itemValue="#{supplier}"
                                                                 forceSelection="true">
-                                                    <oou:converter converterId="omnifaces.ListConverter" list="#{customerSupplierListPresenter.suppliers}"/>
+                                                    <oou:converter converterId="omnifaces.ListConverter" list="#{purchaseOrderRowPresenter.suppliers}"/>
                                                     <p:ajax event="itemSelect" listener="#{purchaseOrderRowPresenter.updateSupplier}" update="boxedItem" />
                                                 </p:autoComplete>
                                                 <p:outputLabel for="supplier" value="#{msg.customerSupplier_supplier}"/>

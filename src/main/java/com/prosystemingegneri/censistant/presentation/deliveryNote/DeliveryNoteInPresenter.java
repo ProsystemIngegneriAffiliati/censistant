@@ -52,6 +52,8 @@ public class DeliveryNoteInPresenter implements Serializable{
     @Inject
     CustomerSupplierService customerSupplierService;
     
+    private List<CustomerSupplier> suppliers;
+    
     private DeliveryNoteIn deliveryNoteIn;
     private Long id;
     
@@ -167,6 +169,19 @@ public class DeliveryNoteInPresenter implements Serializable{
     public void deleteRow(DeliveryNoteRow row) {
         if (row != null)
             deliveryNoteIn.removeRow(row);
+    }
+    
+    public List<CustomerSupplier> completeSupplier(String value) {
+        suppliers = customerSupplierService.listCustomerSuppliers(0, 10, "name", Boolean.TRUE, null, null, null, Boolean.TRUE, null, value, null);
+        return suppliers;
+    }
+
+    public List<CustomerSupplier> getSuppliers() {
+        if (suppliers == null) {
+            suppliers = new ArrayList<>();
+            suppliers.add(supplierTemp);
+        }
+        return suppliers;
     }
 
     public DeliveryNoteIn getDeliveryNoteIn() {

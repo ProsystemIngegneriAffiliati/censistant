@@ -16,11 +16,15 @@
  */
 package com.prosystemingegneri.censistant.presentation.purchasing;
 
+import com.prosystemingegneri.censistant.business.customerSupplier.boundary.CustomerSupplierService;
+import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
 import com.prosystemingegneri.censistant.business.purchasing.boundary.SupplierItemService;
 import com.prosystemingegneri.censistant.business.purchasing.entity.BoxedItem;
 import com.prosystemingegneri.censistant.business.purchasing.entity.SupplierItem;
 import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJBException;
 import javax.faces.application.FacesMessage;
@@ -41,6 +45,10 @@ public class SupplierItemPresenter implements Serializable{
     
     private SupplierItem supplierItem;
     private Long id;
+    
+    @Inject
+    private CustomerSupplierService customerSupplierService;
+    private List<CustomerSupplier> suppliers;
     
     @PostConstruct
     public void init() {
@@ -78,6 +86,19 @@ public class SupplierItemPresenter implements Serializable{
     public void deleteBoxedItem(BoxedItem boxedItem) {
         if (boxedItem != null)
             supplierItem.removeBoxedItem(boxedItem);
+    }
+    
+    public List<CustomerSupplier> completeSupplier(String value) {
+        suppliers = customerSupplierService.listCustomerSuppliers(0, 10, "name", Boolean.TRUE, null, null, null, Boolean.TRUE, null, value, null);
+        return suppliers;
+    }
+
+    public List<CustomerSupplier> getSuppliers() {
+        if (suppliers == null) {
+            suppliers = new ArrayList<>();
+            suppliers.add(supplierItem.getSupplier());
+        }
+        return suppliers;
     }
     
     public SupplierItem getSupplierItem() {

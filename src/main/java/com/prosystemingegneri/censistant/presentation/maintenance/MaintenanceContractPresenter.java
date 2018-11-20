@@ -16,6 +16,7 @@
  */
 package com.prosystemingegneri.censistant.presentation.maintenance;
 
+import com.prosystemingegneri.censistant.business.customerSupplier.boundary.CustomerSupplierService;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
 import com.prosystemingegneri.censistant.business.production.entity.System;
 import com.prosystemingegneri.censistant.business.maintenance.boundary.MaintenanceContractService;
@@ -62,6 +63,10 @@ public class MaintenanceContractPresenter implements Serializable{
     private DualListModel<System> systems = new DualListModel<>();
     @Inject
     SystemService systemService;
+    
+    @Inject
+    private CustomerSupplierService customerSupplierService;
+    private List<CustomerSupplier> customers;
     
     @Inject
     MaintenanceTaskService maintenanceTaskService;
@@ -123,6 +128,19 @@ public class MaintenanceContractPresenter implements Serializable{
     
     public void onTempCustomerSelect(SelectEvent event) {
         updateCustomerSystem();
+    }
+    
+    public List<CustomerSupplier> completeCustomer(String value) {
+        customers = customerSupplierService.listCustomerSuppliers(0, 10, "name", Boolean.TRUE, Boolean.FALSE, null, Boolean.TRUE, null, null, value, null);
+        return customers;
+    }
+
+    public List<CustomerSupplier> getCustomers() {
+        if (customers == null) {
+            customers = new ArrayList<>();
+            customers.add(tempCustomer);
+        }
+        return customers;
     }
 
     public Long getId() {

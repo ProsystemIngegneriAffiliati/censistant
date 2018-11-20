@@ -29,7 +29,6 @@ import com.prosystemingegneri.censistant.business.sales.entity.JobOrder;
 import com.prosystemingegneri.censistant.business.sales.entity.Offer;
 import com.prosystemingegneri.censistant.business.siteSurvey.boundary.SiteSurveyReportService;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport;
-import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyRequest;
 import com.prosystemingegneri.censistant.business.warehouse.boundary.StockService;
 import com.prosystemingegneri.censistant.presentation.DocumentAndImageUtils;
 import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
@@ -42,6 +41,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -84,6 +84,8 @@ public class JobOrderPresenter implements Serializable{
     
     private Offer dummyOffer;
     private SiteSurveyReport dummyReport;
+    
+    private List<CustomerSupplier> customers;
     
     private List<Plant> plants;
     
@@ -277,6 +279,22 @@ public class JobOrderPresenter implements Serializable{
             return stockService.countPlacedQuantity(jobOrder.getOffer().getSystem().getId(), device.getItem().getId());
         else
             return 0L;
+    }
+    
+    public List<CustomerSupplier> completeCustomer(String value) {
+        customers = customerSupplierService.listCustomerSuppliers(0, 10, "name", Boolean.TRUE, null, null, Boolean.TRUE, null, null, value, null);
+        return customers;
+    }
+
+    public List<CustomerSupplier> getCustomers() {
+        if (customers == null) {
+            customers = new ArrayList<>();
+            if (jobOrder.getOffer().getSiteSurveyReport().getRequest() != null
+                    && jobOrder.getOffer().getSiteSurveyReport() != null
+                    && jobOrder.getOffer() != null)
+                customers.add(jobOrder.getOffer().getSiteSurveyReport().getRequest().getCustomer());
+        }
+        return customers;
     }
     
     public JobOrder getJobOrder() {

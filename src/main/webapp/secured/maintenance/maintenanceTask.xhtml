@@ -34,12 +34,12 @@
                                                     <p:autoComplete id="customer"
                                                                     dropdown="true"
                                                                     value="#{maintenanceTaskPresenter.customer}"
-                                                                    completeMethod="#{customerSupplierListPresenter.completeCustomer}"
+                                                                    completeMethod="#{maintenanceTaskPresenter.completeCustomer}"
                                                                     var="cust"
                                                                     itemLabel="#{cust.name}"
                                                                     itemValue="#{cust}"
                                                                     forceSelection="true">
-                                                        <oou:converter converterId="omnifaces.ListConverter" list="#{customerSupplierListPresenter.customers}"/>
+                                                        <oou:converter converterId="omnifaces.ListConverter" list="#{maintenanceTaskPresenter.customers}"/>
                                                         <p:ajax event="itemSelect" update="plant newCustomerPanel" />
                                                     </p:autoComplete>
                                                     <p:outputLabel for="customer" value="#{msg.customerSupplier_customer}"/>

@@ -39,6 +39,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -80,6 +81,7 @@ public class OfferPresenter implements Serializable{
     private SiteSurveyReport dummyReport;
     
     private List<Plant> plants;
+    private List<CustomerSupplier> customers;
     
     private System system;
     
@@ -262,6 +264,21 @@ public class OfferPresenter implements Serializable{
     public void deleteDevice(Device device) {
         if (device != null)
             offer.getSystem().removeDevice(device);
+    }
+    
+    public List<CustomerSupplier> completeCustomer(String value) {
+        customers = customerSupplierService.listCustomerSuppliers(0, 10, "name", Boolean.TRUE, null, null, Boolean.TRUE, null, null, value, null);
+        return customers;
+    }
+
+    public List<CustomerSupplier> getCustomers() {
+        if (customers == null) {
+            customers = new ArrayList<>();
+            if (offer.getSiteSurveyReport().getRequest() != null
+                    && offer.getSiteSurveyReport() != null)
+                customers.add(offer.getSiteSurveyReport().getRequest().getCustomer());
+        }
+        return customers;
     }
     
     public Offer getOffer() {

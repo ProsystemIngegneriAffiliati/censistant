@@ -19,13 +19,12 @@ package com.prosystemingegneri.censistant.presentation.purchasing;
 import com.prosystemingegneri.censistant.business.customerSupplier.boundary.CustomerSupplierService;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
-import com.prosystemingegneri.censistant.business.purchasing.boundary.PurchaseOrderRowService;
 import com.prosystemingegneri.censistant.business.purchasing.boundary.PurchaseOrderService;
-import com.prosystemingegneri.censistant.business.purchasing.control.PurchaseOrderRowToBeDelivered;
 import com.prosystemingegneri.censistant.business.purchasing.entity.PurchaseOrder;
 import com.prosystemingegneri.censistant.business.purchasing.entity.PurchaseOrderRow;
 import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJBException;
@@ -52,6 +51,7 @@ public class PurchaseOrderPresenter implements Serializable{
     private Long id;
     
     private CustomerSupplier supplier;
+    private List<CustomerSupplier> suppliers;
     
     @PostConstruct
     public void init() {
@@ -112,6 +112,19 @@ public class PurchaseOrderPresenter implements Serializable{
             CustomerSupplier tempSupplier = (CustomerSupplier) event.getObject();
             purchaseOrder.setPlant(tempSupplier.getHeadOffice());
         }
+    }
+    
+    public List<CustomerSupplier> completeSupplier(String value) {
+        suppliers = customerSupplierService.listCustomerSuppliers(0, 10, "name", Boolean.TRUE, null, null, null, Boolean.TRUE, null, value, null);
+        return suppliers;
+    }
+
+    public List<CustomerSupplier> getSuppliers() {
+        if (suppliers == null) {
+            suppliers = new ArrayList<>();
+            suppliers.add(supplier);
+        }
+        return suppliers;
     }
     
     public PurchaseOrder getPurchaseOrder() {

@@ -17,10 +17,13 @@
 package com.prosystemingegneri.censistant.presentation.siteSurvey;
 
 import com.prosystemingegneri.censistant.business.customerSupplier.boundary.CustomerSupplierService;
+import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
 import com.prosystemingegneri.censistant.business.siteSurvey.boundary.SiteSurveyRequestService;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyRequest;
 import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJBException;
 import javax.faces.application.FacesMessage;
@@ -40,6 +43,8 @@ public class SiteSurveyRequestPresenter implements Serializable{
     SiteSurveyRequestService service;
     @Inject
     CustomerSupplierService customerSupplierService;
+    
+    private List<CustomerSupplier> customers;
     
     private SiteSurveyRequest siteSurveyRequest;
     private Long id;
@@ -81,6 +86,19 @@ public class SiteSurveyRequestPresenter implements Serializable{
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("returnPage", "siteSurvey/siteSurveyRequest");
         
         return "/secured/customerSupplier/customer?faces-redirect=true";
+    }
+    
+    public List<CustomerSupplier> completeCustomer(String value) {
+        customers = customerSupplierService.listCustomerSuppliers(0, 10, "name", Boolean.TRUE, null, null, Boolean.TRUE, null, null, value, null);
+        return customers;
+    }
+
+    public List<CustomerSupplier> getCustomers() {
+        if (customers == null) {
+            customers = new ArrayList<>();
+            customers.add(siteSurveyRequest.getCustomer());
+        }
+        return customers;
     }
 
     public SiteSurveyRequest getSiteSurveyRequest() {
