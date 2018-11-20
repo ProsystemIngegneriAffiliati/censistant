@@ -55,6 +55,7 @@ public class CustomerSupplierPresenter implements Serializable{
     private CustomerSupplier customerSupplier;
     private Long id;
     private Boolean isCustomerView;
+    private Boolean isAcquiredCustomer;
     private String returnPage;
     
     private SiteSurveyRequest siteSurveyRequest;
@@ -123,8 +124,12 @@ public class CustomerSupplierPresenter implements Serializable{
     public void detailCustomerSupplier() {
         if (customerSupplier == null && id != null) {
             if (id == 0) {
-                if (isCustomerView)
-                    customerSupplier = service.createPotentialCustomer();
+                if (isCustomerView) {
+                    if (isAcquiredCustomer)
+                        customerSupplier = service.createCustomer();
+                    else
+                        customerSupplier = service.createPotentialCustomer();
+                }
                 else
                     customerSupplier = service.createSupplier();
             }
@@ -252,6 +257,14 @@ public class CustomerSupplierPresenter implements Serializable{
 
     public SiteSurveyReportListPresenter getSiteSurveyReportListPresenter() {
         return siteSurveyReportListPresenter;
+    }
+
+    public Boolean getIsAcquiredCustomer() {
+        return isAcquiredCustomer;
+    }
+
+    public void setIsAcquiredCustomer(Boolean isAcquiredCustomer) {
+        this.isAcquiredCustomer = isAcquiredCustomer;
     }
     
 }

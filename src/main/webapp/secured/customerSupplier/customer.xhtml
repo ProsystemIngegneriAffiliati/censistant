@@ -14,6 +14,9 @@
         <f:viewParam name="isCustomerView"
                      value="#{customerSupplierPresenter.isCustomerView}"
                      converter="javax.faces.Boolean"/>
+        <f:viewParam name="isAcquiredCustomer"
+                     value="#{customerSupplierPresenter.isAcquiredCustomer}"
+                     converter="javax.faces.Boolean"/>
         <f:viewParam name="returnPage" value="#{customerSupplierPresenter.returnPage}" />
         <f:viewAction action="#{customerSupplierPresenter.detailCustomerSupplier()}"/>
     </f:metadata>
