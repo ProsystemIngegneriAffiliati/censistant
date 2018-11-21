@@ -35,7 +35,7 @@
                                 <p>#{msg.customerSupplier_customer_tip}</p>
                                 <p:tabView id="customerTabs" dynamic="true">
                                     <p:tab title="#{msg.generalData}">
-                                        <p:panelGrid columns="4" columnClasses="ui-grid-col-5,ui-grid-col-2,ui-grid-col-2,ui-grid-col-3" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                        <p:panelGrid columns="3" columnClasses="ui-grid-col-6,ui-grid-col-3,ui-grid-col-3" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                             <h:panelGroup styleClass="md-inputfield">
                                                 <p:inputText id="businessName" value="#{customerSupplierPresenter.customerSupplier.businessName}"/>
                                                 <p:outputLabel for="businessName" value="#{msg.customerSupplier_customerSupplier_businessName}"/>
@@ -53,13 +53,9 @@
                                                     <p:ajax listener="#{customerSupplierPresenter.onIsOnlyInfoChanged()}" update="addressPanel siteSurveyReportPanel" />
                                                 </p:inputSwitch>
                                             </h:panelGroup>
-
-                                            <h:panelGroup id="siteSurveyReportPanel">
-                                                <p:commandButton disabled="#{empty customerSupplierPresenter.customerSupplier.headOffice}" icon="ui-icon-event-note" value="#{msg.siteSurvey_siteSurveyReport}" title="#{msg.create} #{msg.new} #{msg.siteSurvey_siteSurveyReport}" action="#{customerSupplierPresenter.createNewSiteSurveyReport()}" ajax="false" />
-                                            </h:panelGroup>
                                         </p:panelGrid>
 
-                                        <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                        <p:panelGrid columns="3" columnClasses="ui-grid-col-5,ui-grid-col-3,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                             <h:panelGroup styleClass="md-inputfield">
                                                 <p:calendar id="emailSent" value="#{customerSupplierPresenter.customerSupplier.emailSent}" locale="it" />
                                                 <p:outputLabel for="emailSent" value="#{msg.customerSupplier_customer_emailSent}"/>
@@ -68,6 +64,9 @@
                                             <h:panelGroup>
                                                 <p:outputLabel for="isOfferAccepted" value="#{msg.customerSupplier_customer_isOfferAccepted}" />
                                                 <p:inputSwitch id="isOfferAccepted" label="" value="#{customerSupplierPresenter.customerSupplier.isOfferAccepted}" />
+                                            </h:panelGroup>
+                                            <h:panelGroup id="siteSurveyReportPanel">
+                                                <p:commandButton disabled="#{empty customerSupplierPresenter.customerSupplier.headOffice}" icon="ui-icon-event-note" value="#{msg.new} #{msg.siteSurvey_siteSurveyReport}" title="#{msg.create} #{msg.new} #{msg.siteSurvey_siteSurveyReport}" action="#{customerSupplierPresenter.createNewSiteSurveyReport()}" ajax="false" />
                                             </h:panelGroup>
                                         </p:panelGrid>
 
@@ -243,6 +242,7 @@
                                             <p:column headerText="#{msg.actions}" style="width:64px; text-align:center" priority="0" exportable="false">
                                                 <p:button title="#{msg.edit}" icon="ui-icon-edit" styleClass="AquaButton" outcome="/secured/siteSurvey/siteSurveyReport">
                                                     <f:param name="id" value="#{rep.id}" />
+                                                    <f:param name="returnPage" value="#{customerSupplierPresenter.returnPage}" />
                                                 </p:button>
                                             </p:column>
                                         </p:dataTable>

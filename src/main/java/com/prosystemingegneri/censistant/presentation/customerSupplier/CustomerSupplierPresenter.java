@@ -154,6 +154,7 @@ public class CustomerSupplierPresenter implements Serializable{
             return null;
         
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("idCustomer", customerSupplier.getId());
+        putExternalContext();
         return "/secured/siteSurvey/siteSurveyReport?faces-redirect=true";
     }
     

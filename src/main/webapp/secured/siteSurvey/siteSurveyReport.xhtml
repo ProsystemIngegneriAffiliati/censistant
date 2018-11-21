@@ -10,6 +10,7 @@
         <f:viewParam name="id"
                      value="#{siteSurveyReportPresenter.id}"
                      converter="javax.faces.Long"/>
+        <f:viewParam name="returnPage" value="#{siteSurveyReportPresenter.customerReturnPage}" />
         <f:viewAction action="#{siteSurveyReportPresenter.detailSiteSurveyReport()}"/>
     </f:metadata>
     <ui:composition template="/WEB-INF/template.xhtml">
@@ -192,6 +193,7 @@
                                     <div class="ui-g-4 ui-md-3">
                                         <p:button value="#{msg.cancelBack}" outcome="/secured/customerSupplier/customer" styleClass="secondary">
                                             <f:param name="id" value="#{siteSurveyReportPresenter.siteSurveyReport.request.customer.id}" />
+                                            <f:param name="returnPage" value="#{siteSurveyReportPresenter.customerReturnPage}" />
                                         </p:button>
                                     </div>
                                     <div class="ui-g-2 ui-md-2"></div>

@@ -64,6 +64,7 @@ public class SiteSurveyReportPresenter implements Serializable{
     private List<Plant> plants;
     
     private List<CustomerSupplier> customers;
+    private String customerReturnPage;
     
     private CustomerSupplier newCustomer;
     private Plant newPlant;
@@ -71,6 +72,7 @@ public class SiteSurveyReportPresenter implements Serializable{
     @PostConstruct
     public void init() {
         siteSurveyReport = (SiteSurveyReport) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("siteSurveyReport");
+        customerReturnPage =(String) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("returnPage");
         if (siteSurveyReport != null) {
             Long idCustomer = (Long) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("idCustomer");
             if (idCustomer != null && idCustomer > 0) {
@@ -106,6 +108,8 @@ public class SiteSurveyReportPresenter implements Serializable{
         
         if (id == null || id == 0)
             id = siteSurveyReport.getId();
+        
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("returnPage", customerReturnPage);
         
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Successo", "Salvato con successo"));
         FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
@@ -294,6 +298,14 @@ public class SiteSurveyReportPresenter implements Serializable{
 
     public void setNewCustomer(CustomerSupplier newCustomer) {
         this.newCustomer = newCustomer;
+    }
+
+    public String getCustomerReturnPage() {
+        return customerReturnPage;
+    }
+
+    public void setCustomerReturnPage(String customerReturnPage) {
+        this.customerReturnPage = customerReturnPage;
     }
     
 }
