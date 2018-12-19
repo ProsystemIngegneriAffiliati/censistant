@@ -23,6 +23,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
@@ -46,6 +47,9 @@ public class Item extends BaseEntity<Long>{
     
     private String notes;
     
+    @Transient
+    private final int CROP_LIMIT = 100;
+    
     @Version
     private int version;
 
@@ -54,6 +58,13 @@ public class Item extends BaseEntity<Long>{
 
     public String getDescription() {
         return description;
+    }
+    
+    public String getDescriptionCropped() {
+        if (description.length() > CROP_LIMIT)
+            return description.substring(0, CROP_LIMIT);
+        else
+            return description;
     }
 
     public void setDescription(String description) {
