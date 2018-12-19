@@ -28,6 +28,7 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.omnifaces.cdi.ViewScoped;
+import org.primefaces.event.FileUploadEvent;
 
 /**
  *
@@ -43,6 +44,9 @@ public class SupplierItemListPresenter implements Serializable{
     private List<SupplierItem> selectedSupplierItems;
     
     private List<SupplierItem> supplierItems;
+    
+    @Inject
+    private SupplierItemImportExportPresenter importExportPresenter;
     
     @PostConstruct
     public void init() {
@@ -71,6 +75,10 @@ public class SupplierItemListPresenter implements Serializable{
         if (supplierItems == null || supplierItems.isEmpty())
             supplierItems = service.listSupplierItemsAllField(0, 0, null);
         return supplierItems;
+    }
+    
+    public void handleSupplierItemsUpload(FileUploadEvent event) {
+        importExportPresenter.handleSupplierItemsUpload(event);
     }
 
     public SupplierItemLazyDataModel getLazySupplierItems() {
