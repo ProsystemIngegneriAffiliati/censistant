@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:oou="http://omnifaces.org/ui">
+    <f:metadata>
+        <f:viewParam name="id"
+                     value="#{shelfPresenter.id}"
+                     converter="javax.faces.Long" />
+        <f:viewAction action="#{shelfPresenter.detailShelf()}"/>
+    </f:metadata>
+    <ui:composition template="/WEB-INF/template.xhtml">
+        <ui:define name="content">
+            <oou:form id="shelfForm">
+                <div class="ui-fluid">
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <div class="card card-w-title">
+                                <h1>#{msg.warehouse_shelf}</h1>
+                                <p>#{msg.warehouse_shelf_tip}</p>
+                                <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="name" value="#{shelfPresenter.shelf.name}"/>
+                                        <p:outputLabel for="name" value="#{msg.warehouse_shelf_name}"/>
+                                        <p:message for="name"/>
+                                    </h:panelGroup>
+                                </p:panelGrid>
+
+                                <div class="ui-g">
+                                    <div class="ui-g-1 ui-md-2"></div>
+                                    <div class="ui-g-4 ui-md-3">
+                                        <p:button value="#{msg.cancel}" outcome="/secured/warehouse/shelfs" styleClass="secondary"/>
+                                    </div>
+                                    <div class="ui-g-2 ui-md-2"></div>
+                                    <div class="ui-g-4 ui-md-3">
+                                        <p:commandButton value="#{msg.save}"
+                                                         action="#{shelfPresenter.saveShelf()}"
+                                                         ajax="false"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </oou:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

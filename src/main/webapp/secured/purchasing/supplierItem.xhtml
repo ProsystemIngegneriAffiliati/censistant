@@ -72,11 +72,24 @@
                                         <p:outputLabel for="unitMeasure" value="#{msg.production_unitMeasure}"/>
                                         <p:message for="unitMeasure"/>
                                     </h:panelGroup>
-                                    
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputNumber id="cost" decimalPlaces="#{BoxedItem.SCALE_COST}" symbol="€ " value="#{supplierItemPresenter.supplierItem.boxedItems.get(0).cost}" />
                                         <p:outputLabel for="cost" value="#{msg.purchasing_boxedItem_cost}"/>
                                         <p:message for="cost"/>
+                                    </h:panelGroup>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:autoComplete id="shelf"
+                                                        dropdown="true"
+                                                        value="#{supplierItemPresenter.supplierItem.boxedItems.get(0).defaultShelf}"
+                                                        completeMethod="#{shelfListPresenter.completeShelfs}"
+                                                        var="shelf"
+                                                        itemLabel="#{shelf.name}"
+                                                        itemValue="#{shelf}"
+                                                        forceSelection="true">
+                                            <oou:converter converterId="omnifaces.ListConverter" list="#{shelfListPresenter.getShelfs(supplierItemPresenter.supplierItem.boxedItems.get(0).defaultShelf)}"/>
+                                        </p:autoComplete>
+                                        <p:outputLabel for="shelf" value="#{msg.purchasing_boxedItem_defaultShelf}"/>
+                                        <p:message for="shelf"/>
                                     </h:panelGroup>
                                 </p:panelGrid>
 

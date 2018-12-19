@@ -17,6 +17,7 @@
 package com.prosystemingegneri.censistant.business.purchasing.entity;
 
 import com.prosystemingegneri.censistant.business.entity.BaseEntity;
+import com.prosystemingegneri.censistant.business.warehouse.entity.Shelf;
 import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -54,6 +55,9 @@ public class BoxedItem extends BaseEntity<Long>{
     
     @ManyToOne(optional = false)
     private Box box;
+    
+    @ManyToOne
+    private Shelf defaultShelf;
     
     private String notes;
     
@@ -122,6 +126,14 @@ public class BoxedItem extends BaseEntity<Long>{
                 .append(delimitator)
                 .append(item.getItem().getUnitMeasure().getSymbol())
                 .toString();
+    }
+
+    public Shelf getDefaultShelf() {
+        return defaultShelf;
+    }
+
+    public void setDefaultShelf(Shelf defaultShelf) {
+        this.defaultShelf = defaultShelf;
     }
     
 }
