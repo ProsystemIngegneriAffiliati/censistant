@@ -64,6 +64,10 @@ public class BoxedItem extends BaseEntity<Long>{
         cost = BigDecimal.ZERO;
     }
 
+    public BoxedItem(Box box) {
+        this.box = box;
+    }
+
     public BigDecimal getCost() {
         return cost;
     }

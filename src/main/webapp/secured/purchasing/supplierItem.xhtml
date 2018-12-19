@@ -22,20 +22,12 @@
                             <div class="card card-w-title">
                                 <h1>#{msg.purchasing_supplierItem}</h1>
                                 <p>#{msg.purchasing_supplierItem_tip}</p>
-                                <p:panelGrid columns="2" columnClasses="ui-grid-col-5,ui-grid-col-7" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                <p:panelGrid columns="3" columnClasses="ui-grid-col-3,ui-grid-col-5,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputText id="code" value="#{supplierItemPresenter.supplierItem.code}"/>
                                         <p:outputLabel for="code" value="#{msg.purchasing_supplierItem_code}"/>
                                         <p:message for="code"/>
                                     </h:panelGroup>
-                                    
-                                    <h:panelGroup styleClass="md-inputfield">
-                                        <p:inputText id="description" value="#{supplierItemPresenter.supplierItem.description}"/>
-                                        <p:outputLabel for="description" value="#{msg.purchasing_supplierItem_description}"/>
-                                        <p:message for="description"/>
-                                    </h:panelGroup>
-                                </p:panelGrid>
-                                <p:panelGrid columns="3" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:autoComplete id="item"
                                                         dropdown="true"
@@ -45,12 +37,12 @@
                                                         itemLabel="#{item.description}"
                                                         itemValue="#{item}"
                                                         forceSelection="true">
+                                            <p:ajax event="itemSelect" update="unitMeasure" />
                                             <oou:converter converterId="omnifaces.ListConverter" list="#{itemListPresenter.items}"/>
                                         </p:autoComplete>
                                         <p:outputLabel for="item" value="#{msg.production_item}"/>
                                         <p:message for="item"/>
                                     </h:panelGroup>
-
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:autoComplete id="supplier"
                                                         dropdown="true"
@@ -65,52 +57,26 @@
                                         <p:outputLabel for="supplier" value="#{msg.customerSupplier_supplier}"/>
                                         <p:message for="supplier"/>
                                     </h:panelGroup>
-                                </p:panelGrid>
-
-                                <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
-                                    <p:dataTable id="boxedItemsTable"
-                                                 var="boxedItem"
-                                                 value="#{supplierItemPresenter.supplierItem.boxedItems}">
-                                        <f:facet name="header">
-                                            <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
-                                                #{msg.purchasing_boxedItems}
-                                                <p:commandButton title="#{msg.new}" icon="ui-icon-create" action="#{supplierItemPresenter.detailBoxedItem(null)}" ajax="false" />
-                                            </p:panelGrid>
-                                        </f:facet>
-                                        <p:column headerText="#{msg.purchasing_box_name}" sortBy="#{boxedItem.box.unitMeasure.name}" filterBy="#{boxedItem.box.unitMeasure.name}" filterMatchMode="contains" priority="0">
-                                            <h:outputText value="#{boxedItem.box.unitMeasure.name}" />
-                                        </p:column>
-                                        <p:column headerText="#{msg.purchasing_box_quantity}" sortBy="#{boxedItem.box.quantity}" priority="4">
-                                            <h:outputText value="#{boxedItem.box.quantity}">
-                                                <f:convertNumber integerOnly="true" />
-                                            </h:outputText>
-                                        </p:column>
-                                        <p:column headerText="#{msg.production_unitMeasure_symbol}" sortBy="#{boxedItem.box.unitMeasure.symbol}" priority="5">
-                                            <h:outputText value="#{boxedItem.item.item.unitMeasure.name}" />
-                                        </p:column>
-                                        <p:column headerText="#{msg.purchasing_boxedItem_cost}" sortBy="#{boxedItem.cost}" priority="3">
-                                            <h:outputText value="#{boxedItem.cost}">
-                                                <f:convertNumber currencySymbol="€" minFractionDigits="#{BoxedItem.SCALE_COST}" type="currency" />
-                                            </h:outputText>
-                                        </p:column>
-                                        <p:column headerText="#{msg.purchasing_boxedItem_cost_total}" sortBy="#{boxedItem.totalCost}" priority="2">
-                                            <h:outputText value="#{boxedItem.totalCost}">
-                                                <f:convertNumber currencySymbol="€" minFractionDigits="#{BoxedItem.SCALE_COST}" type="currency" />
-                                            </h:outputText>
-                                        </p:column>
-                                        <p:column headerText="#{msg.actions}" style="width:72px; text-align:center" priority="0">
-                                            <p:splitButton value="" icon="ui-icon-edit" action="#{supplierItemPresenter.detailBoxedItem(boxedItem)}" ajax="false">
-                                                <p:menuitem  value="#{msg.delete}" icon="ui-icon-delete" actionListener="#{supplierItemPresenter.deleteBoxedItem(boxedItem)}" update="boxedItemsTable">
-                                                    <p:confirm header="#{msg.purchasing_boxedItems_delete}" message="#{msg.purchasing_boxedItems_delete_tip}" icon="ui-icon-alert"/>
-                                                </p:menuitem>
-                                            </p:splitButton>
-                                        </p:column>
-                                    </p:dataTable>
-
+                                    
                                     <h:panelGroup styleClass="md-inputfield">
-                                        <p:inputTextarea id="notes" value="#{supplierItemPresenter.supplierItem.notes}"/>
-                                        <p:outputLabel for="notes" value="#{msg.purchasing_supplierItem_notes}"/>
-                                        <p:message for="notes"/>
+                                        <p:autoComplete id="unitMeasure"
+                                                        dropdown="true"
+                                                        value="#{supplierItemPresenter.supplierItem.item.unitMeasure}"
+                                                        completeMethod="#{unitMeasureListPresenter.completeUnitMeasures}"
+                                                        var="um"
+                                                        itemLabel="#{um.name}"
+                                                        itemValue="#{um}"
+                                                        forceSelection="true">
+                                            <oou:converter converterId="omnifaces.ListConverter" list="#{unitMeasureListPresenter.unitMeasures}"/>
+                                        </p:autoComplete>
+                                        <p:outputLabel for="unitMeasure" value="#{msg.production_unitMeasure}"/>
+                                        <p:message for="unitMeasure"/>
+                                    </h:panelGroup>
+                                    
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputNumber id="cost" decimalPlaces="#{BoxedItem.SCALE_COST}" symbol="€ " value="#{supplierItemPresenter.supplierItem.boxedItems.get(0).cost}" />
+                                        <p:outputLabel for="cost" value="#{msg.purchasing_boxedItem_cost}"/>
+                                        <p:message for="cost"/>
                                     </h:panelGroup>
                                 </p:panelGrid>
 

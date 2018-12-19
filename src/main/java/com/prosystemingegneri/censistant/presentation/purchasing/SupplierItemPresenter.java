@@ -18,7 +18,9 @@ package com.prosystemingegneri.censistant.presentation.purchasing;
 
 import com.prosystemingegneri.censistant.business.customerSupplier.boundary.CustomerSupplierService;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
+import com.prosystemingegneri.censistant.business.purchasing.boundary.BoxService;
 import com.prosystemingegneri.censistant.business.purchasing.boundary.SupplierItemService;
+import com.prosystemingegneri.censistant.business.purchasing.entity.Box;
 import com.prosystemingegneri.censistant.business.purchasing.entity.BoxedItem;
 import com.prosystemingegneri.censistant.business.purchasing.entity.SupplierItem;
 import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
@@ -26,11 +28,15 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import javax.ejb.EJBException;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
+import javax.validation.groups.Default;
 import org.omnifaces.cdi.ViewScoped;
 
 /**
@@ -42,6 +48,8 @@ import org.omnifaces.cdi.ViewScoped;
 public class SupplierItemPresenter implements Serializable{
     @Inject
     SupplierItemService service;
+    @Inject
+    private BoxService boxService;
     
     private SupplierItem supplierItem;
     private Long id;
@@ -50,6 +58,9 @@ public class SupplierItemPresenter implements Serializable{
     private CustomerSupplierService customerSupplierService;
     private List<CustomerSupplier> suppliers;
     
+    @Resource
+    Validator validator;
+    
     @PostConstruct
     public void init() {
         supplierItem = (SupplierItem) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("supplierItem");
@@ -57,6 +68,14 @@ public class SupplierItemPresenter implements Serializable{
     
     public String saveSupplierItem() {
         try {
+            boolean isValidated = true;
+            for (ConstraintViolation<SupplierItem> constraintViolation : validator.validate(supplierItem, Default.class)) {
+                isValidated = false;
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", constraintViolation.getMessage()));
+            }
+            if (!isValidated)
+                return "";
+            
             service.saveSupplierItem(supplierItem);
         } catch (EJBException e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", ExceptionUtility.unwrap(e.getCausedByException()).getLocalizedMessage()));
@@ -68,8 +87,14 @@ public class SupplierItemPresenter implements Serializable{
     
     public void detailSupplierItem() {
         if (supplierItem == null && id != null) {
-            if (id == 0)
+            if (id == 0) {
                 supplierItem = new SupplierItem();
+                
+                //Create a new boxedItem with default box
+                supplierItem.setDescription(".");
+                Box box = boxService.readBox(1L);
+                supplierItem.addBoxedItem(new BoxedItem(box), box);
+            }
             else
                 supplierItem = service.readSupplierItem(id);
         }

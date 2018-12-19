@@ -71,7 +71,7 @@ public class SupplierItemLazyDataModel extends LazyDataModel<SupplierItem>{
                         description = String.valueOf(filters.get(filterProperty));
                     if (filterProperty.equalsIgnoreCase("supplier"))
                         supplier = String.valueOf(filters.get(filterProperty));
-                    if (filterProperty.equalsIgnoreCase("item"))
+                    if (filterProperty.equalsIgnoreCase("itemDescription"))
                         itemDescription = String.valueOf(filters.get(filterProperty));
                 }
             }
