@@ -68,6 +68,20 @@ public class CustomerSupplierListPresenter implements Serializable{
         else
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Missing selection", "Select a row before deleting"));
     }
+    
+    public int defaultSort(Object customer1, Object customer2) {
+        if (isPotentialCustomer == null) {
+            CustomerSupplier one = (CustomerSupplier) customer1;
+            CustomerSupplier two = (CustomerSupplier) customer2;
+            if (one.getEmailSent() == null)
+                return -1;
+            if (two.getEmailSent() == null)
+                return 1;
+            return one.getEmailSent().compareTo(two.getEmailSent());
+        }
+        else
+            return 0;
+    }
 
     public CustomerSupplierLazyDataModel getLazyCustomers() {
         return lazyCustomers;

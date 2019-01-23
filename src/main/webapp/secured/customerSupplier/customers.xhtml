@@ -25,7 +25,8 @@
                                      selectionMode="multiple" selection="#{customerSupplierListPresenter.selectedCustomerSuppliers}" rowKey="#{cust.id}"
                                      paginator="true" rows="10" paginatorAlwaysVisible="false"
                                      paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                     rowsPerPageTemplate="10,25,50" lazy="true">
+                                     rowsPerPageTemplate="10,25,50" lazy="true"
+                                     sortBy="emailSent" sortOrder="descending" nullSortOrder="-1">
                             <f:facet name="header">
                                 <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
                                     #{msg.customerSupplier_customers_tip}
