@@ -137,13 +137,13 @@
                                                         <p:commandButton title="#{msg.new}" icon="ui-icon-create" actionListener="#{customerSupplierPresenter.createNewPlant()}" oncomplete="PF('plTbl').addRow()" process="@this"/>
                                                     </p:panelGrid>
                                                 </f:facet>
-                                                <p:column headerText="#{msg.customerSupplier_plant_name}" sortBy="#{plant.name}" filterBy="#{plant.name}" priority="0">
+                                                <p:column headerText="#{msg.customerSupplier_plant_name}" sortBy="#{plant.name}" filterBy="#{plant.name}" filterMatchMode="contains" priority="0">
                                                     <p:cellEditor>
                                                         <f:facet name="output"><h:outputText value="#{plant.name}" /></f:facet>
                                                         <f:facet name="input"><p:inputText value="#{plant.name}" /></f:facet>
                                                     </p:cellEditor>
                                                 </p:column>
-                                                <p:column headerText="#{msg.customerSupplier_plant_address}" sortBy="#{plant.address}" filterBy="#{plant.address}" priority="4">
+                                                <p:column headerText="#{msg.customerSupplier_plant_address}" sortBy="#{plant.address}" filterBy="#{plant.address}" filterMatchMode="contains" priority="4">
                                                     <p:cellEditor>
                                                         <f:facet name="output"><h:outputText value="#{plant.address}" /></f:facet>
                                                         <f:facet name="input"><p:inputText value="#{plant.address}" /></f:facet>
@@ -169,13 +169,13 @@
                                                         <p:commandButton title="#{msg.new}" icon="ui-icon-create" actionListener="#{customerSupplierPresenter.createNewReferee()}" oncomplete="PF('rfTbl').addRow()" process="@this"/>
                                                     </p:panelGrid>
                                                 </f:facet>
-                                                <p:column headerText="#{msg.customerSupplier_referee_name}" sortBy="#{referee.name}" filterBy="#{referee.name}" priority="0">
+                                                <p:column headerText="#{msg.customerSupplier_referee_name}" sortBy="#{referee.name}" filterBy="#{referee.name}" filterMatchMode="contains" priority="0">
                                                     <p:cellEditor>
                                                         <f:facet name="output"><h:outputText value="#{referee.name}" /></f:facet>
                                                         <f:facet name="input"><p:inputText value="#{referee.name}" /></f:facet>
                                                     </p:cellEditor>
                                                 </p:column>
-                                                <p:column headerText="#{msg.customerSupplier_referee_email}" sortBy="#{referee.email}" filterBy="#{referee.email}" priority="4">
+                                                <p:column headerText="#{msg.customerSupplier_referee_email}" sortBy="#{referee.email}" filterBy="#{referee.email}" filterMatchMode="contains" priority="4">
                                                     <p:cellEditor>
                                                         <f:facet name="output"><h:outputText value="#{referee.email}" /></f:facet>
                                                         <f:facet name="input"><p:inputText value="#{referee.email}" /></f:facet>
