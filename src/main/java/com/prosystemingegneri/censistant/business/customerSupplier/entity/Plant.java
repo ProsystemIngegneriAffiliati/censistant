@@ -90,6 +90,17 @@ public class Plant extends BaseEntity<Long>{
                 .append(address)
                 .toString();
     }
+    
+    public String getCustomerNameAddress() {
+        String delim = " - ";
+        
+        return new StringBuilder(customerSupplier.getName())
+                .append(delim)
+                .append(name)
+                .append(delim)
+                .append(address)
+                .toString();
+    }
 
     public Boolean getIsHeadOffice() {
         return isHeadOffice;

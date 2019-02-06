@@ -97,6 +97,10 @@ public class CustomerSupplierService implements Serializable{
         return em.find(CustomerSupplier.class, id);
     }
     
+    public Plant readPlant(Long id) {
+        return em.find(Plant.class, id);
+    }
+    
     public void deleteCustomerSupplier(Long id) {
         em.remove(readCustomerSupplier(id));
     }
@@ -203,7 +207,7 @@ public class CustomerSupplierService implements Serializable{
         return conditions;
     }
     
-    public List<Plant> listPlants(int first, int pageSize, String sortField, Boolean isAscending, CustomerSupplier customerSupplier, String address, String nameAddress) {
+    public List<Plant> listPlants(int first, int pageSize, String sortField, Boolean isAscending, CustomerSupplier customerSupplier, String address, String nameAddress, String customerNameAddress) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Plant> query = cb.createQuery(Plant.class);
         Root<Plant> root = query.from(Plant.class);
@@ -225,6 +229,14 @@ public class CustomerSupplierService implements Serializable{
                     cb.or(
                             cb.like(cb.lower(root.get(Plant_.address)), "%" + String.valueOf(nameAddress).toLowerCase() + "%"),
                             cb.like(cb.lower(root.get(Plant_.name)), "%" + String.valueOf(nameAddress).toLowerCase() + "%")));
+        
+        //Customer name or plant address (or plant name)
+        if (customerNameAddress != null)
+            conditions.add(
+                    cb.or(
+                            cb.like(cb.lower(root.get(Plant_.address)), "%" + String.valueOf(customerNameAddress).toLowerCase() + "%"),
+                            cb.like(cb.lower(root.get(Plant_.name)), "%" + String.valueOf(customerNameAddress).toLowerCase() + "%"),
+                            cb.like(cb.lower(root.join(Plant_.customerSupplier).get(CustomerSupplier_.name)), "%" + String.valueOf(customerNameAddress).toLowerCase() + "%")));
 
         if (!conditions.isEmpty())
             query.where(conditions.toArray(new Predicate[conditions.size()]));

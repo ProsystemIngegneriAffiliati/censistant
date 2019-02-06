@@ -266,11 +266,11 @@ public class MaintenanceTaskPresenter implements Serializable{
     }
     
     public List<Plant> completePlant(String value) {
-        return customerSupplierService.listPlants(0, 10, "address", Boolean.TRUE, customer, null, value);
+        return customerSupplierService.listPlants(0, 10, "address", Boolean.TRUE, customer, null, value, null);
     }
 
     public List<Plant> getPlants() {
-        return customerSupplierService.listPlants(0, 0, "address", Boolean.TRUE, customer, null, null);
+        return customerSupplierService.listPlants(0, 0, "address", Boolean.TRUE, customer, null, null, null);
     }
 
     public CustomerSupplier getNewCustomer() {

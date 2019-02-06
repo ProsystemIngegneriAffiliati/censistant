@@ -104,7 +104,7 @@ public class PurchaseOrderPresenter implements Serializable{
     }
     
     public List<Plant> completeSupplierPlant(String value) {
-        return customerSupplierService.listPlants(0, 10, null, null, supplier, value, null);
+        return customerSupplierService.listPlants(0, 10, null, null, supplier, value, null, null);
     }
     
     public void onSupplierSelect(SelectEvent event) {

@@ -239,12 +239,12 @@ public class OfferPresenter implements Serializable{
     }
     
     public List<Plant> completePlant(String value) {
-        return customerSupplierService.listPlants(0, 10, "address", Boolean.TRUE, offer.getSiteSurveyReport().getRequest().getCustomer(), value, null);
+        return customerSupplierService.listPlants(0, 10, "address", Boolean.TRUE, offer.getSiteSurveyReport().getRequest().getCustomer(), value, null, null);
     }
     
     public List<Plant> getPlants() {
         if (plants == null || plants.isEmpty())
-            plants = customerSupplierService.listPlants(0, 0, null, null, offer.getSiteSurveyReport().getRequest().getCustomer(), null, null);
+            plants = customerSupplierService.listPlants(0, 0, null, null, offer.getSiteSurveyReport().getRequest().getCustomer(), null, null, null);
         return plants;
     }
     

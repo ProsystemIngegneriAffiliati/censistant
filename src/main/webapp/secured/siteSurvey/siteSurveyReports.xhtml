@@ -3,83 +3,137 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:p="http://primefaces.org/ui"
                 template="/WEB-INF/template.xhtml"
-                xmlns:f="http://xmlns.jcp.org/jsf/core">
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:oou="http://omnifaces.org/ui">
     <ui:define name="content">
         <h:form id="siteSurveyReportsForm">
-            <div class="ui-g">
-                <div class="ui-g-12">
-                    <div class="card card-w-title">
-                        <h1>#{msg.siteSurvey_siteSurveyReports}</h1>
-                        <p:dataTable id="siteSurveyReportsTable" widgetVar="siteSurveyReportsTable" var="rep" value="#{siteSurveyReportListPresenter.lazySiteSurveyReports}"
-                                     selectionMode="multiple" selection="#{siteSurveyReportListPresenter.selectedSiteSurveyReports}" rowKey="#{rep.id}"
-                                     paginator="true" rows="10" paginatorAlwaysVisible="false"
-                                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                     rowsPerPageTemplate="10,25,50" lazy="true">
-                            <f:facet name="header">
-                                <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
-                                    #{msg.siteSurvey_siteSurveyReports_tip}
-                                    <p:outputPanel>
-                                        <p:outputPanel style="display: inline-block">
-                                            <p:button title="#{msg.new}" icon="ui-icon-create" styleClass="AquaButton" outcome="/secured/siteSurvey/siteSurveyReport">
-                                                <f:param name="id" value="0" />
-                                            </p:button>
-                                            <p:commandButton title="#{msg.delete}" icon="ui-icon-delete" actionListener="#{siteSurveyReportListPresenter.deleteSiteSurveyReport()}" update="siteSurveyReportsTable">
-                                                <p:confirm header="#{msg.siteSurvey_siteSurveyReports_delete}" message="#{msg.siteSurvey_siteSurveyReports_delete_tip}" icon="ui-icon-alert"/>
-                                            </p:commandButton>
-                                        </p:outputPanel>
-                                    </p:outputPanel>
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card card-w-title">
+                            <h1>#{msg.siteSurvey_siteSurveyReports}</h1>
+
+                            <p:panel header="#{msg.new} #{msg.siteSurvey_siteSurveyReport}" style="margin-bottom: 25px">
+                                <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:autoComplete id="plantsAndCustomers"
+                                                        dropdown="true"
+                                                        value="#{siteSurveyReportListPresenter.plant}"
+                                                        completeMethod="#{siteSurveyReportListPresenter.completePlantsAndCustomers}"
+                                                        var="plant"
+                                                        itemLabel="#{plant.customerNameAddress}"
+                                                        itemValue="#{plant}"
+                                                        forceSelection="true">
+                                            <oou:converter converterId="omnifaces.ListConverter" list="#{siteSurveyReportListPresenter.getPlants(siteSurveyReportListPresenter.plant)}" />
+                                            <p:ajax event="itemSelect" update="createNewPlant createNewSiteSurveyReport" />
+                                        </p:autoComplete>
+                                        <p:outputLabel for="plantsAndCustomers" value="#{msg.customerSupplier_plants} #{msg.customerSupplier_customers}"/>
+                                        <p:message for="plantsAndCustomers"/>
+                                    </h:panelGroup>
                                 </p:panelGrid>
-                            </f:facet>
-                            <p:column headerText="#{msg.siteSurvey_siteSurveyReport_number}" field="number" filterable="false" style="width:75px" priority="5">
-                                <h:outputText value="#{rep.number}"/>
-                            </p:column>
-                            <p:column headerText="#{msg.customerSupplier_customerSupplier_isPotentialCustomer}" style="width:75px" priority="4">
-                                <h:outputText value="#{rep.request.customer.isPotentialCustomer ? 'X' : ''}"/>
-                            </p:column>
-                            <p:column headerText="#{msg.siteSurvey_siteSurveyReport_expected}" sortBy="#{rep.expected}" priority="4">
-                                <h:outputText value="#{rep.expected}">
-                                    <f:convertDateTime pattern="dd/MM/YYYY" />
-                                </h:outputText>
-                            </p:column>
-                            <p:column headerText="#{msg.siteSurvey_siteSurveyReport_actual}" sortBy="#{rep.actual}" priority="2">
-                                <h:outputText value="#{rep.actual}">
-                                    <f:convertDateTime pattern="dd/MM/YYYY" />
-                                </h:outputText>
-                            </p:column>
-                            <p:column headerText="#{msg.customerSupplier_customer}" field="customer" priority="0">
-                                <h:outputText value="#{rep.request.customer.name}"/>
-                            </p:column>
-                            <p:column headerText="#{msg.siteSurvey_siteSurveyReport_constructionSite}" field="nameAddressPlant" priority="1">
-                                <h:outputText value="#{rep.plant.getNameAddress(false)}"/>
-                            </p:column>
-                            <p:column headerText="#{msg.siteSurvey_systemType}" field="systemType" priority="2">
-                                <h:outputText value="#{rep.request.systemType.name}"/>
-                            </p:column>
-                            <p:column headerText="#{msg.customerSupplier_customer_emailSent}" priority="4">
-                                <h:outputText value="#{rep.emailSent}">
-                                    <f:convertDateTime pattern="dd/MM/YYYY" />
-                                </h:outputText>
-                            </p:column>
-                            <p:column headerText="#{msg.siteSurvey_siteSurveyReport_seller}" field="seller" priority="4">
-                                <h:outputText value="#{rep.seller.initials}"/>
-                            </p:column>
-                            <p:column headerText="#{msg.customerSupplier_customer_isOfferAccepted}" field="isOfferAccepted" priority="6">
-                                    <f:facet name="filter">
-                                        <p:selectOneButton onchange="PF('siteSurveyReportsTable').filter()">
-                                            <f:converter converterId="javax.faces.Boolean" />
-                                            <f:selectItem itemLabel="#{msg.all_female}" itemValue="" />
-                                            <f:selectItem itemLabel="#{msg.customerSupplier_customer_isOfferAccepted_true}" itemValue="true" />
-                                            <f:selectItem itemLabel="#{msg.customerSupplier_customer_isOfferAccepted_false}" itemValue="false" />
-                                        </p:selectOneButton>
-                                    </f:facet>
-                                <h:outputText value="#{rep.isOfferAccepted ? 'X' : ''}"/>
-                            </p:column>
-                            <p:column headerText="#{msg.actions}" style="width:64px; text-align:center" priority="0" exportable="false">
-                                <p:button title="#{msg.edit}" icon="ui-icon-edit" styleClass="AquaButton" outcome="/secured/siteSurvey/siteSurveyReport">
-                                    <f:param name="id" value="#{rep.id}" />
-                                </p:button>
-                            </p:column>
-                        </p:dataTable>
+                                <h:panelGroup id="newPlantPanel">
+                                    <p:panelGrid rendered="#{not empty siteSurveyReportListPresenter.newPlant}" columns="2" columnClasses="ui-grid-col-4,ui-grid-col-8" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:inputText id="newPlantName" value="#{siteSurveyReportListPresenter.newPlant.name}"/>
+                                            <p:outputLabel for="newPlantName" value="#{msg.customerSupplier_plant_name}"/>
+                                            <p:message for="newPlantName"/>
+                                        </h:panelGroup>
+
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:inputTextarea id="newPlantAddress" value="#{siteSurveyReportListPresenter.newPlant.address}" rows="3"/>
+                                            <p:outputLabel for="newPlantAddress" value="#{msg.customerSupplier_plant_address}"/>
+                                            <p:message for="newPlantAddress"/>
+                                        </h:panelGroup>
+                                    </p:panelGrid>
+                                </h:panelGroup>
+                                <p:panelGrid columns="3" columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                    <p:button value="#{msg.new} #{msg.customerSupplier_customer_potential}" icon="ui-icon-create" outcome="/secured/customerSupplier/customer">
+                                        <f:param name="id" value="0" />
+                                        <f:param name="isCustomerView" value="true" />
+                                        <f:param name="isAcquiredCustomer" value="#{false}" />
+                                        <f:param name="returnPage" value="siteSurvey/siteSurveyReports" />
+                                    </p:button>
+                                    <p:commandButton id="createNewPlant"
+                                                     disabled="#{empty siteSurveyReportListPresenter.plant}"
+                                                     value="#{msg.new} #{msg.customerSupplier_plant}"
+                                                     action="#{siteSurveyReportListPresenter.createNewPlant()}"
+                                                     update="newPlantPanel"/>
+                                    <p:commandButton id="createNewSiteSurveyReport"
+                                                     disabled="#{empty siteSurveyReportListPresenter.plant}"
+                                                     icon="ui-icon-event-note"
+                                                     value="#{msg.new} #{msg.siteSurvey_siteSurveyReport}"
+                                                     title="#{msg.create} #{msg.new} #{msg.siteSurvey_siteSurveyReport}"
+                                                     action="#{siteSurveyReportListPresenter.createNewSiteSurveyReport()}"
+                                                     ajax="false" />
+                                </p:panelGrid>
+                            </p:panel>
+
+                            <p:dataTable id="siteSurveyReportsTable" widgetVar="siteSurveyReportsTable" var="rep" value="#{siteSurveyReportListPresenter.lazySiteSurveyReports}"
+                                         selectionMode="multiple" selection="#{siteSurveyReportListPresenter.selectedSiteSurveyReports}" rowKey="#{rep.id}"
+                                         paginator="true" rows="10" paginatorAlwaysVisible="false"
+                                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                         rowsPerPageTemplate="10,25,50" lazy="true">
+                                <f:facet name="header">
+                                    <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
+                                        #{msg.siteSurvey_siteSurveyReports_tip}
+                                        <p:outputPanel>
+                                            <p:outputPanel style="display: inline-block">
+                                                <p:button title="#{msg.new}" icon="ui-icon-create" styleClass="AquaButton" outcome="/secured/siteSurvey/siteSurveyReport">
+                                                    <f:param name="id" value="0" />
+                                                </p:button>
+                                                <p:commandButton title="#{msg.delete}" icon="ui-icon-delete" actionListener="#{siteSurveyReportListPresenter.deleteSiteSurveyReport()}" update="siteSurveyReportsTable">
+                                                    <p:confirm header="#{msg.siteSurvey_siteSurveyReports_delete}" message="#{msg.siteSurvey_siteSurveyReports_delete_tip}" icon="ui-icon-alert"/>
+                                                </p:commandButton>
+                                            </p:outputPanel>
+                                        </p:outputPanel>
+                                    </p:panelGrid>
+                                </f:facet>
+                                <p:column headerText="#{msg.siteSurvey_siteSurveyReport_number}" field="number" filterable="false" style="width:55px" priority="5">
+                                    <h:outputText value="#{rep.number}"/>
+                                </p:column>
+                                <p:column headerText="#{msg.customerSupplier_customerSupplier_isPotentialCustomer}" style="width:65px" priority="4">
+                                    <h:outputText value="#{rep.request.customer.isPotentialCustomer ? 'X' : ''}"/>
+                                </p:column>
+                                <p:column headerText="#{msg.siteSurvey_siteSurveyReport_expected}" sortBy="#{rep.expected}" style="width:60px" priority="4">
+                                    <h:outputText value="#{rep.expected}">
+                                        <f:convertDateTime pattern="dd/MM/YY" />
+                                    </h:outputText>
+                                </p:column>
+                                <p:column headerText="#{msg.siteSurvey_siteSurveyReport_actual}" sortBy="#{rep.actual}" style="width:75px" priority="2">
+                                    <h:outputText value="#{rep.actual}">
+                                        <f:convertDateTime pattern="dd/MM/YY" />
+                                    </h:outputText>
+                                </p:column>
+                                <p:column headerText="#{msg.customerSupplier_customer}" field="customer" priority="0">
+                                    <h:outputText value="#{rep.request.customer.name}"/>
+                                </p:column>
+                                <p:column headerText="#{msg.siteSurvey_siteSurveyReport_constructionSite}" field="nameAddressPlant" priority="1">
+                                    <h:outputText value="#{rep.plant.getNameAddress(false)}"/>
+                                </p:column>
+                                <p:column headerText="#{msg.customerSupplier_plant_phone}" style="width:85px" priority="1">
+                                    <h:outputText value="#{rep.plant.customerSupplier.headOffice.phone}"/>
+                                </p:column>
+                                <p:column headerText="#{msg.siteSurvey_systemType}" field="systemType" priority="2">
+                                    <h:outputText value="#{rep.request.systemType.name}"/>
+                                </p:column>
+                                <p:column headerText="#{msg.customerSupplier_customer_emailSent}" style="width:60px" priority="4">
+                                    <h:outputText value="#{rep.emailSent}">
+                                        <f:convertDateTime pattern="dd/MM/YY" />
+                                    </h:outputText>
+                                </p:column>
+                                <p:column headerText="#{msg.siteSurvey_siteSurveyReport_seller}" field="seller" style="width:85px" priority="4">
+                                    <h:outputText value="#{rep.seller.initials}"/>
+                                </p:column>
+                                <p:column headerText="#{msg.customerSupplier_customer_isOfferAccepted}" style="width:60px" priority="6">
+                                    <h:outputText value="#{rep.isOfferAccepted ? 'X' : ''}"/>
+                                </p:column>
+                                <p:column headerText="#{msg.actions}" style="width:64px; text-align:center" priority="0" exportable="false">
+                                    <p:button title="#{msg.edit}" icon="ui-icon-edit" styleClass="AquaButton" outcome="/secured/siteSurvey/siteSurveyReport">
+                                        <f:param name="id" value="#{rep.id}" />
+                                    </p:button>
+                                </p:column>
+                            </p:dataTable>
+                        </div>
                     </div>
                 </div>
             </div>

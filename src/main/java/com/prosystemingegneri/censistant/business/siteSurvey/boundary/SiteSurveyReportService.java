@@ -143,9 +143,11 @@ public class SiteSurveyReportService implements Serializable{
             query.where(conditions.toArray(new Predicate[conditions.size()]));
         
         Order order = cb.desc(root.get(SiteSurveyReport_.expected));
+        Order order2 = cb.desc(root.get(SiteSurveyReport_.number));
         if (isAscending != null && sortField != null && !sortField.isEmpty()) {
             Path<?> path;
             Join<SiteSurveyReport, SiteSurveyRequest> requestRoot;
+            order2 = null;
             switch (sortField) {
                 case "customerName":
                     path = root.get(SiteSurveyReport_.request).get(SiteSurveyRequest_.customer).get(CustomerSupplier_.name);
@@ -167,7 +169,10 @@ public class SiteSurveyReportService implements Serializable{
             else
                 order = cb.desc(path);
         }
-        query.orderBy(order);
+        if (order2 != null)
+            query.orderBy(order, order2);
+        else
+            query.orderBy(order);
         
         TypedQuery<SiteSurveyReport> typedQuery = em.createQuery(select);
         if (pageSize > 0) {

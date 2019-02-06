@@ -128,6 +128,12 @@ public class SiteSurveyReportPresenter implements Serializable{
         if (siteSurveyReport == null && id == null) {
             siteSurveyReport = service.createNewSiteSurveyReport();
             Long idCustomer = (Long) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("idCustomer");
+            Long idPlant = (Long) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("idPlant");
+            if (idPlant != null && idPlant > 0) {
+                Plant plant = customerSupplierService.readPlant(idPlant);
+                siteSurveyReport.getRequest().setCustomer(plant.getCustomerSupplier());
+                siteSurveyReport.setPlant(plant);
+            }
             if (idCustomer != null && idCustomer > 0) {
                 CustomerSupplier customer = customerSupplierService.readCustomerSupplier(idCustomer);
                 siteSurveyReport.getRequest().setCustomer(customer);
@@ -198,12 +204,12 @@ public class SiteSurveyReportPresenter implements Serializable{
     }
     
     public List<Plant> completePlant(String value) {
-        return customerSupplierService.listPlants(0, 10, "address", Boolean.TRUE, siteSurveyReport.getRequest().getCustomer(), null, value);
+        return customerSupplierService.listPlants(0, 10, "address", Boolean.TRUE, siteSurveyReport.getRequest().getCustomer(), null, value, null);
     }
 
     public List<Plant> getPlants() {
         if (plants == null || plants.isEmpty())
-            plants = customerSupplierService.listPlants(0, 0, "address", Boolean.TRUE, siteSurveyReport.getRequest().getCustomer(), null, null);
+            plants = customerSupplierService.listPlants(0, 0, "address", Boolean.TRUE, siteSurveyReport.getRequest().getCustomer(), null, null, null);
         return plants;
     }
 
