@@ -26,7 +26,6 @@ import com.prosystemingegneri.censistant.business.purchasing.entity.SupplierItem
 import com.prosystemingegneri.censistant.business.purchasing.entity.SupplierItem_;
 import com.prosystemingegneri.censistant.business.sales.boundary.JobOrderService;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -119,15 +118,10 @@ public class CustomerSupplierService implements Serializable{
         
         query.orderBy(cb.desc(root.get(CustomerSupplier_.id)));
         if (isAscending != null && sortField != null && !sortField.isEmpty()) {
-            if (sortField.equalsIgnoreCase("emailSent")) {
-                query.orderBy(cb.desc(cb.selectCase().when(cb.isNull(root.get("emailSent")), LocalDate.of(1970, 1, 1)).otherwise(root.get("emailSent"))));
-            }
-            else {
-                if (isAscending)
-                    query.orderBy(cb.asc(root.get(sortField)));
-                else
-                    query.orderBy(cb.desc(root.get(sortField)));
-            }
+            if (isAscending)
+                query.orderBy(cb.asc(root.get(sortField)));
+            else
+                query.orderBy(cb.desc(root.get(sortField)));
         }
         
         TypedQuery<CustomerSupplier> typedQuery = em.createQuery(select);
