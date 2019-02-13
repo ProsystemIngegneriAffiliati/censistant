@@ -21,6 +21,7 @@ import com.prosystemingegneri.censistant.business.entity.BaseEntity;
 import com.prosystemingegneri.censistant.business.maintenance.control.AtLeastOneScheduledMaintenance;
 import com.prosystemingegneri.censistant.business.maintenance.control.AtLeastOneSystem;
 import com.prosystemingegneri.censistant.business.production.entity.System;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -33,12 +34,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.persistence.Version;
+import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -49,6 +52,11 @@ import javax.validation.constraints.NotNull;
 @AtLeastOneSystem
 @AtLeastOneScheduledMaintenance
 public class MaintenanceContract extends BaseEntity<Long> {
+    @Transient
+    public static final int SCALE = 2; //If zero or positive, the scale is the number of digits to the right of the decimal point.
+    @Transient
+    public static final int PRECISION = 7;
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -60,6 +68,13 @@ public class MaintenanceContract extends BaseEntity<Long> {
     @Temporal(TemporalType.DATE)
     @Column(nullable = false)
     private Date creation;
+    
+    private String payment;
+    
+    @NotNull
+    @DecimalMin(value = "0")
+    @Column(nullable = false, scale = SCALE, precision = PRECISION)   
+    private BigDecimal price;
     
     @NotNull
     @Column(nullable = false)
@@ -78,6 +93,9 @@ public class MaintenanceContract extends BaseEntity<Long> {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "maintenanceContract", orphanRemoval = true)
     private final List<ScheduledMaintenance> scheduledMaintenances;
     
+    @Lob
+    private String notes;
+    
     @Version
     private int version;
     
@@ -86,6 +104,7 @@ public class MaintenanceContract extends BaseEntity<Long> {
 
     public MaintenanceContract() {
         creation = new Date();
+        price = BigDecimal.ZERO;
         isFullService = Boolean.FALSE;
         isOnCall = Boolean.FALSE;
         systems = new ArrayList<>();
@@ -198,4 +217,29 @@ public class MaintenanceContract extends BaseEntity<Long> {
         
         return true;
     }*/
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    public String getPayment() {
+        return payment;
+    }
+
+    public void setPayment(String payment) {
+        this.payment = payment;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+    
 }

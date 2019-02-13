@@ -4,8 +4,8 @@
         <jta-data-source>jdbc/postgres_censistant</jta-data-source>
         <properties>
             <!--Comment/uncomment for enabling/disabling database creation and population-->
-            <!--<property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>
-            <property name="javax.persistence.sql-load-script-source" value="sql/insertInitialData.sql"/>-->
+            <property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>
+            <property name="javax.persistence.sql-load-script-source" value="sql/insertInitialData.sql"/>
             
             <!--Uncomment/comment for enabling/disabling sql logging-->
             <!--<property name="eclipselink.logging.level.sql" value="FINE"/>
