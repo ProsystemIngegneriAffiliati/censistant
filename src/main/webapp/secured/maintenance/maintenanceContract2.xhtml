@@ -1,0 +1,117 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:oou="http://omnifaces.org/ui">
+    <f:metadata>
+        <f:viewParam name="id"
+                     value="#{maintenanceContract2Presenter.id}"
+                     converter="javax.faces.Long" />
+        <f:viewAction action="#{maintenanceContract2Presenter.detail()}"/>
+    </f:metadata>
+    <ui:composition template="/WEB-INF/template.xhtml">
+        <ui:define name="content">
+            <oou:importConstants type="com.prosystemingegneri.censistant.business.maintenance.entity2.MaintenanceContract2"/>
+            <oou:form id="maintenanceContractForm">
+                <div class="ui-fluid">
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <div class="card card-w-title">
+                                <h1>#{msg.maintenance_maintenanceContract}</h1>
+                                <p>#{msg.maintenance_maintenanceContract_tip}</p>
+                                <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:autoComplete id="tempCustomer"
+                                                        dropdown="true"
+                                                        value="#{maintenanceContract2Presenter.tempCustomer}"
+                                                        completeMethod="#{customerSupplierListPresenter.completeCustomers}"
+                                                        var="cust"
+                                                        itemLabel="#{cust.name}"
+                                                        itemValue="#{cust}"
+                                                        forceSelection="true">
+                                            <oou:converter converterId="omnifaces.ListConverter" list="#{customerSupplierListPresenter.getCustomers(maintenanceContract2Presenter.tempCustomer)}"/>
+                                            <p:ajax event="itemSelect" listener="#{maintenanceContract2Presenter.onTempCustomerSelect}" update="system systems" />
+                                        </p:autoComplete>
+                                        <p:outputLabel for="tempCustomer" value="#{msg.customerSupplier_customer}"/>
+                                        <p:message for="tempCustomer"/>
+                                    </h:panelGroup>
+                                </p:panelGrid>
+
+                                <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:calendar id="creation" value="#{maintenanceContract2Presenter.maintenanceContract.creation}" locale="it">
+                                            <p:ajax update="expiry"/>
+                                        </p:calendar>
+                                        <p:outputLabel for="creation" value="#{msg.maintenance_maintenanceContract_creation}"/>
+                                        <p:message for="creation"/>
+                                    </h:panelGroup>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:calendar id="expiry" disabled="true" value="#{maintenanceContract2Presenter.maintenanceContract.expiry}" locale="it" />
+                                        <p:outputLabel for="expiry" value="#{msg.maintenance_maintenanceContract_expiry}"/>
+                                        <p:message for="expiry"/>
+                                    </h:panelGroup>
+
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="payment" validator="#{maintenanceContract2Presenter.maintenanceContract.payment}" />
+                                        <p:outputLabel for="payment" value="#{msg.maintenance_maintenanceContract_payment}"/>
+                                        <p:message for="payment"/>
+                                    </h:panelGroup>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputNumber id="price" decimalPlaces="#{maintenanceContract2.SCALE}" symbol="€ " value="#{maintenanceContract2Presenter.maintenanceContract.price}" />
+                                        <p:outputLabel for="price" value="#{msg.maintenance_maintenanceContract_price}"/>
+                                        <p:message for="price"/>
+                                    </h:panelGroup>
+                                </p:panelGrid>
+
+                                <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                    <h:panelGroup>
+                                        <p:outputLabel for="system" value="#{msg.add} #{msg.production_system}" />
+                                        <p:selectOneMenu id="system" value="#{maintenanceContract2Presenter.systemToBeAdded}" converter="omnifaces.SelectItemsConverter">
+                                            <f:selectItem itemLabel="#{msg.production_system_noSelection}" itemValue="" />
+                                            <f:selectItems
+                                                value="#{maintenanceContract2Presenter.avaibleSystems}"
+                                                var="system"
+                                                itemLabel="#{system.description}"
+                                                itemValue="#{system}" />
+                                            <p:ajax event="itemSelect" listener="#{maintenanceContract2Presenter.onSystemSelect}" update="system systems" />
+                                        </p:selectOneMenu>
+                                        <p:message for="system"/>
+                                    </h:panelGroup>
+                                </p:panelGrid>
+
+                                <p:accordionPanel id="systems" value="#{maintenanceContract2Presenter.maintenanceContract.contractedSystems}" var="systemUnderContract">
+                                    <p:tab title="#{systemUnderContract.system.name}">
+                                    </p:tab>
+                                </p:accordionPanel>
+
+                                <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputTextarea id="notes" value="#{maintenanceContract2Presenter.maintenanceContract.notes}" />
+                                        <p:outputLabel for="notes" value="#{msg.maintenance_maintenanceContract_notes}"/>
+                                        <p:message for="notes"/>
+                                    </h:panelGroup>
+                                </p:panelGrid>
+
+                                <div class="ui-g">
+                                    <div class="ui-g-1 ui-md-2"></div>
+                                    <div class="ui-g-4 ui-md-3">
+                                        <p:button value="#{msg.cancel}" outcome="/secured/maintenance/maintenanceContracts2" styleClass="secondary"/>
+                                    </div>
+                                    <div class="ui-g-2 ui-md-2"></div>
+                                    <div class="ui-g-4 ui-md-3">
+                                        <p:commandButton value="#{msg.save}"
+                                                         action="#{maintenanceContract2Presenter.save()}"
+                                                         ajax="false"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </oou:form>
+        </ui:define>
+    </ui:composition>
+</html>

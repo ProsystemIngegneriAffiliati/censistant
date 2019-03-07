@@ -43,6 +43,7 @@ public class CustomerSupplierListPresenter implements Serializable{
     private CustomerSupplierLazyDataModel lazyCustomers;
     private CustomerSupplierLazyDataModel lazySuppliers;
     private List<CustomerSupplier> selectedCustomerSuppliers;
+    private List<CustomerSupplier> customers;
     
     private Boolean isPotentialCustomer;
     
@@ -99,6 +100,23 @@ public class CustomerSupplierListPresenter implements Serializable{
 
     public void setIsPotentialCustomer(Boolean isPotentialCustomer) {
         this.isPotentialCustomer = isPotentialCustomer;
+    }
+    
+    public List<CustomerSupplier> completeCustomers(String name) {
+        customers = service.listCustomerSuppliers(0, 25, null, null, Boolean.FALSE, null, Boolean.TRUE, null, null, name, null);
+        return customers;
+    }
+    
+    /**
+     * Useful only for 'omnifaces.ListConverter' used in 'p:autoComplete'
+     * 
+     * @param defaultCustomer Needed when jsf page read not null autocomplete (when, for example, open an already saved entity)
+     * @return 
+     */
+    public List<CustomerSupplier> getCustomers(CustomerSupplier defaultCustomer) {
+        if (customers.isEmpty())
+            customers.add(defaultCustomer);
+        return customers;
     }
     
 }
