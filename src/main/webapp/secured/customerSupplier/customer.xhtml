@@ -50,7 +50,7 @@
                                             <h:panelGroup>
                                                 <p:outputLabel for="isOnlyInfo" value="#{msg.siteSurvey_siteSurveyRequest_isInfo}" />
                                                 <p:inputSwitch id="isOnlyInfo" value="#{customerSupplierPresenter.customerSupplier.isOnlyInfo}">
-                                                    <p:ajax listener="#{customerSupplierPresenter.onIsOnlyInfoChanged()}" process="addressPanel" update="addressPanel siteSurveyReportPanel" />
+                                                    <p:ajax listener="#{customerSupplierPresenter.onIsOnlyInfoChanged()}" update="addressPanel siteSurveyReportPanel" />
                                                 </p:inputSwitch>
                                             </h:panelGroup>
                                         </p:panelGrid>
@@ -73,7 +73,9 @@
                                         <h:panelGroup id="addressPanel">
                                             <p:panelGrid rendered="#{not empty customerSupplierPresenter.customerSupplier.headOffice}" columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                                 <h:panelGroup styleClass="md-inputfield">
-                                                    <p:inputTextarea id="address" value="#{customerSupplierPresenter.customerSupplier.headOffice.address}" rows="2"/>
+                                                    <p:inputTextarea id="address" value="#{customerSupplierPresenter.customerSupplier.headOffice.address}" rows="2">
+                                                        <p:ajax process="@this" />
+                                                    </p:inputTextarea>
                                                     <p:outputLabel for="address" value="#{msg.customerSupplier_plant_address}"/>
                                                     <p:message for="address"/>
                                                 </h:panelGroup>
@@ -83,7 +85,9 @@
                                                     <p:message for="email"/>
                                                 </h:panelGroup>
                                                 <h:panelGroup styleClass="md-inputfield">
-                                                    <p:inputText id="phone" value="#{customerSupplierPresenter.customerSupplier.headOffice.phone}"/>
+                                                    <p:inputText id="phone" value="#{customerSupplierPresenter.customerSupplier.headOffice.phone}">
+                                                        <p:ajax listener="#{customerSupplierPresenter.onPhoneChanged()}" update="address" />
+                                                    </p:inputText>
                                                     <p:outputLabel for="phone" value="#{msg.customerSupplier_plant_phone}"/>
                                                     <p:message for="phone"/>
                                                 </h:panelGroup>

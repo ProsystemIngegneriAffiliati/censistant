@@ -149,6 +149,11 @@ public class CustomerSupplierPresenter implements Serializable{
         }
     }
     
+    public void onPhoneChanged() {
+        if (customerSupplier.getHeadOffice() != null && (customerSupplier.getHeadOffice().getAddress() == null || customerSupplier.getHeadOffice().getAddress().isEmpty()))
+            customerSupplier.getHeadOffice().setAddress(".");
+    }
+    
     public String createNewSiteSurveyReport() {
         if (!onlySaveCustomerSupplier())
             return null;
