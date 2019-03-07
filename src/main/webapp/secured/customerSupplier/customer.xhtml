@@ -50,7 +50,7 @@
                                             <h:panelGroup>
                                                 <p:outputLabel for="isOnlyInfo" value="#{msg.siteSurvey_siteSurveyRequest_isInfo}" />
                                                 <p:inputSwitch id="isOnlyInfo" value="#{customerSupplierPresenter.customerSupplier.isOnlyInfo}">
-                                                    <p:ajax listener="#{customerSupplierPresenter.onIsOnlyInfoChanged()}" update="addressPanel siteSurveyReportPanel" />
+                                                    <p:ajax listener="#{customerSupplierPresenter.onIsOnlyInfoChanged()}" process="addressPanel" update="addressPanel siteSurveyReportPanel" />
                                                 </p:inputSwitch>
                                             </h:panelGroup>
                                         </p:panelGrid>
