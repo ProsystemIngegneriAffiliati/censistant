@@ -10,8 +10,8 @@
                 <div class="ui-g-12">
                     <div class="card card-w-title">
                         <h1>#{msg.maintenance_maintenanceContracts}</h1>
-                        <p:dataTable id="maintenanceContractsTable" widgetVar="maintenanceContractsTable" var="maintenanceContract" value="#{maintenanceContract2ListPresenter.lazyMaintenanceContracts}"
-                                     selectionMode="multiple" selection="#{maintenanceContract2ListPresenter.selectedMaintenanceContracts}" rowKey="#{maintenanceContract.id}"
+                        <p:dataTable id="maintenanceContractsTable" widgetVar="maintenanceContractsTable" var="maintenanceContract" value="#{maintenanceContractOLDListPresenter.lazyMaintenanceContracts}"
+                                     selectionMode="multiple" selection="#{maintenanceContractOLDListPresenter.selectedMaintenanceContracts}" rowKey="#{maintenanceContract.id}"
                                      paginator="true" rows="10" paginatorAlwaysVisible="false"
                                      paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                      rowsPerPageTemplate="10,25,50" lazy="true">
@@ -20,10 +20,10 @@
                                     #{msg.maintenance_maintenanceContracts_tip}
                                     <p:outputPanel>
                                         <p:outputPanel style="display: inline-block">
-                                            <p:button title="#{msg.new}" icon="ui-icon-create" styleClass="AquaButton" outcome="/secured/maintenance/maintenanceContract2">
+                                            <p:button title="#{msg.new}" icon="ui-icon-create" styleClass="AquaButton" outcome="/secured/maintenance/maintenanceContract">
                                                 <f:param name="id" value="0" />
                                             </p:button>
-                                            <p:commandButton title="#{msg.delete}" icon="ui-icon-delete" actionListener="#{maintenanceContract2ListPresenter.delete()}" update="maintenanceContractsTable">
+                                            <p:commandButton title="#{msg.delete}" icon="ui-icon-delete" actionListener="#{maintenanceContractOLDListPresenter.deleteMaintenanceContract()}" update="maintenanceContractsTable">
                                                 <p:confirm header="#{msg.maintenance_maintenanceContracts_delete}" message="#{msg.maintenance_maintenanceContracts_delete_tip}" icon="ui-icon-alert"/>
                                             </p:commandButton>
                                         </p:outputPanel>
@@ -46,8 +46,19 @@
                                     <f:convertDateTime pattern="dd/MM/YYYY" />
                                 </h:outputText>
                             </p:column>
+                            <p:column headerText="#{msg.maintenance_maintenanceContract_isCompleted}" field="isCompleted" sortable="false" priority="4">
+                                <f:facet name="filter">
+                                    <p:selectOneButton onchange="PF('maintenanceContractsTable').filter()">
+                                        <f:converter converterId="javax.faces.Boolean" />
+                                        <f:selectItem itemLabel="#{msg.all}" itemValue="" />
+                                        <f:selectItem itemLabel="#{msg.maintenance_maintenanceContracts_onlyCompleted}" itemValue="true" />
+                                        <f:selectItem itemLabel="#{msg.maintenance_maintenanceContracts_onlyUncompleted}" itemValue="false" />
+                                    </p:selectOneButton>
+                                </f:facet>
+                                <h:outputText value="#{maintenanceContractOLDListPresenter.isMaintenanceContractCompleted(maintenanceContract.id) == true ? 'X' : ''}" />
+                            </p:column>
                             <p:column headerText="#{msg.actions}" style="width:64px; text-align:center" priority="0" exportable="false">
-                                <p:button title="#{msg.edit}" icon="ui-icon-edit" styleClass="AquaButton" outcome="/secured/maintenance/maintenanceContract2">
+                                <p:button title="#{msg.edit}" icon="ui-icon-edit" styleClass="AquaButton" outcome="/secured/maintenance/maintenanceContract">
                                     <f:param name="id" value="#{maintenanceContract.id}" />
                                 </p:button>
                             </p:column>

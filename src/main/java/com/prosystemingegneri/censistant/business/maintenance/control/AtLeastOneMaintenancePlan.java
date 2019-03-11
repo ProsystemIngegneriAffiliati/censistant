@@ -31,9 +31,9 @@ import javax.validation.Payload;
 @Documented
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = AtLeastOneScheduledMaintenanceValidator.class)
-public @interface AtLeastOneScheduledMaintenance {
-    String message() default "{com.prosystemingegneri.censistant.AtLeastOneScheduledMaintenance.message}";
+@Constraint(validatedBy = AtLeastOneMaintenancePlanValidator.class)
+public @interface AtLeastOneMaintenancePlan {
+    String message() default "{com.prosystemingegneri.censistant.AtLeastOneMaintenancePlan.message}";
     Class<?>[] groups() default {};
  
     Class<? extends Payload>[] payload() default {};

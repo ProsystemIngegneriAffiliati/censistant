@@ -242,13 +242,13 @@
                                         <p:autoComplete id="maintenanceContract"
                                                         dropdown="true"
                                                         value="#{maintenanceTaskPresenter.maintenanceTask.maintenanceContract}"
-                                                        completeMethod="#{maintenanceContractListPresenter.completeUnexpiredMaintenanceContract}"
+                                                        completeMethod="#{maintenanceContractOLDListPresenter.completeUnexpiredMaintenanceContract}"
                                                         var="contract"
                                                         itemLabel="#{contract.customerNameContractExpiry}"
                                                         itemValue="#{contract}"
                                                         forceSelection="true"
                                                         >
-                                            <oou:converter converterId="omnifaces.ListConverter" list="#{maintenanceContractListPresenter.unexpiredMaintenanceContracts}"/>
+                                            <oou:converter converterId="omnifaces.ListConverter" list="#{maintenanceContractOLDListPresenter.unexpiredMaintenanceContracts}"/>
                                         </p:autoComplete>
                                         <p:outputLabel for="maintenanceContract" value="#{msg.maintenance_maintenanceContract}"/>
                                         <p:message for="maintenanceContract"/>

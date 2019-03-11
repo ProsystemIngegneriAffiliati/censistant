@@ -32,7 +32,7 @@ public class AtLeastOneSystemValidator implements ConstraintValidator<AtLeastOne
 
     @Override
     public boolean isValid(MaintenanceContract maintenanceContract, ConstraintValidatorContext context) {
-        return !maintenanceContract.getSystems().isEmpty();
+        return !maintenanceContract.getContractedSystems().isEmpty();
     }
     
 }

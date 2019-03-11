@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Prosystem Ingegneri Affiliati.
+ * Copyright (C) 2018-2019 Prosystem Ingegneri Affiliati.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -16,23 +16,19 @@
  */
 package com.prosystemingegneri.censistant.presentation.maintenance;
 
-import com.prosystemingegneri.censistant.business.maintenance.boundary.MaintenanceContractService;
 import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceContract;
-import java.util.List;
-import java.util.Map;
 import org.primefaces.model.LazyDataModel;
-import org.primefaces.model.SortOrder;
-import static org.primefaces.model.SortOrder.ASCENDING;
-import static org.primefaces.model.SortOrder.DESCENDING;
 
 /**
  *
  * @author Davide Mainardi <ingmainardi at live.com>
  */
-public class MaintenanceContractLazyDataModel extends LazyDataModel<MaintenanceContract>{
-    private final MaintenanceContractService service;
+public class MaintenanceContractOLDLazyDataModel extends LazyDataModel<MaintenanceContract>{
+    /*private final MaintenanceContractOLDService service;
+    
+    private System system;
 
-    public MaintenanceContractLazyDataModel(MaintenanceContractService service) {
+    public MaintenanceContractOLDLazyDataModel(MaintenanceContractOLDService service) {
         this.service = service;
     }
     
@@ -44,8 +40,11 @@ public class MaintenanceContractLazyDataModel extends LazyDataModel<MaintenanceC
     @Override
     public List<MaintenanceContract> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
         Boolean isAscending = null;
+        Boolean isFullService = null;
+        Boolean isOnCall = null;
         String customerName = null;
         Boolean isExpired = null;
+        Boolean isCompleted = null;
         
         switch (sortOrder) {
             case ASCENDING:
@@ -58,18 +57,26 @@ public class MaintenanceContractLazyDataModel extends LazyDataModel<MaintenanceC
         }
         
         if (filters != null && !filters.isEmpty()) {
-            for (String filterProperty : filters.keySet()) {
+            for (Iterator<String> it = filters.keySet().iterator(); it.hasNext();) {
+                String filterProperty = it.next();
+
                 if (!filterProperty.isEmpty()) {
+                    if (filterProperty.equalsIgnoreCase("isFullService"))
+                        isFullService = Boolean.parseBoolean(String.valueOf(filters.get(filterProperty)));
+                    if (filterProperty.equalsIgnoreCase("isOnCall"))
+                        isOnCall = Boolean.parseBoolean(String.valueOf(filters.get(filterProperty)));
                     if (filterProperty.equalsIgnoreCase("customerName"))
                         customerName = String.valueOf(filters.get(filterProperty));
                     if (filterProperty.equalsIgnoreCase("isExpired"))
-                        isExpired = (Boolean) filters.get(filterProperty);
+                        isExpired = Boolean.parseBoolean(String.valueOf(filters.get(filterProperty)));
+                    if (filterProperty.equalsIgnoreCase("isCompleted"))
+                        isCompleted = Boolean.parseBoolean(String.valueOf(filters.get(filterProperty)));
                 }
             }
         }
         
-        List<MaintenanceContract> result = service.list(first, pageSize, sortField, isAscending, customerName, isExpired);
-        this.setRowCount(service.getCount(customerName, isExpired).intValue());
+        List<MaintenanceContract> result = service.listMaintenanceContracts(first, pageSize, sortField, isAscending, isFullService, isOnCall, customerName, isExpired, isCompleted);
+        this.setRowCount(service.getMaintenanceContractsCount(isFullService, isOnCall, customerName, isExpired, isCompleted).intValue());
         
         return result;
     }
@@ -77,10 +84,18 @@ public class MaintenanceContractLazyDataModel extends LazyDataModel<MaintenanceC
     @Override
     public MaintenanceContract getRowData(String rowKey) {
         try {
-            return service.find(Long.parseLong(rowKey));
+            return service.readMaintenanceContract(Long.parseLong(rowKey));
         } catch (NumberFormatException e) {
             return null;
         }
     }
-    
+
+    public System getSystem() {
+        return system;
+    }
+
+    public void setSystem(System system) {
+        this.system = system;
+    }
+    */
 }

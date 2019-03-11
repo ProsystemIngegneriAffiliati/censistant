@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2019 Prosystem Ingegneri Affiliati.
+ * Copyright (C) 2019 Prosystem Ingegneri Affiliati.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -18,9 +18,7 @@ package com.prosystemingegneri.censistant.business.maintenance.entity;
 
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
 import com.prosystemingegneri.censistant.business.entity.BaseEntity;
-import com.prosystemingegneri.censistant.business.maintenance.control.AtLeastOneScheduledMaintenance;
 import com.prosystemingegneri.censistant.business.maintenance.control.AtLeastOneSystem;
-import com.prosystemingegneri.censistant.business.production.entity.System;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -35,7 +33,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -50,19 +47,19 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @AtLeastOneSystem
-@AtLeastOneScheduledMaintenance
 public class MaintenanceContract extends BaseEntity<Long> {
+    @Transient
+    public static final Integer DURATION_MONTHS = 12;
     @Transient
     public static final int SCALE = 2; //If zero or positive, the scale is the number of digits to the right of the decimal point.
     @Transient
     public static final int PRECISION = 7;
+    @Transient
+    private final String SEPARATOR = " - ";
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-    @Transient
-    public static final Integer DURATION_MONTHS = 12;
     
     @NotNull
     @Temporal(TemporalType.DATE)
@@ -76,40 +73,19 @@ public class MaintenanceContract extends BaseEntity<Long> {
     @Column(nullable = false, scale = SCALE, precision = PRECISION)   
     private BigDecimal price;
     
-    @NotNull
-    @Column(nullable = false)
-    private Boolean isFullService;
-    
-    @NotNull
-    @Column(nullable = false)
-    private Boolean isOnCall;
-    
-    @ManyToMany
-    private final List<System> systems;
-    
-    /*@OneToMany(cascade = CascadeType.ALL, mappedBy = "maintenanceContract", orphanRemoval = true)
-    private final List<MaintenanceTask> maintenanceTasks;*/
-    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "maintenanceContract", orphanRemoval = true)
-    private final List<ScheduledMaintenance> scheduledMaintenances;
+    private final List<ContractedSystem> contractedSystems;
     
     @Lob
     private String notes;
     
     @Version
     private int version;
-    
-    @Transient
-    private final String SEPARATOR = " - ";
 
     public MaintenanceContract() {
         creation = new Date();
         price = BigDecimal.ZERO;
-        isFullService = Boolean.FALSE;
-        isOnCall = Boolean.FALSE;
-        systems = new ArrayList<>();
-        /*maintenanceTasks = new ArrayList<>();*/
-        scheduledMaintenances = new ArrayList<>();
+        contractedSystems = new ArrayList<>();
     }
 
     public Date getCreation() {
@@ -118,112 +94,6 @@ public class MaintenanceContract extends BaseEntity<Long> {
 
     public void setCreation(Date creation) {
         this.creation = creation;
-    }
-
-    public Boolean getIsFullService() {
-        return isFullService;
-    }
-
-    public void setIsFullService(Boolean isFullService) {
-        this.isFullService = isFullService;
-    }
-
-    public Boolean getIsOnCall() {
-        return isOnCall;
-    }
-
-    public void setIsOnCall(Boolean isOnCall) {
-        this.isOnCall = isOnCall;
-    }
-
-    @Override
-    public Long getId() {
-        return id;
-    }
-
-    public List<System> getSystems() {
-        return systems;
-    }
-    
-    /*public void addMaintenanceTask(MaintenanceTask maintenanceTask) {
-        if (!maintenanceTasks.contains(maintenanceTask)) {
-            maintenanceTasks.add(maintenanceTask);
-            maintenanceTask.setMaintenanceContract(this);
-        }
-    }
-    
-    public void removeMaintenanceTask(MaintenanceTask maintenanceTask) {
-        if (maintenanceTasks.contains(maintenanceTask)) {
-            maintenanceTasks.remove(maintenanceTask);
-            maintenanceTask.setMaintenanceContract(null);
-        }
-    }
-
-    public List<MaintenanceTask> getMaintenanceTasks() {
-        return maintenanceTasks;
-    }*/
-    
-    public void addScheduledMaintenance(ScheduledMaintenance scheduledMaintenance) {
-        if (!scheduledMaintenances.contains(scheduledMaintenance)) {
-            scheduledMaintenances.add(scheduledMaintenance);
-            scheduledMaintenance.setMaintenanceContract(this);
-        }
-    }
-    
-    public void removeScheduledMaintenance(ScheduledMaintenance scheduledMaintenance) {
-        if (scheduledMaintenances.contains(scheduledMaintenance)) {
-            scheduledMaintenances.remove(scheduledMaintenance);
-            scheduledMaintenance.setMaintenanceContract(null);
-        }
-    }
-    
-    public List<ScheduledMaintenance> getScheduledMaintenances() {
-        return scheduledMaintenances;
-    }
-
-    public Date getExpiry() {
-        Calendar created = new GregorianCalendar();
-        created.setTime(creation);
-        created.add(Calendar.MONTH, DURATION_MONTHS);
-        
-        return created.getTime();
-    }
-    
-    public CustomerSupplier getCustomer() {
-        if (systems != null && !systems.isEmpty())
-            return systems.get(0).getCustomerSupplier();
-        else
-            return null;
-    }
-    
-    public String getCustomerName() {
-        if (systems != null && !systems.isEmpty() && systems.get(0).getCustomerSupplier() != null)
-            return systems.get(0).getCustomerSupplier().getName();
-        else
-            return "";
-    }
-    
-    public String getCustomerNameContractExpiry() {
-                return new StringBuilder(getCustomerName())
-                .append(SEPARATOR)
-                .append(new SimpleDateFormat("dd/MM/yyyy").format(getExpiry()))
-                .toString();
-    }
-    
-    /*public boolean isCompleted() {
-        for (MaintenanceTask maintenanceTask : maintenanceTasks)
-            if (maintenanceTask.getClosed() == null)
-                return false;
-        
-        return true;
-    }*/
-
-    public String getNotes() {
-        return notes;
-    }
-
-    public void setNotes(String notes) {
-        this.notes = notes;
     }
 
     public String getPayment() {
@@ -240,6 +110,66 @@ public class MaintenanceContract extends BaseEntity<Long> {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+    
+    public void addContractedSystem(ContractedSystem contractedSystem) {
+        if (!contractedSystems.contains(contractedSystem)) {
+            contractedSystems.add(contractedSystem);
+            contractedSystem.setMaintenanceContract(this);
+        }
+    }
+    
+    public void removeContractedSystem(ContractedSystem contractedSystem) {
+        if (contractedSystems.contains(contractedSystem)) {
+            contractedSystems.remove(contractedSystem);
+            contractedSystem.setMaintenanceContract(this);
+        }
+    }
+    
+    public List<ContractedSystem> getContractedSystems() {
+        return contractedSystems;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    @Override
+    public Long getId() {
+        return id;
+    }
+    
+    public Date getExpiry() {
+        Calendar created = new GregorianCalendar();
+        created.setTime(creation);
+        created.add(Calendar.MONTH, DURATION_MONTHS);
+        
+        return created.getTime();
+    }
+    
+    public CustomerSupplier getCustomer() {
+        if (contractedSystems != null && !contractedSystems.isEmpty())
+            return contractedSystems.get(0).getSystem().getCustomerSupplier();
+        else
+            return null;
+    }
+    
+    public String getCustomerName() {
+        if (contractedSystems != null && !contractedSystems.isEmpty() && contractedSystems.get(0).getSystem().getCustomerSupplier() != null)
+            return contractedSystems.get(0).getSystem().getCustomerSupplier().getName();
+        else
+            return "";
+    }
+    
+    public String getCustomerNameContractExpiry() {
+                return new StringBuilder(getCustomerName())
+                .append(SEPARATOR)
+                .append(new SimpleDateFormat("dd/MM/yyyy").format(getExpiry()))
+                .toString();
     }
     
 }

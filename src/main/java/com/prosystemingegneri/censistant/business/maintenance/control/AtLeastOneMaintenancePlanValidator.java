@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Prosystem Ingegneri Affiliati.
+ * Copyright (C) 2018-2019 Prosystem Ingegneri Affiliati.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -14,19 +14,25 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.prosystemingegneri.censistant.business.maintenance.entity2;
+package com.prosystemingegneri.censistant.business.maintenance.control;
 
-import java.util.Date;
-import javax.persistence.metamodel.ListAttribute;
-import javax.persistence.metamodel.SingularAttribute;
-import javax.persistence.metamodel.StaticMetamodel;
+import com.prosystemingegneri.censistant.business.maintenance.entity.ContractedSystem;
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
 
 /**
  *
  * @author Davide Mainardi <ingmainardi at live.com>
  */
-@StaticMetamodel(MaintenanceContract2.class)
-public class MaintenanceContract2_ {
-    public static volatile SingularAttribute<MaintenanceContract2, Date> creation;
-    public static volatile ListAttribute<MaintenanceContract2, ContractedSystem> contractedSystems;
+public class AtLeastOneMaintenancePlanValidator implements ConstraintValidator<AtLeastOneMaintenancePlan, ContractedSystem> {
+
+    @Override
+    public void initialize(AtLeastOneMaintenancePlan constraintAnnotation) {
+    }
+
+    @Override
+    public boolean isValid(ContractedSystem contractedSystem, ConstraintValidatorContext context) {
+        return !contractedSystem.getMaintenancePlans().isEmpty();
+    }
+    
 }

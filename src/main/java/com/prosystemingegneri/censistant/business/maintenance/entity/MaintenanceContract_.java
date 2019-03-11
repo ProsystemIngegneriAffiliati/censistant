@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2019 Prosystem Ingegneri Affiliati.
+ * Copyright (C) 2019 Prosystem Ingegneri Affiliati.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -16,7 +16,6 @@
  */
 package com.prosystemingegneri.censistant.business.maintenance.entity;
 
-import com.prosystemingegneri.censistant.business.production.entity.System;
 import java.util.Date;
 import javax.persistence.metamodel.ListAttribute;
 import javax.persistence.metamodel.SingularAttribute;
@@ -28,10 +27,6 @@ import javax.persistence.metamodel.StaticMetamodel;
  */
 @StaticMetamodel(MaintenanceContract.class)
 public class MaintenanceContract_ {
-    public static volatile SingularAttribute<MaintenanceContract, Long> id;
     public static volatile SingularAttribute<MaintenanceContract, Date> creation;
-    public static volatile SingularAttribute<MaintenanceContract, Boolean> isFullService;
-    public static volatile SingularAttribute<MaintenanceContract, Boolean> isOnCall;
-    public static volatile ListAttribute<MaintenanceContract, System> systems;
-    public static volatile ListAttribute<MaintenanceContract, MaintenanceTask> maintenanceTasks;
+    public static volatile ListAttribute<MaintenanceContract, ContractedSystem> contractedSystems;
 }

@@ -1,0 +1,214 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:oou="http://omnifaces.org/ui">
+    <f:metadata>
+        <f:viewParam name="id"
+                     value="#{maintenanceContractOLDPresenter.id}"
+                     converter="javax.faces.Long" />
+        <f:viewAction action="#{maintenanceContractOLDPresenter.detailMaintenanceContract()}"/>
+    </f:metadata>
+    <ui:composition template="/WEB-INF/template.xhtml">
+        <ui:define name="content">
+            <oou:importConstants type="com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceContract"/>
+            <oou:form id="maintenanceContractForm">
+                <div class="ui-fluid">
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <div class="card card-w-title">
+                                <h1>#{msg.maintenance_maintenanceContract}</h1>
+                                <p>#{msg.maintenance_maintenanceContract_tip}</p>
+                                <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:autoComplete id="tempCustomer"
+                                                        dropdown="true"
+                                                        value="#{maintenanceContractOLDPresenter.tempCustomer}"
+                                                        completeMethod="#{maintenanceContractOLDPresenter.completeCustomer}"
+                                                        var="cust"
+                                                        itemLabel="#{cust.name}"
+                                                        itemValue="#{cust}"
+                                                        forceSelection="true">
+                                            <oou:converter converterId="omnifaces.ListConverter" list="#{maintenanceContractOLDPresenter.customers}"/>
+                                            <p:ajax event="itemSelect" listener="#{maintenanceContractOLDPresenter.onTempCustomerSelect}" update="systems" />
+                                        </p:autoComplete>
+                                        <p:outputLabel for="tempCustomer" value="#{msg.customerSupplier_customer}"/>
+                                        <p:message for="tempCustomer"/>
+                                    </h:panelGroup>
+                                </p:panelGrid>
+
+                                <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:calendar id="creation" value="#{maintenanceContractOLDPresenter.maintenanceContract.creation}" locale="it">
+                                            <p:ajax update="expiry"/>
+                                        </p:calendar>
+                                        <p:outputLabel for="creation" value="#{msg.maintenance_maintenanceContract_creation}"/>
+                                        <p:message for="creation"/>
+                                    </h:panelGroup>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:calendar id="expiry" disabled="true" value="#{maintenanceContractOLDPresenter.maintenanceContract.expiry}" locale="it" />
+                                        <p:outputLabel for="expiry" value="#{msg.maintenance_maintenanceContract_expiry}"/>
+                                        <p:message for="expiry"/>
+                                    </h:panelGroup>
+                                    
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="payment" validator="#{maintenanceContractOLDPresenter.maintenanceContract.payment}" />
+                                        <p:outputLabel for="payment" value="#{msg.maintenance_maintenanceContract_payment}"/>
+                                        <p:message for="payment"/>
+                                    </h:panelGroup>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputNumber id="price" decimalPlaces="#{MaintenanceContract.SCALE}" symbol="€ " value="#{maintenanceContractOLDPresenter.maintenanceContract.price}" />
+                                        <p:outputLabel for="price" value="#{msg.maintenance_maintenanceContract_price}"/>
+                                        <p:message for="price"/>
+                                    </h:panelGroup>
+
+                                    <h:panelGroup>
+                                        <p:outputLabel for="isFullService" value="#{msg.maintenance_maintenanceContract_isFullService}"/>
+                                        <p:inputSwitch id="isFullService" value="#{maintenanceContractOLDPresenter.maintenanceContract.isFullService}" />
+                                        <p:message for="isFullService"/>
+                                    </h:panelGroup>
+                                    <h:panelGroup>
+                                        <p:outputLabel for="isOnCall" value="#{msg.maintenance_maintenanceContract_isOnCall}"/>
+                                        <p:inputSwitch id="isOnCall" value="#{maintenanceContractOLDPresenter.maintenanceContract.isOnCall}" />
+                                        <p:message for="isOnCall"/>
+                                    </h:panelGroup>
+                                </p:panelGrid>
+
+                                <p:dataTable id="scheduledMaintenancesTable"
+                                             widgetVar="schMntTbl"
+                                             var="scheduledMaintenance"
+                                             value="#{maintenanceContractOLDPresenter.maintenanceContract.scheduledMaintenances}"
+                                             editable="true" editMode="cell"
+                                             style="margin-bottom: 25px">
+                                    <f:facet name="header">
+                                        <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
+                                            #{msg.maintenance_scheduledMaintenances_tip}
+                                            <p:commandButton title="#{msg.add}" icon="ui-icon-add" actionListener="#{maintenanceContractOLDPresenter.createNewScheduledMaintenance()}" oncomplete="PF('schMntTbl').addRow()" process="@this"/>
+                                        </p:panelGrid>
+                                    </f:facet>
+                                    <p:column headerText="#{msg.maintenance_preventiveMaintenance}" sortBy="#{scheduledMaintenance.preventiveMaintenance.name}" filterBy="#{scheduledMaintenance.preventiveMaintenance.name}" filterMatchMode="contains" priority="0">
+                                        <p:cellEditor>
+                                            <f:facet name="output">
+                                                <h:outputText value="#{scheduledMaintenance.preventiveMaintenance.name}" />
+                                            </f:facet>
+                                            <f:facet name="input">
+                                                <p:autoComplete id="preventiveMaintenance"
+                                                                dropdown="true"
+                                                                value="#{scheduledMaintenance.preventiveMaintenance}"
+                                                                completeMethod="#{preventiveMaintenanceListPresenter.completePreventiveMaintenances}"
+                                                                var="prevMaint"
+                                                                itemLabel="#{prevMaint.name}"
+                                                                itemValue="#{prevMaint}"
+                                                                forceSelection="true">
+                                                    <oou:converter converterId="omnifaces.ListConverter" list="#{preventiveMaintenanceListPresenter.preventiveMaintenances}"/>
+                                                </p:autoComplete>
+                                            </f:facet>
+                                        </p:cellEditor>
+                                    </p:column>
+                                    <p:column headerText="#{msg.maintenance_scheduledMaintenance_quantity_tip}" sortBy="#{row.handledItem.quantity}" priority="2">
+                                        <p:cellEditor>
+                                            <f:facet name="output">
+                                                <h:outputText value="#{scheduledMaintenance.quantity}">
+                                                    <f:convertNumber integerOnly="true" />
+                                                </h:outputText>
+                                            </f:facet>
+                                            <f:facet name="input">
+                                                <p:inputNumber value="#{scheduledMaintenance.quantity}" minValue="1" decimalPlaces="0" />
+                                            </f:facet>
+                                        </p:cellEditor>
+                                    </p:column>
+                                    <p:column headerText="#{msg.actions}" style="width:72px; text-align:center" exportable="false">
+                                        <p:commandButton title="#{msg.remove}" icon="ui-icon-delete" actionListener="#{maintenanceContractOLDPresenter.maintenanceContract.removeScheduledMaintenance(scheduledMaintenance)}" update="scheduledMaintenancesTable">
+                                            <oou:ignoreValidationFailed />
+                                        </p:commandButton>
+                                    </p:column>
+                                </p:dataTable>
+
+                                <p:panel header="#{msg.maintenance_maintenanceContract_systems}" style="margin-bottom: 25px">
+                                    <p:pickList id="systems"
+                                                value="#{maintenanceContractOLDPresenter.systems}" var="system"
+                                                itemValue="#{system}" itemLabel="#{system.address}"
+                                                responsive="true"
+                                                showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains">
+                                        <oou:converter converterId="omnifaces.ListConverter" list="#{maintenanceContractOLDPresenter.customerSystems}"/>
+                                        <f:facet name="sourceCaption">#{msg.production_systems}</f:facet>
+                                        <f:facet name="targetCaption">#{msg.maintenance_maintenanceContract_systems}</f:facet>
+                                    </p:pickList>
+                                </p:panel>
+
+                                <p:dataTable id="maintenanceTasksTable"
+                                             var="maintenanceTask"
+                                             value="#{maintenanceContractOLDPresenter.maintenanceTasks}"
+                                             editable="true" editMode="cell"
+                                             style="margin-bottom: 25px">
+                                    <f:facet name="header">
+                                        <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
+                                            #{msg.maintenance_maintenanceTasks_tip}
+                                            <p:commandButton title="#{msg.update}" icon="ui-icon-update" actionListener="#{maintenanceContractOLDPresenter.updateMaintenanceTasks()}" update="maintenanceTasksTable"/>
+                                        </p:panelGrid>
+                                    </f:facet>
+                                    <p:ajax event="cellEdit" listener="#{maintenanceContractOLDPresenter.onMaintenanceTaskEdit(maintenanceTask)}" />
+                                    <p:column headerText="#{msg.production_system}" sortBy="#{maintenanceTask.system.address}" filterBy="#{maintenanceTask.system.address}" filterMatchMode="contains" priority="3">
+                                        <h:outputText value="#{maintenanceTask.system.address}" />
+                                    </p:column>
+                                    <p:column headerText="#{msg.maintenance_maintenanceTask_description}" sortBy="#{maintenanceTask.description}" filterBy="#{maintenanceTask.description}" filterMatchMode="contains" priority="4">
+                                        <h:outputText value="#{maintenanceTask.description}" />
+                                    </p:column>
+                                    <p:column headerText="#{msg.maintenance_maintenanceTask_expiry}" sortBy="#{maintenanceTask.expiry}" priority="0">
+                                        <p:cellEditor>
+                                            <f:facet name="output">
+                                                <h:outputText value="#{maintenanceTask.expiry}">
+                                                    <f:convertDateTime pattern="dd/MM/YYYY" />
+                                                </h:outputText>
+                                            </f:facet>
+                                            <f:facet name="input">
+                                                <p:calendar value="#{maintenanceTask.expiry}" locale="it" />
+                                            </f:facet>
+                                        </p:cellEditor>
+                                    </p:column>
+                                    <p:column headerText="#{msg.maintenance_maintenanceTask_closed}" filterMatchMode="equals" priority="0">
+                                        <f:facet name="filter">
+                                            <p:selectOneButton onchange="PF('maintenanceTasksTable').filter()">
+                                                <f:converter converterId="javax.faces.Boolean" />
+                                                <f:selectItem itemLabel="#{msg.all}" itemValue="" />
+                                                <f:selectItem itemLabel="#{msg.maintenance_maintenanceTasks_onlyClosed}" itemValue="true" />
+                                                <f:selectItem itemLabel="#{msg.maintenance_maintenanceTasks_onlyOpen}" itemValue="false" />
+                                            </p:selectOneButton>
+                                        </f:facet>
+                                        <h:outputText value="#{maintenanceTask.closed}">
+                                            <f:convertDateTime pattern="dd/MM/YYYY" />
+                                        </h:outputText>
+                                    </p:column>
+                                </p:dataTable>
+
+                                <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputTextarea id="notes" value="#{maintenanceContractOLDPresenter.maintenanceContract.notes}" />
+                                        <p:outputLabel for="notes" value="#{msg.maintenance_maintenanceContract_notes}"/>
+                                        <p:message for="notes"/>
+                                    </h:panelGroup>
+                                </p:panelGrid>
+
+                                <div class="ui-g">
+                                    <div class="ui-g-1 ui-md-2"></div>
+                                    <div class="ui-g-4 ui-md-3">
+                                        <p:button value="#{msg.cancel}" outcome="/secured/maintenance/maintenanceContracts" styleClass="secondary"/>
+                                    </div>
+                                    <div class="ui-g-2 ui-md-2"></div>
+                                    <div class="ui-g-4 ui-md-3">
+                                        <p:commandButton value="#{msg.save}"
+                                                         action="#{maintenanceContractOLDPresenter.saveMaintenanceContract()}"
+                                                         ajax="false"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </oou:form>
+        </ui:define>
+    </ui:composition>
+</html>

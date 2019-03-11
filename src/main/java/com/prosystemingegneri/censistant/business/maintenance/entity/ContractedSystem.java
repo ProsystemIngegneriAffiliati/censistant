@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2019 Prosystem Ingegneri Affiliati.
+ * Copyright (C) 2019 Prosystem Ingegneri Affiliati.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -17,22 +17,29 @@
 package com.prosystemingegneri.censistant.business.maintenance.entity;
 
 import com.prosystemingegneri.censistant.business.entity.BaseEntity;
-import javax.persistence.Column;
+import com.prosystemingegneri.censistant.business.maintenance.control.AtLeastOneMaintenancePlan;
+import com.prosystemingegneri.censistant.business.production.entity.System;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Version;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+
 
 /**
  *
  * @author Davide Mainardi <ingmainardi at live.com>
  */
 @Entity
-public class ScheduledMaintenance extends BaseEntity<Long> {
+@AtLeastOneMaintenancePlan
+public class ContractedSystem extends BaseEntity<Long> {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -43,29 +50,21 @@ public class ScheduledMaintenance extends BaseEntity<Long> {
     
     @NotNull
     @ManyToOne(optional = false)
-    private PreventiveMaintenance preventiveMaintenance;
+    private System system;
     
-    @NotNull
-    @Min(1)
-    @Column(nullable = false)
-    private Integer quantity;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "contractedSystem", orphanRemoval = true)
+    private final List<MaintenancePlan> maintenancePlans;
     
     @Version
     private int version;
 
-    public ScheduledMaintenance() {
-        quantity = 1;
+    public ContractedSystem() {
+        maintenancePlans = new ArrayList<>();
     }
 
-    public ScheduledMaintenance(MaintenanceContract maintenanceContract, PreventiveMaintenance preventiveMaintenance) {
+    public ContractedSystem(System system) {
         this();
-        this.maintenanceContract = maintenanceContract;
-        this.preventiveMaintenance = preventiveMaintenance;
-    }
-
-    @Override
-    public Long getId() {
-        return id;
+        this.system = system;
     }
 
     public MaintenanceContract getMaintenanceContract() {
@@ -76,20 +75,35 @@ public class ScheduledMaintenance extends BaseEntity<Long> {
         this.maintenanceContract = maintenanceContract;
     }
 
-    public PreventiveMaintenance getPreventiveMaintenance() {
-        return preventiveMaintenance;
+    public System getSystem() {
+        return system;
     }
 
-    public void setPreventiveMaintenance(PreventiveMaintenance preventiveMaintenance) {
-        this.preventiveMaintenance = preventiveMaintenance;
+    public void setSystem(System system) {
+        this.system = system;
+    }
+    
+    public void addMaintenancePlan(MaintenancePlan maintenancePlan) {
+        if (!maintenancePlans.contains(maintenancePlan)) {
+            maintenancePlans.add(maintenancePlan);
+            maintenancePlan.setContractedSystem(this);
+        }
+    }
+    
+    public void removeMaintenancePlan(MaintenancePlan maintenancePlan) {
+        if (maintenancePlans.contains(maintenancePlan)) {
+            maintenancePlans.remove(maintenancePlan);
+            maintenancePlan.setContractedSystem(this);
+        }
+    }
+    
+    public List<MaintenancePlan> getMaintenancePlans() {
+        return maintenancePlans;
     }
 
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
+    @Override
+    public Long getId() {
+        return id;
     }
     
 }

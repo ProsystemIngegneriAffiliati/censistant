@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2019 Prosystem Ingegneri Affiliati.
+ * Copyright (C) 2019 Prosystem Ingegneri Affiliati.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -23,11 +23,10 @@ import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJBException;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.omnifaces.cdi.ViewScoped;
+import org.omnifaces.util.Messages;
 
 /**
  *
@@ -35,36 +34,29 @@ import org.omnifaces.cdi.ViewScoped;
  */
 @Named
 @ViewScoped
-public class MaintenanceContractListPresenter implements Serializable{
+public class MaintenanceContractListPresenter implements Serializable {
     @Inject
-    MaintenanceContractService service;
+    private MaintenanceContractService service;
     
     private MaintenanceContractLazyDataModel lazyMaintenanceContracts;
     private List<MaintenanceContract> selectedMaintenanceContracts;
-    
-    private List<MaintenanceContract> unexpiredMaintenanceContracts;
     
     @PostConstruct
     public void init() {
         lazyMaintenanceContracts = new MaintenanceContractLazyDataModel(service);
     }
     
-    public void deleteMaintenanceContract() {
-        if (selectedMaintenanceContracts != null && !selectedMaintenanceContracts.isEmpty()) {
-            for (MaintenanceContract siteSurveyReportTemp : selectedMaintenanceContracts) {
+    public void delete() {
+        if (selectedMaintenanceContracts != null && !selectedMaintenanceContracts.isEmpty())
+            for (MaintenanceContract selectedMaintenanceContract : selectedMaintenanceContracts) {
                 try {
-                    service.deleteMaintenanceContract(siteSurveyReportTemp.getId());
+                    service.delete(selectedMaintenanceContract.getId());
                 } catch (EJBException e) {
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", ExceptionUtility.unwrap(e.getCausedByException()).getLocalizedMessage()));
+                    Messages.create("Error").error().detail(ExceptionUtility.unwrap(e.getCausedByException()).getLocalizedMessage()).add();
                 }
             }
-        }
         else
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Missing selection", "Select a row before deleting"));
-    }
-    
-    public boolean isMaintenanceContractCompleted(Long idMaintenanceContract) {
-        return service.isMaintenanceContractCompleted(idMaintenanceContract);
+            Messages.create("Missing selection").warn().detail("Select a row before deleting").add();
     }
 
     public MaintenanceContractLazyDataModel getLazyMaintenanceContracts() {
@@ -83,13 +75,4 @@ public class MaintenanceContractListPresenter implements Serializable{
         this.selectedMaintenanceContracts = selectedMaintenanceContract;
     }
     
-    public List<MaintenanceContract> completeUnexpiredMaintenanceContract(String value) {
-        return service.listMaintenanceContracts(0, 0, null, null, null, null, value, Boolean.FALSE, null);
-    }
-
-    public List<MaintenanceContract> getUnexpiredMaintenanceContracts() {
-        if (unexpiredMaintenanceContracts == null || unexpiredMaintenanceContracts.isEmpty())
-            unexpiredMaintenanceContracts = service.listMaintenanceContracts(0, 0, null, null, null, null, null, Boolean.FALSE, null);
-        return unexpiredMaintenanceContracts;
-    }
 }
