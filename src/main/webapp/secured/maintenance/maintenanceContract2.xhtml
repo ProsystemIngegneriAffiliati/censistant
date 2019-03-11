@@ -15,6 +15,7 @@
     <ui:composition template="/WEB-INF/template.xhtml">
         <ui:define name="content">
             <oou:importConstants type="com.prosystemingegneri.censistant.business.maintenance.entity2.MaintenanceContract2"/>
+            <oou:importConstants type="com.prosystemingegneri.censistant.business.maintenance.control.MaintenanceType"/>
             <oou:form id="maintenanceContractForm">
                 <div class="ui-fluid">
                     <div class="ui-g">
@@ -55,7 +56,7 @@
                                     </h:panelGroup>
 
                                     <h:panelGroup styleClass="md-inputfield">
-                                        <p:inputText id="payment" validator="#{maintenanceContract2Presenter.maintenanceContract.payment}" />
+                                        <p:inputText id="payment" value="#{maintenanceContract2Presenter.maintenanceContract.payment}" />
                                         <p:outputLabel for="payment" value="#{msg.maintenance_maintenanceContract_payment}"/>
                                         <p:message for="payment"/>
                                     </h:panelGroup>
@@ -74,7 +75,7 @@
                                             <f:selectItems
                                                 value="#{maintenanceContract2Presenter.avaibleSystems}"
                                                 var="system"
-                                                itemLabel="#{system.description}"
+                                                itemLabel="#{system.address}"
                                                 itemValue="#{system}" />
                                             <p:ajax event="itemSelect" listener="#{maintenanceContract2Presenter.onSystemSelect}" update="system systems" />
                                         </p:selectOneMenu>
@@ -83,7 +84,60 @@
                                 </p:panelGrid>
 
                                 <p:accordionPanel id="systems" value="#{maintenanceContract2Presenter.maintenanceContract.contractedSystems}" var="systemUnderContract">
-                                    <p:tab title="#{systemUnderContract.system.name}">
+                                    <p:tab title="#{systemUnderContract.system.address}">
+                                        <p:dataTable id="maintenancePlansTable"
+                                                     widgetVar="mpt"
+                                                     var="maintenancePlan"
+                                                     value="#{systemUnderContract.maintenancePlans}"
+                                                     editable="true" editMode="cell">
+                                            <f:facet name="header">
+                                                <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
+                                                    #{msg.maintenance_maintenancePlan}
+                                                    <p:outputPanel>
+                                                        <p:commandButton title="#{msg.add} #{msg.maintenance_maintenancePlan}" icon="ui-icon-add" actionListener="#{maintenanceContract2Presenter.createNewMaintenancePlan(systemUnderContract)}" oncomplete="PF('mpt').addRow()" process="@this"/>
+                                                    </p:outputPanel>
+                                                </p:panelGrid>
+                                            </f:facet>
+                                            <p:column headerText="#{msg.maintenance_maintenanceType}">
+                                                <p:cellEditor>
+                                                    <f:facet name="output">
+                                                        <h:outputText rendered="#{not empty maintenancePlan.maintenanceType}" value="#{msg['maintenance_maintenanceType_' += maintenancePlan.maintenanceType]}" />
+                                                    </f:facet>
+                                                    <f:facet name="input">
+                                                        <p:selectOneMenu id="maintenanceType" value="#{maintenancePlan.maintenanceType}">
+                                                            <f:selectItem itemLabel="" itemValue="" />
+                                                            <f:selectItems
+                                                                value="#{MaintenanceType}"
+                                                                var="type"
+                                                                itemLabel="#{msg['maintenance_maintenanceType_' += type]}"
+                                                                itemValue="#{type}" />
+                                                            <p:ajax event="itemSelect" update="maintenanceTasksNumberPanel" />
+                                                        </p:selectOneMenu>
+                                                    </f:facet>
+                                                </p:cellEditor>
+                                            </p:column>
+                                            <p:column headerText="#{msg.maintenance_maintenancePlan_maintenanceTasksNumber}">
+                                                <p:cellEditor>
+                                                    <f:facet name="output">
+                                                        <h:panelGroup id="maintenanceTasksNumberPanel">
+                                                            <h:outputText rendered="#{maintenancePlan.maintenanceType == MaintenanceType.ON_CALL}" value="#{msg.na}">
+                                                            </h:outputText>
+                                                            <h:outputText rendered="#{maintenancePlan.maintenanceType != MaintenanceType.ON_CALL}" value="#{maintenancePlan.maintenanceTasksNumber}">
+                                                                <f:convertNumber />
+                                                            </h:outputText>
+                                                        </h:panelGroup>
+                                                    </f:facet>
+                                                    <f:facet name="input">
+                                                        <p:inputNumber value="#{maintenancePlan.maintenanceTasksNumber}" decimalPlaces="0" minValue="1" />
+                                                    </f:facet>
+                                                </p:cellEditor>
+                                            </p:column>
+                                            <p:column headerText="#{msg.actions}" style="width:72px; text-align:center">
+                                                <p:commandButton title="#{msg.remove}" icon="ui-icon-delete" actionListener="#{maintenanceContract2Presenter.removeMaintenancePlan(systemUnderContract, maintenancePlan)}" update="maintenancePlansTable">
+                                                    <p:confirm header="#{msg.maintenance_maintenancePlans_delete}" message="#{msg.maintenance_maintenancePlans_delete_tip}" icon="ui-icon-alert"/>
+                                                </p:commandButton>
+                                            </p:column>
+                                        </p:dataTable>
                                     </p:tab>
                                 </p:accordionPanel>
 

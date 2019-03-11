@@ -20,6 +20,7 @@ import com.prosystemingegneri.censistant.business.customerSupplier.entity.Custom
 import com.prosystemingegneri.censistant.business.maintenance.boundary.MaintenanceContract2Service;
 import com.prosystemingegneri.censistant.business.maintenance.entity2.ContractedSystem;
 import com.prosystemingegneri.censistant.business.maintenance.entity2.MaintenanceContract2;
+import com.prosystemingegneri.censistant.business.maintenance.entity2.MaintenancePlan;
 import com.prosystemingegneri.censistant.business.production.boundary.SystemService;
 import com.prosystemingegneri.censistant.business.production.entity.System;
 import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
@@ -110,6 +111,14 @@ public class MaintenanceContract2Presenter implements Serializable{
     
     public void updateAvaibleSystems() {
         avaibleSystems = service.avaibleSystems(maintenanceContract, tempCustomer);
+    }
+    
+    public void createNewMaintenancePlan(ContractedSystem contractedSystem) {
+        contractedSystem.addMaintenancePlan(new MaintenancePlan());
+    }
+    
+    public void removeMaintenancePlan(ContractedSystem contractedSystem, MaintenancePlan maintenancePlan) {
+        contractedSystem.removeMaintenancePlan(maintenancePlan);
     }
 
     public MaintenanceContract2 getMaintenanceContract() {

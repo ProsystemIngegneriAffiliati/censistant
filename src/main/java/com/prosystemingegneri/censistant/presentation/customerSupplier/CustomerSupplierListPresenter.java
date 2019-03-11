@@ -21,6 +21,7 @@ import com.prosystemingegneri.censistant.business.customerSupplier.entity.Custom
 import com.prosystemingegneri.censistant.business.siteSurvey.boundary.SiteSurveyRequestService;
 import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJBException;
@@ -54,6 +55,7 @@ public class CustomerSupplierListPresenter implements Serializable{
     public void init() {
         lazyCustomers = new CustomerSupplierLazyDataModel(service, Boolean.TRUE, null, isPotentialCustomer);
         lazySuppliers = new CustomerSupplierLazyDataModel(service, null, Boolean.TRUE, null);
+        customers = new ArrayList<>();
     }
     
     public void deleteCustomerSupplier() {
