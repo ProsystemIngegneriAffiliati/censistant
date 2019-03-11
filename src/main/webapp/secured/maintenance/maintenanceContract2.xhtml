@@ -120,9 +120,9 @@
                                                 <p:cellEditor>
                                                     <f:facet name="output">
                                                         <h:panelGroup id="maintenanceTasksNumberPanel">
-                                                            <h:outputText rendered="#{maintenancePlan.maintenanceType == MaintenanceType.ON_CALL}" value="#{msg.na}">
+                                                            <h:outputText rendered="#{maintenancePlan.maintenanceType == MaintenanceType.FULL_SERVICE or maintenancePlan.maintenanceType == MaintenanceType.ON_CALL}" value="#{msg.na}">
                                                             </h:outputText>
-                                                            <h:outputText rendered="#{maintenancePlan.maintenanceType != MaintenanceType.ON_CALL}" value="#{maintenancePlan.maintenanceTasksNumber}">
+                                                            <h:outputText rendered="#{maintenancePlan.maintenanceType != MaintenanceType.FULL_SERVICE and maintenancePlan.maintenanceType != MaintenanceType.ON_CALL}" value="#{maintenancePlan.maintenanceTasksNumber}">
                                                                 <f:convertNumber />
                                                             </h:outputText>
                                                         </h:panelGroup>
