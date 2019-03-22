@@ -29,6 +29,7 @@ import com.prosystemingegneri.censistant.business.production.entity.System;
 import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.annotation.Resource;
 import javax.ejb.EJBException;
@@ -129,6 +130,9 @@ public class MaintenanceContractPresenter implements Serializable{
         for (ContractedSystem contractedSystem : maintenanceContract.getContractedSystems())
             for (MaintenancePlan maintenancePlan : contractedSystem.getMaintenancePlans())
                 maintenanceTasks.addAll(maintenancePlanService.getMaintenanceTasks(maintenancePlan));
+        Collections.sort(maintenanceTasks, (o1, o2) -> {
+            return o1.getExpiry().compareTo(o2.getExpiry());
+        });
     }
     
     public void onExpiryEdit(CellEditEvent event) {
