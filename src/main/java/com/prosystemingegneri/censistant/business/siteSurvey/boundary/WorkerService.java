@@ -111,4 +111,21 @@ public class WorkerService implements Serializable{
             return em.createQuery(select).getResultList().get(0);
         }
     }
+    
+    public Worker getDefaultWorker() {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Worker> query = cb.createQuery(Worker.class);
+        Root<Worker> root = query.from(Worker.class);
+        CriteriaQuery<Worker> select = query.select(root).distinct(true);
+        
+        query.where(cb.like(cb.lower(root.get(Worker_.initials)), "fg"));
+        
+        try {
+            return em.createQuery(select).getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        } catch (NonUniqueResultException ex) {
+            return em.createQuery(select).getResultList().get(0);
+        }
+    }
 }

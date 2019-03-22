@@ -20,13 +20,17 @@ import com.prosystemingegneri.censistant.business.customerSupplier.entity.Custom
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier_;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant_;
+import com.prosystemingegneri.censistant.business.maintenance.control.Inspection;
+import com.prosystemingegneri.censistant.business.maintenance.entity.ContractedSystem_;
+import com.prosystemingegneri.censistant.business.maintenance.entity.InspectionDone;
 import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceContract;
 import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenancePayment;
+import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenancePlan;
+import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenancePlan_;
 import com.prosystemingegneri.censistant.business.production.entity.System;
 import com.prosystemingegneri.censistant.business.production.entity.System_;
 import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceTask;
 import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceTask_;
-import com.prosystemingegneri.censistant.business.maintenance.entity.PreventiveMaintenance;
 import com.prosystemingegneri.censistant.business.maintenance.entity.TaskPrice;
 import com.prosystemingegneri.censistant.business.sales.boundary.JobOrderService;
 import com.prosystemingegneri.censistant.business.sales.boundary.OfferService;
@@ -40,7 +44,7 @@ import com.prosystemingegneri.censistant.business.siteSurvey.entity.SystemType;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.Worker;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -71,7 +75,23 @@ public class MaintenanceTaskService implements Serializable{
     @Inject
     private JobOrderService jobOrderService;
     
-    public MaintenanceTask createNewMaintenanceTask(System system) {
+    public MaintenanceTask create() {
+        MaintenanceTask maintenanceTask = new MaintenanceTask();
+        maintenanceTask.addTaskPrice(new TaskPrice());
+        
+        return maintenanceTask;
+    }
+    
+    public MaintenanceTask create(MaintenancePlan maintenancePlan) {
+        MaintenanceTask maintenanceTask = new MaintenanceTask(maintenancePlan);
+        maintenanceTask.addTaskPrice(new TaskPrice());
+        for (Inspection inspection : Inspection.values())
+            maintenanceTask.addInspectionDone(new InspectionDone(inspection));
+        
+        return maintenanceTask;
+    }
+    
+    public MaintenanceTask create(System system) {
         MaintenanceTask maintenanceTask = new MaintenanceTask(system);
         maintenanceTask.addTaskPrice(new TaskPrice());
         
@@ -79,6 +99,15 @@ public class MaintenanceTaskService implements Serializable{
     }
     
     public MaintenanceTask saveMaintenanceTask(MaintenanceTask maintenanceTask) {
+        //since only the month is useful, last day of month is chosen
+        Calendar temp = Calendar.getInstance();
+        temp.setTime(maintenanceTask.getExpiry());
+        temp.add(Calendar.MONTH, 1);
+        Calendar temp2 = Calendar.getInstance();
+        temp2.set(temp.get(Calendar.YEAR), temp.get(Calendar.MONTH), 1);
+        temp2.add(Calendar.DAY_OF_YEAR, -1);
+        maintenanceTask.setExpiry(temp2.getTime());
+        
         if (maintenanceTask.getId() == null)
             em.persist(maintenanceTask);
         else
@@ -95,13 +124,13 @@ public class MaintenanceTaskService implements Serializable{
         em.remove(readMaintenanceTask(id));
     }
 
-    public List<MaintenanceTask> listMaintenanceTasks(int first, int pageSize, String sortField, Boolean isAscending, System system, String description, Boolean isClosed, String customerSupplierNamePlantNameAddress, MaintenanceContract maintenanceContract, PreventiveMaintenance preventiveMaintenance) {
+    public List<MaintenanceTask> listMaintenanceTasks(int first, int pageSize, String sortField, Boolean isAscending, System system, String description, Boolean isClosed, String customerSupplierNamePlantNameAddress, MaintenanceContract maintenanceContract) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<MaintenanceTask> query = cb.createQuery(MaintenanceTask.class);
         Root<MaintenanceTask> root = query.from(MaintenanceTask.class);
         CriteriaQuery<MaintenanceTask> select = query.select(root).distinct(true);
         
-        List<Predicate> conditions = calculateConditions(cb, root, system, description, isClosed, customerSupplierNamePlantNameAddress, maintenanceContract, preventiveMaintenance);
+        List<Predicate> conditions = calculateConditions(cb, root, system, description, isClosed, customerSupplierNamePlantNameAddress, maintenanceContract);
 
         if (!conditions.isEmpty())
             query.where(conditions.toArray(new Predicate[conditions.size()]));
@@ -141,13 +170,13 @@ public class MaintenanceTaskService implements Serializable{
         return typedQuery.getResultList();
     }
     
-    public Long getMaintenanceTasksCount(System system, String description, Boolean isClosed, String customerSupplierNamePlantNameAddress, MaintenanceContract maintenanceContract, PreventiveMaintenance preventiveMaintenance) {
+    public Long getMaintenanceTasksCount(System system, String description, Boolean isClosed, String customerSupplierNamePlantNameAddress, MaintenanceContract maintenanceContract) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Long> query = cb.createQuery(Long.class);
         Root<MaintenanceTask> root = query.from(MaintenanceTask.class);
         CriteriaQuery<Long> select = query.select(cb.count(root));
 
-        List<Predicate> conditions = calculateConditions(cb, root, system, description, isClosed, customerSupplierNamePlantNameAddress, maintenanceContract, preventiveMaintenance);
+        List<Predicate> conditions = calculateConditions(cb, root, system, description, isClosed, customerSupplierNamePlantNameAddress, maintenanceContract);
 
         if (!conditions.isEmpty())
             query.where(conditions.toArray(new Predicate[conditions.size()]));
@@ -155,7 +184,7 @@ public class MaintenanceTaskService implements Serializable{
         return em.createQuery(select).getSingleResult();
     }
     
-    private List<Predicate> calculateConditions(CriteriaBuilder cb, Root<MaintenanceTask> root, System system, String description, Boolean isClosed, String customerSupplierNamePlantNameAddress, MaintenanceContract maintenanceContract, PreventiveMaintenance preventiveMaintenance) {
+    private List<Predicate> calculateConditions(CriteriaBuilder cb, Root<MaintenanceTask> root, System system, String description, Boolean isClosed, String customerSupplierNamePlantNameAddress, MaintenanceContract maintenanceContract) {
         List<Predicate> conditions = new ArrayList<>();
         
         //system
@@ -193,11 +222,10 @@ public class MaintenanceTaskService implements Serializable{
         
         //Maintenance contract
         if (maintenanceContract != null)
-            conditions.add(cb.equal(root.get(MaintenanceTask_.maintenanceContract), maintenanceContract));
-        
-        //Preventive maintenance
-        if (preventiveMaintenance != null)
-            conditions.add(cb.equal(root.get(MaintenanceTask_.preventiveMaintenance), preventiveMaintenance));
+            conditions.add(cb.equal(root
+                    .join(MaintenanceTask_.maintenancePlan)
+                    .join(MaintenancePlan_.contractedSystem)
+                    .get(ContractedSystem_.maintenanceContract), maintenanceContract));
         
         return conditions;
     }

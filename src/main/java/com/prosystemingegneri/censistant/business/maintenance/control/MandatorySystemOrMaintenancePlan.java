@@ -14,18 +14,27 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.prosystemingegneri.censistant.business.maintenance.entity;
+package com.prosystemingegneri.censistant.business.maintenance.control;
 
-import com.prosystemingegneri.censistant.business.production.entity.System;
-import javax.persistence.metamodel.SingularAttribute;
-import javax.persistence.metamodel.StaticMetamodel;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+import javax.validation.Constraint;
+import javax.validation.Payload;
 
 /**
  *
  * @author Davide Mainardi <ingmainardi at live.com>
  */
-@StaticMetamodel(ContractedSystem.class)
-public class ContractedSystem_ {
-    public static volatile SingularAttribute<ContractedSystem, MaintenanceContract> maintenanceContract;
-    public static volatile SingularAttribute<ContractedSystem, System> system;
+@Documented
+@Target({ElementType.TYPE})
+@Retention(RetentionPolicy.RUNTIME)
+@Constraint(validatedBy = MandatorySystemOrMaintenancePlanValidator.class)
+public @interface MandatorySystemOrMaintenancePlan {
+    String message() default "{com.prosystemingegneri.censistant.MandatorySystemOrMaintenancePlan.message}";
+    Class<?>[] groups() default {};
+ 
+    Class<? extends Payload>[] payload() default {};
 }

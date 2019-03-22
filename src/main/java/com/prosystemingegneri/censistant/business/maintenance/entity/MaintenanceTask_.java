@@ -29,8 +29,7 @@ import javax.persistence.metamodel.StaticMetamodel;
 @StaticMetamodel(MaintenanceTask.class)
 public class MaintenanceTask_ {
     public static volatile SingularAttribute<MaintenanceTask, Long> id;
-    public static volatile SingularAttribute<MaintenanceTask, MaintenanceContract> maintenanceContract;
-    public static volatile SingularAttribute<MaintenanceTask, PreventiveMaintenance> preventiveMaintenance;
+    public static volatile SingularAttribute<MaintenanceTask, MaintenancePlan> maintenancePlan;
     public static volatile SingularAttribute<MaintenanceTask, System> system;
     public static volatile SingularAttribute<MaintenanceTask, String> description;
     public static volatile SingularAttribute<MaintenanceTask, Date> creation;

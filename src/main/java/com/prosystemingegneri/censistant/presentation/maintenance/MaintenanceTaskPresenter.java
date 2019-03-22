@@ -119,7 +119,7 @@ public class MaintenanceTaskPresenter implements Serializable{
     public void detailMaintenanceTask() {
         if (maintenanceTask == null && id != null) {
             if (id == 0)
-                maintenanceTask = service.createNewMaintenanceTask(null);
+                maintenanceTask = service.create();
             else
                 maintenanceTask = service.readMaintenanceTask(id);
         }

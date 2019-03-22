@@ -18,9 +18,12 @@ package com.prosystemingegneri.censistant.presentation.maintenance;
 
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
 import com.prosystemingegneri.censistant.business.maintenance.boundary.MaintenanceContractService;
+import com.prosystemingegneri.censistant.business.maintenance.boundary.MaintenancePlanService;
+import com.prosystemingegneri.censistant.business.maintenance.boundary.MaintenanceTaskService;
 import com.prosystemingegneri.censistant.business.maintenance.entity.ContractedSystem;
 import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceContract;
 import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenancePlan;
+import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceTask;
 import com.prosystemingegneri.censistant.business.production.boundary.SystemService;
 import com.prosystemingegneri.censistant.business.production.entity.System;
 import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
@@ -37,6 +40,7 @@ import javax.validation.Validator;
 import javax.validation.groups.Default;
 import org.omnifaces.cdi.ViewScoped;
 import org.omnifaces.util.Messages;
+import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.SelectEvent;
 
 /**
@@ -58,6 +62,12 @@ public class MaintenanceContractPresenter implements Serializable{
     
     @Inject
     private SystemService systemService;
+    
+    @Inject
+    private MaintenancePlanService maintenancePlanService;
+    private List<MaintenanceTask> maintenanceTasks = new ArrayList<>();
+    @Inject
+    private MaintenanceTaskService maintenanceTaskService;
     
     @Resource
     Validator validator;
@@ -93,6 +103,7 @@ public class MaintenanceContractPresenter implements Serializable{
                 maintenanceContract = service.find(id);
                 tempCustomer = maintenanceContract.getCustomer();
                 updateAvaibleSystems();
+                updateMaintenanceTasks();
             }
         }
     }
@@ -111,6 +122,21 @@ public class MaintenanceContractPresenter implements Serializable{
     
     public void updateAvaibleSystems() {
         avaibleSystems = service.avaibleSystems(maintenanceContract, tempCustomer);
+    }
+    
+    private void updateMaintenanceTasks() {
+        maintenanceTasks.clear();
+        for (ContractedSystem contractedSystem : maintenanceContract.getContractedSystems())
+            for (MaintenancePlan maintenancePlan : contractedSystem.getMaintenancePlans())
+                maintenanceTasks.addAll(maintenancePlanService.getMaintenanceTasks(maintenancePlan));
+    }
+    
+    public void onExpiryEdit(CellEditEvent event) {
+        Object oldValue = event.getOldValue();
+        Object newValue = event.getNewValue();
+         
+        if(newValue != null && !newValue.equals(oldValue))
+            maintenanceTaskService.saveMaintenanceTask(maintenanceTasks.get(event.getRowIndex()));
     }
     
     public void createNewMaintenancePlan(ContractedSystem contractedSystem) {
@@ -159,6 +185,14 @@ public class MaintenanceContractPresenter implements Serializable{
 
     public void setSystemToBeAdded(System systemToBeAdded) {
         this.systemToBeAdded = systemToBeAdded;
+    }
+
+    public List<MaintenanceTask> getMaintenanceTasks() {
+        return maintenanceTasks;
+    }
+
+    public void setMaintenanceTasks(List<MaintenanceTask> maintenanceTasks) {
+        this.maintenanceTasks = maintenanceTasks;
     }
     
 }

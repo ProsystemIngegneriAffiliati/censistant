@@ -24,6 +24,82 @@
                             <div class="card card-w-title">
                                 <h1>#{msg.maintenance_maintenanceTask}</h1>
                                 <p>#{msg.maintenance_maintenanceTask_tip}</p>
+
+                                <p:panelGrid columns="2" columnClasses="ui-grid-col-4,ui-grid-col-8" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:calendar id="creation" value="#{maintenanceTaskPresenter.maintenanceTask.creation}" locale="it" />
+                                        <p:outputLabel for="creation" value="#{msg.maintenance_maintenanceTask_creationForPrinting}"/>
+                                        <p:message for="creation"/>
+                                    </h:panelGroup>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:autoComplete id="inChargeWorker"
+                                                        dropdown="true"
+                                                        value="#{maintenanceTaskPresenter.maintenanceTask.inChargeWorker}"
+                                                        completeMethod="#{workerListPresenter.completeWorkers}"
+                                                        var="worker"
+                                                        itemLabel="#{worker.initials}"
+                                                        itemValue="#{worker}"
+                                                        forceSelection="true"
+                                                        >
+                                            <oou:converter converterId="omnifaces.ListConverter" list="#{workerListPresenter.workers}"/>
+                                        </p:autoComplete>
+                                        <p:outputLabel for="inChargeWorker" value="#{msg.maintenance_maintenanceTask_inChargeWorker}"/>
+                                        <p:message for="inChargeWorker"/>
+                                    </h:panelGroup>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:calendar id="closed" value="#{maintenanceTaskPresenter.maintenanceTask.closed}" locale="it" />
+                                        <p:outputLabel for="closed" value="#{msg.maintenance_maintenanceTask_closedForPrinting}"/>
+                                        <p:message for="closed"/>
+                                    </h:panelGroup>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:autoComplete id="maintenanceWorker"
+                                                        dropdown="true"
+                                                        value="#{maintenanceTaskPresenter.maintenanceTask.maintenanceWorker}"
+                                                        completeMethod="#{workerListPresenter.completeWorkers}"
+                                                        var="worker"
+                                                        itemLabel="#{worker.initials}"
+                                                        itemValue="#{worker}"
+                                                        forceSelection="true"
+                                                        >
+                                            <oou:converter converterId="omnifaces.ListConverter" list="#{workerListPresenter.workers}"/>
+                                        </p:autoComplete>
+                                        <p:outputLabel for="maintenanceWorker" value="#{msg.maintenance_maintenanceTask_maintenanceWorker}"/>
+                                        <p:message for="maintenanceWorker"/>
+                                    </h:panelGroup>
+                                </p:panelGrid>
+                                <p:panelGrid columns="4" columnClasses="ui-grid-col-3,ui-grid-col-3,ui-grid-col-3,ui-grid-col-3" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                    <h:panelGroup>
+                                        <p:outputLabel for="isGuaranteeValid" value="#{msg.maintenance_maintenanceTask_isGuaranteeValid}" />
+                                        <p:inputSwitch id="isGuaranteeValid" label="#{msg.maintenance_maintenanceTask_isGuaranteeValid}" value="#{maintenanceTaskPresenter.maintenanceTask.isGuaranteeValid}" />
+                                    </h:panelGroup>
+                                    <h:panelGroup>
+                                        <p:outputLabel for="isFullService" value="#{msg.maintenance_maintenanceContract_isFullService}" />
+                                        <p:inputSwitch id="isFullService" disabled="true" label="#{msg.maintenance_maintenanceContract_isFullService}" value="#{not empty maintenanceTaskPresenter.maintenanceTask.maintenanceContract and maintenanceTaskPresenter.maintenanceTask.maintenanceContract.isFullService}" />
+                                    </h:panelGroup>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:autoComplete id="maintenanceContract"
+                                                        dropdown="true"
+                                                        value="#{maintenanceTaskPresenter.maintenanceTask.maintenanceContract}"
+                                                        completeMethod="#{maintenanceContractOLDListPresenter.completeUnexpiredMaintenanceContract}"
+                                                        var="contract"
+                                                        itemLabel="#{contract.customerNameContractExpiry}"
+                                                        itemValue="#{contract}"
+                                                        forceSelection="true"
+                                                        >
+                                            <oou:converter converterId="omnifaces.ListConverter" list="#{maintenanceContractOLDListPresenter.unexpiredMaintenanceContracts}"/>
+                                        </p:autoComplete>
+                                        <p:outputLabel for="maintenanceContract" value="#{msg.maintenance_maintenanceContract}"/>
+                                        <p:message for="maintenanceContract"/>
+                                    </h:panelGroup>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText readonly="true" id="expiry" value="#{maintenanceTaskPresenter.maintenanceTask.expiry}">
+                                            <f:convertDateTime locale="it" pattern="MMMM yy" />
+                                        </p:inputText>
+                                        <p:outputLabel for="expiry" value="#{msg.maintenance_maintenanceTask_expiryForPrinting}"/>
+                                        <p:message for="expiry"/>
+                                    </h:panelGroup>
+                                </p:panelGrid>
+
                                 <p:panelGrid columns="2" columnClasses="ui-grid-col-8,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                     <h:panelGroup id="newSystemPanel">
                                         <p:fieldset rendered="#{empty maintenanceTaskPresenter.maintenanceTask.system}"
@@ -169,7 +245,7 @@
                                             </p:commandButton>
                                         </p:fieldset>
                                     </h:panelGroup>
-                                    
+
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:autoComplete id="system"
                                                         dropdown="true"
@@ -187,80 +263,6 @@
                                     </h:panelGroup>
                                 </p:panelGrid>
 
-                                <p:panelGrid columns="2" columnClasses="ui-grid-col-4,ui-grid-col-8" layout="grid" styleClass="ui-panelgrid-blank form-group">
-                                    <h:panelGroup styleClass="md-inputfield">
-                                        <p:calendar id="creation" value="#{maintenanceTaskPresenter.maintenanceTask.creation}" locale="it" />
-                                        <p:outputLabel for="creation" value="#{msg.maintenance_maintenanceTask_creationForPrinting}"/>
-                                        <p:message for="creation"/>
-                                    </h:panelGroup>
-                                    <h:panelGroup styleClass="md-inputfield">
-                                        <p:autoComplete id="inChargeWorker"
-                                                        dropdown="true"
-                                                        value="#{maintenanceTaskPresenter.maintenanceTask.inChargeWorker}"
-                                                        completeMethod="#{workerListPresenter.completeWorkers}"
-                                                        var="worker"
-                                                        itemLabel="#{worker.initials}"
-                                                        itemValue="#{worker}"
-                                                        forceSelection="true"
-                                                        >
-                                            <oou:converter converterId="omnifaces.ListConverter" list="#{workerListPresenter.workers}"/>
-                                        </p:autoComplete>
-                                        <p:outputLabel for="inChargeWorker" value="#{msg.maintenance_maintenanceTask_inChargeWorker}"/>
-                                        <p:message for="inChargeWorker"/>
-                                    </h:panelGroup>
-                                    <h:panelGroup styleClass="md-inputfield">
-                                        <p:calendar id="closed" value="#{maintenanceTaskPresenter.maintenanceTask.closed}" locale="it" />
-                                        <p:outputLabel for="closed" value="#{msg.maintenance_maintenanceTask_closedForPrinting}"/>
-                                        <p:message for="closed"/>
-                                    </h:panelGroup>
-                                    <h:panelGroup styleClass="md-inputfield">
-                                        <p:autoComplete id="maintenanceWorker"
-                                                        dropdown="true"
-                                                        value="#{maintenanceTaskPresenter.maintenanceTask.maintenanceWorker}"
-                                                        completeMethod="#{workerListPresenter.completeWorkers}"
-                                                        var="worker"
-                                                        itemLabel="#{worker.initials}"
-                                                        itemValue="#{worker}"
-                                                        forceSelection="true"
-                                                        >
-                                            <oou:converter converterId="omnifaces.ListConverter" list="#{workerListPresenter.workers}"/>
-                                        </p:autoComplete>
-                                        <p:outputLabel for="maintenanceWorker" value="#{msg.maintenance_maintenanceTask_maintenanceWorker}"/>
-                                        <p:message for="maintenanceWorker"/>
-                                    </h:panelGroup>
-                                </p:panelGrid>
-                                <p:panelGrid columns="4" columnClasses="ui-grid-col-3,ui-grid-col-3,ui-grid-col-3,ui-grid-col-3" layout="grid" styleClass="ui-panelgrid-blank form-group">
-                                    <h:panelGroup>
-                                        <p:outputLabel for="isGuaranteeValid" value="#{msg.maintenance_maintenanceTask_isGuaranteeValid}" />
-                                        <p:inputSwitch id="isGuaranteeValid" label="#{msg.maintenance_maintenanceTask_isGuaranteeValid}" value="#{maintenanceTaskPresenter.maintenanceTask.isGuaranteeValid}" />
-                                    </h:panelGroup>
-                                    <h:panelGroup>
-                                        <p:outputLabel for="isFullService" value="#{msg.maintenance_maintenanceContract_isFullService}" />
-                                        <p:inputSwitch id="isFullService" disabled="true" label="#{msg.maintenance_maintenanceContract_isFullService}" value="#{not empty maintenanceTaskPresenter.maintenanceTask.maintenanceContract and maintenanceTaskPresenter.maintenanceTask.maintenanceContract.isFullService}" />
-                                    </h:panelGroup>
-                                    <h:panelGroup styleClass="md-inputfield">
-                                        <p:autoComplete id="maintenanceContract"
-                                                        dropdown="true"
-                                                        value="#{maintenanceTaskPresenter.maintenanceTask.maintenanceContract}"
-                                                        completeMethod="#{maintenanceContractOLDListPresenter.completeUnexpiredMaintenanceContract}"
-                                                        var="contract"
-                                                        itemLabel="#{contract.customerNameContractExpiry}"
-                                                        itemValue="#{contract}"
-                                                        forceSelection="true"
-                                                        >
-                                            <oou:converter converterId="omnifaces.ListConverter" list="#{maintenanceContractOLDListPresenter.unexpiredMaintenanceContracts}"/>
-                                        </p:autoComplete>
-                                        <p:outputLabel for="maintenanceContract" value="#{msg.maintenance_maintenanceContract}"/>
-                                        <p:message for="maintenanceContract"/>
-                                    </h:panelGroup>
-                                    <h:panelGroup styleClass="md-inputfield">
-                                        <p:inputText readonly="true" id="expiry" value="#{maintenanceTaskPresenter.maintenanceTask.expiry}">
-                                            <f:convertDateTime locale="it" pattern="MMMM yy" />
-                                        </p:inputText>
-                                        <p:outputLabel for="expiry" value="#{msg.maintenance_maintenanceTask_expiryForPrinting}"/>
-                                        <p:message for="expiry"/>
-                                    </h:panelGroup>
-                                </p:panelGrid>
                                 <p:panelGrid columns="2" columnClasses="ui-grid-col-5,ui-grid-col-7" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputTextarea id="description" value="#{maintenanceTaskPresenter.maintenanceTask.description}" />

@@ -14,18 +14,23 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.prosystemingegneri.censistant.business.maintenance.entity;
-
-import com.prosystemingegneri.censistant.business.production.entity.System;
-import javax.persistence.metamodel.SingularAttribute;
-import javax.persistence.metamodel.StaticMetamodel;
+package com.prosystemingegneri.censistant.business.maintenance.control;
 
 /**
  *
  * @author Davide Mainardi <ingmainardi at live.com>
  */
-@StaticMetamodel(ContractedSystem.class)
-public class ContractedSystem_ {
-    public static volatile SingularAttribute<ContractedSystem, MaintenanceContract> maintenanceContract;
-    public static volatile SingularAttribute<ContractedSystem, System> system;
+public enum Inspection {
+    POWER_SUPPLY_220V(0),
+    POWER_SUPPLY_12V(1),
+    ACCUMULATORS(2),
+    SENSORS_UP_AND_RUNNING(3),
+    WARNING_DEVICES(4),
+    SYSTEM_TESTING(5);
+
+    private final int value;
+
+    private Inspection(int value) {
+        this.value = value;
+    }
 }

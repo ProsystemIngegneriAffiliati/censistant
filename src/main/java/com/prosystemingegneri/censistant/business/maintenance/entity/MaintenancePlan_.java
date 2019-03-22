@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2019 Prosystem Ingegneri Affiliati.
+ * Copyright (C) 2019 Prosystem Ingegneri Affiliati.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -16,6 +16,7 @@
  */
 package com.prosystemingegneri.censistant.business.maintenance.entity;
 
+import com.prosystemingegneri.censistant.business.maintenance.control.MaintenanceType;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
@@ -23,7 +24,8 @@ import javax.persistence.metamodel.StaticMetamodel;
  *
  * @author Davide Mainardi <ingmainardi at live.com>
  */
-@StaticMetamodel(PreventiveMaintenance.class)
-public class PreventiveMaintenance_ {
-    public static volatile SingularAttribute<PreventiveMaintenance, String> name;
+@StaticMetamodel(MaintenancePlan.class)
+public class MaintenancePlan_ {
+    public static SingularAttribute<MaintenancePlan, ContractedSystem> contractedSystem;
+    public static SingularAttribute<MaintenancePlan, MaintenanceType> maintenanceType;
 }

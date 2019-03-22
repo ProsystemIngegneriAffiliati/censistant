@@ -17,6 +17,7 @@
 package com.prosystemingegneri.censistant.business.maintenance.entity;
 
 import com.prosystemingegneri.censistant.business.entity.BaseEntity;
+import com.prosystemingegneri.censistant.business.maintenance.control.Inspection;
 import com.prosystemingegneri.censistant.business.maintenance.control.ResultType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -40,15 +41,17 @@ public class InspectionDone extends BaseEntity<Long> {
     private Long id;
     
     @NotNull
-    @ManyToOne(optional = false)
+    @Enumerated(EnumType.ORDINAL)
+    @Column(nullable = false, columnDefinition = "smallint")
     private Inspection inspection;
     
     @NotNull
     @ManyToOne(optional = false)
     private MaintenanceTask maintenanceTask;
     
+    @NotNull
     @Enumerated(EnumType.ORDINAL)
-    @Column(columnDefinition = "smallint")
+    @Column(nullable = false, columnDefinition = "smallint")
     private ResultType inspectionResult;
     
     private String notes;
@@ -60,10 +63,9 @@ public class InspectionDone extends BaseEntity<Long> {
         inspectionResult = ResultType.NULL;
     }
 
-    public InspectionDone(Inspection inspection, MaintenanceTask maintenanceTask) {
+    public InspectionDone(Inspection inspection) {
         this();
         this.inspection = inspection;
-        this.maintenanceTask = maintenanceTask;
     }
 
     public Inspection getInspection() {

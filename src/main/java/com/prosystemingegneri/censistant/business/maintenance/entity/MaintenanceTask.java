@@ -23,6 +23,7 @@ import com.prosystemingegneri.censistant.business.production.entity.System;
 import com.prosystemingegneri.censistant.business.maintenance.control.MandatoryNotesSignatureForClosedMaintenanceTask;
 import com.prosystemingegneri.censistant.business.maintenance.control.MandatoryPaymentsForClosedMaintenanceTask;
 import com.prosystemingegneri.censistant.business.maintenance.control.MandatorySuitableForOperationForClosedMaintenanceTask;
+import com.prosystemingegneri.censistant.business.maintenance.control.MandatorySystemOrMaintenancePlan;
 import com.prosystemingegneri.censistant.business.maintenance.control.SigGen;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.Worker;
 import com.prosystemingegneri.censistant.business.warehouse.entity.HandledItem;
@@ -32,7 +33,9 @@ import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import javax.imageio.ImageIO;
 import javax.persistence.CascadeType;
@@ -57,6 +60,7 @@ import javax.validation.constraints.NotNull;
  * @author Davide Mainardi <ingmainardi at live.com>
  */
 @Entity
+@MandatorySystemOrMaintenancePlan
 @MandatoryNotesSignatureForClosedMaintenanceTask
 @MandatoryInspectionsDoneForClosedMaintenanceTask
 @MandatoryPaymentsForClosedMaintenanceTask
@@ -68,10 +72,9 @@ public class MaintenanceTask extends BaseEntity<Long> {
     private Long id;
     
     @ManyToOne
-    private MaintenanceContract maintenanceContract;
+    private MaintenancePlan maintenancePlan;
     
-    @NotNull
-    @ManyToOne(optional = false)
+    @ManyToOne
     private System system;
     
     @Lob
@@ -115,9 +118,6 @@ public class MaintenanceTask extends BaseEntity<Long> {
     
     private String paymentNotes;
     
-    @ManyToOne
-    private PreventiveMaintenance preventiveMaintenance;
-    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "maintenanceTask", orphanRemoval = true)
     private final List<InspectionDone> inspectionsDone;
     
@@ -146,12 +146,17 @@ public class MaintenanceTask extends BaseEntity<Long> {
         this.system = system;
     }
 
-    public MaintenanceContract getMaintenanceContract() {
-        return maintenanceContract;
+    public MaintenanceTask(MaintenancePlan maintenancePlan) {
+        this();
+        this.maintenancePlan = maintenancePlan;
     }
 
-    public void setMaintenanceContract(MaintenanceContract maintenanceContract) {
-        this.maintenanceContract = maintenanceContract;
+    public MaintenancePlan getMaintenancePlan() {
+        return maintenancePlan;
+    }
+
+    public void setMaintenancePlan(MaintenancePlan maintenancePlan) {
+        this.maintenancePlan = maintenancePlan;
     }
 
     public System getSystem() {
@@ -280,14 +285,6 @@ public class MaintenanceTask extends BaseEntity<Long> {
 
     public TaskPrice getTaskPrice() {
         return taskPrice;
-    }
-
-    public PreventiveMaintenance getPreventiveMaintenance() {
-        return preventiveMaintenance;
-    }
-
-    public void setPreventiveMaintenance(PreventiveMaintenance preventiveMaintenance) {
-        this.preventiveMaintenance = preventiveMaintenance;
     }
     
     public void addReplacement(Replacement replacement) {

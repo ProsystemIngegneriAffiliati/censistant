@@ -14,18 +14,25 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.prosystemingegneri.censistant.business.maintenance.entity;
+package com.prosystemingegneri.censistant.business.maintenance.control;
 
-import com.prosystemingegneri.censistant.business.production.entity.System;
-import javax.persistence.metamodel.SingularAttribute;
-import javax.persistence.metamodel.StaticMetamodel;
+import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceTask;
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
 
 /**
  *
  * @author Davide Mainardi <ingmainardi at live.com>
  */
-@StaticMetamodel(ContractedSystem.class)
-public class ContractedSystem_ {
-    public static volatile SingularAttribute<ContractedSystem, MaintenanceContract> maintenanceContract;
-    public static volatile SingularAttribute<ContractedSystem, System> system;
+public class MandatorySystemOrMaintenancePlanValidator implements ConstraintValidator<MandatorySystemOrMaintenancePlan, MaintenanceTask> {
+
+    @Override
+    public void initialize(MandatorySystemOrMaintenancePlan constraintAnnotation) {
+    }
+
+    @Override
+    public boolean isValid(MaintenanceTask maintenanceTask, ConstraintValidatorContext context) {
+        return !(maintenanceTask.getSystem() == null && maintenanceTask.getMaintenancePlan() == null);
+    }
+    
 }

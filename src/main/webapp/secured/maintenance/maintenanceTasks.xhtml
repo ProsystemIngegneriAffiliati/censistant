@@ -44,7 +44,7 @@
                             </p:column>
                             <p:column headerText="#{msg.maintenance_maintenanceTask_expiry}" field="expiry" filterable="false" priority="2">
                                 <h:outputText value="#{maintenanceTask.expiry}">
-                                    <f:convertDateTime pattern="dd/MM/YYYY" />
+                                    <f:convertDateTime pattern="MMMM YYYY" />
                                 </h:outputText>
                             </p:column>
                             <p:column headerText="#{msg.maintenance_maintenanceTask_closed}" field="isClosed" sortable="false" priority="0">
