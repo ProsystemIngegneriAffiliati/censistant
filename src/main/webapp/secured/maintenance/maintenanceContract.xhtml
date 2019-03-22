@@ -146,7 +146,8 @@
                                              var="maintenanceTask"
                                              value="#{maintenanceContractPresenter.maintenanceTasks}"
                                              editable="true" editMode="cell"
-                                             style="margin-bottom: 25px">
+                                             style="margin-bottom: 25px"
+                                             rowStyleClass="#{maintenanceContractPresenter.calculateExpiryColor(maintenanceTask)}">
                                     <f:facet name="header">
                                         <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
                                             #{msg.maintenance_maintenanceTasks}

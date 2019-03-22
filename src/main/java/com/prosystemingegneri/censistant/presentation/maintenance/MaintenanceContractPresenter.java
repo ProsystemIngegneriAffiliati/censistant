@@ -143,6 +143,10 @@ public class MaintenanceContractPresenter implements Serializable{
             maintenanceTaskService.saveMaintenanceTask(maintenanceTasks.get(event.getRowIndex()));
     }
     
+    public String calculateExpiryColor(MaintenanceTask maintenanceTask) {
+        return MaintenanceTaskControl.calculateExpiryColor(maintenanceTask);
+    }
+    
     public void createNewMaintenancePlan(ContractedSystem contractedSystem) {
         contractedSystem.addMaintenancePlan(new MaintenancePlan());
     }

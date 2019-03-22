@@ -64,28 +64,7 @@ public class MaintenanceTaskListPresenter implements Serializable{
     }
     
     public String calculateExpiryColor(MaintenanceTask maintenanceTask) {
-        if (maintenanceTask.getClosed() == null && maintenanceTask.getExpiry() != null) {
-            GregorianCalendar oneMonthAhead = new GregorianCalendar();
-            oneMonthAhead.add(Calendar.MONTH, 1);
-
-            GregorianCalendar oneWeekAhead = new GregorianCalendar();
-            oneWeekAhead.add(Calendar.WEEK_OF_YEAR, 1);
-
-            GregorianCalendar yesterday = new GregorianCalendar();
-            yesterday.add(Calendar.DAY_OF_YEAR, -1);
-
-            GregorianCalendar scadCal = new GregorianCalendar();
-            scadCal.setTime(maintenanceTask.getExpiry());
-
-            if (scadCal.before(yesterday))
-                return "blue-grey-row";
-            if (scadCal.before(oneWeekAhead))
-                return "red-row";
-            if (scadCal.before(oneMonthAhead))
-                return "amber-row";            
-        }
-        
-        return "";
+        return MaintenanceTaskControl.calculateExpiryColor(maintenanceTask);
     }
 
     public MaintenanceTaskLazyDataModel getLazyMaintenanceTasks() {
