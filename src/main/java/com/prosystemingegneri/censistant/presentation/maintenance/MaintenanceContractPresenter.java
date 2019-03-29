@@ -24,12 +24,12 @@ import com.prosystemingegneri.censistant.business.maintenance.entity.ContractedS
 import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceContract;
 import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenancePlan;
 import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceTask;
-import com.prosystemingegneri.censistant.business.production.boundary.SystemService;
 import com.prosystemingegneri.censistant.business.production.entity.System;
 import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.Resource;
 import javax.ejb.EJBException;
@@ -62,13 +62,12 @@ public class MaintenanceContractPresenter implements Serializable{
     private System systemToBeAdded;
     
     @Inject
-    private SystemService systemService;
-    
-    @Inject
     private MaintenancePlanService maintenancePlanService;
     private List<MaintenanceTask> maintenanceTasks = new ArrayList<>();
     @Inject
     private MaintenanceTaskService maintenanceTaskService;
+    
+    private Date initial;
     
     @Resource
     Validator validator;
@@ -83,7 +82,7 @@ public class MaintenanceContractPresenter implements Serializable{
             if (!isValidated)
                 return null;
             
-            maintenanceContract = service.save(maintenanceContract);
+            maintenanceContract = service.save(maintenanceContract, initial);
         } catch (EJBException e) {
             Messages.create("Error").error().detail(ExceptionUtility.unwrap(e.getCausedByException()).getLocalizedMessage()).add();
             return null;
@@ -106,7 +105,16 @@ public class MaintenanceContractPresenter implements Serializable{
                 updateAvaibleSystems();
                 updateMaintenanceTasks();
             }
+            updateInitial();
         }
+    }
+    
+    public void updateInitial() {
+        initial = maintenanceContract.getCreation();
+    }
+    
+    public Integer getMaintenanceTasksToBeCreated() {
+        return service.getMaintenanceTasksToBeCreated(maintenanceContract);
     }
     
     public void onTempCustomerSelect(SelectEvent event) {
@@ -201,6 +209,14 @@ public class MaintenanceContractPresenter implements Serializable{
 
     public void setMaintenanceTasks(List<MaintenanceTask> maintenanceTasks) {
         this.maintenanceTasks = maintenanceTasks;
+    }
+
+    public Date getInitial() {
+        return initial;
+    }
+
+    public void setInitial(Date initial) {
+        this.initial = initial;
     }
     
 }

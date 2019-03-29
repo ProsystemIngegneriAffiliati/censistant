@@ -32,7 +32,6 @@ import com.prosystemingegneri.censistant.business.sales.entity.Offer;
 import com.prosystemingegneri.censistant.business.sales.entity.Offer_;
 import com.prosystemingegneri.censistant.business.siteSurvey.boundary.WorkerService;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport_;
-import com.prosystemingegneri.censistant.business.siteSurvey.entity.Worker;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -73,13 +72,13 @@ public class MaintenanceContractService implements Serializable{
         return new MaintenanceContract();
     }
     
-    public MaintenanceContract save(MaintenanceContract maintenanceContract) {
+    public MaintenanceContract save(MaintenanceContract maintenanceContract, Date initial) {
         if (maintenanceContract.getId() == null)
             em.persist(maintenanceContract);
         else
             maintenanceContract = em.merge(maintenanceContract);
         
-        createMaintenanceTasks(maintenanceContract);
+        createMaintenanceTasks(maintenanceContract, initial);
 
         return maintenanceContract;
     }
@@ -201,19 +200,26 @@ public class MaintenanceContractService implements Serializable{
         return em.createQuery(query).getResultList();
     }
     
-    private void createMaintenanceTasks(@NotNull MaintenancePlan maintenancePlan, @NotNull int numberOfMaintenanceTasksToBeCreated) {
+    private void createMaintenanceTasks(@NotNull MaintenancePlan maintenancePlan, @NotNull int numberOfMaintenanceTasksToBeCreated, Date initialDate) {
         if (maintenancePlan.getMaintenanceType() == MaintenanceType.PREVENTIVE_MAINTENANCE) {
-            int spanInMonths = MaintenanceContract.DURATION_MONTHS / maintenancePlan.getMaintenanceTasksNumber();
-            GregorianCalendar expiry = new GregorianCalendar();
-            expiry.setTime(maintenancePlan.getContractedSystem().getMaintenanceContract().getCreation());
-            expiry.add(Calendar.MONTH, MaintenanceContract.DURATION_MONTHS);
+            //since only the month is useful, last day of month is chosen
+            Calendar temp = Calendar.getInstance();
+            temp.setTime(initialDate);
+            temp.add(Calendar.MONTH, 1);
+            Calendar initial = Calendar.getInstance();
+            initial.set(temp.get(Calendar.YEAR), temp.get(Calendar.MONTH), 1);
+            initial.add(Calendar.DAY_OF_YEAR, -1);
+            GregorianCalendar contractExpiry = new GregorianCalendar();
+            contractExpiry.setTime(maintenancePlan.getContractedSystem().getMaintenanceContract().getExpiry());
+            contractExpiry.add(Calendar.MONTH, -1 * MaintenanceContract.DURATION_MONTHS / (maintenancePlan.getMaintenanceTasksNumber() + 1));
+            int spanInDays = ((int)( (contractExpiry.getTime().getTime() - initial.getTime().getTime()) / (1000 * 60 * 60 * 24))) / (maintenancePlan.getMaintenanceTasksNumber() - 1);
             GregorianCalendar tempExpiry = new GregorianCalendar();
             for (int i = 0; i < numberOfMaintenanceTasksToBeCreated; i++) {
                 MaintenanceTask maintenanceTask = maintenanceTaskService.create(maintenancePlan);
                 maintenanceTask.setDescription("Manutenzione programmata");
                 maintenanceTask.setInChargeWorker(workerService.getDefaultWorker());
-                tempExpiry.setTime(expiry.getTime());
-                tempExpiry.add(Calendar.MONTH, -1 * spanInMonths * (i + 1));
+                tempExpiry.setTime(initial.getTime());
+                tempExpiry.add(Calendar.DAY_OF_YEAR, spanInDays * i);
                 maintenanceTask.setExpiry(tempExpiry.getTime());
                 
                 maintenanceTaskService.saveMaintenanceTask(maintenanceTask);
@@ -221,9 +227,19 @@ public class MaintenanceContractService implements Serializable{
         }
     }
     
-    public void createMaintenanceTasks(@NotNull MaintenanceContract maintenanceContract) {
+    public void createMaintenanceTasks(@NotNull MaintenanceContract maintenanceContract, Date initial) {
         for (ContractedSystem contractedSystem : maintenanceContract.getContractedSystems())
             for (MaintenancePlan maintenancePlan : contractedSystem.getMaintenancePlans())
-                createMaintenanceTasks(maintenancePlan, maintenancePlan.getMaintenanceTasksNumber() - maintenancePlanService.getMaintenanceTasks(maintenancePlan).size());
+                createMaintenanceTasks(maintenancePlan, maintenancePlan.getMaintenanceTasksNumber() - maintenancePlanService.getMaintenanceTasks(maintenancePlan).size(), initial);
+    }
+
+    public int getMaintenanceTasksToBeCreated(@NotNull MaintenanceContract maintenanceContract) {
+        int result = 0;
+        
+        for (ContractedSystem contractedSystem : maintenanceContract.getContractedSystems())
+            for (MaintenancePlan maintenancePlan : contractedSystem.getMaintenancePlans())
+                result += maintenancePlan.getMaintenanceTasksNumber() - maintenancePlanService.getMaintenanceTasks(maintenancePlan).size();
+        
+        return result;
     }
 }

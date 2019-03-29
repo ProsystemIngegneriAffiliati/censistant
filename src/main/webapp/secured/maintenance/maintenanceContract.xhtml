@@ -5,7 +5,8 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:oou="http://omnifaces.org/ui">
+      xmlns:oou="http://omnifaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <f:metadata>
         <f:viewParam name="id"
                      value="#{maintenanceContractPresenter.id}"
@@ -44,7 +45,7 @@
                                 <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:calendar id="creation" value="#{maintenanceContractPresenter.maintenanceContract.creation}" locale="it">
-                                            <p:ajax update="expiry"/>
+                                            <p:ajax listener="#{maintenanceContractPresenter.updateInitial()}" update="expiry maintenanceTasksTable"/>
                                         </p:calendar>
                                         <p:outputLabel for="creation" value="#{msg.maintenance_maintenanceContract_creation}"/>
                                         <p:message for="creation"/>
@@ -98,6 +99,7 @@
                                                     </p:outputPanel>
                                                 </p:panelGrid>
                                             </f:facet>
+                                            <p:ajax event="cellEdit" update="maintenanceContractForm:maintenanceTasksTable" />
                                             <p:column headerText="#{msg.maintenance_maintenanceType}">
                                                 <p:cellEditor>
                                                     <f:facet name="output">
@@ -140,7 +142,7 @@
                                         </p:dataTable>
                                     </p:tab>
                                 </p:accordionPanel>
-                                
+
                                 <p:dataTable id="maintenanceTasksTable"
                                              widgetVar="mainttskst"
                                              var="maintenanceTask"
@@ -151,12 +153,15 @@
                                     <f:facet name="header">
                                         <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
                                             #{msg.maintenance_maintenanceTasks}
-                                            <h:panelGroup />
+                                            <p:outputPanel id="maintenanceTasksTableHeaderPanel" style="display: inline-block">
+                                                <p:outputLabel rendered="#{maintenanceContractPresenter.maintenanceTasksToBeCreated > 0}" value="#{msg.maintenance_maintenanceContract_maintenanceTasks_create_initialDate_tip}" />
+                                                <p:calendar id="initial" rendered="#{maintenanceContractPresenter.maintenanceTasksToBeCreated > 0}" value="#{maintenanceContractPresenter.initial}" locale="it" />
+                                            </p:outputPanel>
                                         </p:panelGrid>
                                     </f:facet>
-                                    
+
                                     <p:ajax event="cellEdit" listener="#{maintenanceContractPresenter.onExpiryEdit}" />
-                                    
+
                                     <p:column headerText="#{msg.production_system}" filterBy="#{maintenanceTask.maintenancePlan.contractedSystem.system.address}" filterMatchMode="contains" sortBy="#{maintenanceTask.maintenancePlan.contractedSystem.system.address}" priority="2">
                                         <h:outputText value="#{maintenanceTask.maintenancePlan.contractedSystem.system.address}" />
                                     </p:column>
@@ -207,7 +212,7 @@
                                     <div class="ui-g-4 ui-md-3">
                                         <p:commandButton value="#{msg.save}"
                                                          action="#{maintenanceContractPresenter.save()}"
-                                                         ajax="false"/>
+                                                         ajax="false" />
                                     </div>
                                 </div>
                             </div>
