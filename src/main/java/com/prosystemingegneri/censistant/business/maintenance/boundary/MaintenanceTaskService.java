@@ -16,20 +16,20 @@
  */
 package com.prosystemingegneri.censistant.business.maintenance.boundary;
 
-import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier_;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant_;
 import com.prosystemingegneri.censistant.business.maintenance.control.Inspection;
+import com.prosystemingegneri.censistant.business.maintenance.control.MaintenanceType;
 import com.prosystemingegneri.censistant.business.maintenance.entity.ContractedSystem_;
 import com.prosystemingegneri.censistant.business.maintenance.entity.InspectionDone;
-import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceContract;
 import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenancePayment;
 import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenancePlan;
 import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenancePlan_;
 import com.prosystemingegneri.censistant.business.production.entity.System;
 import com.prosystemingegneri.censistant.business.production.entity.System_;
 import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceTask;
+import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceTaskDto;
 import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceTask_;
 import com.prosystemingegneri.censistant.business.maintenance.entity.TaskPrice;
 import com.prosystemingegneri.censistant.business.sales.boundary.JobOrderService;
@@ -38,13 +38,13 @@ import com.prosystemingegneri.censistant.business.sales.entity.JobOrder;
 import com.prosystemingegneri.censistant.business.sales.entity.Offer;
 import com.prosystemingegneri.censistant.business.sales.entity.Offer_;
 import com.prosystemingegneri.censistant.business.sales.entity.PlaceType;
-import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport_;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SystemType;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.Worker;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -53,8 +53,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Join;
-import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
@@ -123,14 +121,48 @@ public class MaintenanceTaskService implements Serializable{
     public void deleteMaintenanceTask(Long id) {
         em.remove(readMaintenanceTask(id));
     }
-
-    public List<MaintenanceTask> listMaintenanceTasks(int first, int pageSize, String sortField, Boolean isAscending, System system, String description, Boolean isClosed, String customerSupplierNamePlantNameAddress, MaintenanceContract maintenanceContract) {
+    
+    public List<MaintenanceTaskDto> listMaintenanceTasks(int first, int pageSize, String sortField, Boolean isAscending, String customerName, String systemAddress, MaintenanceType maintenanceType, Date expiryStart, Date expiryEnd, Boolean isClosed) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<MaintenanceTask> query = cb.createQuery(MaintenanceTask.class);
+        CriteriaQuery<MaintenanceTaskDto> query = cb.createQuery(MaintenanceTaskDto.class);
         Root<MaintenanceTask> root = query.from(MaintenanceTask.class);
-        CriteriaQuery<MaintenanceTask> select = query.select(root).distinct(true);
+        CriteriaQuery<MaintenanceTaskDto> select = query.select(cb.construct(
+                MaintenanceTaskDto.class,
+                root.get(MaintenanceTask_.id),
+                root
+                        .join(MaintenanceTask_.maintenancePlan)
+                        .join(MaintenancePlan_.contractedSystem)
+                        .join(ContractedSystem_.system)
+                        .join(System_.offers).join(Offer_.siteSurveyReport)
+                        .join(SiteSurveyReport_.plant)
+                        .join(Plant_.customerSupplier)
+                        .get(CustomerSupplier_.name),
+                root
+                        .join(MaintenanceTask_.maintenancePlan)
+                        .join(MaintenancePlan_.contractedSystem)
+                        .join(ContractedSystem_.system)
+                        .join(System_.offers).join(Offer_.siteSurveyReport)
+                        .join(SiteSurveyReport_.plant)
+                        .get(Plant_.address),
+                root
+                        .join(MaintenanceTask_.system)
+                        .join(System_.offers).join(Offer_.siteSurveyReport)
+                        .join(SiteSurveyReport_.plant)
+                        .join(Plant_.customerSupplier)
+                        .get(CustomerSupplier_.name),
+                root
+                        .join(MaintenanceTask_.system)
+                        .join(System_.offers).join(Offer_.siteSurveyReport)
+                        .join(SiteSurveyReport_.plant)
+                        .get(Plant_.address),
+                root
+                        .join(MaintenanceTask_.maintenancePlan)
+                        .get(MaintenancePlan_.maintenanceType),
+                root.get(MaintenanceTask_.expiry),
+                root.get(MaintenanceTask_.closed)
+        )).distinct(true);
         
-        List<Predicate> conditions = calculateConditions(cb, root, system, description, isClosed, customerSupplierNamePlantNameAddress, maintenanceContract);
+        List<Predicate> conditions = calculateConditions(cb, root, customerName, systemAddress, maintenanceType, expiryStart, expiryEnd, isClosed);
 
         if (!conditions.isEmpty())
             query.where(conditions.toArray(new Predicate[conditions.size()]));
@@ -139,11 +171,8 @@ public class MaintenanceTaskService implements Serializable{
         if (isAscending != null && sortField != null && !sortField.isEmpty()) {
             Path<?> path;
             switch (sortField) {
-                case "description":
-                    path = root.get(MaintenanceTask_.description);
-                    break;
-                case "creation":
-                    path = root.get(MaintenanceTask_.creation);
+                case "maintenanceType":
+                    path = root.get(MaintenanceTask_.maintenancePlan).get(MaintenancePlan_.maintenanceType);
                     break;
                 case "expiry":
                     path = root.get(MaintenanceTask_.expiry);
@@ -161,7 +190,7 @@ public class MaintenanceTaskService implements Serializable{
         }
         query.orderBy(order);
         
-        TypedQuery<MaintenanceTask> typedQuery = em.createQuery(select);
+        TypedQuery<MaintenanceTaskDto> typedQuery = em.createQuery(select);
         if (pageSize > 0) {
             typedQuery.setMaxResults(pageSize);
             typedQuery.setFirstResult(first);
@@ -170,13 +199,13 @@ public class MaintenanceTaskService implements Serializable{
         return typedQuery.getResultList();
     }
     
-    public Long getMaintenanceTasksCount(System system, String description, Boolean isClosed, String customerSupplierNamePlantNameAddress, MaintenanceContract maintenanceContract) {
+    public Long getMaintenanceTasksCount(String customerName, String systemAddress, MaintenanceType maintenanceType, Date expiryStart, Date expiryEnd, Boolean isClosed) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Long> query = cb.createQuery(Long.class);
         Root<MaintenanceTask> root = query.from(MaintenanceTask.class);
         CriteriaQuery<Long> select = query.select(cb.count(root));
 
-        List<Predicate> conditions = calculateConditions(cb, root, system, description, isClosed, customerSupplierNamePlantNameAddress, maintenanceContract);
+        List<Predicate> conditions = calculateConditions(cb, root, customerName, systemAddress, maintenanceType, expiryStart, expiryEnd, isClosed);
 
         if (!conditions.isEmpty())
             query.where(conditions.toArray(new Predicate[conditions.size()]));
@@ -184,16 +213,64 @@ public class MaintenanceTaskService implements Serializable{
         return em.createQuery(select).getSingleResult();
     }
     
-    private List<Predicate> calculateConditions(CriteriaBuilder cb, Root<MaintenanceTask> root, System system, String description, Boolean isClosed, String customerSupplierNamePlantNameAddress, MaintenanceContract maintenanceContract) {
+    private List<Predicate> calculateConditions(CriteriaBuilder cb, Root<MaintenanceTask> root, String customerName, String systemAddress, MaintenanceType maintenanceType, Date expiryStart, Date expiryEnd, Boolean isClosed) {
         List<Predicate> conditions = new ArrayList<>();
         
-        //system
-        if (system != null)
-            conditions.add(cb.equal(root.get(MaintenanceTask_.system), system));
+        //Customer name
+        if (customerName != null && !customerName.isEmpty())
+            conditions.add(
+                    cb.or(
+                            cb.like(cb.lower(
+                                    root
+                                    .join(MaintenanceTask_.maintenancePlan)
+                                    .join(MaintenancePlan_.contractedSystem)
+                                    .join(ContractedSystem_.system)
+                                    .join(System_.offers).join(Offer_.siteSurveyReport)
+                                    .join(SiteSurveyReport_.plant)
+                                    .join(Plant_.customerSupplier)
+                                    .get(CustomerSupplier_.name)
+                            ), "%" + customerName.toLowerCase() + "%"),
+                            cb.like(cb.lower(
+                                    root
+                                    .join(MaintenanceTask_.system)
+                                    .join(System_.offers).join(Offer_.siteSurveyReport)
+                                    .join(SiteSurveyReport_.plant)
+                                    .join(Plant_.customerSupplier)
+                                    .get(CustomerSupplier_.name)
+                            ), "%" + customerName.toLowerCase() + "%")
+                    ));
         
-        //description
-        if (description != null && !description.isEmpty())
-            conditions.add(cb.like(cb.lower(root.get(MaintenanceTask_.description)), "%" + description.toLowerCase() + "%"));
+        //System address
+        if (systemAddress != null && !systemAddress.isEmpty())
+            conditions.add(
+                    cb.or(
+                            cb.like(cb.lower(
+                                    root
+                                    .join(MaintenanceTask_.maintenancePlan)
+                                    .join(MaintenancePlan_.contractedSystem)
+                                    .join(ContractedSystem_.system)
+                                    .join(System_.offers).join(Offer_.siteSurveyReport)
+                                    .join(SiteSurveyReport_.plant)
+                                    .get(Plant_.address)
+                            ), "%" + systemAddress.toLowerCase() + "%"),
+                            cb.like(cb.lower(
+                                    root
+                                    .join(MaintenanceTask_.system)
+                                    .join(System_.offers).join(Offer_.siteSurveyReport)
+                                    .join(SiteSurveyReport_.plant)
+                                    .get(Plant_.address)
+                            ), "%" + systemAddress.toLowerCase() + "%")
+                    ));
+        
+        //Maintenance type
+        if (maintenanceType != null)
+            conditions.add(cb.equal(root.join(MaintenanceTask_.maintenancePlan).get(MaintenancePlan_.maintenanceType), maintenanceType));
+        
+        //Expiry date
+        if (expiryStart != null &&  expiryEnd != null)
+            conditions.add(cb.between(root.<Date>get(MaintenanceTask_.expiry), expiryStart, expiryEnd));
+        if (expiryStart == null &&  expiryEnd != null)
+            conditions.add(cb.lessThan(root.<Date>get(MaintenanceTask_.expiry), expiryEnd));
         
         //isClosed
         if (isClosed != null) {
@@ -202,30 +279,6 @@ public class MaintenanceTaskService implements Serializable{
             else
                 conditions.add(cb.isNull(root.get(MaintenanceTask_.closed)));
         }
-        
-        //customerSupplierNamePlantNameAddress
-        if (customerSupplierNamePlantNameAddress != null && !customerSupplierNamePlantNameAddress.isEmpty()) {
-            Join<SiteSurveyReport, Plant> plantRoot = root
-                    .join(MaintenanceTask_.system)
-                    .join(System_.offers, JoinType.LEFT)
-                    .join(Offer_.siteSurveyReport)
-                    .join(SiteSurveyReport_.plant);
-            Join<Plant, CustomerSupplier> customerRoot = plantRoot.join(Plant_.customerSupplier);
-            conditions.add(
-                    cb.or(
-                            cb.like(cb.lower(plantRoot.get(Plant_.name)), "%" + String.valueOf(customerSupplierNamePlantNameAddress).toLowerCase() + "%"),
-                            cb.like(cb.lower(plantRoot.get(Plant_.address)), "%" + String.valueOf(customerSupplierNamePlantNameAddress).toLowerCase() + "%"),
-                            cb.like(cb.lower(customerRoot.get(CustomerSupplier_.name)), "%" + String.valueOf(customerSupplierNamePlantNameAddress).toLowerCase() + "%")
-                    )
-            );
-        }
-        
-        //Maintenance contract
-        if (maintenanceContract != null)
-            conditions.add(cb.equal(root
-                    .join(MaintenanceTask_.maintenancePlan)
-                    .join(MaintenancePlan_.contractedSystem)
-                    .get(ContractedSystem_.maintenanceContract), maintenanceContract));
         
         return conditions;
     }

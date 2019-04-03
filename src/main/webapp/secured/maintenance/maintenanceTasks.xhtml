@@ -3,8 +3,10 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:p="http://primefaces.org/ui"
                 template="/WEB-INF/template.xhtml"
-                xmlns:f="http://xmlns.jcp.org/jsf/core">
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:oou="http://omnifaces.org/ui">
     <ui:define name="content">
+        <oou:importConstants type="com.prosystemingegneri.censistant.business.maintenance.control.MaintenanceType"/>
         <h:form id="maintenanceTasksForm">
             <div class="ui-g">
                 <div class="ui-g-12">
@@ -31,23 +33,31 @@
                                     </p:outputPanel>
                                 </p:panelGrid>
                             </f:facet>
-                            <p:column headerText="#{msg.maintenance_maintenanceTask_description}" field="description" priority="0">
-                                <h:outputText value="#{maintenanceTask.description}" />
+                            <p:column headerText="#{msg.customerSupplier_customer}" field="customerName" sortable="false" priority="2">
+                                <h:outputText value="#{maintenanceTask.customerName}" />
                             </p:column>
-                            <p:column headerText="#{msg.customerSupplier_plant_address}" field="customerSupplierNamePlantNameAddress" sortable="false" priority="2">
-                                <h:outputText value="#{maintenanceTask.system.getCustomerSupplierNamePlantNameAddress(false)}" />
+                            <p:column headerText="#{msg.customerSupplier_plant_address}" field="systemAddress" sortable="false" priority="0">
+                                <h:outputText value="#{maintenanceTask.systemAddress}" />
                             </p:column>
-                            <p:column headerText="#{msg.maintenance_maintenanceTask_creation}" field="creation" filterable="false" priority="4">
-                                <h:outputText value="#{maintenanceTask.creation}">
-                                    <f:convertDateTime pattern="dd/MM/YYYY" />
-                                </h:outputText>
+                            <p:column headerText="#{msg.maintenance_maintenanceType}" field="maintenanceType" priority="4">
+                                <f:facet name="filter">
+                                    <p:selectOneMenu onchange="PF('maintenanceTasksTable').filter()">
+                                        <f:selectItem itemLabel="#{msg.all}" itemValue="" />
+                                        <f:selectItems
+                                            value="#{MaintenanceType}"
+                                            var="type"
+                                            itemLabel="#{msg['maintenance_maintenanceType_' += type]}"
+                                            itemValue="#{type}" />
+                                    </p:selectOneMenu>
+                                </f:facet>
+                                <h:outputText value="#{msg['maintenance_maintenanceType_' += maintenanceTask.maintenanceType]}" />
                             </p:column>
                             <p:column headerText="#{msg.maintenance_maintenanceTask_expiry}" field="expiry" filterable="false" priority="2">
                                 <h:outputText value="#{maintenanceTask.expiry}">
                                     <f:convertDateTime pattern="MMMM YYYY" />
                                 </h:outputText>
                             </p:column>
-                            <p:column headerText="#{msg.maintenance_maintenanceTask_closed}" field="isClosed" sortable="false" priority="0">
+                            <p:column headerText="#{msg.maintenance_maintenanceTask_closed}" field="isClosed" priority="2">
                                 <f:facet name="filter">
                                     <p:selectOneButton onchange="PF('maintenanceTasksTable').filter()">
                                         <f:converter converterId="javax.faces.Boolean" />

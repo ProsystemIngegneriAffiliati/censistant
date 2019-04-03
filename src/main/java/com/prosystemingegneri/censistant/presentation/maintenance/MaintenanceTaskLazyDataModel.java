@@ -16,10 +16,10 @@
  */
 package com.prosystemingegneri.censistant.presentation.maintenance;
 
-import com.prosystemingegneri.censistant.business.production.entity.System;
 import com.prosystemingegneri.censistant.business.maintenance.boundary.MaintenanceTaskService;
-import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceContract;
-import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceTask;
+import com.prosystemingegneri.censistant.business.maintenance.control.MaintenanceType;
+import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceTaskDto;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -32,27 +32,28 @@ import static org.primefaces.model.SortOrder.DESCENDING;
  *
  * @author Davide Mainardi <ingmainardi at live.com>
  */
-public class MaintenanceTaskLazyDataModel extends LazyDataModel<MaintenanceTask>{
+public class MaintenanceTaskLazyDataModel extends LazyDataModel<MaintenanceTaskDto>{
     private final MaintenanceTaskService service;
     
-    private System system;
-    private MaintenanceContract maintenanceContract;
+    private Date expiryStart;
+    private Date expiryEnd;
 
     public MaintenanceTaskLazyDataModel(MaintenanceTaskService service) {
         this.service = service;
     }
     
     @Override
-    public Object getRowKey(MaintenanceTask object) {
+    public Object getRowKey(MaintenanceTaskDto object) {
         return object.getId();
     }
     
     @Override
-    public List<MaintenanceTask> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
+    public List<MaintenanceTaskDto> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
         Boolean isAscending = null;
-        String description = null;
+        String customerName = null;
+        String systemAddress = null;
+        MaintenanceType maintenanceType = null;
         Boolean isClosed = null;
-        String customerSupplierNamePlantNameAddress = null;
         
         switch (sortOrder) {
             case ASCENDING:
@@ -69,45 +70,31 @@ public class MaintenanceTaskLazyDataModel extends LazyDataModel<MaintenanceTask>
                 String filterProperty = it.next();
 
                 if (!filterProperty.isEmpty()) {
-                    if (filterProperty.equalsIgnoreCase("description"))
-                        description = String.valueOf(filters.get(filterProperty));
+                    if (filterProperty.equalsIgnoreCase("customerName"))
+                        customerName = String.valueOf(filters.get(filterProperty));
+                    if (filterProperty.equalsIgnoreCase("systemAddress"))
+                        systemAddress = String.valueOf(filters.get(filterProperty));
+                    if (filterProperty.equalsIgnoreCase("maintenanceType"))
+                        maintenanceType = MaintenanceType.valueOf(String.valueOf(filters.get(filterProperty)));
                     if (filterProperty.equalsIgnoreCase("isClosed"))
                         isClosed = Boolean.parseBoolean(String.valueOf(filters.get(filterProperty)));
-                    if (filterProperty.equalsIgnoreCase("customerSupplierNamePlantNameAddress"))
-                        customerSupplierNamePlantNameAddress = String.valueOf(filters.get(filterProperty));
                 }
             }
         }
         
-        List<MaintenanceTask> result = service.listMaintenanceTasks(first, pageSize, sortField, isAscending, system, description, isClosed, customerSupplierNamePlantNameAddress, maintenanceContract);
-        this.setRowCount(service.getMaintenanceTasksCount(system, description, isClosed, customerSupplierNamePlantNameAddress, maintenanceContract).intValue());
+        List<MaintenanceTaskDto> result = service.listMaintenanceTasks(first, pageSize, sortField, isAscending, customerName, systemAddress, maintenanceType, expiryStart, expiryEnd, isClosed);
+        this.setRowCount(service.getMaintenanceTasksCount(customerName, systemAddress, maintenanceType, expiryStart, expiryEnd, isClosed).intValue());
         
         return result;
     }
 
     @Override
-    public MaintenanceTask getRowData(String rowKey) {
+    public MaintenanceTaskDto getRowData(String rowKey) {
         try {
-            return service.readMaintenanceTask(Long.parseLong(rowKey));
+            return MaintenanceTaskDto.create(service.readMaintenanceTask(Long.parseLong(rowKey)));
         } catch (NumberFormatException e) {
             return null;
         }
-    }
-
-    public System getSystem() {
-        return system;
-    }
-
-    public void setSystem(System system) {
-        this.system = system;
-    }
-
-    public MaintenanceContract getMaintenanceContract() {
-        return maintenanceContract;
-    }
-
-    public void setMaintenanceContract(MaintenanceContract maintenanceContract) {
-        this.maintenanceContract = maintenanceContract;
     }
     
 }
