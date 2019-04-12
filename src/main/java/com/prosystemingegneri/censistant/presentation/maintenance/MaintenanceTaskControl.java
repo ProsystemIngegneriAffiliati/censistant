@@ -17,7 +17,9 @@
 package com.prosystemingegneri.censistant.presentation.maintenance;
 
 import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceTask;
+import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceTaskDto;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 /**
@@ -26,21 +28,33 @@ import java.util.GregorianCalendar;
  */
 public class MaintenanceTaskControl {
     public static String calculateExpiryColor(MaintenanceTask maintenanceTask) {
-        if (maintenanceTask.getClosed() == null && maintenanceTask.getExpiry() != null) {
-            GregorianCalendar oneMonthAhead = new GregorianCalendar();
-            oneMonthAhead.add(Calendar.MONTH, 1);
+        if (maintenanceTask.getClosed() == null && maintenanceTask.getExpiry() != null)
+            calculate(maintenanceTask.getExpiry());
+        
+        return "";
+    }
+    
+    public static String calculateExpiryColor(MaintenanceTaskDto maintenanceTaskDto) {
+        if (maintenanceTaskDto.getClosed() == null && maintenanceTaskDto.getExpiry() != null)
+            calculate(maintenanceTaskDto.getExpiry());
+        
+        return "";
+    }
+    
+    private static String calculate(Date expiry) {
+        GregorianCalendar oneMonthAhead = new GregorianCalendar();
+        oneMonthAhead.add(Calendar.MONTH, 1);
 
-            GregorianCalendar yesterday = new GregorianCalendar();
-            yesterday.add(Calendar.DAY_OF_YEAR, -1);
+        GregorianCalendar yesterday = new GregorianCalendar();
+        yesterday.add(Calendar.DAY_OF_YEAR, -1);
 
-            GregorianCalendar scadCal = new GregorianCalendar();
-            scadCal.setTime(maintenanceTask.getExpiry());
+        GregorianCalendar scadCal = new GregorianCalendar();
+        scadCal.setTime(expiry);
 
-            if (scadCal.before(yesterday))
-                return "red-row";
-            if (scadCal.before(oneMonthAhead))
-                return "amber-row";            
-        }
+        if (scadCal.before(yesterday))
+            return "red-row";
+        if (scadCal.before(oneMonthAhead))
+            return "amber-row";
         
         return "";
     }

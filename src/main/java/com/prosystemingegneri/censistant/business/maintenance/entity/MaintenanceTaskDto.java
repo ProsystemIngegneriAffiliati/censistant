@@ -86,18 +86,18 @@ public class MaintenanceTaskDto implements Serializable {
     }
     
     public String getCustomerName() {
-        if (customerNameFromMaintenancePlan != null && customerNameFromMaintenancePlan.isEmpty())
+        if (customerNameFromMaintenancePlan != null && !customerNameFromMaintenancePlan.isEmpty())
             return customerNameFromMaintenancePlan;
-        if (customerNameFromSystem != null && customerNameFromSystem.isEmpty())
+        if (customerNameFromSystem != null && !customerNameFromSystem.isEmpty())
             return customerNameFromMaintenancePlan;
         
         return "";
     }
     
     public String getSystemAddress() {
-        if (systemAddressFromMaintenancePlan != null && systemAddressFromMaintenancePlan.isEmpty())
+        if (systemAddressFromMaintenancePlan != null && !systemAddressFromMaintenancePlan.isEmpty())
             return systemAddressFromMaintenancePlan;
-        if (systemAddressFromSystem != null && systemAddressFromSystem.isEmpty())
+        if (systemAddressFromSystem != null && !systemAddressFromSystem.isEmpty())
             return systemAddressFromSystem;
         
         return "";

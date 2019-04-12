@@ -18,6 +18,7 @@ package com.prosystemingegneri.censistant.presentation.maintenance;
 
 import com.prosystemingegneri.censistant.business.maintenance.boundary.MaintenanceTaskService;
 import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceTask;
+import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceTaskDto;
 import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
 import java.io.Serializable;
 import java.util.Calendar;
@@ -63,8 +64,8 @@ public class MaintenanceTaskListPresenter implements Serializable{
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Missing selection", "Select a row before deleting"));
     }
     
-    public String calculateExpiryColor(MaintenanceTask maintenanceTask) {
-        return MaintenanceTaskControl.calculateExpiryColor(maintenanceTask);
+    public String calculateExpiryColor(MaintenanceTaskDto maintenanceTaskDto) {
+        return MaintenanceTaskControl.calculateExpiryColor(maintenanceTaskDto);
     }
 
     public MaintenanceTaskLazyDataModel getLazyMaintenanceTasks() {
