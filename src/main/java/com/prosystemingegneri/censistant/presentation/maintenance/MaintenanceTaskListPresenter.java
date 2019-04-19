@@ -17,12 +17,9 @@
 package com.prosystemingegneri.censistant.presentation.maintenance;
 
 import com.prosystemingegneri.censistant.business.maintenance.boundary.MaintenanceTaskService;
-import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceTask;
 import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceTaskDto;
 import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
 import java.io.Serializable;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJBException;
@@ -43,7 +40,7 @@ public class MaintenanceTaskListPresenter implements Serializable{
     MaintenanceTaskService service;
     
     private MaintenanceTaskLazyDataModel lazyMaintenanceTasks;
-    private List<MaintenanceTask> selectedMaintenanceTasks;
+    private List<MaintenanceTaskDto> selectedMaintenanceTasks;
     
     @PostConstruct
     public void init() {
@@ -52,9 +49,9 @@ public class MaintenanceTaskListPresenter implements Serializable{
     
     public void deleteMaintenanceTask() {
         if (selectedMaintenanceTasks != null && !selectedMaintenanceTasks.isEmpty()) {
-            for (MaintenanceTask siteSurveyReportTemp : selectedMaintenanceTasks) {
+            for (MaintenanceTaskDto maintenanceTaskDto : selectedMaintenanceTasks) {
                 try {
-                    service.deleteMaintenanceTask(siteSurveyReportTemp.getId());
+                    service.deleteMaintenanceTask(maintenanceTaskDto.getId());
                 } catch (EJBException e) {
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", ExceptionUtility.unwrap(e.getCausedByException()).getLocalizedMessage()));
                 }
@@ -76,11 +73,12 @@ public class MaintenanceTaskListPresenter implements Serializable{
         this.lazyMaintenanceTasks = lazyMaintenanceTasks;
     }
 
-    public List<MaintenanceTask> getSelectedMaintenanceTasks() {
+    public List<MaintenanceTaskDto> getSelectedMaintenanceTasks() {
         return selectedMaintenanceTasks;
     }
 
-    public void setSelectedMaintenanceTasks(List<MaintenanceTask> selectedMaintenanceTask) {
-        this.selectedMaintenanceTasks = selectedMaintenanceTask;
+    public void setSelectedMaintenanceTasks(List<MaintenanceTaskDto> selectedMaintenanceTasks) {
+        this.selectedMaintenanceTasks = selectedMaintenanceTasks;
     }
+    
 }

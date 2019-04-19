@@ -29,14 +29,14 @@ import java.util.GregorianCalendar;
 public class MaintenanceTaskControl {
     public static String calculateExpiryColor(MaintenanceTask maintenanceTask) {
         if (maintenanceTask.getClosed() == null && maintenanceTask.getExpiry() != null)
-            calculate(maintenanceTask.getExpiry());
+            return calculate(maintenanceTask.getExpiry());
         
         return "";
     }
     
     public static String calculateExpiryColor(MaintenanceTaskDto maintenanceTaskDto) {
         if (maintenanceTaskDto.getClosed() == null && maintenanceTaskDto.getExpiry() != null)
-            calculate(maintenanceTaskDto.getExpiry());
+            return calculate(maintenanceTaskDto.getExpiry());
         
         return "";
     }

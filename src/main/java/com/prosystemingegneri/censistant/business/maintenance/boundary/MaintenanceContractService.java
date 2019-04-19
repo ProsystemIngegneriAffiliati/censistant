@@ -201,7 +201,18 @@ public class MaintenanceContractService implements Serializable{
     }
     
     private void createMaintenanceTasks(@NotNull MaintenancePlan maintenancePlan, @NotNull int numberOfMaintenanceTasksToBeCreated, Date initialDate) {
-        if (maintenancePlan.getMaintenanceType() == MaintenanceType.PREVENTIVE_MAINTENANCE) {
+        if (maintenancePlan.getMaintenanceType() == MaintenanceType.TELECONTROL || maintenancePlan.getMaintenanceType() == MaintenanceType.PREVENTIVE_MAINTENANCE) {
+            String maintenancePlanDescription;
+            switch (maintenancePlan.getMaintenanceType()) {
+                case PREVENTIVE_MAINTENANCE:
+                    maintenancePlanDescription = "Manutenzione programmata";
+                    break;
+                case TELECONTROL:
+                    maintenancePlanDescription = "Telecontrollo";
+                    break;
+                default:
+                    maintenancePlanDescription = "";
+            }
             //since only the month is useful, last day of month is chosen
             Calendar temp = Calendar.getInstance();
             temp.setTime(initialDate);
@@ -216,7 +227,7 @@ public class MaintenanceContractService implements Serializable{
             GregorianCalendar tempExpiry = new GregorianCalendar();
             for (int i = 0; i < numberOfMaintenanceTasksToBeCreated; i++) {
                 MaintenanceTask maintenanceTask = maintenanceTaskService.create(maintenancePlan);
-                maintenanceTask.setDescription("Manutenzione programmata");
+                maintenanceTask.setDescription(maintenancePlanDescription);
                 maintenanceTask.setInChargeWorker(workerService.getDefaultWorker());
                 tempExpiry.setTime(initial.getTime());
                 tempExpiry.add(Calendar.DAY_OF_YEAR, spanInDays * i);

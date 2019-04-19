@@ -18,6 +18,7 @@ package com.prosystemingegneri.censistant.business.maintenance.entity;
 
 import com.prosystemingegneri.censistant.business.entity.BaseEntity;
 import com.prosystemingegneri.censistant.business.maintenance.control.AtLeastOneMaintenancePlan;
+import com.prosystemingegneri.censistant.business.maintenance.control.MaintenanceType;
 import com.prosystemingegneri.censistant.business.production.entity.System;
 import java.util.ArrayList;
 import java.util.List;
@@ -104,6 +105,16 @@ public class ContractedSystem extends BaseEntity<Long> {
     @Override
     public Long getId() {
         return id;
+    }
+    
+    public boolean isFullService() {
+        boolean result = false;
+        
+        for (MaintenancePlan maintenancePlan : maintenancePlans)
+            if (maintenancePlan.getMaintenanceType() == MaintenanceType.FULL_SERVICE)
+                return true;
+        
+        return result;
     }
     
 }

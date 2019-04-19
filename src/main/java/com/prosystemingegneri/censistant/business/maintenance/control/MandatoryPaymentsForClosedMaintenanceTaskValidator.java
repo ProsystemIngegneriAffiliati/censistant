@@ -32,7 +32,12 @@ public class MandatoryPaymentsForClosedMaintenanceTaskValidator implements Const
 
     @Override
     public boolean isValid(MaintenanceTask maintenanceTask, ConstraintValidatorContext context) {
-        return !(maintenanceTask.getClosed() != null && maintenanceTask.getMaintenancePayments().isEmpty());
+        return !(
+                maintenanceTask.getClosed() != null
+                &&
+                (maintenanceTask.getSystem() != null || (maintenanceTask.getMaintenancePlan() != null && maintenanceTask.getMaintenancePlan().getMaintenanceType() == MaintenanceType.PREVENTIVE_MAINTENANCE))
+                &&
+                maintenanceTask.getMaintenancePayments().isEmpty());
     }
     
 }

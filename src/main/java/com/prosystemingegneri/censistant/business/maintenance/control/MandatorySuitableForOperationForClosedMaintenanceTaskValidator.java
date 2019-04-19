@@ -32,7 +32,12 @@ public class MandatorySuitableForOperationForClosedMaintenanceTaskValidator impl
 
     @Override
     public boolean isValid(MaintenanceTask maintenanceTask, ConstraintValidatorContext context) {
-        return !(maintenanceTask.getClosed() != null && maintenanceTask.getIsSuitableForOperation() == null);
+        return !(
+                maintenanceTask.getClosed() != null
+                &&
+                (maintenanceTask.getSystem() != null || (maintenanceTask.getMaintenancePlan() != null && maintenanceTask.getMaintenancePlan().getMaintenanceType() == MaintenanceType.PREVENTIVE_MAINTENANCE))
+                &&
+                maintenanceTask.getIsSuitableForOperation() == null);
     }
     
 }

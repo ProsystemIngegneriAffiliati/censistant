@@ -34,7 +34,7 @@ public class MandatoryInspectionsDoneForClosedMaintenanceTaskValidator implement
     @Override
     public boolean isValid(MaintenanceTask maintenanceTask, ConstraintValidatorContext context) {
         
-        if (maintenanceTask.getClosed() != null)
+        if (maintenanceTask.getClosed() != null && (maintenanceTask.getSystem() != null || (maintenanceTask.getMaintenancePlan() != null && maintenanceTask.getMaintenancePlan().getMaintenanceType() == MaintenanceType.PREVENTIVE_MAINTENANCE)))
             for (InspectionDone inspectionDone : maintenanceTask.getInspectionsDone())
                 if (inspectionDone.getInspectionResult().equals(ResultType.NULL))
                     return false;

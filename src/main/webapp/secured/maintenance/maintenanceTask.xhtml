@@ -17,6 +17,7 @@
         <ui:define name="content">
             <oou:importConstants type="com.prosystemingegneri.censistant.business.maintenance.control.ResultType" />
             <oou:importConstants type="com.prosystemingegneri.censistant.business.maintenance.entity.TaskPrice"/>
+            <oou:importConstants type="com.prosystemingegneri.censistant.business.maintenance.control.Inspection"/>
             <oou:form id="maintenanceTaskForm">
                 <div class="ui-fluid">
                     <div class="ui-g">
@@ -74,20 +75,10 @@
                                     </h:panelGroup>
                                     <h:panelGroup>
                                         <p:outputLabel for="isFullService" value="#{msg.maintenance_maintenanceContract_isFullService}" />
-                                        <p:inputSwitch id="isFullService" disabled="true" label="#{msg.maintenance_maintenanceContract_isFullService}" value="#{not empty maintenanceTaskPresenter.maintenanceTask.maintenanceContract and maintenanceTaskPresenter.maintenanceTask.maintenanceContract.isFullService}" />
+                                        <p:inputSwitch id="isFullService" disabled="true" label="#{msg.maintenance_maintenanceContract_isFullService}" value="#{not empty maintenanceTaskPresenter.maintenanceTask.maintenancePlan and maintenanceTaskPresenter.maintenanceTask.maintenancePlan.contractedSystem.fullService}" />
                                     </h:panelGroup>
                                     <h:panelGroup styleClass="md-inputfield">
-                                        <p:autoComplete id="maintenanceContract"
-                                                        dropdown="true"
-                                                        value="#{maintenanceTaskPresenter.maintenanceTask.maintenanceContract}"
-                                                        completeMethod="#{maintenanceContractOLDListPresenter.completeUnexpiredMaintenanceContract}"
-                                                        var="contract"
-                                                        itemLabel="#{contract.customerNameContractExpiry}"
-                                                        itemValue="#{contract}"
-                                                        forceSelection="true"
-                                                        >
-                                            <oou:converter converterId="omnifaces.ListConverter" list="#{maintenanceContractOLDListPresenter.unexpiredMaintenanceContracts}"/>
-                                        </p:autoComplete>
+                                        <p:inputText id="maintenanceContract" readonly="true" value="#{maintenanceTaskPresenter.maintenanceTask.maintenancePlan.contractedSystem.maintenanceContract.customerNameContractExpiry}" />
                                         <p:outputLabel for="maintenanceContract" value="#{msg.maintenance_maintenanceContract}"/>
                                         <p:message for="maintenanceContract"/>
                                     </h:panelGroup>
@@ -115,7 +106,7 @@
                                                                     itemLabel="#{cust.name}"
                                                                     itemValue="#{cust}"
                                                                     forceSelection="true">
-                                                        <oou:converter converterId="omnifaces.ListConverter" list="#{maintenanceTaskPresenter.customers}"/>
+                                                        <oou:converter converterId="omnifaces.ListConverter" list="#{maintenanceTaskPresenter.getCustomers(maintenanceTaskPresenter.completeCustomer)}"/>
                                                         <p:ajax event="itemSelect" update="plant newCustomerPanel" />
                                                     </p:autoComplete>
                                                     <p:outputLabel for="customer" value="#{msg.customerSupplier_customer}"/>
@@ -130,7 +121,7 @@
                                                                     itemLabel="#{plant.getNameAddress(false)}"
                                                                     itemValue="#{plant}"
                                                                     forceSelection="true">
-                                                        <oou:converter converterId="omnifaces.ListConverter" list="#{maintenanceTaskPresenter.plants}"/>
+                                                        <oou:converter converterId="omnifaces.ListConverter" list="#{maintenanceTaskPresenter.getPlants(maintenanceTaskPresenter.plant)}"/>
                                                         <p:ajax event="itemSelect" update="newCustomerPanel" />
                                                     </p:autoComplete>
                                                     <p:outputLabel for="plant" value="#{msg.siteSurvey_siteSurveyReport_constructionSite}"/>
@@ -289,8 +280,8 @@
                                             <h:panelGroup />
                                         </p:panelGrid>
                                     </f:facet>
-                                    <p:column headerText="#{msg.maintenance_inspection_name}" filterBy="#{inspectionDone.inspection.name}" filterMatchMode="contains" priority="0">
-                                        <h:outputText value="#{inspectionDone.inspection.name}" />
+                                    <p:column headerText="#{msg.maintenance_inspection_name}" priority="0">
+                                        <h:outputText value="#{msg['maintenance_inspection_' += inspectionDone.inspection]}" />
                                     </p:column>
                                     <p:column headerText="#{msg.actions}" style="width:100px; text-align:center" priority="0">
                                         <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">

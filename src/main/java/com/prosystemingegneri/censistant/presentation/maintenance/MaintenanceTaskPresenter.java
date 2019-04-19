@@ -19,8 +19,10 @@ package com.prosystemingegneri.censistant.presentation.maintenance;
 import com.prosystemingegneri.censistant.business.customerSupplier.boundary.CustomerSupplierService;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
+import com.prosystemingegneri.censistant.business.maintenance.boundary.MaintenanceContractService;
 import com.prosystemingegneri.censistant.business.maintenance.boundary.MaintenanceTaskService;
 import com.prosystemingegneri.censistant.business.maintenance.entity.InspectionDone;
+import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceContract;
 import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceTask;
 import com.prosystemingegneri.censistant.business.maintenance.entity.Replacement;
 import com.prosystemingegneri.censistant.business.maintenance.entity.WorkingDuration;
@@ -37,6 +39,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.ejb.EJBException;
 import javax.faces.application.FacesMessage;
@@ -77,6 +80,11 @@ public class MaintenanceTaskPresenter implements Serializable{
     private HandledItemLazyDataModel lazyHandledItems;
     
     private List<CustomerSupplier> customers;
+    private List<Plant> plants;
+    
+    @Inject
+    private MaintenanceContractService maintenanceContractService;
+    private List<MaintenanceContract> unexpiredMaintenanceContract;
     
     @Resource
     Validator validator;
@@ -91,6 +99,12 @@ public class MaintenanceTaskPresenter implements Serializable{
     private SystemType systemType;
     private PlaceType placeType;
     private Worker seller;
+    
+    private void init() {
+        unexpiredMaintenanceContract = new ArrayList<>();
+        customers = new ArrayList<>();
+        plants = new ArrayList<>();
+    }
     
     private boolean isValid() {
         boolean isValidated = true;
@@ -117,6 +131,7 @@ public class MaintenanceTaskPresenter implements Serializable{
     }
     
     public void detailMaintenanceTask() {
+        init();
         if (maintenanceTask == null && id != null) {
             if (id == 0)
                 maintenanceTask = service.create();
@@ -266,11 +281,20 @@ public class MaintenanceTaskPresenter implements Serializable{
     }
     
     public List<Plant> completePlant(String value) {
-        return customerSupplierService.listPlants(0, 10, "address", Boolean.TRUE, customer, null, value, null);
+        plants = customerSupplierService.listPlants(0, 25, "address", Boolean.TRUE, customer, null, null, value);
+        return plants;
     }
-
-    public List<Plant> getPlants() {
-        return customerSupplierService.listPlants(0, 0, "address", Boolean.TRUE, customer, null, null, null);
+    
+    /**
+     * Useful only for 'omnifaces.ListConverter' used in 'p:autoComplete'
+     * 
+     * @param defaultPlant Needed when jsf page read not null autocomplete (when, for example, open an already saved entity)
+     * @return 
+     */
+    public List<Plant> getPlants(Plant defaultPlant) {
+        if (plants.isEmpty())
+            plants.add(defaultPlant);
+        return plants;
     }
 
     public CustomerSupplier getNewCustomer() {
@@ -350,15 +374,36 @@ public class MaintenanceTaskPresenter implements Serializable{
     }
     
     public List<CustomerSupplier> completeCustomer(String value) {
-        customers = customerSupplierService.listCustomerSuppliers(0, 10, "name", Boolean.TRUE, null, null, Boolean.TRUE, null, null, value, null);
+        customers = customerSupplierService.listCustomerSuppliers(0, 25, "name", Boolean.TRUE, null, null, Boolean.TRUE, null, null, value, null);
         return customers;
     }
 
-    public List<CustomerSupplier> getCustomers() {
-        if (customers == null) {
-            customers = new ArrayList<>();
-            customers.add(customer);
-        }
+    /**
+     * Useful only for 'omnifaces.ListConverter' used in 'p:autoComplete'
+     * 
+     * @param defaultCustomer Needed when jsf page read not null autocomplete (when, for example, open an already saved entity)
+     * @return 
+     */
+    public List<CustomerSupplier> getCustomers(CustomerSupplier defaultCustomer) {
+        if (customers.isEmpty())
+            customers.add(defaultCustomer);
         return customers;
+    }
+    
+    public List<MaintenanceContract> completeUnexpiredMaintenanceContract(String customerName) {
+        unexpiredMaintenanceContract = maintenanceContractService.list(0, 25, null, null, customerName, Boolean.FALSE);
+        return unexpiredMaintenanceContract;
+    }
+    
+    /**
+     * Useful only for 'omnifaces.ListConverter' used in 'p:autoComplete'
+     * 
+     * @param defaultMaintenanceContract Needed when jsf page read not null autocomplete (when, for example, open an already saved entity)
+     * @return 
+     */
+    public List<MaintenanceContract> getUnexpiredMaintenanceContracts(MaintenanceContract defaultMaintenanceContract) {
+        if (unexpiredMaintenanceContract.isEmpty())
+            unexpiredMaintenanceContract.add(defaultMaintenanceContract);
+        return unexpiredMaintenanceContract;
     }
 }
