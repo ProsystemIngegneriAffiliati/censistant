@@ -17,6 +17,7 @@
 package com.prosystemingegneri.censistant.business.production.boundary;
 
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
+import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant_;
 import com.prosystemingegneri.censistant.business.production.entity.System;
 import com.prosystemingegneri.censistant.business.production.entity.System_;
@@ -82,13 +83,13 @@ public class SystemService implements Serializable{
         em.remove(readSystem(id));
     }
 
-    public List<System> listSystems(int first, int pageSize, String sortField, Boolean isAscending, String description, CustomerSupplier customer) {
+    public List<System> listSystems(int first, int pageSize, String sortField, Boolean isAscending, String description, CustomerSupplier customer, Plant plant) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<System> query = cb.createQuery(System.class);
         Root<System> root = query.from(System.class);
         CriteriaQuery<System> select = query.select(root).distinct(true);
         
-        List<Predicate> conditions = calculateConditions(cb, root, description, customer);
+        List<Predicate> conditions = calculateConditions(cb, root, description, customer, plant);
 
         if (!conditions.isEmpty())
             query.where(conditions.toArray(new Predicate[conditions.size()]));
@@ -119,13 +120,13 @@ public class SystemService implements Serializable{
         return typedQuery.getResultList();
     }
     
-    public Long getSystemsCount(String description, CustomerSupplier customer) {
+    public Long getSystemsCount(String description, CustomerSupplier customer, Plant plant) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Long> query = cb.createQuery(Long.class);
         Root<System> root = query.from(System.class);
         CriteriaQuery<Long> select = query.select(cb.count(root));
 
-        List<Predicate> conditions = calculateConditions(cb, root, description, customer);
+        List<Predicate> conditions = calculateConditions(cb, root, description, customer, plant);
 
         if (!conditions.isEmpty())
             query.where(conditions.toArray(new Predicate[conditions.size()]));
@@ -133,7 +134,7 @@ public class SystemService implements Serializable{
         return em.createQuery(select).getSingleResult();
     }
     
-    private List<Predicate> calculateConditions(CriteriaBuilder cb, Root<System> root, String description, CustomerSupplier customer) {
+    private List<Predicate> calculateConditions(CriteriaBuilder cb, Root<System> root, String description, CustomerSupplier customer, Plant plant) {
         List<Predicate> conditions = new ArrayList<>();
 
         //description
@@ -149,6 +150,16 @@ public class SystemService implements Serializable{
                     .join(Offer_.siteSurveyReport)
                     .join(SiteSurveyReport_.plant)
                     .join(Plant_.customerSupplier), customer));
+        }
+        
+        //Plant
+        if (plant != null) {
+            ListJoin<System, Offer> offersRoot = root.join(System_.offers);
+            conditions.add(cb.isNotNull(offersRoot.get(Offer_.jobOrder)));
+            conditions.add(cb.equal(
+                    offersRoot
+                    .join(Offer_.siteSurveyReport)
+                    .get(SiteSurveyReport_.plant), plant));
         }
         
         return conditions;

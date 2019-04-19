@@ -64,13 +64,13 @@ public class SystemListPresenter implements Serializable{
     }
     
     public List<System> completeSystems(String description) {
-        return service.listSystems(0, 10, null, null, description, null);
+        return service.listSystems(0, 10, null, null, description, null, null);
     }
     
     //Useful only for 'omnifaces.ListConverter' used in 'p:autoComplete'
     public List<System> getSystems() {
         if (systems == null || systems.isEmpty())
-            systems = service.listSystems(0, 0, null, null, null, null);
+            systems = service.listSystems(0, 0, null, null, null, null, null);
         
         return systems;
     }

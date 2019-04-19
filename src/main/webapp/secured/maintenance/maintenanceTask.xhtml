@@ -68,33 +68,10 @@
                                         <p:message for="maintenanceWorker"/>
                                     </h:panelGroup>
                                 </p:panelGrid>
-                                <p:panelGrid columns="4" columnClasses="ui-grid-col-3,ui-grid-col-3,ui-grid-col-3,ui-grid-col-3" layout="grid" styleClass="ui-panelgrid-blank form-group">
-                                    <h:panelGroup>
-                                        <p:outputLabel for="isGuaranteeValid" value="#{msg.maintenance_maintenanceTask_isGuaranteeValid}" />
-                                        <p:inputSwitch id="isGuaranteeValid" label="#{msg.maintenance_maintenanceTask_isGuaranteeValid}" value="#{maintenanceTaskPresenter.maintenanceTask.isGuaranteeValid}" />
-                                    </h:panelGroup>
-                                    <h:panelGroup>
-                                        <p:outputLabel for="isFullService" value="#{msg.maintenance_maintenanceContract_isFullService}" />
-                                        <p:inputSwitch id="isFullService" disabled="true" label="#{msg.maintenance_maintenanceContract_isFullService}" value="#{not empty maintenanceTaskPresenter.maintenanceTask.maintenancePlan and maintenanceTaskPresenter.maintenanceTask.maintenancePlan.contractedSystem.fullService}" />
-                                    </h:panelGroup>
-                                    <h:panelGroup styleClass="md-inputfield">
-                                        <p:inputText id="maintenanceContract" readonly="true" value="#{maintenanceTaskPresenter.maintenanceTask.maintenancePlan.contractedSystem.maintenanceContract.customerNameContractExpiry}" />
-                                        <p:outputLabel for="maintenanceContract" value="#{msg.maintenance_maintenanceContract}"/>
-                                        <p:message for="maintenanceContract"/>
-                                    </h:panelGroup>
-                                    <h:panelGroup styleClass="md-inputfield">
-                                        <p:inputText readonly="true" id="expiry" value="#{maintenanceTaskPresenter.maintenanceTask.expiry}">
-                                            <f:convertDateTime locale="it" pattern="MMMM yy" />
-                                        </p:inputText>
-                                        <p:outputLabel for="expiry" value="#{msg.maintenance_maintenanceTask_expiryForPrinting}"/>
-                                        <p:message for="expiry"/>
-                                    </h:panelGroup>
-                                </p:panelGrid>
 
-                                <p:panelGrid columns="2" columnClasses="ui-grid-col-8,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group">
-                                    <h:panelGroup id="newSystemPanel">
-                                        <p:fieldset rendered="#{empty maintenanceTaskPresenter.maintenanceTask.system}"
-                                                    legend="#{msg.production_system_ToBeCreated}"
+                                <h:panelGroup id="systemPanel">
+                                    <p:panelGrid rendered="#{empty maintenanceTaskPresenter.maintenanceTask.system and empty maintenanceTaskPresenter.maintenanceTask.maintenancePlan}" columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                        <p:fieldset legend="#{msg.production_system_ToBeCreated}"
                                                     toggleable="true" collapsed="true" style="margin-bottom: 25px">
                                             <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                                 <h:panelGroup styleClass="md-inputfield">
@@ -106,7 +83,7 @@
                                                                     itemLabel="#{cust.name}"
                                                                     itemValue="#{cust}"
                                                                     forceSelection="true">
-                                                        <oou:converter converterId="omnifaces.ListConverter" list="#{maintenanceTaskPresenter.getCustomers(maintenanceTaskPresenter.completeCustomer)}"/>
+                                                        <oou:converter converterId="omnifaces.ListConverter" list="#{maintenanceTaskPresenter.getCustomers(maintenanceTaskPresenter.customer)}"/>
                                                         <p:ajax event="itemSelect" update="plant newCustomerPanel" />
                                                     </p:autoComplete>
                                                     <p:outputLabel for="customer" value="#{msg.customerSupplier_customer}"/>
@@ -231,28 +208,105 @@
                                             <p:commandButton action="#{maintenanceTaskPresenter.createNewJobOrder()}"
                                                              value="#{msg.add} #{msg.production_system}"
                                                              icon="ui-icon-create"
-                                                             update="system newSystemPanel">
+                                                             update="contractAndSystem systemPanel replacementsPanel">
                                                 <oou:ignoreValidationFailed />
                                             </p:commandButton>
                                         </p:fieldset>
-                                    </h:panelGroup>
 
-                                    <h:panelGroup styleClass="md-inputfield">
-                                        <p:autoComplete id="system"
-                                                        dropdown="true"
-                                                        value="#{maintenanceTaskPresenter.maintenanceTask.system}"
-                                                        completeMethod="#{systemListPresenter.completeSystems}"
-                                                        var="sys"
-                                                        itemLabel="#{sys.name}"
-                                                        itemValue="#{sys}"
-                                                        forceSelection="true">
-                                            <oou:converter converterId="omnifaces.ListConverter" list="#{systemListPresenter.systems}"/>
-                                            <p:ajax event="itemSelect" listener="#{maintenanceTaskPresenter.onSystemSelect}" update="replacementsPanel newSystemPanel" />
-                                        </p:autoComplete>
-                                        <p:outputLabel for="system" value="#{msg.production_system_InDb}"/>
-                                        <p:message for="system"/>
-                                    </h:panelGroup>
-                                </p:panelGrid>
+                                        <p:fieldset legend="#{msg.production_system_InDb}"
+                                                    toggleable="true" collapsed="true" style="margin-bottom: 25px">
+                                            <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                                <h:panelGroup styleClass="md-inputfield">
+                                                    <p:autoComplete id="customerSystemInDb"
+                                                                    dropdown="true"
+                                                                    value="#{maintenanceTaskPresenter.customer}"
+                                                                    completeMethod="#{maintenanceTaskPresenter.completeCustomer}"
+                                                                    var="cust"
+                                                                    itemLabel="#{cust.name}"
+                                                                    itemValue="#{cust}"
+                                                                    forceSelection="true">
+                                                        <oou:converter converterId="omnifaces.ListConverter" list="#{maintenanceTaskPresenter.getCustomers(maintenanceTaskPresenter.customer)}"/>
+                                                        <p:ajax event="itemSelect" listener="#{maintenanceTaskPresenter.updateSystemsToBeAdded()}" update="plant systemToBeAdded" />
+                                                    </p:autoComplete>
+                                                    <p:outputLabel for="customerSystemInDb" value="#{msg.customerSupplier_customer}"/>
+                                                    <p:message for="customerSystemInDb"/>
+                                                </h:panelGroup>
+                                                <h:panelGroup styleClass="md-inputfield">
+                                                    <p:autoComplete id="plantSystemInDb"
+                                                                    dropdown="true"
+                                                                    value="#{maintenanceTaskPresenter.plant}"
+                                                                    completeMethod="#{maintenanceTaskPresenter.completePlant}"
+                                                                    var="plant"
+                                                                    itemLabel="#{plant.getNameAddress(false)}"
+                                                                    itemValue="#{plant}"
+                                                                    forceSelection="true">
+                                                        <oou:converter converterId="omnifaces.ListConverter" list="#{maintenanceTaskPresenter.getPlants(maintenanceTaskPresenter.plant)}"/>
+                                                        <p:ajax event="itemSelect" listener="#{maintenanceTaskPresenter.updateSystemsToBeAdded()}" update="systemToBeAdded" />
+                                                    </p:autoComplete>
+                                                    <p:outputLabel for="plantSystemInDb" value="#{msg.siteSurvey_siteSurveyReport_constructionSite}"/>
+                                                    <p:message for="plantSystemInDb"/>
+                                                </h:panelGroup>
+
+                                                <h:panelGroup>
+                                                    <p:selectOneMenu id="systemToBeAdded" value="#{maintenanceTaskPresenter.maintenanceTask.system}" converter="omnifaces.SelectItemsConverter">
+                                                        <f:selectItem itemLabel="#{msg.production_system_noSelection}" itemValue="" />
+                                                        <f:selectItems
+                                                            value="#{maintenanceTaskPresenter.systemsToBeAdded}"
+                                                            var="system"
+                                                            itemLabel="#{system.address}"
+                                                            itemValue="#{system}" />
+                                                        <p:ajax event="itemSelect" listener="#{maintenanceTaskPresenter.onSystemSelect}" update="replacementsPanel unexpiredMaintenanceContract contractAndSystem" />
+                                                    </p:selectOneMenu>
+                                                    <p:message for="systemToBeAdded"/>
+                                                </h:panelGroup>
+                                                <h:panelGroup>
+                                                    <p:selectOneMenu id="unexpiredMaintenanceContract" value="#{maintenanceTaskPresenter.unexpiredMaintenanceContract}" converter="omnifaces.SelectItemsConverter">
+                                                        <f:selectItem itemLabel="#{msg.maintenance_maintenanceContract_abbr}" itemValue="" />
+                                                        <f:selectItems
+                                                            value="#{maintenanceTaskPresenter.unexpiredMaintenanceContracts}"
+                                                            var="contract"
+                                                            itemLabel="#{contract.customerNameContractExpiry}"
+                                                            itemValue="#{contract}" />
+                                                        <p:ajax event="itemSelect" listener="#{maintenanceTaskPresenter.onMaintenanceContractSelect}" update="contractAndSystem" />
+                                                    </p:selectOneMenu>
+                                                    <p:message for="unexpiredMaintenanceContract"/>
+                                                </h:panelGroup>
+                                            </p:panelGrid>
+                                        </p:fieldset>
+                                    </p:panelGrid>
+                                </h:panelGroup>
+
+                                <h:panelGroup id="contractAndSystem">
+                                    <p:panelGrid rendered="#{not empty maintenanceTaskPresenter.systemStr}" columns="4" columnClasses="ui-grid-col-3,ui-grid-col-3,ui-grid-col-3,ui-grid-col-3" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                        <h:panelGroup>
+                                            <p:outputLabel for="isGuaranteeValid" value="#{msg.maintenance_maintenanceTask_isGuaranteeValid}" />
+                                            <p:inputSwitch id="isGuaranteeValid" label="#{msg.maintenance_maintenanceTask_isGuaranteeValid}" value="#{maintenanceTaskPresenter.maintenanceTask.isGuaranteeValid}" />
+                                        </h:panelGroup>
+                                        <h:panelGroup>
+                                            <p:outputLabel for="isFullService" value="#{msg.maintenance_maintenanceContract_isFullService}" />
+                                            <p:inputSwitch id="isFullService" disabled="true" label="#{msg.maintenance_maintenanceContract_isFullService}" value="#{not empty maintenanceTaskPresenter.maintenanceTask.maintenancePlan and maintenanceTaskPresenter.maintenanceTask.maintenancePlan.contractedSystem.fullService}" />
+                                        </h:panelGroup>
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:inputText id="maintenanceContract" readonly="true" value="#{maintenanceTaskPresenter.maintenanceTask.maintenancePlan.contractedSystem.maintenanceContract.customerNameContractExpiry}" />
+                                            <p:outputLabel for="maintenanceContract" value="#{msg.maintenance_maintenanceContract}"/>
+                                            <p:message for="maintenanceContract"/>
+                                        </h:panelGroup>
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:inputText readonly="true" id="expiry" value="#{maintenanceTaskPresenter.maintenanceTask.expiry}">
+                                                <f:convertDateTime locale="it" pattern="MMMM yy" />
+                                            </p:inputText>
+                                            <p:outputLabel for="expiry" value="#{msg.maintenance_maintenanceTask_expiryForPrinting}"/>
+                                            <p:message for="expiry"/>
+                                        </h:panelGroup>
+                                    </p:panelGrid>
+                                    <p:panelGrid rendered="#{not empty maintenanceTaskPresenter.systemStr}" columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:inputText readonly="true" id="system" value="#{maintenanceTaskPresenter.systemStr}" />
+                                            <p:outputLabel for="system" value="#{msg.production_system}"/>
+                                            <p:message for="system"/>
+                                        </h:panelGroup>
+                                    </p:panelGrid>
+                                </h:panelGroup>
 
                                 <p:panelGrid columns="2" columnClasses="ui-grid-col-5,ui-grid-col-7" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                     <h:panelGroup styleClass="md-inputfield">

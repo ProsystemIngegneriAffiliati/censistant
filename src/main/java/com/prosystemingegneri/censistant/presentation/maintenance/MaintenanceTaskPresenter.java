@@ -21,11 +21,15 @@ import com.prosystemingegneri.censistant.business.customerSupplier.entity.Custom
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
 import com.prosystemingegneri.censistant.business.maintenance.boundary.MaintenanceContractService;
 import com.prosystemingegneri.censistant.business.maintenance.boundary.MaintenanceTaskService;
+import com.prosystemingegneri.censistant.business.maintenance.control.MaintenanceType;
+import com.prosystemingegneri.censistant.business.maintenance.entity.ContractedSystem;
 import com.prosystemingegneri.censistant.business.maintenance.entity.InspectionDone;
 import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceContract;
+import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenancePlan;
 import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceTask;
 import com.prosystemingegneri.censistant.business.maintenance.entity.Replacement;
 import com.prosystemingegneri.censistant.business.maintenance.entity.WorkingDuration;
+import com.prosystemingegneri.censistant.business.production.boundary.SystemService;
 import com.prosystemingegneri.censistant.business.production.entity.System;
 import com.prosystemingegneri.censistant.business.sales.entity.PlaceType;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SystemType;
@@ -81,10 +85,15 @@ public class MaintenanceTaskPresenter implements Serializable{
     
     private List<CustomerSupplier> customers;
     private List<Plant> plants;
+    @Inject
+    private SystemService systemService;
+    private List<System> systemsToBeAdded;
+    private System systemToBeAdded;
     
     @Inject
     private MaintenanceContractService maintenanceContractService;
-    private List<MaintenanceContract> unexpiredMaintenanceContract;
+    private List<MaintenanceContract> unexpiredMaintenanceContracts;
+    private MaintenanceContract unexpiredMaintenanceContract;
     
     @Resource
     Validator validator;
@@ -101,7 +110,6 @@ public class MaintenanceTaskPresenter implements Serializable{
     private Worker seller;
     
     private void init() {
-        unexpiredMaintenanceContract = new ArrayList<>();
         customers = new ArrayList<>();
         plants = new ArrayList<>();
     }
@@ -199,8 +207,30 @@ public class MaintenanceTaskPresenter implements Serializable{
     
     public void onSystemSelect(SelectEvent event) {
         System system = (System) event.getObject();
-        if (system != null)
+        if (system != null) {
             lazyHandledItems = new HandledItemLazyDataModel(handledItemService, null, system, null, Boolean.FALSE);
+            updateUnexpiredMaintenanceContracts();
+        }
+    }
+    
+    public void onMaintenanceContractSelect(SelectEvent event) {
+        MaintenanceContract maintenanceContract = (MaintenanceContract) event.getObject();
+        if (maintenanceContract != null) {
+            for (ContractedSystem contractedSystem : maintenanceContract.getContractedSystems()) {
+                if (contractedSystem.getSystem().equals(systemToBeAdded)) {
+                    MaintenancePlan maintenancePlan = null;
+                    for (MaintenancePlan maintenancePlan2 : contractedSystem.getMaintenancePlans())
+                        if (maintenancePlan2.getMaintenanceType() == MaintenanceType.MAINTENANCE)
+                            maintenancePlan = maintenancePlan2;
+                    if (maintenancePlan == null) {
+                        maintenancePlan = new MaintenancePlan(MaintenanceType.MAINTENANCE);
+                        contractedSystem.addMaintenancePlan(maintenancePlan);
+                    }
+                    maintenanceTask.setSystem(null);
+                    maintenanceTask.setMaintenancePlan(maintenancePlan);
+                }
+            }
+        }
     }
     
     public void onHandledItemSelect(SelectEvent event) {
@@ -389,21 +419,51 @@ public class MaintenanceTaskPresenter implements Serializable{
             customers.add(defaultCustomer);
         return customers;
     }
-    
-    public List<MaintenanceContract> completeUnexpiredMaintenanceContract(String customerName) {
-        unexpiredMaintenanceContract = maintenanceContractService.list(0, 25, null, null, customerName, Boolean.FALSE);
-        return unexpiredMaintenanceContract;
+
+    public System getSystemToBeAdded() {
+        return systemToBeAdded;
+    }
+
+    public void setSystemToBeAdded(System systemToBeAdded) {
+        this.systemToBeAdded = systemToBeAdded;
     }
     
-    /**
-     * Useful only for 'omnifaces.ListConverter' used in 'p:autoComplete'
-     * 
-     * @param defaultMaintenanceContract Needed when jsf page read not null autocomplete (when, for example, open an already saved entity)
-     * @return 
-     */
-    public List<MaintenanceContract> getUnexpiredMaintenanceContracts(MaintenanceContract defaultMaintenanceContract) {
-        if (unexpiredMaintenanceContract.isEmpty())
-            unexpiredMaintenanceContract.add(defaultMaintenanceContract);
+    public void updateSystemsToBeAdded() {
+        systemsToBeAdded = systemService.listSystems(0, 0, null, null, null, customer, plant);
+    }
+
+    public List<System> getSystemsToBeAdded() {
+        return systemsToBeAdded;
+    }
+
+    public MaintenanceContract getUnexpiredMaintenanceContract() {
         return unexpiredMaintenanceContract;
+    }
+
+    public void setUnexpiredMaintenanceContract(MaintenanceContract unexpiredMaintenanceContract) {
+        this.unexpiredMaintenanceContract = unexpiredMaintenanceContract;
+    }
+    
+    public void updateUnexpiredMaintenanceContracts() {
+        unexpiredMaintenanceContracts = maintenanceContractService.list(0, 0, null, null, customer, null, plant, systemToBeAdded, Boolean.FALSE);
+    }
+
+    public List<MaintenanceContract> getUnexpiredMaintenanceContracts() {
+        return unexpiredMaintenanceContracts;
+    }
+
+    public void setUnexpiredMaintenanceContracts(List<MaintenanceContract> unexpiredMaintenanceContracts) {
+        this.unexpiredMaintenanceContracts = unexpiredMaintenanceContracts;
+    }
+    
+    public String getSystemStr() {
+        if (maintenanceTask != null) {
+            if (maintenanceTask.getSystem() != null)
+                return maintenanceTask.getSystem().getAddress();
+            if (maintenanceTask.getMaintenancePlan() != null)
+                return maintenanceTask.getMaintenancePlan().getContractedSystem().getSystem().getAddress();
+        }
+        
+        return "";
     }
 }

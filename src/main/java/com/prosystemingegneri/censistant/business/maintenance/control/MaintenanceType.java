@@ -24,7 +24,8 @@ public enum MaintenanceType {
     PREVENTIVE_MAINTENANCE(0),
     FULL_SERVICE(1),
     TELECONTROL(2),
-    ON_CALL(3);
+    ON_CALL(3),
+    MAINTENANCE(4);
     
     private final int value;
 

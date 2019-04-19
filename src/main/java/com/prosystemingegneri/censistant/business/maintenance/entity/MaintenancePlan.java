@@ -58,6 +58,11 @@ public class MaintenancePlan extends BaseEntity<Long> {
         maintenanceTasksNumber = 1;
     }
 
+    public MaintenancePlan(MaintenanceType maintenanceType) {
+        this();
+        this.maintenanceType = maintenanceType;
+    }
+
     public ContractedSystem getContractedSystem() {
         return contractedSystem;
     }

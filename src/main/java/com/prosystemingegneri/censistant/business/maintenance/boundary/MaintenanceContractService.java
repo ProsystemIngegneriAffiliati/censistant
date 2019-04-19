@@ -18,6 +18,7 @@ package com.prosystemingegneri.censistant.business.maintenance.boundary;
 
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier_;
+import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant_;
 import com.prosystemingegneri.censistant.business.maintenance.control.MaintenanceType;
 import com.prosystemingegneri.censistant.business.maintenance.entity.ContractedSystem;
@@ -31,6 +32,7 @@ import com.prosystemingegneri.censistant.business.production.entity.System_;
 import com.prosystemingegneri.censistant.business.sales.entity.Offer;
 import com.prosystemingegneri.censistant.business.sales.entity.Offer_;
 import com.prosystemingegneri.censistant.business.siteSurvey.boundary.WorkerService;
+import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport_;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -45,6 +47,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
 import javax.persistence.criteria.ListJoin;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Path;
@@ -91,13 +94,13 @@ public class MaintenanceContractService implements Serializable{
         em.remove(find(id));
     }
 
-    public List<MaintenanceContract> list(int first, int pageSize, String sortField, Boolean isAscending, String customerName, Boolean isExpired) {
+    public List<MaintenanceContract> list(int first, int pageSize, String sortField, Boolean isAscending, CustomerSupplier customer, String customerName, Plant plant, System system, Boolean isExpired) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<MaintenanceContract> query = cb.createQuery(MaintenanceContract.class);
         Root<MaintenanceContract> root = query.from(MaintenanceContract.class);
         CriteriaQuery<MaintenanceContract> select = query.select(root).distinct(true);
         
-        List<Predicate> conditions = calculateConditions(cb, root, customerName, isExpired);
+        List<Predicate> conditions = calculateConditions(cb, root, customer, customerName, plant, system, isExpired);
 
         if (!conditions.isEmpty())
             query.where(conditions.toArray(new Predicate[conditions.size()]));
@@ -131,13 +134,13 @@ public class MaintenanceContractService implements Serializable{
         return typedQuery.getResultList();
     }
     
-    public Long getCount(String customerName, Boolean isExpired) {
+    public Long getCount(CustomerSupplier customer, String customerName, Plant plant, System system, Boolean isExpired) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Long> query = cb.createQuery(Long.class);
         Root<MaintenanceContract> root = query.from(MaintenanceContract.class);
         CriteriaQuery<Long> select = query.select(cb.count(root));
 
-        List<Predicate> conditions = calculateConditions(cb, root, customerName, isExpired);
+        List<Predicate> conditions = calculateConditions(cb, root, customer, customerName, plant, system, isExpired);
 
         if (!conditions.isEmpty())
             query.where(conditions.toArray(new Predicate[conditions.size()]));
@@ -145,19 +148,42 @@ public class MaintenanceContractService implements Serializable{
         return em.createQuery(select).getSingleResult();
     }
     
-    private List<Predicate> calculateConditions(CriteriaBuilder cb, Root<MaintenanceContract> root, String customerName, Boolean isExpired) {
+    private List<Predicate> calculateConditions(CriteriaBuilder cb, Root<MaintenanceContract> root, CustomerSupplier customer, String customerName, Plant plant, System system, Boolean isExpired) {
         List<Predicate> conditions = new ArrayList<>();
         
-        //Customer name
-        if (customerName != null && !customerName.isEmpty())
-            conditions.add(cb.like(cb.lower(root
-                    .join(MaintenanceContract_.contractedSystems)
-                    .join(ContractedSystem_.system)
-                    .join(System_.offers)
-                    .join(Offer_.siteSurveyReport)
-                    .join(SiteSurveyReport_.plant)
-                    .join(Plant_.customerSupplier)
-                    .get(CustomerSupplier_.name)), "%" + customerName.toLowerCase() + "%"));
+        if (customer != null || (customerName != null && !customerName.isEmpty()) || plant != null || system != null) {
+            Join<MaintenanceContract, ContractedSystem> rootContractedSystem = root.join(MaintenanceContract_.contractedSystems);
+            
+            if (customer != null || (customerName != null && !customerName.isEmpty()) || plant != null) {
+                Join<ContractedSystem, System> rootSystem = rootContractedSystem.join(ContractedSystem_.system);
+                Join<System, Offer> rootOffers = rootSystem.join(System_.offers);
+                Join<Offer, SiteSurveyReport> rootSiteSurveyReport = rootOffers.join(Offer_.siteSurveyReport);
+                
+                if (customer != null || (customerName != null && !customerName.isEmpty())) {
+                    Join<SiteSurveyReport, Plant> rootPlant = rootSiteSurveyReport.join(SiteSurveyReport_.plant);
+                    
+                    //Customer entity
+                    if (customer != null)
+                        conditions.add(cb.equal(rootPlant.get(Plant_.customerSupplier), customer));
+                    
+                    if (customerName != null && !customerName.isEmpty())
+                        conditions.add(cb.like(cb.lower(
+                                rootPlant
+                                        .join(Plant_.customerSupplier)
+                                        .get(CustomerSupplier_.name))
+                                , "%" + customerName.toLowerCase() + "%"));
+                }
+                
+                //Plant entity
+                if (plant != null)
+                    conditions.add(cb.equal(rootSiteSurveyReport.get(SiteSurveyReport_.plant), plant));
+            }
+            
+            //System entity
+            if (system != null)
+                conditions.add(cb.equal(rootContractedSystem.get(ContractedSystem_.system), system));
+            
+        }
         
         //Is expired
         if (isExpired != null) {

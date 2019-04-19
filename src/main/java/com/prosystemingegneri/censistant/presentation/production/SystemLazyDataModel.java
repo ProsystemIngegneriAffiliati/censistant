@@ -71,8 +71,8 @@ public class SystemLazyDataModel extends LazyDataModel<System>{
             }
         }
         
-        List<System> result = service.listSystems(first, pageSize, sortField, isAscending, description, customer);
-        this.setRowCount(service.getSystemsCount(description, customer).intValue());
+        List<System> result = service.listSystems(first, pageSize, sortField, isAscending, description, customer, null);
+        this.setRowCount(service.getSystemsCount(description, customer, null).intValue());
         
         return result;
     }

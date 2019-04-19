@@ -68,8 +68,8 @@ public class MaintenanceContractLazyDataModel extends LazyDataModel<MaintenanceC
             }
         }
         
-        List<MaintenanceContract> result = service.list(first, pageSize, sortField, isAscending, customerName, isExpired);
-        this.setRowCount(service.getCount(customerName, isExpired).intValue());
+        List<MaintenanceContract> result = service.list(first, pageSize, sortField, isAscending, null, customerName, null, null, isExpired);
+        this.setRowCount(service.getCount(null, customerName, null, null, isExpired).intValue());
         
         return result;
     }
