@@ -155,7 +155,8 @@ public class MaintenanceTaskService implements Serializable{
                 joinPlantSystem.get(Plant_.address),
                 joinMaintenancePlan.get(MaintenancePlan_.maintenanceType),
                 root.get(MaintenanceTask_.expiry),
-                root.get(MaintenanceTask_.closed)
+                root.get(MaintenanceTask_.closed),
+                root.get(MaintenanceTask_.closingNotes)
         )).distinct(true);
         
         List<Predicate> conditions = calculateConditions(cb, root, joinMaintenancePlan, joinPlantFromMaintenancePlan, joinCustomerSupplierFromMaintenancePlan, joinPlantSystem, joinCustomerSupplierFromSystem, customerName, systemAddress, maintenanceType, expiryStart, expiryEnd, isClosed);

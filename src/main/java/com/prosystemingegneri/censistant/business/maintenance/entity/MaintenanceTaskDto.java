@@ -35,6 +35,7 @@ public class MaintenanceTaskDto implements Serializable {
     private MaintenanceType maintenanceType;
     private Date expiry;
     private Date closed;
+    private String closingNotes;
 
     public MaintenanceTaskDto() {
     }
@@ -50,7 +51,8 @@ public class MaintenanceTaskDto implements Serializable {
             String systemAddressFromSystem,
             MaintenanceType maintenanceType,
             Date expiry,
-            Date closed) {
+            Date closed,
+            String closingNotes) {
         this.id = id;
         this.customerNameFromMaintenancePlan = customerNameFromMaintenancePlan;
         this.systemAddressFromMaintenancePlan = systemAddressFromMaintenancePlan;
@@ -59,6 +61,7 @@ public class MaintenanceTaskDto implements Serializable {
         this.maintenanceType = maintenanceType;
         this.expiry = expiry;
         this.closed = closed;
+        this.closingNotes = closingNotes;
     }
     
     public static MaintenanceTaskDto create(MaintenanceTask maintenanceTask) {
@@ -80,6 +83,7 @@ public class MaintenanceTaskDto implements Serializable {
             result.setClosed(maintenanceTask.getClosed());
             result.setExpiry(maintenanceTask.getExpiry());
             result.setId(maintenanceTask.getId());
+            result.setClosingNotes(maintenanceTask.getClosingNotes());
         }
         
         return result;
@@ -166,5 +170,16 @@ public class MaintenanceTaskDto implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
+
+    public String getClosingNotes() {
+        return closingNotes;
+    }
+
+    public void setClosingNotes(String closingNotes) {
+        this.closingNotes = closingNotes;
+    }
     
+    public boolean isSeeNotes() {
+        return closed != null && maintenanceType == MaintenanceType.TELECONTROL && closingNotes != null && !closingNotes.isEmpty();
+    }
 }

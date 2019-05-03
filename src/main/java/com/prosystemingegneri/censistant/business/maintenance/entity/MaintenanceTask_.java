@@ -32,6 +32,7 @@ public class MaintenanceTask_ {
     public static volatile SingularAttribute<MaintenanceTask, MaintenancePlan> maintenancePlan;
     public static volatile SingularAttribute<MaintenanceTask, System> system;
     public static volatile SingularAttribute<MaintenanceTask, String> description;
+    public static volatile SingularAttribute<MaintenanceTask, String> closingNotes;
     public static volatile SingularAttribute<MaintenanceTask, Date> creation;
     public static volatile SingularAttribute<MaintenanceTask, Worker> inChargeWorker;
     public static volatile SingularAttribute<MaintenanceTask, Boolean> isGuaranteeValid;
