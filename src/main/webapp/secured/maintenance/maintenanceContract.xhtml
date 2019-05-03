@@ -172,7 +172,7 @@
                                         <p:cellEditor>
                                             <f:facet name="output">
                                                 <h:outputText value="#{maintenanceTask.expiry}">
-                                                    <f:convertDateTime pattern="MMMM YYYY" />
+                                                    <f:convertDateTime pattern="MMMM yyyy" />
                                                 </h:outputText>
                                             </f:facet>
                                             <f:facet name="input">
@@ -190,7 +190,7 @@
                                             </p:selectOneButton>
                                         </f:facet>
                                         <h:outputText value="#{maintenanceTask.closed}">
-                                            <f:convertDateTime pattern="MMMM YYYY" />
+                                            <f:convertDateTime pattern="MMMM yyyy" />
                                         </h:outputText>
                                     </p:column>
                                 </p:dataTable>
