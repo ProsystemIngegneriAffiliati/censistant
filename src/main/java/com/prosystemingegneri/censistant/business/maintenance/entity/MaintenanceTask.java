@@ -34,6 +34,8 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import javax.imageio.ImageIO;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -87,8 +89,8 @@ public class MaintenanceTask extends BaseEntity<Long> {
     @ManyToOne(optional = false)
     private Worker inChargeWorker;
     
-    @ManyToOne
-    private Worker maintenanceWorker;
+    @ManyToMany
+    private Set<Worker> maintenanceWorkers;
     
     @NotNull
     @Column(nullable = false)
@@ -135,6 +137,7 @@ public class MaintenanceTask extends BaseEntity<Long> {
         maintenancePayments = new ArrayList<>();
         inspectionsDone = new ArrayList<>();
         replacements = new ArrayList<>();
+        maintenanceWorkers = new TreeSet<>();
     }
 
     public MaintenanceTask(System system) {
@@ -366,12 +369,12 @@ public class MaintenanceTask extends BaseEntity<Long> {
         }
     }
 
-    public Worker getMaintenanceWorker() {
-        return maintenanceWorker;
+    public Set<Worker> getMaintenanceWorkers() {
+        return maintenanceWorkers;
     }
 
-    public void setMaintenanceWorker(Worker maintenanceWorker) {
-        this.maintenanceWorker = maintenanceWorker;
+    public void setMaintenanceWorkers(Set<Worker> maintenanceWorkers) {
+        this.maintenanceWorkers = maintenanceWorkers;
     }
 
     public java.awt.Image getCustomerSignatureImg() {

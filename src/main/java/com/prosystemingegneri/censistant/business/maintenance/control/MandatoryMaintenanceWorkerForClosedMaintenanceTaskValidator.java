@@ -33,7 +33,7 @@ public class MandatoryMaintenanceWorkerForClosedMaintenanceTaskValidator impleme
     @Override
     public boolean isValid(MaintenanceTask mantenanceTask, ConstraintValidatorContext context) {
         
-        return !(mantenanceTask.getClosed() != null && mantenanceTask.getMaintenanceWorker() == null);
+        return !(mantenanceTask.getClosed() != null && mantenanceTask.getMaintenanceWorkers().isEmpty());
     }
     
 }

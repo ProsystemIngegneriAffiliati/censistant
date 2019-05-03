@@ -47,25 +47,24 @@
                                         <p:outputLabel for="inChargeWorker" value="#{msg.maintenance_maintenanceTask_inChargeWorker}"/>
                                         <p:message for="inChargeWorker"/>
                                     </h:panelGroup>
-                                    <h:panelGroup styleClass="md-inputfield">
-                                        <p:calendar id="closed" value="#{maintenanceTaskPresenter.maintenanceTask.closed}" locale="it" />
+                                    <h:panelGroup>
                                         <p:outputLabel for="closed" value="#{msg.maintenance_maintenanceTask_closedForPrinting}"/>
+                                        <p:calendar id="closed" value="#{maintenanceTaskPresenter.maintenanceTask.closed}" locale="it" />
                                         <p:message for="closed"/>
                                     </h:panelGroup>
-                                    <h:panelGroup styleClass="md-inputfield">
-                                        <p:autoComplete id="maintenanceWorker"
-                                                        dropdown="true"
-                                                        value="#{maintenanceTaskPresenter.maintenanceTask.maintenanceWorker}"
-                                                        completeMethod="#{workerListPresenter.completeWorkers}"
-                                                        var="worker"
-                                                        itemLabel="#{worker.initials}"
-                                                        itemValue="#{worker}"
-                                                        forceSelection="true"
-                                                        >
-                                            <oou:converter converterId="omnifaces.ListConverter" list="#{workerListPresenter.workers}"/>
-                                        </p:autoComplete>
-                                        <p:outputLabel for="maintenanceWorker" value="#{msg.maintenance_maintenanceTask_maintenanceWorker}"/>
-                                        <p:message for="maintenanceWorker"/>
+                                    <h:panelGroup>
+                                        <p:outputLabel for="maintenanceWorkers" value="#{msg.maintenance_maintenanceTask_maintenanceWorkers}"/>
+                                        <p:selectManyCheckbox id="maintenanceWorkers"
+                                                              value="#{maintenanceTaskPresenter.maintenanceTask.maintenanceWorkers}"
+                                                              layout="responsive"
+                                                              columns="3"
+                                                              converter="omnifaces.SelectItemsConverter">
+                                            <f:selectItems value="#{workerListPresenter.workers}"
+                                                           var="worker"
+                                                           itemLabel="#{worker.initials}"
+                                                           itemValue="#{worker}" />
+                                        </p:selectManyCheckbox>
+                                        <p:message for="maintenanceWorkers"/>
                                     </h:panelGroup>
                                 </p:panelGrid>
 
