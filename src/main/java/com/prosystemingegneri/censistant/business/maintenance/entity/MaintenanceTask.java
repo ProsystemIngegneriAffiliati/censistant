@@ -17,7 +17,6 @@
 package com.prosystemingegneri.censistant.business.maintenance.entity;
 
 import com.prosystemingegneri.censistant.business.entity.BaseEntity;
-import com.prosystemingegneri.censistant.business.maintenance.control.MandatoryInspectionsDoneForClosedMaintenanceTask;
 import com.prosystemingegneri.censistant.business.maintenance.control.MandatoryMaintenanceWorkerForClosedMaintenanceTask;
 import com.prosystemingegneri.censistant.business.production.entity.System;
 import com.prosystemingegneri.censistant.business.maintenance.control.MandatoryNotesSignatureForClosedMaintenanceTask;
@@ -60,7 +59,6 @@ import javax.validation.constraints.NotNull;
 @Entity
 @MandatorySystemOrMaintenancePlan
 @MandatoryNotesSignatureForClosedMaintenanceTask
-@MandatoryInspectionsDoneForClosedMaintenanceTask
 @MandatoryPaymentsForClosedMaintenanceTask
 @MandatorySuitableForOperationForClosedMaintenanceTask
 @MandatoryMaintenanceWorkerForClosedMaintenanceTask
