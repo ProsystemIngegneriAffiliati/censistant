@@ -418,7 +418,7 @@
                                         </h:panelGroup>
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:inputNumber id="fixedCallAmount" decimalPlaces="#{TaskPrice.SCALE_PRICE}" symbol="€ " value="#{maintenanceTaskPresenter.maintenanceTask.taskPrice.fixedCallAmount}">
-                                                <p:ajax update="price" />
+                                                <p:ajax update="price priceWithVat" />
                                             </p:inputNumber>
                                             <p:outputLabel for="fixedCallAmount" value="#{msg.maintenance_maintenanceTask_taskPrice_fixedCallAmount}" />
                                             <p:message for="fixedCallAmount"/>
@@ -431,7 +431,7 @@
                                                 <h:panelGroup styleClass="md-inputfield">
                                                     <p:inputText id="normalWorkingStarted" pt:type="datetime-local" value="#{maintenanceTaskPresenter.maintenanceTask.taskPrice.normalWorking.started}">
                                                         <f:convertDateTime pattern="yyyy-MM-dd'T'HH:mm" />
-                                                        <p:ajax update="normalWorkingDurationInHours normalWorkingPrice price" />
+                                                        <p:ajax update="normalWorkingDurationInHours normalWorkingPrice price priceWithVat" />
                                                     </p:inputText>
                                                     <p:outputLabel for="normalWorkingStarted" value="#{msg.maintenance_maintenanceTask_workingDuration_started}" />
                                                     <p:message for="normalWorkingStarted"/>
@@ -439,14 +439,14 @@
                                                 <h:panelGroup styleClass="md-inputfield">
                                                     <p:inputText id="normalWorkingEnded" pt:type="datetime-local" value="#{maintenanceTaskPresenter.maintenanceTask.taskPrice.normalWorking.ended}">
                                                         <f:convertDateTime pattern="yyyy-MM-dd'T'HH:mm" />
-                                                        <p:ajax update="normalWorkingDurationInHours normalWorkingPrice price" />
+                                                        <p:ajax update="normalWorkingDurationInHours normalWorkingPrice price priceWithVat" />
                                                     </p:inputText>
                                                     <p:outputLabel for="normalWorkingEnded" value="#{msg.maintenance_maintenanceTask_workingDuration_ended}" />
                                                     <p:message for="normalWorkingEnded"/>
                                                 </h:panelGroup>
                                                 <h:panelGroup styleClass="md-inputfield">
                                                     <p:inputNumber id="normalWorkingWorkersNumber" decimalPlaces="0" value="#{maintenanceTaskPresenter.maintenanceTask.taskPrice.normalWorking.workersNumber}">
-                                                        <p:ajax update="normalWorkingPrice price" />
+                                                        <p:ajax update="normalWorkingPrice price priceWithVat" />
                                                     </p:inputNumber>
                                                     <p:outputLabel for="normalWorkingWorkersNumber" value="#{msg.maintenance_maintenanceTask_workingDuration_workersNumber}"/>
                                                     <p:message for="normalWorkingWorkersNumber"/>
@@ -478,7 +478,7 @@
                                                 <h:panelGroup styleClass="md-inputfield">
                                                     <p:inputText id="overtimeWorkingStarted" pt:type="datetime-local" value="#{maintenanceTaskPresenter.maintenanceTask.taskPrice.overtimeWorking.started}">
                                                         <f:convertDateTime pattern="yyyy-MM-dd'T'HH:mm" />
-                                                        <p:ajax update="overtimeWorkingDurationInHours overtimeWorkingPrice price" />
+                                                        <p:ajax update="overtimeWorkingDurationInHours overtimeWorkingPrice price priceWithVat" />
                                                     </p:inputText>
                                                     <p:outputLabel for="overtimeWorkingStarted" value="#{msg.maintenance_maintenanceTask_workingDuration_started}" />
                                                     <p:message for="overtimeWorkingStarted"/>
@@ -486,14 +486,14 @@
                                                 <h:panelGroup styleClass="md-inputfield">
                                                     <p:inputText id="overtimeWorkingEnded" pt:type="datetime-local" value="#{maintenanceTaskPresenter.maintenanceTask.taskPrice.overtimeWorking.ended}">
                                                         <f:convertDateTime pattern="yyyy-MM-dd'T'HH:mm" />
-                                                        <p:ajax update="overtimeWorkingDurationInHours overtimeWorkingPrice price" />
+                                                        <p:ajax update="overtimeWorkingDurationInHours overtimeWorkingPrice price priceWithVat" />
                                                     </p:inputText>
                                                     <p:outputLabel for="overtimeWorkingEnded" value="#{msg.maintenance_maintenanceTask_workingDuration_ended}" />
                                                     <p:message for="overtimeWorkingEnded"/>
                                                 </h:panelGroup>
                                                 <h:panelGroup styleClass="md-inputfield">
                                                     <p:inputNumber id="overtimeWorkingWorkersNumber" decimalPlaces="0" value="#{maintenanceTaskPresenter.maintenanceTask.taskPrice.overtimeWorking.workersNumber}">
-                                                        <p:ajax update="overtimeWorkingPrice price" />
+                                                        <p:ajax update="overtimeWorkingPrice price priceWithVat" />
                                                     </p:inputNumber>
                                                     <p:outputLabel for="overtimeWorkingWorkersNumber" value="#{msg.maintenance_maintenanceTask_workingDuration_workersNumber}"/>
                                                     <p:message for="overtimeWorkingWorkersNumber"/>
@@ -505,7 +505,7 @@
                                                 </h:panelGroup>
                                                 <h:panelGroup styleClass="md-inputfield">
                                                     <p:inputNumber id="overtimeWorkingHourlyPrices" decimalPlaces="#{TaskPrice.SCALE_PRICE}" symbol="€ " value="#{maintenanceTaskPresenter.maintenanceTask.taskPrice.overtimeWorking.hourlyPrices}">
-                                                        <p:ajax update="overtimeWorkingPrice price" />
+                                                        <p:ajax update="overtimeWorkingPrice price priceWithVat" />
                                                     </p:inputNumber>
                                                     <p:outputLabel for="overtimeWorkingHourlyPrices" value="#{msg.maintenance_maintenanceTask_workingDuration_hourlyPrices}" />
                                                     <p:message for="overtimeWorkingHourlyPrices"/>
@@ -525,7 +525,7 @@
                                                 <h:panelGroup styleClass="md-inputfield">
                                                     <p:inputText id="travelWorkingStarted" pt:type="datetime-local" value="#{maintenanceTaskPresenter.maintenanceTask.taskPrice.travelWorking.started}">
                                                         <f:convertDateTime pattern="yyyy-MM-dd'T'HH:mm" />
-                                                        <p:ajax update="travelWorkingDurationInHours travelWorkingPrice price" />
+                                                        <p:ajax update="travelWorkingDurationInHours travelWorkingPrice price priceWithVat" />
                                                     </p:inputText>
                                                     <p:outputLabel for="travelWorkingStarted" value="#{msg.maintenance_maintenanceTask_workingDuration_started}" />
                                                     <p:message for="travelWorkingStarted"/>
@@ -533,14 +533,14 @@
                                                 <h:panelGroup styleClass="md-inputfield">
                                                     <p:inputText id="travelWorkingEnded" pt:type="datetime-local" value="#{maintenanceTaskPresenter.maintenanceTask.taskPrice.travelWorking.ended}">
                                                         <f:convertDateTime pattern="yyyy-MM-dd'T'HH:mm" />
-                                                        <p:ajax update="travelWorkingDurationInHours travelWorkingPrice price" />
+                                                        <p:ajax update="travelWorkingDurationInHours travelWorkingPrice price priceWithVat" />
                                                     </p:inputText>
                                                     <p:outputLabel for="travelWorkingEnded" value="#{msg.maintenance_maintenanceTask_workingDuration_ended}" />
                                                     <p:message for="travelWorkingEnded"/>
                                                 </h:panelGroup>
                                                 <h:panelGroup styleClass="md-inputfield">
                                                     <p:inputNumber id="travelWorkingWorkersNumber" decimalPlaces="0" value="#{maintenanceTaskPresenter.maintenanceTask.taskPrice.travelWorking.workersNumber}">
-                                                        <p:ajax update="travelWorkingPrice price" />
+                                                        <p:ajax update="travelWorkingPrice price priceWithVat" />
                                                     </p:inputNumber>
                                                     <p:outputLabel for="travelWorkingWorkersNumber" value="#{msg.maintenance_maintenanceTask_workingDuration_workersNumber}"/>
                                                     <p:message for="travelWorkingWorkersNumber"/>
@@ -552,7 +552,7 @@
                                                 </h:panelGroup>
                                                 <h:panelGroup styleClass="md-inputfield">
                                                     <p:inputNumber id="travelWorkingHourlyPrices" decimalPlaces="#{TaskPrice.SCALE_PRICE}" symbol="€ " value="#{maintenanceTaskPresenter.maintenanceTask.taskPrice.travelWorking.hourlyPrices}">
-                                                        <p:ajax update="travelWorkingPrice price" />
+                                                        <p:ajax update="travelWorkingPrice price priceWithVat" />
                                                     </p:inputNumber>
                                                     <p:outputLabel for="travelWorkingHourlyPrices" value="#{msg.maintenance_maintenanceTask_workingDuration_hourlyPrices}" />
                                                     <p:message for="travelWorkingHourlyPrices"/>
@@ -568,14 +568,14 @@
                                     <p:panelGrid columns="3" columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:inputNumber id="kilometersTravelled" decimalPlaces="0" value="#{maintenanceTaskPresenter.maintenanceTask.taskPrice.kilometersTravelled}">
-                                                <p:ajax update="priceTravelled price" />
+                                                <p:ajax update="priceTravelled price priceWithVat" />
                                             </p:inputNumber>
                                             <p:outputLabel for="kilometersTravelled" value="#{msg.maintenance_maintenanceTask_taskPrice_kilometersTravelled}" />
                                             <p:message for="kilometersTravelled"/>
                                         </h:panelGroup>
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:inputNumber id="pricePerKilometer" decimalPlaces="#{TaskPrice.SCALE_PRICE}" symbol="€ " value="#{maintenanceTaskPresenter.maintenanceTask.taskPrice.pricePerKilometer}">
-                                                <p:ajax update="priceTravelled price" />
+                                                <p:ajax update="priceTravelled price priceWithVat" />
                                             </p:inputNumber>
                                             <p:outputLabel for="pricePerKilometer" value="#{msg.maintenance_maintenanceTask_taskPrice_pricePerKilometer}" />
                                             <p:message for="pricePerKilometer"/>
@@ -589,7 +589,7 @@
                                     <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:inputNumber id="travelExpenses" decimalPlaces="#{TaskPrice.SCALE_PRICE}" symbol="€ " value="#{maintenanceTaskPresenter.maintenanceTask.taskPrice.travelExpenses}">
-                                                <p:ajax update="price" />
+                                                <p:ajax update="price priceWithVat" />
                                             </p:inputNumber>
                                             <p:outputLabel for="travelExpenses" value="#{msg.maintenance_maintenanceTask_taskPrice_travelExpenses}" />
                                             <p:message for="travelExpenses"/>
@@ -598,6 +598,25 @@
                                             <p:inputNumber readonly="true" id="price" decimalPlaces="#{TaskPrice.SCALE_PRICE}" symbol="€ " value="#{maintenanceTaskPresenter.maintenanceTask.price}" />
                                             <p:outputLabel for="price" value="#{msg.maintenance_maintenanceTask_taskPrice_price}" />
                                             <p:message for="price"/>
+                                        </h:panelGroup>
+
+                                        <h:panelGroup>
+                                            <p:outputLabel for="vat" value="#{msg.maintenance_vat_abbr}" />
+                                            <p:selectOneMenu id="vat" value="#{maintenanceTaskPresenter.maintenanceTask.vat}" converter="omnifaces.SelectItemsConverter">
+                                                <f:selectItem itemLabel="#{msg.maintenance_vat_noSelection}" itemValue="" />
+                                                <f:selectItems
+                                                    value="#{vatListPresenter.vats}"
+                                                    var="vat"
+                                                    itemLabel="#{vat.name}"
+                                                    itemValue="#{vat}" />
+                                                <p:ajax event="itemSelect" update="priceWithVat" />
+                                            </p:selectOneMenu>
+                                            <p:message for="vat"/>
+                                        </h:panelGroup>
+                                        <h:panelGroup>
+                                            <p:outputLabel for="priceWithVat" value="#{msg.maintenance_maintenanceTask_taskPrice_priceWithVat}" />
+                                            <p:inputNumber readonly="true" id="priceWithVat" decimalPlaces="#{TaskPrice.SCALE_PRICE}" symbol="€ " value="#{maintenanceTaskPresenter.maintenanceTask.priceWithVat}" />
+                                            <p:message for="priceWithVat"/>
                                         </h:panelGroup>
                                     </p:panelGrid>
                                 </p:panel>

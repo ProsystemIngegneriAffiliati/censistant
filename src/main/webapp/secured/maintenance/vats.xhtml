@@ -1,0 +1,55 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:oou="http://omnifaces.org/ui">
+    <ui:define name="content">
+        <oou:importConstants type="com.prosystemingegneri.censistant.business.maintenance.entity.Vat"/>
+        <h:form id="vatsForm">
+            <div class="ui-g">
+                <div class="ui-g-12">
+                    <div class="card card-w-title">
+                        <h1>#{msg.maintenance_vats}</h1>
+
+                        <p:dataTable id="vatsTable"
+                                     var="vat"
+                                     value="#{vatListPresenter.vats}"
+                                     selectionMode="multiple"
+                                     selection="#{vatListPresenter.selectedVats}"
+                                     rowKey="#{vat.id}">
+                            <f:facet name="header">
+                                <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
+                                    #{msg.maintenance_vats_tip}
+                                    <p:outputPanel>
+                                        <p:button title="#{msg.new}" icon="ui-icon-create" styleClass="AquaButton" outcome="/secured/maintenance/vat">
+                                            <f:param name="id" value="0" />
+                                        </p:button>
+                                        <p:commandButton title="#{msg.delete}" icon="ui-icon-delete" actionListener="#{vatListPresenter.delete()}" update="vatsTable">
+                                            <p:confirm header="#{msg.maintenance_vats_delete}" message="#{msg.maintenance_vats_delete_tip}" icon="ui-icon-alert"/>
+                                        </p:commandButton>
+                                    </p:outputPanel>
+                                </p:panelGrid>
+                            </f:facet>
+                            <p:column headerText="#{msg.maintenance_vat_name}" sortBy="#{vat.name}" filterBy="#{vat.name}" filterMatchMode="contains">
+                                <h:outputText value="#{vat.name}"/>
+                            </p:column>
+                            <p:column headerText="#{msg.maintenance_vat_percent}">
+                                <h:outputText value="#{vat.percent}">
+                                    <f:convertNumber type="percent" maxFractionDigits="#{Vat.SCALE}" />
+                                </h:outputText>
+                            </p:column>
+
+                            <p:column headerText="#{msg.actions}" style="width:64px; text-align:center">
+                                <p:button title="#{msg.edit}" icon="ui-icon-edit" styleClass="AquaButton" outcome="/secured/maintenance/vat">
+                                    <f:param name="id" value="#{vat.id}" />
+                                </p:button>
+                            </p:column>
+                        </p:dataTable>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>

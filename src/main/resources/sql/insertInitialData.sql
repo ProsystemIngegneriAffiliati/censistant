@@ -189,3 +189,7 @@ INSERT INTO maintenancepayment(name, version) VALUES('Inviare fattura', 0)
 INSERT INTO maintenancepayment(name, version) VALUES('Pagamento contante', 0)
 INSERT INTO maintenancepayment(name, version) VALUES('Pagamento con assegno', 0)
 INSERT INTO maintenancepayment(name, version) VALUES('Non effettuato', 0)
+
+INSERT INTO vat(name, percent, version) VALUES('Non applicabile', 0, 0)
+INSERT INTO vat(name, percent, version) VALUES('IVA 22', 0.22, 0)
+INSERT INTO vat(name, percent, version) VALUES('IVA 10', 0.10, 0)

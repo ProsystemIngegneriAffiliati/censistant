@@ -23,6 +23,7 @@ import com.prosystemingegneri.censistant.business.maintenance.control.MandatoryN
 import com.prosystemingegneri.censistant.business.maintenance.control.MandatoryPaymentsForClosedMaintenanceTask;
 import com.prosystemingegneri.censistant.business.maintenance.control.MandatorySuitableForOperationForClosedMaintenanceTask;
 import com.prosystemingegneri.censistant.business.maintenance.control.MandatorySystemOrMaintenancePlan;
+import com.prosystemingegneri.censistant.business.maintenance.control.MandatoryVatForClosedMaintenanceTask;
 import com.prosystemingegneri.censistant.business.maintenance.control.SigGen;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.Worker;
 import com.prosystemingegneri.censistant.business.warehouse.entity.HandledItem;
@@ -60,6 +61,7 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @MandatorySystemOrMaintenancePlan
+@MandatoryVatForClosedMaintenanceTask
 @MandatoryNotesSignatureForClosedMaintenanceTask
 @MandatoryPaymentsForClosedMaintenanceTask
 @MandatorySuitableForOperationForClosedMaintenanceTask
@@ -122,6 +124,9 @@ public class MaintenanceTask extends BaseEntity<Long> {
     @NotNull
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "maintenanceTask", orphanRemoval = true, optional = false)
     private TaskPrice taskPrice;
+    
+    @ManyToOne
+    private Vat vat;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "maintenanceTask", orphanRemoval = true)
     private final List<Replacement> replacements;
@@ -316,6 +321,13 @@ public class MaintenanceTask extends BaseEntity<Long> {
         return getReplacementsPrice().add(taskPrice.getPrice());
     }
     
+    public BigDecimal getPriceWithVat() {
+        if (vat != null)
+            return getPrice().multiply(BigDecimal.ONE.add(vat.getPercent()));
+        else
+            return getPrice();
+    }
+    
     public List<HandledItem> getReplacementHandledItems() {
         List<HandledItem> result = new ArrayList<>();
         
@@ -406,6 +418,14 @@ public class MaintenanceTask extends BaseEntity<Long> {
 
     public void setCustomerSignatureImg(java.awt.Image customerSignatureImg) {
         this.customerSignatureImg = customerSignatureImg;
+    }
+
+    public Vat getVat() {
+        return vat;
+    }
+
+    public void setVat(Vat vat) {
+        this.vat = vat;
     }
     
 }
