@@ -33,7 +33,7 @@ public class MandatoryVatForClosedMaintenanceTaskValidator implements Constraint
     @Override
     public boolean isValid(MaintenanceTask maintenanceTask, ConstraintValidatorContext context) {
         return !(
-                maintenanceTask.getClosed() != null
+                maintenanceTask.isTaskClosed()
                 &&
                 (maintenanceTask.getSystem() != null || (maintenanceTask.getMaintenancePlan() != null && maintenanceTask.getMaintenancePlan().getMaintenanceType() == MaintenanceType.PREVENTIVE_MAINTENANCE))
                 &&

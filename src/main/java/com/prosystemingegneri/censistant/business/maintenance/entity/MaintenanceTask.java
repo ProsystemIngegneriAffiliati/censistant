@@ -25,6 +25,7 @@ import com.prosystemingegneri.censistant.business.maintenance.control.MandatoryS
 import com.prosystemingegneri.censistant.business.maintenance.control.MandatorySystemOrMaintenancePlan;
 import com.prosystemingegneri.censistant.business.maintenance.control.MandatoryVatForClosedMaintenanceTask;
 import com.prosystemingegneri.censistant.business.maintenance.control.SigGen;
+import com.prosystemingegneri.censistant.business.maintenance.control.SuitableForOperation;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.Worker;
 import com.prosystemingegneri.censistant.business.warehouse.entity.HandledItem;
 import java.io.ByteArrayOutputStream;
@@ -41,6 +42,8 @@ import javax.imageio.ImageIO;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -131,7 +134,9 @@ public class MaintenanceTask extends BaseEntity<Long> {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "maintenanceTask", orphanRemoval = true)
     private final List<Replacement> replacements;
     
-    private Boolean isSuitableForOperation;
+    @Enumerated(EnumType.ORDINAL)
+    @Column(nullable = false, columnDefinition = "smallint")
+    private SuitableForOperation suitableForOperation;
     
     @Version
     private int version;
@@ -349,36 +354,12 @@ public class MaintenanceTask extends BaseEntity<Long> {
         return false;
     }
 
-    public Boolean getIsSuitableForOperation() {
-        return isSuitableForOperation;
+    public SuitableForOperation getSuitableForOperation() {
+        return suitableForOperation;
     }
 
-    public void setIsSuitableForOperation(Boolean isSuitableForOperation) {
-        this.isSuitableForOperation = isSuitableForOperation;
-    }
-    
-    //only for p:triStateCheckbox
-    public String getIsSuitableForOperationStr() {
-        if (isSuitableForOperation == null)
-            return "0";
-        else {
-            if (isSuitableForOperation)
-                return "1";
-            else
-                return "2";
-        }
-    }
-
-    //only for p:triStateCheckbox
-    public void setIsSuitableForOperationStr(String isSuitableForOperationStr) {
-        if ("0".equals(isSuitableForOperationStr))
-            isSuitableForOperation = null;
-        else {
-            if ("1".equals(isSuitableForOperationStr))
-                isSuitableForOperation = Boolean.TRUE;
-            else
-                isSuitableForOperation = Boolean.FALSE;
-        }
+    public void setSuitableForOperation(SuitableForOperation suitableForOperation) {
+        this.suitableForOperation = suitableForOperation;
     }
 
     public Set<Worker> getMaintenanceWorkers() {
@@ -428,4 +409,7 @@ public class MaintenanceTask extends BaseEntity<Long> {
         this.vat = vat;
     }
     
+    public boolean isTaskClosed() {
+        return suitableForOperation != null && suitableForOperation != SuitableForOperation.SUSPENDED && closed != null;
+    }
 }

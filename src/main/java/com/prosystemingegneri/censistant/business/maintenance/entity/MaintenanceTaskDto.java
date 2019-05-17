@@ -17,6 +17,7 @@
 package com.prosystemingegneri.censistant.business.maintenance.entity;
 
 import com.prosystemingegneri.censistant.business.maintenance.control.MaintenanceType;
+import com.prosystemingegneri.censistant.business.maintenance.control.SuitableForOperation;
 import com.prosystemingegneri.censistant.business.production.entity.System;
 import com.prosystemingegneri.censistant.business.sales.entity.Offer;
 import java.io.Serializable;
@@ -34,6 +35,7 @@ public class MaintenanceTaskDto implements Serializable {
     private String systemAddressFromSystem;
     private MaintenanceType maintenanceType;
     private Date expiry;
+    private SuitableForOperation suitableForOperation;
     private Date closed;
     private String closingNotes;
 
@@ -51,6 +53,7 @@ public class MaintenanceTaskDto implements Serializable {
             String systemAddressFromSystem,
             MaintenanceType maintenanceType,
             Date expiry,
+            SuitableForOperation suitableForOperation,
             Date closed,
             String closingNotes) {
         this.id = id;
@@ -60,9 +63,12 @@ public class MaintenanceTaskDto implements Serializable {
         this.systemAddressFromSystem = systemAddressFromSystem;
         this.maintenanceType = maintenanceType;
         this.expiry = expiry;
+        this.suitableForOperation = suitableForOperation;
         this.closed = closed;
         this.closingNotes = closingNotes;
     }
+
+    
     
     public static MaintenanceTaskDto create(MaintenanceTask maintenanceTask) {
         MaintenanceTaskDto result = new MaintenanceTaskDto();
@@ -82,6 +88,7 @@ public class MaintenanceTaskDto implements Serializable {
             
             result.setClosed(maintenanceTask.getClosed());
             result.setExpiry(maintenanceTask.getExpiry());
+            result.setSuitableForOperation(maintenanceTask.getSuitableForOperation());
             result.setId(maintenanceTask.getId());
             result.setClosingNotes(maintenanceTask.getClosingNotes());
         }
@@ -93,7 +100,7 @@ public class MaintenanceTaskDto implements Serializable {
         if (customerNameFromMaintenancePlan != null && !customerNameFromMaintenancePlan.isEmpty())
             return customerNameFromMaintenancePlan;
         if (customerNameFromSystem != null && !customerNameFromSystem.isEmpty())
-            return customerNameFromMaintenancePlan;
+            return customerNameFromSystem;
         
         return "";
     }
@@ -181,5 +188,17 @@ public class MaintenanceTaskDto implements Serializable {
     
     public boolean isSeeNotes() {
         return closed != null && maintenanceType == MaintenanceType.TELECONTROL && closingNotes != null && !closingNotes.isEmpty();
+    }
+
+    public SuitableForOperation getSuitableForOperation() {
+        return suitableForOperation;
+    }
+
+    public void setSuitableForOperation(SuitableForOperation suitableForOperation) {
+        this.suitableForOperation = suitableForOperation;
+    }
+    
+    public boolean isTaskClosed() {
+        return suitableForOperation != null && suitableForOperation != SuitableForOperation.SUSPENDED && closed != null;
     }
 }

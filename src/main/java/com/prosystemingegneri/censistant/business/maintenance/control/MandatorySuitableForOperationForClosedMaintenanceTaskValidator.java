@@ -37,7 +37,7 @@ public class MandatorySuitableForOperationForClosedMaintenanceTaskValidator impl
                 &&
                 (maintenanceTask.getSystem() != null || (maintenanceTask.getMaintenancePlan() != null && maintenanceTask.getMaintenancePlan().getMaintenanceType() == MaintenanceType.PREVENTIVE_MAINTENANCE))
                 &&
-                maintenanceTask.getIsSuitableForOperation() == null);
+                maintenanceTask.getSuitableForOperation() == null);
     }
     
 }

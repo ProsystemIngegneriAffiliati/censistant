@@ -18,6 +18,7 @@ package com.prosystemingegneri.censistant.presentation.maintenance;
 
 import com.prosystemingegneri.censistant.business.maintenance.boundary.MaintenanceTaskService;
 import com.prosystemingegneri.censistant.business.maintenance.control.MaintenanceType;
+import com.prosystemingegneri.censistant.business.maintenance.control.SuitableForOperation;
 import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceTaskDto;
 import java.util.Date;
 import java.util.Iterator;
@@ -53,6 +54,7 @@ public class MaintenanceTaskLazyDataModel extends LazyDataModel<MaintenanceTaskD
         String customerName = null;
         String systemAddress = null;
         MaintenanceType maintenanceType = null;
+        SuitableForOperation suitableForOperation = null;
         Boolean isClosed = null;
         
         switch (sortOrder) {
@@ -76,14 +78,16 @@ public class MaintenanceTaskLazyDataModel extends LazyDataModel<MaintenanceTaskD
                         systemAddress = String.valueOf(filters.get(filterProperty));
                     if (filterProperty.equalsIgnoreCase("maintenanceType"))
                         maintenanceType = MaintenanceType.valueOf(String.valueOf(filters.get(filterProperty)));
+                    if (filterProperty.equalsIgnoreCase("suitableForOperation"))
+                        suitableForOperation = SuitableForOperation.valueOf(String.valueOf(filters.get(filterProperty)));
                     if (filterProperty.equalsIgnoreCase("isClosed"))
                         isClosed = Boolean.parseBoolean(String.valueOf(filters.get(filterProperty)));
                 }
             }
         }
         
-        List<MaintenanceTaskDto> result = service.listMaintenanceTasks(first, pageSize, sortField, isAscending, customerName, systemAddress, maintenanceType, expiryStart, expiryEnd, isClosed);
-        this.setRowCount(service.getMaintenanceTasksCount(customerName, systemAddress, maintenanceType, expiryStart, expiryEnd, isClosed).intValue());
+        List<MaintenanceTaskDto> result = service.listMaintenanceTasks(first, pageSize, sortField, isAscending, customerName, systemAddress, maintenanceType, expiryStart, expiryEnd, suitableForOperation, isClosed);
+        this.setRowCount(service.getMaintenanceTasksCount(customerName, systemAddress, maintenanceType, expiryStart, expiryEnd, suitableForOperation, isClosed).intValue());
         
         return result;
     }

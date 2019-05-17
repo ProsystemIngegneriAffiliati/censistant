@@ -22,6 +22,7 @@ import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant_;
 import com.prosystemingegneri.censistant.business.maintenance.control.Inspection;
 import com.prosystemingegneri.censistant.business.maintenance.control.MaintenanceType;
+import com.prosystemingegneri.censistant.business.maintenance.control.SuitableForOperation;
 import com.prosystemingegneri.censistant.business.maintenance.entity.ContractedSystem;
 import com.prosystemingegneri.censistant.business.maintenance.entity.ContractedSystem_;
 import com.prosystemingegneri.censistant.business.maintenance.entity.InspectionDone;
@@ -102,14 +103,16 @@ public class MaintenanceTaskService implements Serializable{
     }
     
     public MaintenanceTask saveMaintenanceTask(MaintenanceTask maintenanceTask) {
-        //since only the month is useful, last day of month is chosen
-        Calendar temp = Calendar.getInstance();
-        temp.setTime(maintenanceTask.getExpiry());
-        temp.add(Calendar.MONTH, 1);
-        Calendar temp2 = Calendar.getInstance();
-        temp2.set(temp.get(Calendar.YEAR), temp.get(Calendar.MONTH), 1);
-        temp2.add(Calendar.DAY_OF_YEAR, -1);
-        maintenanceTask.setExpiry(temp2.getTime());
+        if (maintenanceTask.getExpiry() != null) {
+            //since only the month is useful, last day of month is chosen
+            Calendar temp = Calendar.getInstance();
+            temp.setTime(maintenanceTask.getExpiry());
+            temp.add(Calendar.MONTH, 1);
+            Calendar temp2 = Calendar.getInstance();
+            temp2.set(temp.get(Calendar.YEAR), temp.get(Calendar.MONTH), 1);
+            temp2.add(Calendar.DAY_OF_YEAR, -1);
+            maintenanceTask.setExpiry(temp2.getTime());
+        }
         
         if (maintenanceTask.getId() == null)
             em.persist(maintenanceTask);
@@ -127,7 +130,15 @@ public class MaintenanceTaskService implements Serializable{
         em.remove(readMaintenanceTask(id));
     }
     
-    public List<MaintenanceTaskDto> listMaintenanceTasks(int first, int pageSize, String sortField, Boolean isAscending, String customerName, String systemAddress, MaintenanceType maintenanceType, Date expiryStart, Date expiryEnd, Boolean isClosed) {
+    public List<MaintenanceTaskDto> listMaintenanceTasks(
+            int first, int pageSize,
+            String sortField, Boolean isAscending,
+            String customerName,
+            String systemAddress,
+            MaintenanceType maintenanceType,
+            Date expiryStart, Date expiryEnd,
+            SuitableForOperation suitableForOperation,
+            Boolean isClosed) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<MaintenanceTaskDto> query = cb.createQuery(MaintenanceTaskDto.class);
         Root<MaintenanceTask> root = query.from(MaintenanceTask.class);
@@ -155,11 +166,12 @@ public class MaintenanceTaskService implements Serializable{
                 joinPlantSystem.get(Plant_.address),
                 joinMaintenancePlan.get(MaintenancePlan_.maintenanceType),
                 root.get(MaintenanceTask_.expiry),
+                root.get(MaintenanceTask_.suitableForOperation),
                 root.get(MaintenanceTask_.closed),
                 root.get(MaintenanceTask_.closingNotes)
         )).distinct(true);
         
-        List<Predicate> conditions = calculateConditions(cb, root, joinMaintenancePlan, joinPlantFromMaintenancePlan, joinCustomerSupplierFromMaintenancePlan, joinPlantSystem, joinCustomerSupplierFromSystem, customerName, systemAddress, maintenanceType, expiryStart, expiryEnd, isClosed);
+        List<Predicate> conditions = calculateConditions(cb, root, joinMaintenancePlan, joinPlantFromMaintenancePlan, joinCustomerSupplierFromMaintenancePlan, joinPlantSystem, joinCustomerSupplierFromSystem, customerName, systemAddress, maintenanceType, expiryStart, expiryEnd, suitableForOperation, isClosed);
 
         if (!conditions.isEmpty())
             query.where(conditions.toArray(new Predicate[conditions.size()]));
@@ -196,7 +208,13 @@ public class MaintenanceTaskService implements Serializable{
         return typedQuery.getResultList();
     }
     
-    public Long getMaintenanceTasksCount(String customerName, String systemAddress, MaintenanceType maintenanceType, Date expiryStart, Date expiryEnd, Boolean isClosed) {
+    public Long getMaintenanceTasksCount(
+            String customerName,
+            String systemAddress,
+            MaintenanceType maintenanceType,
+            Date expiryStart, Date expiryEnd,
+            SuitableForOperation suitableForOperation,
+            Boolean isClosed) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Long> query = cb.createQuery(Long.class);
         Root<MaintenanceTask> root = query.from(MaintenanceTask.class);
@@ -216,7 +234,7 @@ public class MaintenanceTaskService implements Serializable{
         Join<SiteSurveyReport, Plant> joinPlantSystem = joinSiteSurveyReportSystem.join(SiteSurveyReport_.plant, JoinType.LEFT);
         Join<Plant, CustomerSupplier> joinCustomerSupplierFromSystem = joinPlantSystem.join(Plant_.customerSupplier, JoinType.LEFT);
 
-        List<Predicate> conditions = calculateConditions(cb, root, joinMaintenancePlan, joinPlantFromMaintenancePlan, joinCustomerSupplierFromMaintenancePlan, joinPlantSystem, joinCustomerSupplierFromSystem, customerName, systemAddress, maintenanceType, expiryStart, expiryEnd, isClosed);
+        List<Predicate> conditions = calculateConditions(cb, root, joinMaintenancePlan, joinPlantFromMaintenancePlan, joinCustomerSupplierFromMaintenancePlan, joinPlantSystem, joinCustomerSupplierFromSystem, customerName, systemAddress, maintenanceType, expiryStart, expiryEnd, suitableForOperation, isClosed);
 
         if (!conditions.isEmpty())
             query.where(conditions.toArray(new Predicate[conditions.size()]));
@@ -235,6 +253,7 @@ public class MaintenanceTaskService implements Serializable{
             String systemAddress,
             MaintenanceType maintenanceType,
             Date expiryStart, Date expiryEnd,
+            SuitableForOperation suitableForOperation,
             Boolean isClosed) {
         List<Predicate> conditions = new ArrayList<>();
         
@@ -264,10 +283,16 @@ public class MaintenanceTaskService implements Serializable{
         if (expiryStart == null &&  expiryEnd != null)
             conditions.add(cb.lessThan(root.<Date>get(MaintenanceTask_.expiry), expiryEnd));
         
+        //Suitable for operation
+        if (suitableForOperation != null)
+            conditions.add(cb.equal(root.get(MaintenanceTask_.suitableForOperation), suitableForOperation));
+        
         //isClosed
         if (isClosed != null) {
             if (isClosed)
-                conditions.add(cb.isNotNull(root.get(MaintenanceTask_.closed)));
+                conditions.add(cb.and(
+                        cb.isNotNull(root.get(MaintenanceTask_.closed)),
+                        cb.notEqual(root.get(MaintenanceTask_.suitableForOperation), SuitableForOperation.SUSPENDED)));
             else
                 conditions.add(cb.isNull(root.get(MaintenanceTask_.closed)));
         }

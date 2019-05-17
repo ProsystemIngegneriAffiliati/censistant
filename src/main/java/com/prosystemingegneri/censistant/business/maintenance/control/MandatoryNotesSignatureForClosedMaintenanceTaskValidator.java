@@ -34,7 +34,7 @@ public class MandatoryNotesSignatureForClosedMaintenanceTaskValidator implements
     public boolean isValid(MaintenanceTask mantenanceTask, ConstraintValidatorContext context) {
         
         return !(
-                mantenanceTask.getClosed() != null
+                mantenanceTask.isTaskClosed()
                 &&
                 (mantenanceTask.getSystem() != null || (mantenanceTask.getMaintenancePlan() != null && mantenanceTask.getMaintenancePlan().getMaintenanceType() == MaintenanceType.PREVENTIVE_MAINTENANCE))
                 &&

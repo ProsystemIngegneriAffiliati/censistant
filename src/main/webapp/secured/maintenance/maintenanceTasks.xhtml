@@ -7,6 +7,7 @@
                 xmlns:oou="http://omnifaces.org/ui">
     <ui:define name="content">
         <oou:importConstants type="com.prosystemingegneri.censistant.business.maintenance.control.MaintenanceType"/>
+        <oou:importConstants type="com.prosystemingegneri.censistant.business.maintenance.control.SuitableForOperation"/>
         <h:form id="maintenanceTasksForm">
             <div class="ui-g">
                 <div class="ui-g-12">
@@ -50,12 +51,25 @@
                                             itemValue="#{type}" />
                                     </p:selectOneMenu>
                                 </f:facet>
-                                <h:outputText value="#{msg['maintenance_maintenanceType_' += maintenanceTask.maintenanceType]}" />
+                                <h:outputText rendered="#{not empty maintenanceTask.maintenanceType}" value="#{msg['maintenance_maintenanceType_' += maintenanceTask.maintenanceType]}" />
                             </p:column>
                             <p:column headerText="#{msg.maintenance_maintenanceTask_expiry}" field="expiry" filterable="false" priority="2">
                                 <h:outputText value="#{maintenanceTask.expiry}">
                                     <f:convertDateTime pattern="MMMM yyyy" />
                                 </h:outputText>
+                            </p:column>
+                            <p:column headerText="#{msg.maintenance_maintenanceTask_isSuitableForOperation}" field="suitableForOperation" priority="4">
+                                <f:facet name="filter">
+                                    <p:selectOneMenu onchange="PF('maintenanceTasksTable').filter()">
+                                        <f:selectItem itemLabel="#{msg.all}" itemValue="" />
+                                        <f:selectItems
+                                            value="#{SuitableForOperation}"
+                                            var="suitable"
+                                            itemLabel="#{msg['maintenance_suitableForOperation_' += suitable]}"
+                                            itemValue="#{suitable}" />
+                                    </p:selectOneMenu>
+                                </f:facet>
+                                <h:outputText rendered="#{not empty maintenanceTask.suitableForOperation}" value="#{msg['maintenance_suitableForOperation_' += maintenanceTask.suitableForOperation]}" />
                             </p:column>
                             <p:column headerText="#{msg.maintenance_maintenanceTask_closed}" field="isClosed" priority="2">
                                 <f:facet name="filter">

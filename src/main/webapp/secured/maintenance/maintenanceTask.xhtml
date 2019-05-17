@@ -18,6 +18,7 @@
             <oou:importConstants type="com.prosystemingegneri.censistant.business.maintenance.control.ResultType" />
             <oou:importConstants type="com.prosystemingegneri.censistant.business.maintenance.entity.TaskPrice"/>
             <oou:importConstants type="com.prosystemingegneri.censistant.business.maintenance.control.Inspection"/>
+            <oou:importConstants type="com.prosystemingegneri.censistant.business.maintenance.control.SuitableForOperation"/>
             <oou:form id="maintenanceTaskForm">
                 <div class="ui-fluid">
                     <div class="ui-g">
@@ -662,7 +663,14 @@
                                         <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                             <h:panelGroup>
                                                 <p:outputLabel for="isSuitableForOperation" value="#{msg.maintenance_maintenanceTask_isSuitableForOperation}" />
-                                                <p:triStateCheckbox id="isSuitableForOperation" value="#{maintenanceTaskPresenter.maintenanceTask.isSuitableForOperationStr}" />
+                                                <p:selectOneMenu id="isSuitableForOperation" value="#{maintenanceTaskPresenter.maintenanceTask.suitableForOperation}">
+                                                    <f:selectItem itemLabel="" itemValue="" />
+                                                    <f:selectItems
+                                                        value="#{SuitableForOperation}"
+                                                        var="suitable"
+                                                        itemLabel="#{msg['maintenance_suitableForOperation_' += suitable]}"
+                                                        itemValue="#{suitable}" />
+                                                </p:selectOneMenu>
                                             </h:panelGroup>
                                             <p:commandButton value="#{msg.print}" icon="ui-icon-print" ajax="false">
                                                 <p:fileDownload value="#{maintenanceTaskPresenter.print()}" />

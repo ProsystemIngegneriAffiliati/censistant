@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2019 Prosystem Ingegneri Affiliati.
+ * Copyright (C) 2019 Prosystem Ingegneri Affiliati.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -16,24 +16,19 @@
  */
 package com.prosystemingegneri.censistant.business.maintenance.control;
 
-import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceTask;
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
-
 /**
  *
  * @author Davide Mainardi <ingmainardi at live.com>
  */
-public class MandatoryMaintenanceWorkerForClosedMaintenanceTaskValidator implements ConstraintValidator<MandatoryMaintenanceWorkerForClosedMaintenanceTask, MaintenanceTask> {
-
-    @Override
-    public void initialize(MandatoryMaintenanceWorkerForClosedMaintenanceTask constraintAnnotation) {
-    }
-
-    @Override
-    public boolean isValid(MaintenanceTask mantenanceTask, ConstraintValidatorContext context) {
-        
-        return !(mantenanceTask.isTaskClosed() && mantenanceTask.getMaintenanceWorkers().isEmpty());
-    }
+public enum SuitableForOperation {
+    SUITABLE(0),
+    PARTIALLY_SUITABLE(1),
+    SUSPENDED(2),
+    NOT_SUITABLE(3);
     
+    private final int value;
+
+    private SuitableForOperation(int value) {
+        this.value = value;
+    }
 }
