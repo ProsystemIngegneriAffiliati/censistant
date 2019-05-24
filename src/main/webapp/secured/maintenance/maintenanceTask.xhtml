@@ -208,7 +208,7 @@
                                             <p:commandButton action="#{maintenanceTaskPresenter.createNewJobOrder()}"
                                                              value="#{msg.add} #{msg.production_system}"
                                                              icon="ui-icon-create"
-                                                             update="contractAndSystem systemPanel replacementsPanel">
+                                                             update="contractAndSystem systemPanel replacementsPanel devicesTable">
                                                 <oou:ignoreValidationFailed />
                                             </p:commandButton>
                                         </p:fieldset>
@@ -255,7 +255,7 @@
                                                             var="system"
                                                             itemLabel="#{system.address}"
                                                             itemValue="#{system}" />
-                                                        <p:ajax event="itemSelect" listener="#{maintenanceTaskPresenter.onSystemSelect}" update="replacementsPanel unexpiredMaintenanceContract contractAndSystem" />
+                                                        <p:ajax event="itemSelect" listener="#{maintenanceTaskPresenter.onSystemSelect}" update="replacementsPanel unexpiredMaintenanceContract contractAndSystem devicesTable" />
                                                     </p:selectOneMenu>
                                                     <p:message for="systemToBeAdded"/>
                                                 </h:panelGroup>
@@ -267,7 +267,7 @@
                                                             var="contract"
                                                             itemLabel="#{contract.customerNameContractExpiry}"
                                                             itemValue="#{contract}" />
-                                                        <p:ajax event="itemSelect" listener="#{maintenanceTaskPresenter.onMaintenanceContractSelect}" update="contractAndSystem" />
+                                                        <p:ajax event="itemSelect" listener="#{maintenanceTaskPresenter.onMaintenanceContractSelect}" update="contractAndSystem devicesTable" />
                                                     </p:selectOneMenu>
                                                     <p:message for="unexpiredMaintenanceContract"/>
                                                 </h:panelGroup>
@@ -305,6 +305,25 @@
                                             <p:outputLabel for="system" value="#{msg.production_system}"/>
                                             <p:message for="system"/>
                                         </h:panelGroup>
+                                        <p:dataTable id="devicesTable"
+                                                     var="device"
+                                                     value="#{maintenanceTaskPresenter.system.devices}"
+                                                     style="margin-bottom: 25px">
+                                            <f:facet name="header">
+                                                #{msg.maintenance_maintenanceTask_systemDevices}
+                                            </f:facet>
+                                            <p:column headerText="#{msg.production_device}" filterBy="#{device.item.description}" filterMatchMode="contains" priority="0">
+                                                <h:outputText value="#{device.item.description}"/>
+                                            </p:column>
+                                            <p:column headerText="#{msg.production_device_quantity}" priority="2">
+                                                <h:outputText value="#{device.quantity}">
+                                                    <f:convertNumber integerOnly="true" />
+                                                </h:outputText>
+                                            </p:column>
+                                            <p:column headerText="#{msg.production_unitMeasure_symbol}" priority="4">
+                                                <h:outputText value="#{device.item.unitMeasure.symbol}"/>
+                                            </p:column>
+                                        </p:dataTable>
                                     </p:panelGrid>
                                 </h:panelGroup>
 

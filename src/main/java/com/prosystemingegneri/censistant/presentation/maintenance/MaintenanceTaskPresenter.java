@@ -43,7 +43,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.ejb.EJBException;
 import javax.faces.application.FacesMessage;
@@ -95,6 +94,8 @@ public class MaintenanceTaskPresenter implements Serializable{
     private List<MaintenanceContract> unexpiredMaintenanceContracts;
     private MaintenanceContract unexpiredMaintenanceContract;
     
+    private System system;
+    
     @Resource
     Validator validator;
     
@@ -128,7 +129,6 @@ public class MaintenanceTaskPresenter implements Serializable{
         try {
             if (!isValid())
                 return null;
-
             service.saveMaintenanceTask(maintenanceTask);
         } catch (EJBException e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", ExceptionUtility.unwrap(e.getCausedByException()).getLocalizedMessage()));
@@ -143,8 +143,12 @@ public class MaintenanceTaskPresenter implements Serializable{
         if (maintenanceTask == null && id != null) {
             if (id == 0)
                 maintenanceTask = service.create();
-            else
+            else {
                 maintenanceTask = service.readMaintenanceTask(id);
+                system = maintenanceTask.getSystem();
+                if (system == null)
+                    system = maintenanceTask.getMaintenancePlan().getContractedSystem().getSystem();
+            }
         }
         
         clearNewCustomer();
@@ -206,9 +210,10 @@ public class MaintenanceTaskPresenter implements Serializable{
     }
     
     public void onSystemSelect(SelectEvent event) {
-        System system = (System) event.getObject();
-        if (system != null) {
-            lazyHandledItems = new HandledItemLazyDataModel(handledItemService, null, system, null, Boolean.FALSE);
+        System tempSystem = (System) event.getObject();
+        if (tempSystem != null) {
+            this.system = tempSystem;
+            lazyHandledItems = new HandledItemLazyDataModel(handledItemService, null, tempSystem, null, Boolean.FALSE);
             updateUnexpiredMaintenanceContracts();
         }
     }
@@ -466,4 +471,13 @@ public class MaintenanceTaskPresenter implements Serializable{
         
         return "";
     }
+
+    public System getSystem() {
+        return system;
+    }
+
+    public void setSystem(System system) {
+        this.system = system;
+    }
+    
 }
