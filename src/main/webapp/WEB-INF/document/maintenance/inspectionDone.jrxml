@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.6.0.final utlizzo versione della libreria JasperReports6.6.0  -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="inspectionsDone" pageWidth="288" pageHeight="842" columnWidth="288" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="75367bdc-1b9b-4a91-a0c6-3511f873e5e5">
+<!-- Created with Jaspersoft Studio version 6.8.0.final utlizzo versione della libreria JasperReports6.8.0-2ed8dfabb690ff337a5797129f2cd92902b0c87b  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="inspectionsDone" pageWidth="288" pageHeight="842" columnWidth="288" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" resourceBundle="i18n.messages" uuid="75367bdc-1b9b-4a91-a0c6-3511f873e5e5">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="com.jaspersoft.studio.unit." value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
@@ -14,7 +14,7 @@
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
-	<field name="inspection" class="com.prosystemingegneri.censistant.business.maintenance.entity.Inspection"/>
+	<field name="inspection" class="com.prosystemingegneri.censistant.business.maintenance.control.Inspection"/>
 	<field name="inspectionResult" class="com.prosystemingegneri.censistant.business.maintenance.control.ResultType"/>
 	<columnHeader>
 		<band height="15">
@@ -50,7 +50,7 @@
 					<font size="8"/>
 					<paragraph leftIndent="4" rightIndent="4"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{inspection}.getName()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[str("maintenance_inspection_" + $F{inspection})]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="180" y="0" width="108" height="15" uuid="0e99df77-c207-4e03-9de3-e48360e66c0b"/>

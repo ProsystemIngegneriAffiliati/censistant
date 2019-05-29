@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.6.0.final utlizzo versione della libreria JasperReports6.6.0  -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="maintenanceTask" pageWidth="595" pageHeight="842" columnWidth="575" leftMargin="10" rightMargin="10" topMargin="10" bottomMargin="10" uuid="469dbe3b-ec1f-4869-b6a8-99d14aca6d98">
+<!-- Created with Jaspersoft Studio version 6.8.0.final utlizzo versione della libreria JasperReports6.8.0-2ed8dfabb690ff337a5797129f2cd92902b0c87b  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="maintenanceTask" pageWidth="595" pageHeight="842" columnWidth="575" leftMargin="10" rightMargin="10" topMargin="10" bottomMargin="10" resourceBundle="i18n.messages" uuid="469dbe3b-ec1f-4869-b6a8-99d14aca6d98">
 	<property name="com.jaspersoft.studio.unit." value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
@@ -15,13 +15,12 @@
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
-	<field name="number" class="java.lang.Integer"/>
-	<field name="maintenanceContract" class="com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceContract"/>
+	<field name="maintenancePlan" class="com.prosystemingegneri.censistant.business.maintenance.entity.MaintenancePlan"/>
 	<field name="system" class="com.prosystemingegneri.censistant.business.production.entity.System"/>
 	<field name="description" class="java.lang.String"/>
 	<field name="creation" class="java.util.Date"/>
 	<field name="inChargeWorker" class="com.prosystemingegneri.censistant.business.siteSurvey.entity.Worker"/>
-	<field name="maintenanceWorker" class="com.prosystemingegneri.censistant.business.siteSurvey.entity.Worker"/>
+	<field name="maintenanceWorkers" class="java.util.Set"/>
 	<field name="isGuaranteeValid" class="java.lang.Boolean"/>
 	<field name="expiry" class="java.util.Date"/>
 	<field name="closed" class="java.util.Date"/>
@@ -29,11 +28,10 @@
 	<field name="customerSignature" class="java.lang.String"/>
 	<field name="maintenancePayments" class="java.util.List"/>
 	<field name="paymentNotes" class="java.lang.String"/>
-	<field name="preventiveMaintenance" class="com.prosystemingegneri.censistant.business.maintenance.entity.PreventiveMaintenance"/>
 	<field name="inspectionsDone" class="java.util.List"/>
 	<field name="taskPrice" class="com.prosystemingegneri.censistant.business.maintenance.entity.TaskPrice"/>
 	<field name="replacements" class="java.util.List"/>
-	<field name="isSuitableForOperation" class="java.lang.Boolean"/>
+	<field name="suitableForOperation" class="com.prosystemingegneri.censistant.business.maintenance.control.SuitableForOperation"/>
 	<field name="customerSignatureImg" class="java.awt.Image"/>
 	<field name="currentMaintenanceTask" class="com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceTask">
 		<fieldDescription><![CDATA[_THIS]]></fieldDescription>
@@ -49,7 +47,7 @@
 					<font size="8" isBold="true"/>
 					<paragraph firstLineIndent="0" leftIndent="1" rightIndent="1" spacingBefore="1" spacingAfter="1"/>
 				</textElement>
-				<textFieldExpression><![CDATA["RAPPORTO DI INTERVENTO n°"+$F{number}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["RAPPORTO DI INTERVENTO"]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="359" y="15" width="108" height="10" uuid="87ac88ed-ae44-43a3-815d-0bf085da9a45"/>
@@ -73,7 +71,7 @@
 					<font size="6" isBold="false"/>
 					<paragraph firstLineIndent="0" leftIndent="1" rightIndent="1" spacingBefore="1" spacingAfter="1"/>
 				</textElement>
-				<textFieldExpression><![CDATA["TECNICO: " + ($F{maintenanceWorker}!= null?$F{maintenanceWorker}.getInitials():"")]]></textFieldExpression>
+				<textFieldExpression><![CDATA["TECNICO: " + (!$F{maintenanceWorkers}.isEmpty()?$F{currentMaintenanceTask}.getMaintenanceWorkersStr():"")]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="359" y="25" width="108" height="10" uuid="e96af905-038f-4a48-91bb-e25179c7703b"/>
@@ -97,7 +95,7 @@
 					<font size="6" isBold="false"/>
 					<paragraph firstLineIndent="0" leftIndent="1" rightIndent="1" spacingBefore="1" spacingAfter="1"/>
 				</textElement>
-				<textFieldExpression><![CDATA["CONTRATTO GARANZIA: " + (($F{maintenanceContract} != null && $F{maintenanceContract}.getIsFullService())?"SÌ":"NO")]]></textFieldExpression>
+				<textFieldExpression><![CDATA["CONTRATTO GARANZIA: " + ($F{currentMaintenanceTask}.isFullService()?"SÌ":"NO")]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="359" y="45" width="108" height="10" uuid="3681afe9-3e87-4367-9bd4-1d295e36cbb0"/>
@@ -105,7 +103,7 @@
 					<font size="6" isBold="false"/>
 					<paragraph firstLineIndent="0" leftIndent="1" rightIndent="1" spacingBefore="1" spacingAfter="1"/>
 				</textElement>
-				<textFieldExpression><![CDATA["CONTRATTO MANUTENZIONE: " + ($F{maintenanceContract}!=null?"SÌ":"NO")]]></textFieldExpression>
+				<textFieldExpression><![CDATA["CONTRATTO MANUTENZIONE: " + ($F{maintenancePlan}!=null?"SÌ":"NO")]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="467" y="45" width="108" height="10" uuid="87c3a50e-7e41-4812-a4a2-e9704c120255"/>
@@ -242,7 +240,7 @@ Confermiamo l’effettiva durata del lavoro e ci dichiariamo soddisfatti dell'in
 					<font size="5"/>
 					<paragraph leftIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Si dichiara che l'impianto " + ($F{isSuitableForOperation}?"è idoneo":"non è idoneo") + " al funzionamento"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Si dichiara che l'impianto " + (str("maintenance_suitableForOperation_" + $F{suitableForOperation})) + " al funzionamento"]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement positionType="FixRelativeToBottom" stretchType="ContainerHeight" x="0" y="175" width="95" height="25" uuid="927215be-926c-41cd-a53e-2f17df8dc982"/>
@@ -257,7 +255,7 @@ Confermiamo l’effettiva durata del lavoro e ci dichiariamo soddisfatti dell'in
 					<font size="8"/>
 					<paragraph leftIndent="4" rightIndent="4"/>
 				</textElement>
-				<textFieldExpression><![CDATA["FIRMA DEL TECNICO" + System.lineSeparator() + $F{maintenanceWorker}.getName()]]></textFieldExpression>
+				<textFieldExpression><![CDATA["FIRMA DEL TECNICO" + System.lineSeparator() + ((com.prosystemingegneri.censistant.business.siteSurvey.entity.Worker)$F{maintenanceWorkers}.iterator().next()).getName()]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement positionType="FixRelativeToBottom" stretchType="ContainerHeight" x="135" y="175" width="95" height="15" uuid="8e5578dd-63ce-41e8-b8d1-98018ff766dd"/>

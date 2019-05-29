@@ -17,6 +17,7 @@
 package com.prosystemingegneri.censistant.business.maintenance.entity;
 
 import com.prosystemingegneri.censistant.business.entity.BaseEntity;
+import com.prosystemingegneri.censistant.business.maintenance.control.MaintenanceType;
 import com.prosystemingegneri.censistant.business.maintenance.control.MandatoryMaintenanceWorkerForClosedMaintenanceTask;
 import com.prosystemingegneri.censistant.business.production.entity.System;
 import com.prosystemingegneri.censistant.business.maintenance.control.MandatoryNotesSignatureForClosedMaintenanceTask;
@@ -411,5 +412,28 @@ public class MaintenanceTask extends BaseEntity<Long> {
     
     public boolean isTaskClosed() {
         return suitableForOperation != null && suitableForOperation != SuitableForOperation.SUSPENDED && closed != null;
+    }
+    
+    public boolean isFullService() {
+        if (maintenancePlan != null)
+            for (MaintenancePlan maintenancePlan1 : maintenancePlan.getContractedSystem().getMaintenancePlans())
+                if (maintenancePlan1.getMaintenanceType() == MaintenanceType.FULL_SERVICE)
+                    return true;
+        
+        return false;
+    }
+    
+    public String getMaintenanceWorkersStr() {
+        StringBuilder result = new StringBuilder();
+        String separator = " - ";
+        
+        for (Worker maintenanceWorker : maintenanceWorkers)
+            result = result
+                    .append(maintenanceWorker.getInitials())
+                    .append(separator);
+        if (separator.length() > 0)
+            result = result.delete(result.length() - separator.length(), result.length());
+        
+        return result.toString();
     }
 }
