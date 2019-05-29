@@ -16,6 +16,7 @@
  */
 package com.prosystemingegneri.censistant.presentation.maintenance;
 
+import com.ibm.icu.util.Calendar;
 import com.prosystemingegneri.censistant.business.customerSupplier.boundary.CustomerSupplierService;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
@@ -37,9 +38,9 @@ import com.prosystemingegneri.censistant.business.siteSurvey.entity.Worker;
 import com.prosystemingegneri.censistant.business.warehouse.boundary.HandledItemService;
 import com.prosystemingegneri.censistant.business.warehouse.entity.HandledItem;
 import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
-import com.prosystemingegneri.censistant.presentation.warehouse.HandledItemLazyDataModel;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -80,7 +81,6 @@ public class MaintenanceTaskPresenter implements Serializable{
     
     @Inject
     HandledItemService handledItemService;
-    private HandledItemLazyDataModel lazyHandledItems;
     
     private List<CustomerSupplier> customers;
     private List<Plant> plants;
@@ -113,6 +113,7 @@ public class MaintenanceTaskPresenter implements Serializable{
     private void init() {
         customers = new ArrayList<>();
         plants = new ArrayList<>();
+        maintenanceTask = (MaintenanceTask) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("maintenanceTask");
     }
     
     private boolean isValid() {
@@ -143,12 +144,19 @@ public class MaintenanceTaskPresenter implements Serializable{
         if (maintenanceTask == null && id != null) {
             if (id == 0)
                 maintenanceTask = service.create();
-            else {
+            else
                 maintenanceTask = service.readMaintenanceTask(id);
-                system = maintenanceTask.getSystem();
-                if (system == null)
-                    system = maintenanceTask.getMaintenancePlan().getContractedSystem().getSystem();
-            }
+        }
+        if (maintenanceTask != null && (id == null || id > 0)) {
+            system = maintenanceTask.getSystem();
+            if (system == null)
+                system = maintenanceTask.getMaintenancePlan().getContractedSystem().getSystem();
+            GregorianCalendar start = new GregorianCalendar();
+            start.add(Calendar.MINUTE, -1);
+            List<HandledItem> added = handledItemService.listHandledItems(0, 0, null, null, null, null, null, null, null, system, null, null, null, null, null, Boolean.FALSE, start, new GregorianCalendar());
+            if (added != null)
+                for (HandledItem handledItem : added)
+                    maintenanceTask.addReplacement(new Replacement(handledItem));
         }
         
         clearNewCustomer();
@@ -200,20 +208,11 @@ public class MaintenanceTaskPresenter implements Serializable{
         if (event.getVisibility().equals(Visibility.VISIBLE))
             maintenanceTask.getTaskPrice().setTravelWorking(new WorkingDuration());
     }
-
-    public HandledItemLazyDataModel getLazyHandledItems() {
-        return lazyHandledItems;
-    }
-
-    public void setLazyHandledItems(HandledItemLazyDataModel lazyHandledItems) {
-        this.lazyHandledItems = lazyHandledItems;
-    }
     
     public void onSystemSelect(SelectEvent event) {
         System tempSystem = (System) event.getObject();
         if (tempSystem != null) {
             this.system = tempSystem;
-            lazyHandledItems = new HandledItemLazyDataModel(handledItemService, null, tempSystem, null, Boolean.FALSE);
             updateUnexpiredMaintenanceContracts();
         }
     }
@@ -478,6 +477,12 @@ public class MaintenanceTaskPresenter implements Serializable{
 
     public void setSystem(System system) {
         this.system = system;
+    }
+    
+    public String openItemMovement() {
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("maintenanceTask", maintenanceTask);
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("returnPage", "maintenance/maintenanceTask");
+        return "/secured/warehouse/itemMovement?faces-redirect=true";
     }
     
 }

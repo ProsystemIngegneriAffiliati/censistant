@@ -16,6 +16,7 @@
  */
 package com.prosystemingegneri.censistant.presentation.warehouse;
 
+import com.prosystemingegneri.censistant.business.maintenance.entity.MaintenanceTask;
 import com.prosystemingegneri.censistant.business.production.entity.Device;
 import com.prosystemingegneri.censistant.business.production.entity.System;
 import com.prosystemingegneri.censistant.business.production.entity.UnitMeasure;
@@ -74,6 +75,8 @@ public class StockListPresenter implements Serializable{
     
     private Device device;
     
+    private MaintenanceTask maintenanceTask;
+    
     private String returnPage;
     
     @PostConstruct
@@ -82,11 +85,17 @@ public class StockListPresenter implements Serializable{
         jobOrder = (JobOrder) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("jobOrder");
         activeIndex = (Integer) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("activeIndex");
         device = (Device) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("device");
+        maintenanceTask = (MaintenanceTask) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("maintenanceTask");
         returnPage = (String) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("returnPage");
         
         if (jobOrder != null) {
             locationTypeArrival = LocationType.SYSTEM;
             locationArrival = jobOrder.getOffer().getSystem();
+        }
+        
+        if (maintenanceTask != null) {
+            locationTypeArrival = LocationType.SYSTEM;
+            locationArrival = maintenanceTask.getSystem();
         }
         
         initPreparedStock();
@@ -141,7 +150,8 @@ public class StockListPresenter implements Serializable{
                     if (moved > 1)
                         itemStr += "s";
                     if (returnPage != null && !returnPage.isEmpty()) {
-                        jobOrder.getOffer().setSystem((System) locationArrival);
+                        if (jobOrder != null)
+                            jobOrder.getOffer().setSystem((System) locationArrival);
                         putExternalContext();
                         return "/secured/" + returnPage + "?faces-redirect=true";
                     }
@@ -174,6 +184,7 @@ public class StockListPresenter implements Serializable{
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("jobOrder", jobOrder);
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("activeIndex", activeIndex);
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("device", device);
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("maintenanceTask", maintenanceTask);
     }
 
     public StockLazyDataModel getLazyStock() {

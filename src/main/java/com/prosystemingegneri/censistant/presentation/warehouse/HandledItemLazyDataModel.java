@@ -94,8 +94,8 @@ public class HandledItemLazyDataModel extends LazyDataModel<HandledItem>{
             }
         }
         
-        List<HandledItem> result = service.listHandledItems(first, pageSize, sortField, isAscending, workerName, supplierItemCode, supplierItemDescription, fromLocation, fromLocationName, toLocation, toLocationName, null, null, null, isAssociatedToDeliveryNoteRow, isAssociatedToReplacement);
-        this.setRowCount(service.getHandledItemsCount(workerName, supplierItemCode, supplierItemDescription, fromLocation, fromLocationName, toLocation, toLocationName, null, null, null, isAssociatedToDeliveryNoteRow, isAssociatedToReplacement).intValue());
+        List<HandledItem> result = service.listHandledItems(first, pageSize, sortField, isAscending, workerName, supplierItemCode, supplierItemDescription, fromLocation, fromLocationName, toLocation, toLocationName, null, null, null, isAssociatedToDeliveryNoteRow, isAssociatedToReplacement, null, null);
+        this.setRowCount(service.getHandledItemsCount(workerName, supplierItemCode, supplierItemDescription, fromLocation, fromLocationName, toLocation, toLocationName, null, null, null, isAssociatedToDeliveryNoteRow, isAssociatedToReplacement, null, null).intValue());
         
         return result;
     }

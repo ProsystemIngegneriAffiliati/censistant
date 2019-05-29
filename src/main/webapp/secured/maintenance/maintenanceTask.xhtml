@@ -364,70 +364,54 @@
                                     </p:column>
                                 </p:dataTable>
                                 <h:panelGroup id="replacementsPanel">
-                                    <p:panelGrid rendered="#{not empty maintenanceTaskPresenter.maintenanceTask.system}" columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="form-group">
-                                        <p:dataTable id="handledItemsTable" var="handledItem" value="#{maintenanceTaskPresenter.lazyHandledItems}"
-                                                     selectionMode="multiple" selection="#{maintenanceTaskPresenter.maintenanceTask.replacementHandledItems}" rowKey="#{handledItem.id}"
-                                                     paginator="true" rows="10" paginatorAlwaysVisible="false"
-                                                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                                     rowsPerPageTemplate="10,25,50" lazy="true">
-                                            <f:facet name="header">
-                                                #{msg.maintenance_maintenanceTask_replacements_system}
-                                            </f:facet>
-                                            <p:ajax event="rowSelect" listener="#{maintenanceTaskPresenter.onHandledItemSelect}" update="maintenanceTaskForm:replacementsTable maintenanceTaskForm:taskPricePanel" />
-                                            <p:column headerText="#{msg.warehouse_handledItem_handlingTimestamp}" field="handlingTimestamp" filterable="false" priority="0">
-                                                <h:outputText value="#{handledItem.handlingTimestamp}">
-                                                    <f:convertDateTime type="both" dateStyle="medium" timeStyle="short" />
-                                                </h:outputText>
-                                            </p:column>
-                                            <p:column headerText="#{msg.purchasing_supplierItem_codeAndDescription}" priority="0">
-                                                <h:outputText value="#{handledItem.boxedItem.item.codeAndDescription}"/>
-                                            </p:column>
-                                            <p:column headerText="#{msg.warehouse_handledItem_quantity}" priority="0">
-                                                <h:outputText value="#{handledItem.quantity}">
-                                                    <f:convertNumber integerOnly="true" />
-                                                </h:outputText>
-                                            </p:column>
-                                            <p:column headerText="#{msg.production_unitMeasure_symbol}" priority="4">
-                                                <h:outputText value="#{handledItem.boxedItem.item.item.unitMeasure.symbol}"/>
-                                            </p:column>
-                                        </p:dataTable>
-                                        <p:dataTable id="replacementsTable"
-                                                     var="replacement"
-                                                     value="#{maintenanceTaskPresenter.maintenanceTask.replacements}"
-                                                     editable="true" editMode="cell">
-                                            <f:facet name="header">
-                                                <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
-                                                    #{msg.maintenance_maintenanceTask_replacements}
+                                    <p:dataTable id="replacementsTable"
+                                                 var="replacement"
+                                                 value="#{maintenanceTaskPresenter.maintenanceTask.replacements}"
+                                                 editable="true" editMode="cell">
+                                        <f:facet name="header">
+                                            <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
+                                                #{msg.maintenance_maintenanceTask_replacements}
+                                                <p:outputPanel style="display: inline-block">
                                                     <p:commandButton title="#{msg.update}" icon="ui-icon-update" update="replacementsTable maintenanceTaskForm:taskPricePanel"/>
-                                                </p:panelGrid>
-                                            </f:facet>
-                                            <p:column headerText="#{msg.purchasing_supplierItem_codeAndDescription}" priority="0">
-                                                <h:outputText value="#{replacement.handledItem.boxedItem.item.codeAndDescription}" />
-                                            </p:column>
-                                            <p:column headerText="#{msg.warehouse_handledItem_quantity}" priority="2">
-                                                <h:outputText value="#{replacement.handledItem.quantity}">
-                                                    <f:convertNumber integerOnly="true" />
-                                                </h:outputText>
-                                            </p:column>
-                                            <p:column headerText="#{msg.maintenance_maintenanceTask_replacement_price_abbr}" priority="4">
-                                                <p:cellEditor>
-                                                    <f:facet name="output">
-                                                        <h:outputText value="#{replacement.price}">
-                                                            <f:convertNumber currencySymbol="€" minFractionDigits="#{TaskPrice.SCALE_PRICE}" type="currency" />
-                                                        </h:outputText>
-                                                    </f:facet>
-                                                    <f:facet name="input">
-                                                        <p:inputNumber decimalPlaces="#{TaskPrice.SCALE_PRICE}" symbol="€ " value="#{replacement.price}" />
-                                                    </f:facet>
-                                                </p:cellEditor>
-                                            </p:column>
-                                            <p:column headerText="#{msg.maintenance_maintenanceTask_replacement_totalPrice}" priority="0">
-                                                <h:outputText value="#{replacement.totalPrice}">
-                                                    <f:convertNumber currencySymbol="€" minFractionDigits="#{TaskPrice.SCALE_PRICE}" type="currency" />
-                                                </h:outputText>
-                                            </p:column>
-                                        </p:dataTable>
-                                    </p:panelGrid>
+                                                    <p:commandButton title="#{msg.add}" icon="ui-icon-add" action="#{maintenanceTaskPresenter.openItemMovement()}" ajax="false">
+                                                        <oou:ignoreValidationFailed />
+                                                    </p:commandButton>
+                                                </p:outputPanel>
+                                            </p:panelGrid>
+                                        </f:facet>
+                                        <p:column headerText="#{msg.purchasing_supplierItem_codeAndDescription}" priority="0">
+                                            <h:outputText value="#{replacement.handledItem.boxedItem.item.codeAndDescription}" />
+                                        </p:column>
+                                        <p:column headerText="#{msg.warehouse_handledItem_quantity}" priority="2">
+                                            <h:outputText value="#{replacement.handledItem.quantity}">
+                                                <f:convertNumber integerOnly="true" />
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column headerText="#{msg.maintenance_maintenanceTask_replacement_price_abbr}" priority="4">
+                                            <p:cellEditor>
+                                                <f:facet name="output">
+                                                    <h:outputText value="#{replacement.price}">
+                                                        <f:convertNumber currencySymbol="€" minFractionDigits="#{TaskPrice.SCALE_PRICE}" type="currency" />
+                                                    </h:outputText>
+                                                </f:facet>
+                                                <f:facet name="input">
+                                                    <p:inputNumber decimalPlaces="#{TaskPrice.SCALE_PRICE}" symbol="€ " value="#{replacement.price}">
+                                                        <p:ajax update="totalPrice maintenanceTaskForm:taskPricePanel" />
+                                                    </p:inputNumber>
+                                                </f:facet>
+                                            </p:cellEditor>
+                                        </p:column>
+                                        <p:column headerText="#{msg.maintenance_maintenanceTask_replacement_totalPrice}" priority="0">
+                                            <h:outputText id="totalPrice" value="#{replacement.totalPrice}">
+                                                <f:convertNumber currencySymbol="€" minFractionDigits="#{TaskPrice.SCALE_PRICE}" type="currency" />
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column headerText="#{msg.actions}" style="width:72px; text-align:center">
+                                            <p:commandButton title="#{msg.remove}" icon="ui-icon-delete" actionListener="#{maintenanceTaskPresenter.maintenanceTask.removeReplacement(replacement)}" update="replacementsTable">
+                                                <p:confirm header="#{msg.maintenance_maintenanceTask_replacements_delete}" message="#{msg.maintenance_maintenanceTask_replacements_delete_tip}" icon="ui-icon-alert"/>
+                                            </p:commandButton>
+                                        </p:column>
+                                    </p:dataTable>
                                 </h:panelGroup>
                                 <p:panel id="taskPricePanel" header="#{msg.maintenance_maintenanceTask_taskPrice}" style="margin-top: 25px; margin-bottom: 25px">
                                     <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">

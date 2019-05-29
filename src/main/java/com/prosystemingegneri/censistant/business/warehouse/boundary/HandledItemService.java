@@ -52,6 +52,7 @@ import com.prosystemingegneri.censistant.business.warehouse.entity.Warehouse_;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -151,13 +152,26 @@ public class HandledItemService implements Serializable{
         em.remove(readHandledItem(id));
     }
     
-    public List<HandledItem> listHandledItems(int first, int pageSize, String sortField, Boolean isAscending, String workerName, String supplierItemCode, String supplierItemDescription, Location fromLocation, String fromLocationName, Location toLocation, String toLocationName, BoxedItem boxedItem, Location fromOrToLocation, Item item, Boolean isAssociatedToDeliveryNoteRow, Boolean isAssociatedToReplacement) {
+    public List<HandledItem> listHandledItems(
+            int first, int pageSize,
+            String sortField, Boolean isAscending,
+            String workerName,
+            String supplierItemCode,
+            String supplierItemDescription,
+            Location fromLocation, String fromLocationName,
+            Location toLocation, String toLocationName,
+            BoxedItem boxedItem,
+            Location fromOrToLocation,
+            Item item,
+            Boolean isAssociatedToDeliveryNoteRow,
+            Boolean isAssociatedToReplacement,
+            GregorianCalendar start, GregorianCalendar end) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<HandledItem> query = cb.createQuery(HandledItem.class);
         Root<HandledItem> root = query.from(HandledItem.class);
         CriteriaQuery<HandledItem> select = query.select(root).distinct(true);
         
-        List<Predicate> conditions = calculateConditions(cb, query, root, workerName, supplierItemCode, supplierItemDescription, fromLocation, fromLocationName, toLocation, toLocationName, boxedItem, fromOrToLocation, item, isAssociatedToDeliveryNoteRow, isAssociatedToReplacement);
+        List<Predicate> conditions = calculateConditions(cb, query, root, workerName, supplierItemCode, supplierItemDescription, fromLocation, fromLocationName, toLocation, toLocationName, boxedItem, fromOrToLocation, item, isAssociatedToDeliveryNoteRow, isAssociatedToReplacement, start, end);
 
         if (!conditions.isEmpty())
             query.where(conditions.toArray(new Predicate[conditions.size()]));
@@ -195,20 +209,31 @@ public class HandledItemService implements Serializable{
             return typedQuery.getResultList();
         }
         else {
-            if (boxedItem != null || fromOrToLocation != null || item != null)   //we don't want all the handled items!
+            if (boxedItem != null || fromLocation != null || toLocation != null || fromOrToLocation != null || item != null)   //we don't want all the handled items!
                 return typedQuery.getResultList();
             else
                 return null;
         }
     }
     
-    public Long getHandledItemsCount(String workerName, String supplierItemCode, String supplierItemDescription,Location fromLocation, String fromLocationName, Location toLocation, String toLocationName, BoxedItem boxedItem, Location fromOrToLocation, Item item, Boolean isAssociatedToDeliveryNoteRow, Boolean isAssociatedToReplacement) {
+    public Long getHandledItemsCount(
+            String workerName,
+            String supplierItemCode,
+            String supplierItemDescription,
+            Location fromLocation, String fromLocationName,
+            Location toLocation, String toLocationName,
+            BoxedItem boxedItem,
+            Location fromOrToLocation,
+            Item item,
+            Boolean isAssociatedToDeliveryNoteRow,
+            Boolean isAssociatedToReplacement,
+            GregorianCalendar start, GregorianCalendar end) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Long> query = cb.createQuery(Long.class);
         Root<HandledItem> root = query.from(HandledItem.class);
         CriteriaQuery<Long> select = query.select(cb.count(root));
 
-        List<Predicate> conditions = calculateConditions(cb, query, root, workerName, supplierItemCode, supplierItemDescription, fromLocation, fromLocationName, toLocation, toLocationName, boxedItem, fromOrToLocation, item, isAssociatedToDeliveryNoteRow, isAssociatedToReplacement);
+        List<Predicate> conditions = calculateConditions(cb, query, root, workerName, supplierItemCode, supplierItemDescription, fromLocation, fromLocationName, toLocation, toLocationName, boxedItem, fromOrToLocation, item, isAssociatedToDeliveryNoteRow, isAssociatedToReplacement, start, end);
 
         if (!conditions.isEmpty())
             query.where(conditions.toArray(new Predicate[conditions.size()]));
@@ -223,7 +248,19 @@ public class HandledItemService implements Serializable{
         }
     }
     
-    private List<Predicate> calculateConditions(CriteriaBuilder cb, CriteriaQuery query, Root<HandledItem> root, String workerName, String supplierItemCode, String supplierItemDescription, Location fromLocation, String fromLocationName, Location toLocation, String toLocationName, BoxedItem boxedItem, Location fromOrToLocation, Item item, Boolean isAssociatedToDeliveryNoteRow, Boolean isAssociatedToReplacement) {
+    private List<Predicate> calculateConditions(
+            CriteriaBuilder cb, CriteriaQuery query, Root<HandledItem> root,
+            String workerName,
+            String supplierItemCode,
+            String supplierItemDescription,
+            Location fromLocation, String fromLocationName,
+            Location toLocation, String toLocationName,
+            BoxedItem boxedItem,
+            Location fromOrToLocation,
+            Item item,
+            Boolean isAssociatedToDeliveryNoteRow,
+            Boolean isAssociatedToReplacement,
+            GregorianCalendar start, GregorianCalendar end) {
         List<Predicate> conditions = new ArrayList<>();
         
         //Worker's name
@@ -303,6 +340,10 @@ public class HandledItemService implements Serializable{
             else
                 conditions.add(cb.not(cb.in(path).value(subquery)));
         }
+        
+        //Handling timestamp between dates
+        if (start != null && end != null)
+            conditions.add(cb.between(root.<Date>get(HandledItem_.handlingTimestamp), start.getTime(), end.getTime()));
         
         return conditions;
     }
