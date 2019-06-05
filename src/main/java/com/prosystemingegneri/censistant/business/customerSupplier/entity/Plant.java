@@ -192,4 +192,18 @@ public class Plant extends BaseEntity<Long>{
         if (!customerSupplier.getIsSupplier() && location != null)
             removeLocation();
     }
+    
+    public String getPhoneStr() {
+        StringBuilder result = new StringBuilder();
+        String separatore = " - ";
+        
+        if (phone != null && !phone.isEmpty())
+            result = result.append(phone).append(separatore);
+        if (!isHeadOffice && customerSupplier.getHeadOffice() != null)
+            result = result.append(customerSupplier.getHeadOffice().getPhoneStr());
+        if (result.length() > 0 && result.charAt(result.length() - 1) == separatore.charAt(separatore.length() - 1))
+            result = result.delete(result.length() - separatore.length(), result.length());
+        
+        return result.toString();
+    }
 }

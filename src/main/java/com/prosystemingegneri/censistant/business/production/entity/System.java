@@ -242,4 +242,13 @@ public class System extends Location {
             return "";
     }
     
+    public Plant getPlant() {
+        Plant result = null;
+        
+        if (!offers.isEmpty())
+            result = offers.get(offers.size() - 1).getSiteSurveyReport().getPlant();
+        
+        return result;
+    }
+    
 }
