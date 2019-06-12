@@ -18,6 +18,7 @@
             <oou:importConstants type="com.prosystemingegneri.censistant.business.maintenance.control.ResultType" />
             <oou:importConstants type="com.prosystemingegneri.censistant.business.maintenance.entity.TaskPrice"/>
             <oou:importConstants type="com.prosystemingegneri.censistant.business.maintenance.control.Inspection"/>
+            <oou:importConstants type="com.prosystemingegneri.censistant.business.maintenance.control.MaintenanceType"/>
             <oou:importConstants type="com.prosystemingegneri.censistant.business.maintenance.control.SuitableForOperation"/>
             <oou:form id="maintenanceTaskForm">
                 <div class="ui-fluid">
@@ -28,12 +29,12 @@
                                 <p>#{msg.maintenance_maintenanceTask_tip}</p>
 
                                 <p:panelGrid columns="2" columnClasses="ui-grid-col-4,ui-grid-col-8" layout="grid" styleClass="ui-panelgrid-blank form-group">
-                                    <h:panelGroup styleClass="md-inputfield">
+                                    <h:panelGroup rendered="#{not MaintenanceType.TELECONTROL.equals(maintenanceTaskPresenter.maintenanceTask.maintenancePlan.maintenanceType)}" styleClass="md-inputfield">
                                         <p:calendar id="creation" value="#{maintenanceTaskPresenter.maintenanceTask.creation}" locale="it" />
                                         <p:outputLabel for="creation" value="#{msg.maintenance_maintenanceTask_creationForPrinting}"/>
                                         <p:message for="creation"/>
                                     </h:panelGroup>
-                                    <h:panelGroup styleClass="md-inputfield">
+                                    <h:panelGroup rendered="#{not MaintenanceType.TELECONTROL.equals(maintenanceTaskPresenter.maintenanceTask.maintenancePlan.maintenanceType)}" styleClass="md-inputfield">
                                         <p:autoComplete id="inChargeWorker"
                                                         dropdown="true"
                                                         value="#{maintenanceTaskPresenter.maintenanceTask.inChargeWorker}"
@@ -277,54 +278,56 @@
                                 </h:panelGroup>
 
                                 <h:panelGroup id="contractAndSystem">
-                                    <p:panelGrid rendered="#{not empty maintenanceTaskPresenter.systemStr}" columns="4" columnClasses="ui-grid-col-3,ui-grid-col-3,ui-grid-col-3,ui-grid-col-3" layout="grid" styleClass="ui-panelgrid-blank form-group">
-                                        <h:panelGroup>
-                                            <p:outputLabel for="isGuaranteeValid" value="#{msg.maintenance_maintenanceTask_isGuaranteeValid}" />
-                                            <p:inputSwitch id="isGuaranteeValid" label="#{msg.maintenance_maintenanceTask_isGuaranteeValid}" value="#{maintenanceTaskPresenter.maintenanceTask.isGuaranteeValid}" />
-                                        </h:panelGroup>
-                                        <h:panelGroup>
-                                            <p:outputLabel for="isFullService" value="#{msg.maintenance_maintenanceContract_isFullService}" />
-                                            <p:inputSwitch id="isFullService" disabled="true" label="#{msg.maintenance_maintenanceContract_isFullService}" value="#{not empty maintenanceTaskPresenter.maintenanceTask.maintenancePlan and maintenanceTaskPresenter.maintenanceTask.maintenancePlan.contractedSystem.fullService}" />
-                                        </h:panelGroup>
-                                        <h:panelGroup styleClass="md-inputfield">
-                                            <p:inputText id="maintenanceContract" readonly="true" value="#{maintenanceTaskPresenter.maintenanceTask.maintenancePlan.contractedSystem.maintenanceContract.customerNameContractExpiry}" />
-                                            <p:outputLabel for="maintenanceContract" value="#{msg.maintenance_maintenanceContract}"/>
-                                            <p:message for="maintenanceContract"/>
-                                        </h:panelGroup>
-                                        <h:panelGroup styleClass="md-inputfield">
-                                            <p:inputText readonly="true" id="expiry" value="#{maintenanceTaskPresenter.maintenanceTask.expiry}">
-                                                <f:convertDateTime locale="it" pattern="MMMM yy" />
-                                            </p:inputText>
-                                            <p:outputLabel for="expiry" value="#{msg.maintenance_maintenanceTask_expiryForPrinting}"/>
-                                            <p:message for="expiry"/>
-                                        </h:panelGroup>
-                                    </p:panelGrid>
-                                    <p:panelGrid rendered="#{not empty maintenanceTaskPresenter.systemStr}" columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
-                                        <h:panelGroup styleClass="md-inputfield">
-                                            <p:inputText readonly="true" id="system" value="#{maintenanceTaskPresenter.systemStr}" />
-                                            <p:outputLabel for="system" value="#{msg.production_system}"/>
-                                            <p:message for="system"/>
-                                        </h:panelGroup>
-                                        <p:dataTable id="devicesTable"
-                                                     var="device"
-                                                     value="#{maintenanceTaskPresenter.system.devices}"
-                                                     style="margin-bottom: 25px">
-                                            <f:facet name="header">
-                                                #{msg.maintenance_maintenanceTask_systemDevices}
-                                            </f:facet>
-                                            <p:column headerText="#{msg.production_device}" filterBy="#{device.item.description}" filterMatchMode="contains" priority="0">
-                                                <h:outputText value="#{device.item.description}"/>
-                                            </p:column>
-                                            <p:column headerText="#{msg.production_device_quantity}" priority="2">
-                                                <h:outputText value="#{device.quantity}">
-                                                    <f:convertNumber integerOnly="true" />
-                                                </h:outputText>
-                                            </p:column>
-                                            <p:column headerText="#{msg.production_unitMeasure_symbol}" priority="4">
-                                                <h:outputText value="#{device.item.unitMeasure.symbol}"/>
-                                            </p:column>
-                                        </p:dataTable>
-                                    </p:panelGrid>
+                                    <h:panelGroup rendered="#{not MaintenanceType.TELECONTROL.equals(maintenanceTaskPresenter.maintenanceTask.maintenancePlan.maintenanceType)}">
+                                        <p:panelGrid rendered="#{not empty maintenanceTaskPresenter.systemStr}" columns="4" columnClasses="ui-grid-col-3,ui-grid-col-3,ui-grid-col-3,ui-grid-col-3" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                            <h:panelGroup>
+                                                <p:outputLabel for="isGuaranteeValid" value="#{msg.maintenance_maintenanceTask_isGuaranteeValid}" />
+                                                <p:inputSwitch id="isGuaranteeValid" label="#{msg.maintenance_maintenanceTask_isGuaranteeValid}" value="#{maintenanceTaskPresenter.maintenanceTask.isGuaranteeValid}" />
+                                            </h:panelGroup>
+                                            <h:panelGroup>
+                                                <p:outputLabel for="isFullService" value="#{msg.maintenance_maintenanceContract_isFullService}" />
+                                                <p:inputSwitch id="isFullService" disabled="true" label="#{msg.maintenance_maintenanceContract_isFullService}" value="#{not empty maintenanceTaskPresenter.maintenanceTask.maintenancePlan and maintenanceTaskPresenter.maintenanceTask.maintenancePlan.contractedSystem.fullService}" />
+                                            </h:panelGroup>
+                                            <h:panelGroup styleClass="md-inputfield">
+                                                <p:inputText id="maintenanceContract" readonly="true" value="#{maintenanceTaskPresenter.maintenanceTask.maintenancePlan.contractedSystem.maintenanceContract.customerNameContractExpiry}" />
+                                                <p:outputLabel for="maintenanceContract" value="#{msg.maintenance_maintenanceContract}"/>
+                                                <p:message for="maintenanceContract"/>
+                                            </h:panelGroup>
+                                            <h:panelGroup styleClass="md-inputfield">
+                                                <p:inputText readonly="true" id="expiry" value="#{maintenanceTaskPresenter.maintenanceTask.expiry}">
+                                                    <f:convertDateTime locale="it" pattern="MMMM yy" />
+                                                </p:inputText>
+                                                <p:outputLabel for="expiry" value="#{msg.maintenance_maintenanceTask_expiryForPrinting}"/>
+                                                <p:message for="expiry"/>
+                                            </h:panelGroup>
+                                        </p:panelGrid>
+                                        <p:panelGrid rendered="#{not empty maintenanceTaskPresenter.systemStr}" columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                            <h:panelGroup styleClass="md-inputfield">
+                                                <p:inputText readonly="true" id="system" value="#{maintenanceTaskPresenter.systemStr}" />
+                                                <p:outputLabel for="system" value="#{msg.production_system}"/>
+                                                <p:message for="system"/>
+                                            </h:panelGroup>
+                                            <p:dataTable id="devicesTable"
+                                                         var="device"
+                                                         value="#{maintenanceTaskPresenter.system.devices}"
+                                                         style="margin-bottom: 25px">
+                                                <f:facet name="header">
+                                                    #{msg.maintenance_maintenanceTask_systemDevices}
+                                                </f:facet>
+                                                <p:column headerText="#{msg.production_device}" filterBy="#{device.item.description}" filterMatchMode="contains" priority="0">
+                                                    <h:outputText value="#{device.item.description}"/>
+                                                </p:column>
+                                                <p:column headerText="#{msg.production_device_quantity}" priority="2">
+                                                    <h:outputText value="#{device.quantity}">
+                                                        <f:convertNumber integerOnly="true" />
+                                                    </h:outputText>
+                                                </p:column>
+                                                <p:column headerText="#{msg.production_unitMeasure_symbol}" priority="4">
+                                                    <h:outputText value="#{device.item.unitMeasure.symbol}"/>
+                                                </p:column>
+                                            </p:dataTable>
+                                        </p:panelGrid>
+                                    </h:panelGroup>
                                 </h:panelGroup>
 
                                 <p:panelGrid columns="2" columnClasses="ui-grid-col-5,ui-grid-col-7" layout="grid" styleClass="ui-panelgrid-blank form-group">
@@ -342,7 +345,7 @@
                                     </h:panelGroup>
                                 </p:panelGrid>
                                 <p:dataTable id="inspectionsDoneTable"
-                                             rendered="#{not empty maintenanceTaskPresenter.maintenanceTask.inspectionsDone}"
+                                             rendered="#{not empty maintenanceTaskPresenter.maintenanceTask.inspectionsDone and (not MaintenanceType.TELECONTROL.equals(maintenanceTaskPresenter.maintenanceTask.maintenancePlan.maintenanceType))}"
                                              var="inspectionDone"
                                              value="#{maintenanceTaskPresenter.maintenanceTask.inspectionsDone}"
                                              rowStyleClass="#{maintenanceTaskPresenter.calculateInspectionDoneResultColor(inspectionDone)}"
@@ -365,6 +368,7 @@
                                 </p:dataTable>
                                 <h:panelGroup id="replacementsPanel">
                                     <p:dataTable id="replacementsTable"
+                                                 rendered="#{not MaintenanceType.TELECONTROL.equals(maintenanceTaskPresenter.maintenanceTask.maintenancePlan.maintenanceType)}"
                                                  var="replacement"
                                                  value="#{maintenanceTaskPresenter.maintenanceTask.replacements}"
                                                  editable="true" editMode="cell">
@@ -413,7 +417,7 @@
                                         </p:column>
                                     </p:dataTable>
                                 </h:panelGroup>
-                                <p:panel id="taskPricePanel" header="#{msg.maintenance_maintenanceTask_taskPrice}" style="margin-top: 25px; margin-bottom: 25px">
+                                <p:panel id="taskPricePanel" rendered="#{not MaintenanceType.TELECONTROL.equals(maintenanceTaskPresenter.maintenanceTask.maintenancePlan.maintenanceType)}" header="#{msg.maintenance_maintenanceTask_taskPrice}" style="margin-top: 25px; margin-bottom: 25px">
                                     <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:inputNumber readonly="true" id="replacementsPrice" decimalPlaces="#{TaskPrice.SCALE_PRICE}" symbol="€ " value="#{maintenanceTaskPresenter.maintenanceTask.replacementsPrice}" />
@@ -624,7 +628,7 @@
                                         </h:panelGroup>
                                     </p:panelGrid>
                                 </p:panel>
-                                <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="form-group">
+                                <p:panelGrid rendered="#{not MaintenanceType.TELECONTROL.equals(maintenanceTaskPresenter.maintenanceTask.maintenancePlan.maintenanceType)}" columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="form-group">
                                     <p:dataTable id="maintenancePayments"
                                                  var="payment"
                                                  value="#{maintenancePaymentListPresenter.maintenancePayments}"
@@ -647,7 +651,7 @@
                                     </h:panelGroup>
                                 </p:panelGrid>
                                 <h:panelGroup id="customerSignaturePanel">
-                                    <p:panelGrid rendered="#{not empty maintenanceTaskPresenter.maintenanceTask.closingNotes}" columns="2" columnClasses="ui-grid-col-11,ui-grid-col-1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                    <p:panelGrid rendered="#{not empty maintenanceTaskPresenter.maintenanceTask.closingNotes and (not MaintenanceType.TELECONTROL.equals(maintenanceTaskPresenter.maintenanceTask.maintenancePlan.maintenanceType))}" columns="2" columnClasses="ui-grid-col-11,ui-grid-col-1" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:outputLabel for="customerSignature" value="#{msg.maintenance_maintenanceTask_customerSignature}" />
                                             <p:signature id="customerSignature"

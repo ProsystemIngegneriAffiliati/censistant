@@ -161,7 +161,7 @@ public class MaintenanceTaskService implements Serializable{
                 MaintenanceTaskDto.class,
                 root.get(MaintenanceTask_.id),
                 joinCustomerSupplierFromMaintenancePlan.get(CustomerSupplier_.name),
-                joinPlantFromMaintenancePlan.get(Plant_.address),
+                cb.concat(joinPlantFromMaintenancePlan.get(Plant_.name), cb.concat(cb.literal(" - "), joinPlantFromMaintenancePlan.get(Plant_.address))),
                 joinCustomerSupplierFromSystem.get(CustomerSupplier_.name),
                 joinPlantSystem.get(Plant_.address),
                 joinMaintenancePlan.get(MaintenancePlan_.maintenanceType),
@@ -290,11 +290,29 @@ public class MaintenanceTaskService implements Serializable{
         //isClosed
         if (isClosed != null) {
             if (isClosed)
-                conditions.add(cb.and(
-                        cb.isNotNull(root.get(MaintenanceTask_.closed)),
-                        cb.notEqual(root.get(MaintenanceTask_.suitableForOperation), SuitableForOperation.SUSPENDED)));
+                conditions.add(
+                        cb.or(
+                                cb.and(
+                                        cb.isNotNull(root.get(MaintenanceTask_.closed)),
+                                        cb.equal(joinMaintenancePlan.get(MaintenancePlan_.maintenanceType), MaintenanceType.TELECONTROL)
+                                ),
+                                cb.and(
+                                        cb.isNotNull(root.get(MaintenanceTask_.closed)),
+                                        cb.notEqual(joinMaintenancePlan.get(MaintenancePlan_.maintenanceType), MaintenanceType.TELECONTROL),
+                                        cb.notEqual(root.get(MaintenanceTask_.suitableForOperation), SuitableForOperation.SUSPENDED)
+                                )
+                        )
+                );
             else
-                conditions.add(cb.isNull(root.get(MaintenanceTask_.closed)));
+                conditions.add(
+                        cb.or(
+                                cb.isNull(root.get(MaintenanceTask_.closed)),
+                                cb.and(
+                                        cb.isNotNull(root.get(MaintenanceTask_.closed)),
+                                        cb.equal(root.get(MaintenanceTask_.suitableForOperation), SuitableForOperation.SUSPENDED)
+                                )
+                        )
+                );
         }
         
         return conditions;
