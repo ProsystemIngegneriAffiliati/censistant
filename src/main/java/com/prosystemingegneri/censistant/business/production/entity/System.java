@@ -251,4 +251,11 @@ public class System extends Location {
         return result;
     }
     
+    public String getSellerInitials() {
+        if (!offers.isEmpty())
+            return offers.get(offers.size() - 1).getSiteSurveyReport().getSeller().getInitials();
+        
+        return "";
+    }
+    
 }

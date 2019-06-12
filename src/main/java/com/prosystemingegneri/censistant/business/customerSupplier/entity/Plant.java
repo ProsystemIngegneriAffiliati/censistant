@@ -61,6 +61,8 @@ public class Plant extends BaseEntity<Long>{
     
     private String email;
     
+    private String zone;
+    
     private String notes;
     
     @OneToOne(mappedBy = "plant", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
@@ -206,4 +208,13 @@ public class Plant extends BaseEntity<Long>{
         
         return result.toString();
     }
+
+    public String getZone() {
+        return zone;
+    }
+
+    public void setZone(String zone) {
+        this.zone = zone;
+    }
+    
 }

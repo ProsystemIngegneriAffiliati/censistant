@@ -431,8 +431,35 @@ public class MaintenanceTask extends BaseEntity<Long> {
             result = result
                     .append(maintenanceWorker.getInitials())
                     .append(separator);
-        if (separator.length() > 0)
+        if (result.length() > 0)
             result = result.delete(result.length() - separator.length(), result.length());
+        
+        return result.toString();
+    }
+    
+    public String getMaintenanceTypesStr() {
+        StringBuilder result = new StringBuilder();
+        
+        if (maintenancePlan != null) {
+            for (MaintenancePlan tempMaintenancePlan : maintenancePlan.getContractedSystem().getMaintenancePlans()) {
+                switch (tempMaintenancePlan.getMaintenanceType()) {
+                    case FULL_SERVICE:
+                        result = result.append("G");
+                        break;
+                    case MAINTENANCE:
+                        break;
+                    case ON_CALL:
+                        break;
+                    case PREVENTIVE_MAINTENANCE:
+                        result = result.append("M");
+                        break;
+                    case TELECONTROL:
+                        result = result.append("T");
+                        break;
+                    default:
+                }
+            }
+        }
         
         return result.toString();
     }

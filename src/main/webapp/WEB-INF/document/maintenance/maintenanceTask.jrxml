@@ -55,69 +55,69 @@
 				</textElement>
 				<textFieldExpression><![CDATA["RAPPORTO DI INTERVENTO"]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="359" y="15" width="108" height="10" uuid="87ac88ed-ae44-43a3-815d-0bf085da9a45"/>
+			<staticText>
+				<reportElement x="359" y="15" width="45" height="10" uuid="ea179118-9cb1-4ae2-abef-efc5f01d66b9"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="6" isBold="false"/>
 					<paragraph firstLineIndent="0" leftIndent="1" rightIndent="1" spacingBefore="1" spacingAfter="1"/>
 				</textElement>
-				<textFieldExpression><![CDATA["RICHIESTO IL: " + new SimpleDateFormat("dd/MM/yyyy").format($F{creation})]]></textFieldExpression>
+				<text><![CDATA[RICHIESTO IL:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="477" y="15" width="98" height="10" uuid="ef1de604-fc34-40fa-9867-cc7fa665ac01"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="6" isBold="true"/>
+					<paragraph firstLineIndent="0" leftIndent="1" rightIndent="1" spacingBefore="1" spacingAfter="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{inChargeWorker}.getInitials()]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="467" y="15" width="108" height="10" uuid="ef1de604-fc34-40fa-9867-cc7fa665ac01"/>
+				<reportElement x="502" y="25" width="73" height="10" uuid="5d6890bb-2dbb-4104-86ff-ad39ee109d2a"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font size="6" isBold="false"/>
+					<font size="6" isBold="true"/>
 					<paragraph firstLineIndent="0" leftIndent="1" rightIndent="1" spacingBefore="1" spacingAfter="1"/>
 				</textElement>
-				<textFieldExpression><![CDATA["A: " + $F{inChargeWorker}.getInitials()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[(!$F{maintenanceWorkers}.isEmpty()?$F{currentMaintenanceTask}.getMaintenanceWorkersStr():"")]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="467" y="25" width="108" height="10" uuid="5d6890bb-2dbb-4104-86ff-ad39ee109d2a"/>
+				<reportElement x="414" y="25" width="53" height="10" uuid="e96af905-038f-4a48-91bb-e25179c7703b"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font size="6" isBold="false"/>
+					<font size="6" isBold="true"/>
 					<paragraph firstLineIndent="0" leftIndent="1" rightIndent="1" spacingBefore="1" spacingAfter="1"/>
 				</textElement>
-				<textFieldExpression><![CDATA["TECNICO: " + (!$F{maintenanceWorkers}.isEmpty()?$F{currentMaintenanceTask}.getMaintenanceWorkersStr():"")]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{closed}!=null?new SimpleDateFormat("dd/MM/yyyy").format($F{closed}):"")]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="359" y="25" width="108" height="10" uuid="e96af905-038f-4a48-91bb-e25179c7703b"/>
+				<reportElement x="399" y="35" width="68" height="10" uuid="b7e7e751-fd9f-4766-a145-7bf4d13809b0"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font size="6" isBold="false"/>
+					<font size="6" isBold="true"/>
 					<paragraph firstLineIndent="0" leftIndent="1" rightIndent="1" spacingBefore="1" spacingAfter="1"/>
 				</textElement>
-				<textFieldExpression><![CDATA["INTERVENUTI IL: " + ($F{closed}!=null?new SimpleDateFormat("dd/MM/yyyy").format($F{closed}):"")]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{isGuaranteeValid}?"SÌ":"NO")]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="359" y="35" width="108" height="10" uuid="b7e7e751-fd9f-4766-a145-7bf4d13809b0"/>
+				<reportElement x="544" y="35" width="31" height="10" uuid="47ae50ba-e57b-40aa-91a9-0fd1883808ed"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font size="6" isBold="false"/>
+					<font size="6" isBold="true"/>
 					<paragraph firstLineIndent="0" leftIndent="1" rightIndent="1" spacingBefore="1" spacingAfter="1"/>
 				</textElement>
-				<textFieldExpression><![CDATA["GARANZIA: " + ($F{isGuaranteeValid}?"SÌ":"NO")]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{currentMaintenanceTask}.isFullService()?"SÌ":"NO")]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="467" y="35" width="108" height="10" uuid="47ae50ba-e57b-40aa-91a9-0fd1883808ed"/>
+				<reportElement x="454" y="45" width="13" height="10" uuid="3681afe9-3e87-4367-9bd4-1d295e36cbb0"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font size="6" isBold="false"/>
+					<font size="6" isBold="true"/>
 					<paragraph firstLineIndent="0" leftIndent="1" rightIndent="1" spacingBefore="1" spacingAfter="1"/>
 				</textElement>
-				<textFieldExpression><![CDATA["CONTRATTO GARANZIA: " + ($F{currentMaintenanceTask}.isFullService()?"SÌ":"NO")]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{maintenancePlan}!=null?"SÌ":"NO")]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="359" y="45" width="108" height="10" uuid="3681afe9-3e87-4367-9bd4-1d295e36cbb0"/>
+				<reportElement x="530" y="45" width="45" height="10" uuid="87c3a50e-7e41-4812-a4a2-e9704c120255"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font size="6" isBold="false"/>
+					<font size="6" isBold="true"/>
 					<paragraph firstLineIndent="0" leftIndent="1" rightIndent="1" spacingBefore="1" spacingAfter="1"/>
 				</textElement>
-				<textFieldExpression><![CDATA["CONTRATTO MANUTENZIONE: " + ($F{maintenancePlan}!=null?"SÌ":"NO")]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="467" y="45" width="108" height="10" uuid="87c3a50e-7e41-4812-a4a2-e9704c120255"/>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font size="6" isBold="false"/>
-					<paragraph firstLineIndent="0" leftIndent="1" rightIndent="1" spacingBefore="1" spacingAfter="1"/>
-				</textElement>
-				<textFieldExpression><![CDATA["INTERVENTO MESE: " + ($F{expiry}!=null?new SimpleDateFormat("MMMM yy").format($F{expiry}):"")]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{expiry}!=null?new SimpleDateFormat("MMMM yy").format($F{expiry}):"")]]></textFieldExpression>
 			</textField>
 			<image hAlign="Center" vAlign="Middle">
 				<reportElement x="0" y="0" width="359" height="50" uuid="72ec7343-4bde-49d5-be9b-d7771e1ced2a">
@@ -125,10 +125,88 @@
 				</reportElement>
 				<imageExpression><![CDATA[$P{reportImagePath} + "logoForMaintenanceTask.png"]]></imageExpression>
 			</image>
+			<textField>
+				<reportElement x="404" y="15" width="63" height="10" uuid="753f106f-a516-4a59-ac7d-b386c4751754"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="6" isBold="true"/>
+					<paragraph firstLineIndent="0" leftIndent="1" rightIndent="1" spacingBefore="1" spacingAfter="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format($F{creation})]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="359" y="25" width="55" height="10" uuid="19a02fc1-f646-4f01-bf9e-951e01983ff7">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="6" isBold="false"/>
+					<paragraph firstLineIndent="0" leftIndent="1" rightIndent="1" spacingBefore="1" spacingAfter="1"/>
+				</textElement>
+				<text><![CDATA[INTERVENUTI IL:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="359" y="35" width="40" height="10" uuid="d5eedde6-0193-4f32-88f8-92843a0c60fe">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="6" isBold="false"/>
+					<paragraph firstLineIndent="0" leftIndent="1" rightIndent="1" spacingBefore="1" spacingAfter="1"/>
+				</textElement>
+				<text><![CDATA[GARANZIA:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="359" y="45" width="95" height="10" uuid="fc0d6050-cf5f-41d0-a484-96ccdcf7d9a9">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="6" isBold="false"/>
+					<paragraph firstLineIndent="0" leftIndent="1" rightIndent="1" spacingBefore="1" spacingAfter="1"/>
+				</textElement>
+				<text><![CDATA[CONTRATTO MANUTENZIONE:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="467" y="15" width="10" height="10" uuid="063f04f8-9d53-40a3-98d0-399b3e780367">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="6" isBold="false"/>
+					<paragraph firstLineIndent="0" leftIndent="1" rightIndent="1" spacingBefore="1" spacingAfter="1"/>
+				</textElement>
+				<text><![CDATA[A:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="467" y="25" width="35" height="10" uuid="0aab7bda-41e4-4ebb-a86b-c3d7ed16c33d">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="6" isBold="false"/>
+					<paragraph firstLineIndent="0" leftIndent="1" rightIndent="1" spacingBefore="1" spacingAfter="1"/>
+				</textElement>
+				<text><![CDATA[TECNICO:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="467" y="35" width="77" height="10" uuid="b27010e7-bea6-4def-acfe-f24af41bc244"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="6" isBold="false"/>
+					<paragraph firstLineIndent="0" leftIndent="1" rightIndent="1" spacingBefore="1" spacingAfter="1"/>
+				</textElement>
+				<text><![CDATA[CONTRATTO GARANZIA:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="467" y="45" width="63" height="10" uuid="b635b3f9-1da9-4634-aac9-3f78c30c8c6d"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="6" isBold="false"/>
+					<paragraph firstLineIndent="0" leftIndent="1" rightIndent="1" spacingBefore="1" spacingAfter="1"/>
+				</textElement>
+				<text><![CDATA[INTERVENTO MESE:]]></text>
+			</staticText>
 		</band>
 		<band height="35">
 			<textField isBlankWhenNull="true">
 				<reportElement x="70" y="20" width="289" height="15" uuid="2e076132-100f-4f11-8574-a55ac7504b2e">
+					<property name="com.jaspersoft.studio.unit.spacingBefore" value="px"/>
+					<property name="com.jaspersoft.studio.unit.spacingAfter" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -138,14 +216,17 @@
 					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement verticalAlignment="Top">
-					<font size="8" isBold="true"/>
-					<paragraph firstLineIndent="0" leftIndent="4" rightIndent="4" spacingBefore="4" spacingAfter="4"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+					<paragraph firstLineIndent="0" leftIndent="4" rightIndent="4" spacingBefore="0" spacingAfter="0"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{plant}.getCustomerSupplier().getBusinessName()]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="10" y="20" width="60" height="15" uuid="4007643f-897e-494a-966f-07c193185c0c"/>
+				<reportElement x="10" y="20" width="60" height="15" uuid="4007643f-897e-494a-966f-07c193185c0c">
+					<property name="com.jaspersoft.studio.unit.spacingBefore" value="px"/>
+					<property name="com.jaspersoft.studio.unit.spacingAfter" value="px"/>
+				</reportElement>
 				<box>
 					<pen lineColor="#B4B4B4"/>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -153,9 +234,9 @@
 					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement verticalAlignment="Top">
+				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="false" isItalic="true"/>
-					<paragraph firstLineIndent="0" leftIndent="4" rightIndent="4" spacingBefore="4" spacingAfter="4"/>
+					<paragraph firstLineIndent="0" leftIndent="4" rightIndent="4" spacingBefore="0" spacingAfter="0"/>
 				</textElement>
 				<text><![CDATA[Cliente]]></text>
 			</staticText>
@@ -163,6 +244,8 @@
 				<reportElement x="419" y="20" width="146" height="15" uuid="50cdac22-9c49-4feb-a52e-6c969586c5f2">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.spacingBefore" value="px"/>
+					<property name="com.jaspersoft.studio.unit.spacingAfter" value="px"/>
 				</reportElement>
 				<box>
 					<pen lineColor="#B4B4B4"/>
@@ -171,15 +254,17 @@
 					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement verticalAlignment="Top">
+				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="false"/>
-					<paragraph firstLineIndent="0" leftIndent="4" rightIndent="4" spacingBefore="4" spacingAfter="4"/>
+					<paragraph firstLineIndent="0" leftIndent="4" rightIndent="4" spacingBefore="0" spacingAfter="0"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{plant}.getCustomerSupplier().getVatRegistrationNumber()]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="359" y="20" width="60" height="15" uuid="de44ad6d-10a0-4457-b5f4-61c567e33929">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.spacingBefore" value="px"/>
+					<property name="com.jaspersoft.studio.unit.spacingAfter" value="px"/>
 				</reportElement>
 				<box>
 					<pen lineColor="#B4B4B4"/>
@@ -188,9 +273,9 @@
 					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement verticalAlignment="Top">
+				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="false" isItalic="true"/>
-					<paragraph firstLineIndent="0" leftIndent="4" rightIndent="4" spacingBefore="4" spacingAfter="4"/>
+					<paragraph firstLineIndent="0" leftIndent="4" rightIndent="4" spacingBefore="0" spacingAfter="0"/>
 				</textElement>
 				<text><![CDATA[P. IVA]]></text>
 			</staticText>
@@ -216,6 +301,8 @@
 		<band height="15">
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement stretchType="ContainerHeight" x="70" y="0" width="289" height="15" uuid="d80a4e35-ed56-443b-9447-6bd3ae7a70da">
+					<property name="com.jaspersoft.studio.unit.spacingBefore" value="px"/>
+					<property name="com.jaspersoft.studio.unit.spacingAfter" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -225,14 +312,17 @@
 					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement verticalAlignment="Top">
+				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="false"/>
-					<paragraph firstLineIndent="0" leftIndent="4" rightIndent="4" spacingBefore="4" spacingAfter="4"/>
+					<paragraph firstLineIndent="0" leftIndent="4" rightIndent="4" spacingBefore="0" spacingAfter="0"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{plant}.getAddress()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{plant}.getNameAddress( false )]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement stretchType="ContainerHeight" x="10" y="0" width="60" height="15" uuid="a824ea7f-db97-4065-a199-a8e138103026"/>
+				<reportElement stretchType="ContainerHeight" x="10" y="0" width="60" height="15" uuid="a824ea7f-db97-4065-a199-a8e138103026">
+					<property name="com.jaspersoft.studio.unit.spacingBefore" value="px"/>
+					<property name="com.jaspersoft.studio.unit.spacingAfter" value="px"/>
+				</reportElement>
 				<box>
 					<pen lineColor="#B4B4B4"/>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -240,9 +330,9 @@
 					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement verticalAlignment="Top">
+				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="false" isItalic="true"/>
-					<paragraph firstLineIndent="0" leftIndent="4" rightIndent="4" spacingBefore="4" spacingAfter="4"/>
+					<paragraph firstLineIndent="0" leftIndent="4" rightIndent="4" spacingBefore="0" spacingAfter="0"/>
 				</textElement>
 				<text><![CDATA[Indirizzo]]></text>
 			</staticText>
@@ -251,6 +341,8 @@
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.spacingBefore" value="px"/>
+					<property name="com.jaspersoft.studio.unit.spacingAfter" value="px"/>
 				</reportElement>
 				<box>
 					<pen lineColor="#B4B4B4"/>
@@ -259,9 +351,9 @@
 					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement verticalAlignment="Top">
+				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="false"/>
-					<paragraph firstLineIndent="0" leftIndent="4" rightIndent="4" spacingBefore="4" spacingAfter="4"/>
+					<paragraph firstLineIndent="0" leftIndent="4" rightIndent="4" spacingBefore="0" spacingAfter="0"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{plant}.getPhoneStr()]]></textFieldExpression>
 			</textField>
@@ -269,6 +361,8 @@
 				<reportElement stretchType="ContainerHeight" x="359" y="0" width="60" height="15" uuid="6400e922-5322-42c6-9747-fd837ce5695e">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.spacingBefore" value="px"/>
+					<property name="com.jaspersoft.studio.unit.spacingAfter" value="px"/>
 				</reportElement>
 				<box>
 					<pen lineColor="#B4B4B4"/>
@@ -277,9 +371,9 @@
 					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement verticalAlignment="Top">
+				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="false" isItalic="true"/>
-					<paragraph firstLineIndent="0" leftIndent="4" rightIndent="4" spacingBefore="4" spacingAfter="4"/>
+					<paragraph firstLineIndent="0" leftIndent="4" rightIndent="4" spacingBefore="0" spacingAfter="0"/>
 				</textElement>
 				<text><![CDATA[Telefono]]></text>
 			</staticText>
@@ -296,6 +390,139 @@
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 			</line>
+		</band>
+		<band height="15">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="ContainerHeight" x="249" y="0" width="110" height="15" uuid="924772f0-5ec2-485f-aaac-77c9974484a6">
+					<property name="com.jaspersoft.studio.unit.spacingBefore" value="px"/>
+					<property name="com.jaspersoft.studio.unit.spacingAfter" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<box>
+					<pen lineColor="#B4B4B4"/>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="false"/>
+					<paragraph firstLineIndent="0" leftIndent="4" rightIndent="4" spacingBefore="0" spacingAfter="0"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{currentMaintenanceTask}.getMaintenanceTypesStr()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement stretchType="ContainerHeight" x="179" y="0" width="70" height="15" uuid="1ba5a231-ae90-4b38-a111-2657c8bafee4">
+					<property name="com.jaspersoft.studio.unit.spacingBefore" value="px"/>
+					<property name="com.jaspersoft.studio.unit.spacingAfter" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<pen lineColor="#B4B4B4"/>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="false" isItalic="true"/>
+					<paragraph firstLineIndent="0" leftIndent="4" rightIndent="4" spacingBefore="0" spacingAfter="0"/>
+				</textElement>
+				<text><![CDATA[Tipo contratto]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="ContainerHeight" x="419" y="0" width="146" height="15" uuid="424f458a-848a-458a-9c20-872d394579dd">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.spacingBefore" value="px"/>
+					<property name="com.jaspersoft.studio.unit.spacingAfter" value="px"/>
+				</reportElement>
+				<box>
+					<pen lineColor="#B4B4B4"/>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="false"/>
+					<paragraph firstLineIndent="0" leftIndent="4" rightIndent="4" spacingBefore="0" spacingAfter="0"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{plant}.getZone()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement stretchType="ContainerHeight" x="359" y="0" width="60" height="15" uuid="3ebcd84b-5068-41ad-8d1b-eb253a9716ab">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.spacingBefore" value="px"/>
+					<property name="com.jaspersoft.studio.unit.spacingAfter" value="px"/>
+				</reportElement>
+				<box>
+					<pen lineColor="#B4B4B4"/>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="false" isItalic="true"/>
+					<paragraph firstLineIndent="0" leftIndent="4" rightIndent="4" spacingBefore="0" spacingAfter="0"/>
+				</textElement>
+				<text><![CDATA[Zona]]></text>
+			</staticText>
+			<line>
+				<reportElement stretchType="ContainerHeight" x="0" y="0" width="1" height="15" forecolor="#B4B4B4" uuid="edf478e6-4dfc-4bca-a1d6-a9086bfc4c67">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+			</line>
+			<line>
+				<reportElement stretchType="ContainerHeight" x="574" y="0" width="1" height="15" forecolor="#B4B4B4" uuid="efa99887-d00e-4ce3-bad3-614bfbb0d5c0">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+			</line>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="ContainerHeight" x="70" y="0" width="109" height="15" uuid="a77b8c22-2fd4-4434-9547-2bd09d8cc3f5">
+					<property name="com.jaspersoft.studio.unit.spacingBefore" value="px"/>
+					<property name="com.jaspersoft.studio.unit.spacingAfter" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<pen lineColor="#B4B4B4"/>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="false"/>
+					<paragraph firstLineIndent="0" leftIndent="4" rightIndent="4" spacingBefore="0" spacingAfter="0"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{system}.getSellerInitials()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement stretchType="ContainerHeight" x="10" y="0" width="60" height="15" uuid="8decc6c8-5022-4eaf-82d7-54f40fb97350">
+					<property name="com.jaspersoft.studio.unit.spacingBefore" value="px"/>
+					<property name="com.jaspersoft.studio.unit.spacingAfter" value="px"/>
+				</reportElement>
+				<box>
+					<pen lineColor="#B4B4B4"/>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="false" isItalic="true"/>
+					<paragraph firstLineIndent="0" leftIndent="4" rightIndent="4" spacingBefore="0" spacingAfter="0"/>
+				</textElement>
+				<text><![CDATA[Venditore]]></text>
+			</staticText>
 		</band>
 		<band height="50">
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
@@ -341,7 +568,8 @@
 				</reportElement>
 			</line>
 		</band>
-		<band height="51">
+		<band height="61">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<textField isStretchWithOverflow="true">
 				<reportElement x="0" y="0" width="288" height="15" uuid="4719c048-bc6a-467d-854b-ce1d68266907"/>
 				<box>
@@ -358,7 +586,9 @@
 				<textFieldExpression><![CDATA["DIFETTO COMUNICATO" + System.lineSeparator() + System.lineSeparator() + $F{description} + System.lineSeparator()]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="ContainerBottom" x="288" y="0" width="287" height="51" uuid="eed6ae78-f3df-4945-a98d-5e04c6c49b67"/>
+				<reportElement stretchType="ContainerBottom" x="288" y="0" width="287" height="56" uuid="eed6ae78-f3df-4945-a98d-5e04c6c49b67">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
 				<box>
 					<pen lineColor="#B4B4B4"/>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
@@ -380,16 +610,17 @@
 				<subreportExpression><![CDATA[$P{subReportPath} + "inspectionDone.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport>
-				<reportElement positionType="Float" x="0" y="20" width="288" height="31" isRemoveLineWhenBlank="true" uuid="a243e8f1-a544-4434-8942-221f34b6ffcb">
+				<reportElement positionType="Float" x="0" y="25" width="288" height="31" isRemoveLineWhenBlank="true" uuid="a243e8f1-a544-4434-8942-221f34b6ffcb">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 					<printWhenExpression><![CDATA[$F{replacements}!=null&&!$F{replacements}.isEmpty()]]></printWhenExpression>
 				</reportElement>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{replacements})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[$P{subReportPath} + "replacement.jasper"]]></subreportExpression>
 			</subreport>
 		</band>
-		<band height="200">
+		<band height="215">
 			<subreport>
-				<reportElement stretchType="ContainerHeight" x="0" y="0" width="230" height="175" uuid="4fe13e03-e75b-4645-96f3-b14a35779194"/>
+				<reportElement stretchType="ContainerHeight" x="0" y="0" width="230" height="190" uuid="4fe13e03-e75b-4645-96f3-b14a35779194"/>
 				<subreportParameter name="subReportPath">
 					<subreportParameterExpression><![CDATA[$P{subReportPath}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -402,7 +633,7 @@
 				<subreportExpression><![CDATA[$P{subReportPath} + "maintenancePayment.jasper"]]></subreportExpression>
 			</subreport>
 			<textField isStretchWithOverflow="true">
-				<reportElement positionType="Float" stretchType="ContainerBottom" x="230" y="100" width="117" height="100" uuid="cea76375-22f1-4029-96a1-6fe4e4817dfa">
+				<reportElement positionType="Float" stretchType="ContainerBottom" x="230" y="100" width="117" height="115" uuid="cea76375-22f1-4029-96a1-6fe4e4817dfa">
 					<printWhenExpression><![CDATA[$F{paymentNotes}!=null && !$F{paymentNotes}.isEmpty()]]></printWhenExpression>
 				</reportElement>
 				<box>
@@ -429,22 +660,26 @@
 				<text><![CDATA[AVVERTENZE IMPORTANTI]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="347" y="15" width="228" height="135" uuid="1c8d4272-5d27-4b6e-9441-0ac94911e83d"/>
+				<reportElement x="347" y="15" width="228" height="140" uuid="1c8d4272-5d27-4b6e-9441-0ac94911e83d">
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
 				<box>
 					<leftPen lineWidth="1.0" lineColor="#B4B4B4"/>
 					<rightPen lineWidth="1.0" lineColor="#B4B4B4"/>
 				</box>
 				<textElement textAlignment="Justified" verticalAlignment="Top">
-					<font size="5" isBold="false"/>
-					<paragraph leftIndent="2" rightIndent="2"/>
+					<font size="6" isBold="false"/>
+					<paragraph lineSpacing="Proportional" lineSpacingSize="0.8" leftIndent="4" rightIndent="4"/>
 				</textElement>
-				<text><![CDATA[1) In caso di mancato pagamento il ns. centro di assistenza non effettuerà interventi fino a saldo dell’importo dovutoci. Il costo di intervento come sopra evidenziato ed accettato deve essere saldato per contanti contestualmente alla firma della presente a meno di preventiva pattuizione contraria. Il pagamento differito verrà maggiorato degli oneri di incasso. Sul ritardato pagamento verranno applicati gli interessi al TOP-RATE bancario maggiorato del 2%.
+				<text><![CDATA[1) In caso di mancato pagamento il ns. centro di assistenza non effettuerà interventi fino a saldo dell’importo dovutoci. Il costo di intervento come sopra evidenziato ed accettato deve essere saldato contestualmente alla firma della presente a meno di preventiva pattuizione contraria. Il pagamento differito verrà maggiorato degli oneri di incasso. Sul ritardato pagamento verranno applicati gli interessi al TOP-RATE bancario maggiorato del 2%.
 
 2) I Sigg. Committenti sono pregati di controllare l'esatta annotazione delle ore di lavoro sui rapporti che verranno presentati alla firma.
 
-3) L’apposizione della forma vale anche come benestare delle spese di viaggio, trasferta, ecc.; e pertanto non potrà essere in seguito sollevata eccezione alcuna.
+3) L’apposizione della firma vale anche come benestare delle spese di viaggio, trasferta, ecc.; e pertanto non potrà essere in seguito sollevata eccezione alcuna.
 
-4) La garanzia decorre dalla data del COLLAUDO ed è valida per 6 mesi.
+4) La garanzia decorre dalla data del COLLAUDO ed è valida per 12 mesi.
 
 5) La garanzia decade immediatamente, come pura la nostra responsabilità sull’impianto in caso di manomissione di tutte o parte delle apparecchiature, di modifiche e riparazione eseguite da persone da noi non autorizzate, di cattiva manutenzione, di trascuratezza o dell’incapacità dell’utente.
 
@@ -452,20 +687,20 @@
 Confermiamo l’effettiva durata del lavoro e ci dichiariamo soddisfatti dell'intervento.]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="347" y="150" width="228" height="10" uuid="e1c5f533-389b-41b8-9bd2-eb990fdd4d2b"/>
+				<reportElement x="347" y="165" width="228" height="10" uuid="e1c5f533-389b-41b8-9bd2-eb990fdd4d2b"/>
 				<box>
 					<pen lineColor="#B4B4B4"/>
 					<leftPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font size="5"/>
+					<font size="6"/>
 					<paragraph leftIndent="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Si dichiara che l'impianto " + (str("maintenance_suitableForOperation_" + $F{suitableForOperation})) + " al funzionamento"]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement positionType="FixRelativeToBottom" stretchType="ContainerHeight" x="0" y="175" width="95" height="25" uuid="927215be-926c-41cd-a53e-2f17df8dc982"/>
+				<reportElement positionType="FixRelativeToBottom" stretchType="ContainerHeight" x="0" y="190" width="95" height="25" uuid="927215be-926c-41cd-a53e-2f17df8dc982"/>
 				<box>
 					<pen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
@@ -480,7 +715,7 @@ Confermiamo l’effettiva durata del lavoro e ci dichiariamo soddisfatti dell'in
 				<textFieldExpression><![CDATA["FIRMA DEL TECNICO" + System.lineSeparator() + ((com.prosystemingegneri.censistant.business.siteSurvey.entity.Worker)$F{maintenanceWorkers}.iterator().next()).getName()]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement positionType="FixRelativeToBottom" stretchType="ContainerHeight" x="135" y="175" width="95" height="15" uuid="8e5578dd-63ce-41e8-b8d1-98018ff766dd"/>
+				<reportElement positionType="FixRelativeToBottom" stretchType="ContainerHeight" x="135" y="190" width="95" height="15" uuid="8e5578dd-63ce-41e8-b8d1-98018ff766dd"/>
 				<box>
 					<pen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
 				</box>
@@ -491,7 +726,7 @@ Confermiamo l’effettiva durata del lavoro e ci dichiariamo soddisfatti dell'in
 				<textFieldExpression><![CDATA[NumberFormat.getInstance(Locale.ITALY).getCurrencyInstance().format($F{currentMaintenanceTask}.getPrice())]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement positionType="FixRelativeToBottom" stretchType="ContainerHeight" x="95" y="175" width="40" height="25" uuid="b908dbf9-1bcb-40a5-a78a-b39bb4d2c279"/>
+				<reportElement positionType="FixRelativeToBottom" stretchType="ContainerHeight" x="95" y="190" width="40" height="25" uuid="b908dbf9-1bcb-40a5-a78a-b39bb4d2c279"/>
 				<box>
 					<pen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
@@ -506,7 +741,7 @@ Confermiamo l’effettiva durata del lavoro e ci dichiariamo soddisfatti dell'in
 				<text><![CDATA[TOTALE]]></text>
 			</staticText>
 			<staticText>
-				<reportElement positionType="FixRelativeToBottom" stretchType="ContainerHeight" x="135" y="190" width="95" height="10" uuid="501fe9bf-05ca-4016-a9e0-9cc323404e47"/>
+				<reportElement positionType="FixRelativeToBottom" stretchType="ContainerHeight" x="135" y="205" width="95" height="10" uuid="501fe9bf-05ca-4016-a9e0-9cc323404e47"/>
 				<box>
 					<pen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
@@ -521,7 +756,9 @@ Confermiamo l’effettiva durata del lavoro e ci dichiariamo soddisfatti dell'in
 				<text><![CDATA[+ I.V.A.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="347" y="160" width="40" height="40" uuid="d70ba5d7-31d2-43d5-a1b1-50d21aa19721"/>
+				<reportElement x="347" y="175" width="43" height="40" uuid="d70ba5d7-31d2-43d5-a1b1-50d21aa19721">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
 				<box>
 					<pen lineColor="#B4B4B4"/>
 					<leftPen lineWidth="1.0"/>
@@ -529,19 +766,35 @@ Confermiamo l’effettiva durata del lavoro e ci dichiariamo soddisfatti dell'in
 					<rightPen lineWidth="0.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="5"/>
+					<font size="7"/>
 					<paragraph leftIndent="0"/>
 				</textElement>
 				<text><![CDATA[IL CLIENTE]]></text>
 			</staticText>
 			<image hAlign="Center" vAlign="Middle">
-				<reportElement x="387" y="160" width="188" height="40" uuid="f1b624fb-0b8a-4e6b-a760-296c5c053d75"/>
+				<reportElement x="390" y="175" width="185" height="40" uuid="f1b624fb-0b8a-4e6b-a760-296c5c053d75">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
 				<box>
 					<bottomPen lineWidth="1.0" lineColor="#B4B4B4"/>
 					<rightPen lineWidth="1.0" lineColor="#B4B4B4"/>
 				</box>
 				<imageExpression><![CDATA[$F{customerSignatureImg}]]></imageExpression>
 			</image>
+			<staticText>
+				<reportElement x="347" y="155" width="228" height="10" uuid="1d5b036f-c918-4b08-8776-45d276ee16dd"/>
+				<box>
+					<pen lineColor="#B4B4B4"/>
+					<leftPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="6"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Confermiamo l’effettiva durata del lavoro e ci dichiariamo soddisfatti dell'intervento.]]></text>
+			</staticText>
 		</band>
 	</detail>
 </jasperReport>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.6.0.final utlizzo versione della libreria JasperReports6.6.0  -->
+<!-- Created with Jaspersoft Studio version 6.8.0.final utlizzo versione della libreria JasperReports6.8.0-2ed8dfabb690ff337a5797129f2cd92902b0c87b  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="workingDuration" pageWidth="230" pageHeight="842" columnWidth="230" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="6a8c3716-4e2e-4fa0-b703-56983efd8b3a">
 	<property name="com.jaspersoft.studio.unit." value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
@@ -39,7 +39,7 @@
 				<textFieldExpression><![CDATA[$P{type} + " dalle " + new SimpleDateFormat("HH:mm").format($F{started}) + " alle " + new SimpleDateFormat("HH:mm").format($F{ended})]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement stretchType="ContainerHeight" x="0" y="15" width="135" height="15" uuid="ff3cbcf4-5870-4952-9ef6-a2cabab81ffc"/>
+				<reportElement stretchType="ContainerHeight" x="0" y="15" width="165" height="15" uuid="ff3cbcf4-5870-4952-9ef6-a2cabab81ffc"/>
 				<box>
 					<pen lineWidth="1.0" lineStyle="Dotted" lineColor="#B4B4B4"/>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -54,7 +54,10 @@
 				<textFieldExpression><![CDATA["tecn. " + $F{workersNumber} + " tot. ore " + $F{currentWorkingDuration}.getDurationInHours() + " x " + $F{hourlyPrices}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement stretchType="ContainerHeight" x="135" y="15" width="95" height="15" uuid="5586dddf-d65d-46ff-aed0-abdf45030026"/>
+				<reportElement stretchType="ContainerHeight" x="165" y="15" width="65" height="15" uuid="5586dddf-d65d-46ff-aed0-abdf45030026">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
 				<box>
 					<pen lineWidth="1.0" lineStyle="Dotted" lineColor="#B4B4B4"/>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
