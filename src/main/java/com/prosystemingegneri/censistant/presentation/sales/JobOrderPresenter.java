@@ -319,7 +319,6 @@ public class JobOrderPresenter implements Serializable{
                 tempBean.add(jobOrder);
                 Map<String, Object> params = new HashMap<>();
                 params.put("ReportTitle", "Scheda installazione");
-                params.put(JRParameter.REPORT_LOCALE, new Locale("it", "IT"));
                 params.put("subReportPath", FacesContext.getCurrentInstance().getExternalContext().getRealPath("/WEB-INF/document/jobOrder/") + "/");
                 params.put("reportImagePath", FacesContext.getCurrentInstance().getExternalContext().getRealPath("/WEB-INF/document/images/") + "/");
 

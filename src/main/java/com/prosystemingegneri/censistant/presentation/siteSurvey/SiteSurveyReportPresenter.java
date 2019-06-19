@@ -172,7 +172,6 @@ public class SiteSurveyReportPresenter implements Serializable{
             tempBean.add(siteSurveyReport);
             Map<String, Object> params = new HashMap<>();
             params.put("ReportTitle", "Stampa verbale di sopralluogo");
-            params.put(JRParameter.REPORT_LOCALE, new Locale("it", "IT"));
             //params.put("subReportPath", FacesContext.getCurrentInstance().getExternalContext().getRealPath("/document/offerta/") + "/");
             params.put("reportImagePath", FacesContext.getCurrentInstance().getExternalContext().getRealPath("/WEB-INF/document/images/") + "/");
             

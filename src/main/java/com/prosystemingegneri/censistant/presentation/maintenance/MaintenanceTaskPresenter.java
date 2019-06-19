@@ -252,7 +252,6 @@ public class MaintenanceTaskPresenter implements Serializable{
                 List<MaintenanceTask> tempBean = new ArrayList<>();
                 tempBean.add(maintenanceTask);
                 Map<String, Object> params = new HashMap<>();
-                params.put(JRParameter.REPORT_LOCALE, new Locale("it", "IT"));
                 params.put("ReportTitle", "Rapporto di intervento");
                 params.put("subReportPath", FacesContext.getCurrentInstance().getExternalContext().getRealPath("/WEB-INF/document/maintenance/") + "/");
                 params.put("reportImagePath", FacesContext.getCurrentInstance().getExternalContext().getRealPath("/WEB-INF/document/images/") + "/");
