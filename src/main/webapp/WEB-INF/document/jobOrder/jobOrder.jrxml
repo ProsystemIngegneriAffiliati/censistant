@@ -112,9 +112,9 @@
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
-				<textElement verticalAlignment="Middle">
+				<textElement verticalAlignment="Top">
 					<font isBold="true"/>
-					<paragraph leftIndent="2" rightIndent="2"/>
+					<paragraph leftIndent="2" rightIndent="2" spacingBefore="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{currentJobOrder}.getWorkersStr()]]></textFieldExpression>
 			</textField>

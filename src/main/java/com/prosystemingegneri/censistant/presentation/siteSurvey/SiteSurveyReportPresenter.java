@@ -27,6 +27,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJBException;
@@ -35,6 +36,7 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -170,6 +172,7 @@ public class SiteSurveyReportPresenter implements Serializable{
             tempBean.add(siteSurveyReport);
             Map<String, Object> params = new HashMap<>();
             params.put("ReportTitle", "Stampa verbale di sopralluogo");
+            params.put(JRParameter.REPORT_LOCALE, new Locale("it", "IT"));
             //params.put("subReportPath", FacesContext.getCurrentInstance().getExternalContext().getRealPath("/document/offerta/") + "/");
             params.put("reportImagePath", FacesContext.getCurrentInstance().getExternalContext().getRealPath("/WEB-INF/document/images/") + "/");
             
