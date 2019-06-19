@@ -42,7 +42,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.ejb.EJBException;
@@ -53,10 +55,16 @@ import javax.inject.Named;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import javax.validation.groups.Default;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.apache.commons.io.FilenameUtils;
 import org.omnifaces.cdi.ViewScoped;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.SelectEvent;
+import org.primefaces.model.ByteArrayContent;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
@@ -122,16 +130,20 @@ public class JobOrderPresenter implements Serializable{
         }
     }
     
+    private boolean isValid() {
+        boolean isValidated = true;
+        for (ConstraintViolation<JobOrder> constraintViolation : validator.validate(jobOrder, Default.class)) {
+            isValidated = false;
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", constraintViolation.getMessage()));
+        }
+        
+        return isValidated;
+    }
+    
     public String saveJobOrder() {
         try {
-            boolean isValidated = true;
-            for (ConstraintViolation<JobOrder> constraintViolation : validator.validate(jobOrder, Default.class)) {
-                isValidated = false;
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", constraintViolation.getMessage()));
-            }
-            if (!isValidated)
+            if (!isValid())
                 return null;
-            
             service.saveJobOrder(jobOrder);
         } catch (EJBException e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", ExceptionUtility.unwrap(e.getCausedByException()).getLocalizedMessage()));
@@ -295,6 +307,37 @@ public class JobOrderPresenter implements Serializable{
                 customers.add(jobOrder.getOffer().getSiteSurveyReport().getRequest().getCustomer());
         }
         return customers;
+    }
+    
+    public StreamedContent print() {
+        if (isValid()) {
+            try {
+                jobOrder = service.saveJobOrder(jobOrder);
+                List<JobOrder> tempBean = new ArrayList<>();
+                tempBean.add(jobOrder);
+                Map<String, Object> params = new HashMap<>();
+                params.put("ReportTitle", "Scheda installazione");
+                params.put("subReportPath", FacesContext.getCurrentInstance().getExternalContext().getRealPath("/WEB-INF/document/jobOrder/") + "/");
+                params.put("reportImagePath", FacesContext.getCurrentInstance().getExternalContext().getRealPath("/WEB-INF/document/images/") + "/");
+
+                String reportPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/WEB-INF/document/jobOrder/jobOrder.jasper");
+                JasperPrint jasperPrint = JasperFillManager.fillReport(reportPath, params, new JRBeanCollectionDataSource(tempBean));
+
+                return new ByteArrayContent(JasperExportManager.exportReportToPdf(jasperPrint), "application/pdf", jobOrder.getNumberStr() + ".pdf");
+                } catch (EJBException e) {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", ExceptionUtility.unwrap(e.getCausedByException()).getLocalizedMessage()));
+                    return null;
+                } catch (JRException ex) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Error during printing" + 
+                        java.lang.System.lineSeparator() +
+                        java.lang.System.lineSeparator() + ex.getLocalizedMessage()));
+            }
+        }
+        
+        if (id == 0L)
+            id = jobOrder.getId();
+        
+        return null;
     }
     
     public JobOrder getJobOrder() {

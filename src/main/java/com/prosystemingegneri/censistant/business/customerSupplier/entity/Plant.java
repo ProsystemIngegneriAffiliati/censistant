@@ -208,6 +208,34 @@ public class Plant extends BaseEntity<Long>{
         
         return result.toString();
     }
+    
+    public String getFaxStr() {
+        StringBuilder result = new StringBuilder();
+        String separatore = " - ";
+        
+        if (fax != null && !fax.isEmpty())
+            result = result.append(fax).append(separatore);
+        if (!isHeadOffice && customerSupplier.getHeadOffice() != null)
+            result = result.append(customerSupplier.getHeadOffice().getFaxStr());
+        if (result.length() > 0 && result.charAt(result.length() - 1) == separatore.charAt(separatore.length() - 1))
+            result = result.delete(result.length() - separatore.length(), result.length());
+        
+        return result.toString();
+    }
+    
+    public String getEmailStr() {
+        StringBuilder result = new StringBuilder();
+        String separatore = " - ";
+        
+        if (email != null && !email.isEmpty())
+            result = result.append(email).append(separatore);
+        if (!isHeadOffice && customerSupplier.getHeadOffice() != null)
+            result = result.append(customerSupplier.getHeadOffice().getEmailStr());
+        if (result.length() > 0 && result.charAt(result.length() - 1) == separatore.charAt(separatore.length() - 1))
+            result = result.delete(result.length() - separatore.length(), result.length());
+        
+        return result.toString();
+    }
 
     public String getZone() {
         return zone;

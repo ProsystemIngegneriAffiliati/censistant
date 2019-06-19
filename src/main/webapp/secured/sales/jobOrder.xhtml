@@ -22,18 +22,20 @@
                             <div class="card card-w-title">
                                 <h1>#{msg.sales_jobOrder}</h1>
                                 <p>#{msg.sales_jobOrder_tip}</p>
-                                <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                <p:panelGrid columns="3" columnClasses="ui-grid-col-5,ui-grid-col-5,ui-grid-col-2" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputNumber id="number" value="#{jobOrderPresenter.jobOrder.number}" decimalPlaces="0" />
                                         <p:outputLabel for="number" value="#{msg.sales_jobOrder_number}" />
                                         <p:message for="number"/>
                                     </h:panelGroup>
-
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:calendar id="creation" value="#{jobOrderPresenter.jobOrder.creation}" locale="it" />
                                         <p:outputLabel for="creation" value="#{msg.sales_jobOrder_creation}"/>
                                         <p:message for="creation"/>
                                     </h:panelGroup>
+                                    <p:commandButton value="#{msg.print}" icon="ui-icon-print" ajax="false">
+                                        <p:fileDownload value="#{jobOrderPresenter.print()}" />
+                                    </p:commandButton>
                                 </p:panelGrid>
 
                                 <p:tabView id="jobOrderTabs" dynamic="true" activeIndex="#{jobOrderPresenter.activeIndex}">
@@ -164,6 +166,27 @@
                                                 <p:inputText id="customerOrderNumber" value="#{jobOrderPresenter.jobOrder.customerOrderNumber}"/>
                                                 <p:outputLabel for="customerOrderNumber" value="#{msg.sales_jobOrder_customerOrderNumber}"/>
                                                 <p:message for="customerOrderNumber"/>
+                                            </h:panelGroup>
+                                        </p:panelGrid>
+                                        <p:panelGrid columns="2" columnClasses="ui-grid-col-4,ui-grid-col-8" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                            <h:panelGroup>
+                                                <p:outputLabel for="installation" value="#{msg.sales_jobOrder_installation}"/>
+                                                <p:calendar id="installation" value="#{jobOrderPresenter.jobOrder.installation}" locale="it" />
+                                                <p:message for="installation"/>
+                                            </h:panelGroup>
+                                            <h:panelGroup>
+                                                <p:outputLabel for="workers" value="#{msg.sales_jobOrder_workers}"/>
+                                                <p:selectManyCheckbox id="workers"
+                                                                      value="#{jobOrderPresenter.jobOrder.workers}"
+                                                                      layout="responsive"
+                                                                      columns="3"
+                                                                      converter="omnifaces.SelectItemsConverter">
+                                                    <f:selectItems value="#{workerListPresenter.workers}"
+                                                                   var="worker"
+                                                                   itemLabel="#{worker.initials}"
+                                                                   itemValue="#{worker}" />
+                                                </p:selectManyCheckbox>
+                                                <p:message for="workers"/>
                                             </h:panelGroup>
                                         </p:panelGrid>
                                     </p:tab>

@@ -17,14 +17,18 @@
 package com.prosystemingegneri.censistant.business.sales.entity;
 
 import com.prosystemingegneri.censistant.business.entity.BaseEntity;
+import com.prosystemingegneri.censistant.business.siteSurvey.entity.Worker;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Set;
+import java.util.TreeSet;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
@@ -63,6 +67,12 @@ public class JobOrder extends BaseEntity<Long> {
     @ManyToOne(optional = false)
     private PlaceType placeType;
     
+    @ManyToMany
+    private Set<Worker> workers;
+    
+    @Temporal(TemporalType.DATE)
+    private Date installation;
+    
     private String notes;
     
     @Version
@@ -70,6 +80,8 @@ public class JobOrder extends BaseEntity<Long> {
 
     public JobOrder() {
         creation = new Date();
+        installation = new Date();
+        workers = new TreeSet<>();
     }
 
     public JobOrder(Integer number) {
@@ -148,5 +160,34 @@ public class JobOrder extends BaseEntity<Long> {
                 .append(offer.getSiteSurveyReport().getPlant().getNameAddress(false))
                 .toString();
     }
+
+    public Set<Worker> getWorkers() {
+        return workers;
+    }
+
+    public void setWorkers(Set<Worker> workers) {
+        this.workers = workers;
+    }
+
+    public Date getInstallation() {
+        return installation;
+    }
+
+    public void setInstallation(Date installation) {
+        this.installation = installation;
+    }
     
+    public String getWorkersStr() {
+        StringBuilder result = new StringBuilder();
+        String separator = " - ";
+        
+        for (Worker worker : workers)
+            result = result
+                    .append(worker.getInitials())
+                    .append(separator);
+        if (result.length() > 0)
+            result = result.delete(result.length() - separator.length(), result.length());
+        
+        return result.toString();
+    }
 }
