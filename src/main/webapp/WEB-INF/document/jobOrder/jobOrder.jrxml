@@ -76,7 +76,7 @@
 				<text><![CDATA[VIDEOCONTROLLO E AUTOMAZIONE ACCESSI - RIVELAZIONE / SEGNALAZIONE INCENDIO]]></text>
 			</staticText>
 		</band>
-		<band height="95" splitType="Stretch">
+		<band height="80" splitType="Stretch">
 			<textField isBlankWhenNull="true">
 				<reportElement x="195" y="15" width="185" height="15" uuid="29dea462-61b8-43b4-9828-89fcc264eef6">
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
@@ -104,7 +104,7 @@
 				<text><![CDATA[Rif. ordine]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="390" y="15" width="185" height="60" uuid="30f61b49-93eb-4117-91ea-42d0ffd243f9">
+				<reportElement x="390" y="15" width="185" height="50" uuid="30f61b49-93eb-4117-91ea-42d0ffd243f9">
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
@@ -132,11 +132,10 @@
 				<text><![CDATA[Rif. installazione]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="0" y="60" width="185" height="15" uuid="dcf4ec51-1a24-4208-bafa-dca8d120db1d">
+				<reportElement x="0" y="50" width="185" height="15" uuid="dcf4ec51-1a24-4208-bafa-dca8d120db1d">
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
@@ -147,7 +146,7 @@
 				<textFieldExpression><![CDATA[$F{offer}.getSiteSurveyReport().getRequest().getSystemType().getName()]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="45" width="185" height="15" uuid="ff449a4f-21ef-40b0-b98b-e3a5d2062f87">
+				<reportElement x="0" y="35" width="185" height="15" uuid="ff449a4f-21ef-40b0-b98b-e3a5d2062f87">
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
@@ -160,11 +159,10 @@
 				<text><![CDATA[Tipologia impianto]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="195" y="60" width="185" height="15" uuid="db6c77a5-3255-4e59-8d54-246eb26bf994">
+				<reportElement x="195" y="50" width="185" height="15" uuid="db6c77a5-3255-4e59-8d54-246eb26bf994">
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
@@ -175,12 +173,11 @@
 				<textFieldExpression><![CDATA[$F{placeType}.getName()]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="195" y="45" width="185" height="15" uuid="824de3d1-2a8c-4652-a559-7266c965cc33">
+				<reportElement x="195" y="35" width="185" height="15" uuid="824de3d1-2a8c-4652-a559-7266c965cc33">
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
 					<paragraph leftIndent="2" rightIndent="2"/>
@@ -214,7 +211,8 @@
 				<text><![CDATA[Rif. commessa]]></text>
 			</staticText>
 		</band>
-		<band height="70">
+		<band height="65">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<staticText>
 				<reportElement x="0" y="0" width="185" height="15" uuid="9d4b237f-6d1e-43de-87b0-ef0ce0239080">
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
@@ -283,8 +281,7 @@
 				<textFieldExpression><![CDATA[$F{offer}.getSiteSurveyReport().getPlant().getAddress()]]></textFieldExpression>
 			</textField>
 		</band>
-		<band height="70">
-			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		<band height="65">
 			<staticText>
 				<reportElement x="0" y="0" width="185" height="15" uuid="9e7a1a74-e4d7-4a27-9592-64c692d518e5">
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
@@ -378,8 +375,7 @@
 				<textFieldExpression><![CDATA[$F{offer}.getSiteSurveyReport().getPlant().getEmailStr()]]></textFieldExpression>
 			</textField>
 		</band>
-		<band height="60">
-			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		<band height="55">
 			<staticText>
 				<reportElement x="0" y="0" width="185" height="15" uuid="a93f00e9-5ca7-4ba5-a72b-cf131998c5ef">
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
@@ -492,8 +488,7 @@
 				<textFieldExpression><![CDATA[$F{offer}.getSystem().getPowerSource()]]></textFieldExpression>
 			</textField>
 		</band>
-		<band height="50">
-			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		<band height="45">
 			<staticText>
 				<reportElement x="0" y="0" width="185" height="15" uuid="5cf753fa-c582-4691-8002-35aad731ad9d">
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
