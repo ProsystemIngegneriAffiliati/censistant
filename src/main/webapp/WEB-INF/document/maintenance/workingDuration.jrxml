@@ -53,7 +53,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA["tecn. " + $F{workersNumber} + " tot. ore " + $F{currentWorkingDuration}.getDurationInHours() + " x " + $F{hourlyPrices}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="#,##0.00 ¤;#,##0.00- ¤">
 				<reportElement stretchType="ContainerHeight" x="165" y="15" width="65" height="15" uuid="5586dddf-d65d-46ff-aed0-abdf45030026">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
@@ -69,7 +69,7 @@
 					<font size="8"/>
 					<paragraph leftIndent="4" rightIndent="4"/>
 				</textElement>
-				<textFieldExpression><![CDATA[NumberFormat.getInstance(Locale.ITALY).getCurrencyInstance().format($F{currentWorkingDuration}.getPrice())]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{currentWorkingDuration}.getPrice()]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

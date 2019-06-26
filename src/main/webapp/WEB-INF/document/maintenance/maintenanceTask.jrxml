@@ -714,7 +714,7 @@ Confermiamo l’effettiva durata del lavoro e ci dichiariamo soddisfatti dell'in
 				</textElement>
 				<textFieldExpression><![CDATA["FIRMA DEL TECNICO" + System.lineSeparator() + ((com.prosystemingegneri.censistant.business.siteSurvey.entity.Worker)$F{maintenanceWorkers}.iterator().next()).getName()]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="#,##0.00 ¤;#,##0.00- ¤">
 				<reportElement positionType="FixRelativeToBottom" stretchType="ContainerHeight" x="135" y="190" width="95" height="15" uuid="8e5578dd-63ce-41e8-b8d1-98018ff766dd"/>
 				<box>
 					<pen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
@@ -723,7 +723,7 @@ Confermiamo l’effettiva durata del lavoro e ci dichiariamo soddisfatti dell'in
 					<font size="8"/>
 					<paragraph leftIndent="4" rightIndent="4"/>
 				</textElement>
-				<textFieldExpression><![CDATA[NumberFormat.getInstance(Locale.ITALY).getCurrencyInstance().format($F{currentMaintenanceTask}.getPrice())]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{currentMaintenanceTask}.getPrice()]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement positionType="FixRelativeToBottom" stretchType="ContainerHeight" x="95" y="190" width="40" height="25" uuid="b908dbf9-1bcb-40a5-a78a-b39bb4d2c279"/>

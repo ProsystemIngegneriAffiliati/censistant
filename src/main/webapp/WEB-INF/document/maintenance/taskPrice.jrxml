@@ -70,7 +70,7 @@
 				</textElement>
 				<text><![CDATA[Totale ricambi]]></text>
 			</staticText>
-			<textField isStretchWithOverflow="true">
+			<textField isStretchWithOverflow="true" pattern="#,##0.00 ¤;#,##0.00- ¤">
 				<reportElement stretchType="ContainerHeight" x="165" y="0" width="65" height="15" uuid="471430c9-3ee3-4e69-a87f-b23bf01194ff">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
@@ -86,7 +86,7 @@
 					<font size="8"/>
 					<paragraph leftIndent="4" rightIndent="4"/>
 				</textElement>
-				<textFieldExpression><![CDATA[NumberFormat.getInstance(Locale.ITALY).getCurrencyInstance().format($F{maintenanceTask}.getReplacementsPrice())]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{maintenanceTask}.getReplacementsPrice()]]></textFieldExpression>
 			</textField>
 		</band>
 		<band height="15">
@@ -105,7 +105,7 @@
 				</textElement>
 				<text><![CDATA[Fisso di chiamata]]></text>
 			</staticText>
-			<textField isStretchWithOverflow="true">
+			<textField isStretchWithOverflow="true" pattern="#,##0.00 ¤;#,##0.00- ¤">
 				<reportElement stretchType="ContainerHeight" x="165" y="0" width="65" height="15" uuid="0cb3900e-e535-434b-87f1-b03341c49abd">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
@@ -121,7 +121,7 @@
 					<font size="8"/>
 					<paragraph leftIndent="4" rightIndent="4"/>
 				</textElement>
-				<textFieldExpression><![CDATA[NumberFormat.getInstance(Locale.ITALY).getCurrencyInstance().format($F{fixedCallAmount})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{fixedCallAmount}]]></textFieldExpression>
 			</textField>
 		</band>
 		<band height="30">
@@ -174,9 +174,9 @@
 					<font size="8"/>
 					<paragraph leftIndent="4" rightIndent="4"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Costo al km " + NumberFormat.getInstance(Locale.ITALY).getCurrencyInstance().format($F{pricePerKilometer}) + " x km tot. " + $F{kilometersTravelled}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Costo al km " + $F{pricePerKilometer} + " € x km tot. " + $F{kilometersTravelled}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true">
+			<textField isStretchWithOverflow="true" pattern="#,##0.00 ¤;#,##0.00- ¤">
 				<reportElement stretchType="ContainerHeight" x="165" y="0" width="65" height="15" uuid="606e8fc7-0415-43be-a1a1-aa95519e9f9c">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
@@ -192,7 +192,7 @@
 					<font size="8"/>
 					<paragraph leftIndent="4" rightIndent="4"/>
 				</textElement>
-				<textFieldExpression><![CDATA[NumberFormat.getInstance(Locale.ITALY).getCurrencyInstance().format($F{currentTaskPrice}.getPriceTravelled())]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{currentTaskPrice}.getPriceTravelled()]]></textFieldExpression>
 			</textField>
 		</band>
 		<band height="15">
@@ -211,7 +211,7 @@
 				</textElement>
 				<text><![CDATA[Oneri di trasferta]]></text>
 			</staticText>
-			<textField isStretchWithOverflow="true">
+			<textField isStretchWithOverflow="true" pattern="#,##0.00 ¤;#,##0.00- ¤">
 				<reportElement stretchType="ContainerHeight" x="165" y="0" width="65" height="15" uuid="f253af07-174a-4802-849e-2b0197f3aad5">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
@@ -227,7 +227,7 @@
 					<font size="8"/>
 					<paragraph leftIndent="4" rightIndent="4"/>
 				</textElement>
-				<textFieldExpression><![CDATA[NumberFormat.getInstance(Locale.ITALY).getCurrencyInstance().format($F{travelExpenses})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{travelExpenses}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
