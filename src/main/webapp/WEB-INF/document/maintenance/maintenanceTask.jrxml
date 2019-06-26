@@ -117,7 +117,7 @@
 					<font size="6" isBold="true"/>
 					<paragraph firstLineIndent="0" leftIndent="1" rightIndent="1" spacingBefore="1" spacingAfter="1"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($F{expiry}!=null?new SimpleDateFormat("MMMM yy", new Locale("it", "IT")).format($F{expiry}):"")]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{expiry}!=null?new SimpleDateFormat("MMMM yy", Locale.ITALY).format($F{expiry}):"")]]></textFieldExpression>
 			</textField>
 			<image hAlign="Center" vAlign="Middle">
 				<reportElement x="0" y="0" width="359" height="50" uuid="72ec7343-4bde-49d5-be9b-d7771e1ced2a">

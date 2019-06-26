@@ -3,3 +3,4 @@
 /src/main/resources/payara/production/dbUserPassword
 /src/main/webapp/WEB-INF/document/images/logo.png
 /bin/
+/src/main/resources/operations/production/initial.gz
