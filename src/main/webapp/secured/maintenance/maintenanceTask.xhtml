@@ -651,6 +651,14 @@
                                     </h:panelGroup>
                                 </p:panelGrid>
                                 <h:panelGroup id="customerSignaturePanel">
+                                    <p:panelGrid rendered="#{not empty maintenanceTaskPresenter.maintenanceTask.closingNotes and (not MaintenanceType.TELECONTROL.equals(maintenanceTaskPresenter.maintenanceTask.maintenancePlan.maintenanceType))}" columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                        In caso di mancato pagamento il ns. centro di assistenza non effettuerà interventi fino a saldo dell'importo dovutoci. Il costo di intervento come sopra evidenziato ed accettato deve essere saldato contestualmente alla firma della presente a meno di preventiva pattuizione contraria. Il pagamento differito verrà maggiorato degli oneri di incasso. Sul ritardato pagamento verranno applicati gli interessi al TOP-RATE bancario maggiorato del 2%.<br />
+                                        2) I Sigg. Committenti sono pregati di controllare l'esatta annotazione delle ore di lavoro sui rapporti che verranno presentati alla firma.<br />
+                                        3) L'apposizione della firma vale anche come benestare delle spese di viaggio, trasferta, ecc.; e pertanto non potrà essere in seguito sollevata eccezione alcuna.<br />
+                                        4) La garanzia decorre dalla data del COLLAUDO ed è valida per 12 mesi.<br />
+                                        5) La garanzia decade immediatamente, come pura la nostra responsabilità sull'impianto in caso di manomissione di tutte o parte delle apparecchiature, di modifiche e riparazione eseguite da persone da noi non autorizzate, di cattiva manutenzione, di trascuratezza o dell'incapacità dell'utente.<br />
+                                        Confermiamo l'effettiva durata del lavoro e ci dichiariamo soddisfatti dell'intervento.
+                                    </p:panelGrid>
                                     <p:panelGrid rendered="#{not empty maintenanceTaskPresenter.maintenanceTask.closingNotes and (not MaintenanceType.TELECONTROL.equals(maintenanceTaskPresenter.maintenanceTask.maintenancePlan.maintenanceType))}" columns="2" columnClasses="ui-grid-col-11,ui-grid-col-1" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:outputLabel for="customerSignature" value="#{msg.maintenance_maintenanceTask_customerSignature}" />
