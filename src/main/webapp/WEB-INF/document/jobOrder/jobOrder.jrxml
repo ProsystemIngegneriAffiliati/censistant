@@ -501,7 +501,7 @@
 				</textElement>
 				<text><![CDATA[Data inzio lavori]]></text>
 			</staticText>
-			<textField isBlankWhenNull="true">
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
 				<reportElement x="0" y="15" width="185" height="15" uuid="3682194f-adc5-495b-9cef-e79928de0038">
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
@@ -513,7 +513,7 @@
 					<font isBold="true"/>
 					<paragraph leftIndent="2" rightIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($F{creation}!=null?new SimpleDateFormat("dd/MM/yyyy").format($F{creation}):"")]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{creation}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="195" y="0" width="185" height="15" uuid="30706e5a-50e0-4426-864a-7ad5d2809c60">
@@ -526,7 +526,7 @@
 				</textElement>
 				<text><![CDATA[Data cons. impianto]]></text>
 			</staticText>
-			<textField isBlankWhenNull="true">
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
 				<reportElement x="195" y="15" width="185" height="15" uuid="0e8b612a-31ce-4952-89ad-5ce0108cdfc2">
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
@@ -537,7 +537,7 @@
 					<font isBold="true"/>
 					<paragraph leftIndent="2" rightIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($F{installation}!=null?new SimpleDateFormat("dd/MM/yyyy").format($F{installation}):"")]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{installation}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="390" y="0" width="185" height="15" uuid="2227eff2-b203-40cf-9eab-bf681347c44b">
@@ -564,7 +564,8 @@
 				<textFieldExpression><![CDATA["24 mesi"]]></textFieldExpression>
 			</textField>
 		</band>
-		<band height="50">
+		<band height="65">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<staticText>
 				<reportElement x="0" y="0" width="185" height="15" uuid="de95429a-03ef-4fc4-adb4-9a9cd14be89f">
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
@@ -580,7 +581,7 @@
 				<text><![CDATA[Composizione impianto]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="0" y="35" width="137" height="15" uuid="ba12c89d-e4aa-4b0c-a2c3-1e355a96ecd6">
+				<reportElement x="210" y="0" width="137" height="15" uuid="ba12c89d-e4aa-4b0c-a2c3-1e355a96ecd6">
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
@@ -592,6 +593,43 @@
 					<paragraph leftIndent="2" rightIndent="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[Locale.getDefault().toString()]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement key="" x="0" y="20" width="575" height="30" isRemoveLineWhenBlank="true" uuid="61f4e6ec-1944-4858-9d72-7cba8a765f49">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{offer}.getSystem().getDevices())]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{subReportPath} + "device.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="50">
+			<staticText>
+				<reportElement x="0" y="0" width="185" height="15" uuid="1bf4c6c0-2aac-46b3-97b5-7dbc47e972ae">
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+					<paragraph leftIndent="2" rightIndent="2"/>
+				</textElement>
+				<text><![CDATA[Note particolari]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="ContainerHeight" x="0" y="20" width="575" height="15" uuid="d7269e5a-88f0-4152-acaf-b7b6bfb0633f">
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font isBold="false"/>
+					<paragraph leftIndent="2" rightIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{notes}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
