@@ -30,6 +30,7 @@ import com.prosystemingegneri.censistant.business.maintenance.entity.Maintenance
 import com.prosystemingegneri.censistant.business.maintenance.entity.Replacement;
 import com.prosystemingegneri.censistant.business.maintenance.entity.WorkingDuration;
 import com.prosystemingegneri.censistant.business.production.boundary.SystemService;
+import com.prosystemingegneri.censistant.business.production.entity.Device;
 import com.prosystemingegneri.censistant.business.production.entity.System;
 import com.prosystemingegneri.censistant.business.sales.entity.PlaceType;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SystemType;
@@ -97,6 +98,7 @@ public class MaintenanceTaskPresenter implements Serializable{
     private MaintenanceContract unexpiredMaintenanceContract;
     
     private System system;
+    private List<Device> importantDevices;
     
     @Resource
     Validator validator;
@@ -163,6 +165,7 @@ public class MaintenanceTaskPresenter implements Serializable{
         
         clearNewCustomer();
         clearNewPlant();
+        updateImportantDevices();
     }
     
     public void clearCustomerSignature() {
@@ -217,6 +220,7 @@ public class MaintenanceTaskPresenter implements Serializable{
             this.system = tempSystem;
             updateUnexpiredMaintenanceContracts();
         }
+        updateImportantDevices();
     }
     
     public void onMaintenanceContractSelect(SelectEvent event) {
@@ -237,6 +241,7 @@ public class MaintenanceTaskPresenter implements Serializable{
                 }
             }
         }
+        updateImportantDevices();
     }
     
     public void onHandledItemSelect(SelectEvent event) {
@@ -400,6 +405,7 @@ public class MaintenanceTaskPresenter implements Serializable{
         }
         
         maintenanceTask.setSystem(service.createNewJobOrder(plant, systemType, placeType, seller).getOffer().getSystem());
+        updateImportantDevices();
     }
     
     public void clearNewCustomer() {
@@ -487,5 +493,18 @@ public class MaintenanceTaskPresenter implements Serializable{
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("returnPage", "maintenance/maintenanceTask");
         return "/secured/warehouse/itemMovement?faces-redirect=true";
     }
+
+    public List<Device> getImportantDevices() {
+        return importantDevices;
+    }
+
+    public void setImportantDevices(List<Device> importantDevices) {
+        this.importantDevices = importantDevices;
+    }
     
+    private void updateImportantDevices() {
+        importantDevices = new ArrayList<>();
+        if (system != null)
+            importantDevices.addAll(system.listImportantDevices());
+    }
 }

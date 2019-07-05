@@ -50,10 +50,15 @@ public class Device extends BaseEntity<Long> {
     @Column(nullable = false)
     private Integer quantity;
     
+    @NotNull
+    @Column(nullable = false)
+    private Boolean isImportant;
+    
     @Version
     private int version;
 
     public Device() {
+        isImportant = Boolean.TRUE;
     }
     
     public Device duplicate() {
@@ -92,6 +97,14 @@ public class Device extends BaseEntity<Long> {
     @Override
     public Long getId() {
         return id;
+    }
+
+    public Boolean getIsImportant() {
+        return isImportant;
+    }
+
+    public void setIsImportant(Boolean isImportant) {
+        this.isImportant = isImportant;
     }
     
 }

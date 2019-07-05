@@ -531,9 +531,9 @@
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-					<printWhenExpression><![CDATA[$F{replacements}!=null&&!$F{replacements}.isEmpty()]]></printWhenExpression>
+					<printWhenExpression><![CDATA[!$V{system}.listImportantDevices().isEmpty()]]></printWhenExpression>
 				</reportElement>
-				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($V{system}.getDevices())]]></dataSourceExpression>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($V{system}.listImportantDevices())]]></dataSourceExpression>
 				<subreportExpression><![CDATA[$P{subReportPath} + "device.jasper"]]></subreportExpression>
 			</subreport>
 			<line>

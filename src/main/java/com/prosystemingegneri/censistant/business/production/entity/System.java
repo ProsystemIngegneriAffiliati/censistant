@@ -257,5 +257,12 @@ public class System extends Location {
         
         return "";
     }
-    
+    public List<Device> listImportantDevices() {
+        List<Device> result = new ArrayList<>();
+        for (Device device : devices)
+            if (device.getIsImportant())
+                result.add(device);
+        
+        return result;
+    }
 }

@@ -16,7 +16,7 @@
                                 <h1>#{msg.production_device}</h1>
                                 <p>#{msg.production_device_tip}</p>
 
-                                <p:panelGrid columns="3" columnClasses="ui-grid-col-6,ui-grid-col-3,ui-grid-col-3" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:autoComplete id="item"
                                                         dropdown="true"
@@ -32,7 +32,15 @@
                                         <p:outputLabel for="item" value="#{msg.production_item}"/>
                                         <p:message for="item"/>
                                     </h:panelGroup>
+                                </p:panelGrid>
 
+                                <p:panelGrid columns="3" columnClasses="ui-grid-col-6,ui-grid-col-3,ui-grid-col-3" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                    <h:panelGroup>
+                                        <p:outputLabel for="isImportant" value="#{msg.production_device_isImportant}" title="#{msg.production_device_isImportant_tip}" />
+                                        <p:inputSwitch id="isImportant" value="#{devicePresenter.device.isImportant}" />
+                                        <p:message for="isImportant"/>
+                                    </h:panelGroup>
+                                    
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputNumber id="quantity" decimalPlaces="0" minValue="1" value="#{devicePresenter.device.quantity}" />
                                         <p:outputLabel for="quantity" value="#{msg.production_device_quantity}"/>
