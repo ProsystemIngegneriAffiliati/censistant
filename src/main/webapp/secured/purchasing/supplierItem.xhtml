@@ -38,7 +38,7 @@
                                                         itemValue="#{item}"
                                                         forceSelection="true">
                                             <p:ajax event="itemSelect" update="unitMeasure" />
-                                            <oou:converter converterId="omnifaces.ListConverter" list="#{itemListPresenter.items}"/>
+                                            <oou:converter converterId="omnifaces.ListConverter" list="#{itemListPresenter.getItems(supplierItemPresenter.supplierItem.item)}"/>
                                         </p:autoComplete>
                                         <p:outputLabel for="item" value="#{msg.production_item}"/>
                                         <p:message for="item"/>

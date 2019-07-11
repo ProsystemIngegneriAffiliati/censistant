@@ -20,6 +20,7 @@ import com.prosystemingegneri.censistant.business.purchasing.boundary.SupplierIt
 import com.prosystemingegneri.censistant.business.purchasing.entity.SupplierItem;
 import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJBException;
@@ -51,6 +52,7 @@ public class SupplierItemListPresenter implements Serializable{
     @PostConstruct
     public void init() {
         lazySupplierItems = new SupplierItemLazyDataModel(service);
+        supplierItems = new ArrayList<>();
     }
     
     public void deleteSupplierItem() {
@@ -68,12 +70,19 @@ public class SupplierItemListPresenter implements Serializable{
     }
     
     public List<SupplierItem> completeSupplierItems(String value) {
-        return service.listSupplierItemsAllField(0, 10, value);
+        supplierItems = service.listSupplierItemsAllField(0, 10, value);
+        return supplierItems;
     }
 
-    public List<SupplierItem> getSupplierItems() {
-        if (supplierItems == null || supplierItems.isEmpty())
-            supplierItems = service.listSupplierItemsAllField(0, 0, null);
+    /**
+     * Useful only for 'omnifaces.ListConverter' used in 'p:autoComplete'
+     * 
+     * @param defaultSupplierItem Needed when jsf page read not null autocomplete (when, for example, open an already saved entity)
+     * @return 
+     */
+    public List<SupplierItem> getSupplierItems(SupplierItem defaultSupplierItem) {
+        if (supplierItems.isEmpty())
+            supplierItems.add(defaultSupplierItem);
         return supplierItems;
     }
     

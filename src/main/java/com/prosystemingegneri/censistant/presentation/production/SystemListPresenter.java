@@ -20,6 +20,7 @@ import com.prosystemingegneri.censistant.business.production.entity.System;
 import com.prosystemingegneri.censistant.business.production.boundary.SystemService;
 import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJBException;
@@ -47,6 +48,7 @@ public class SystemListPresenter implements Serializable{
     @PostConstruct
     public void init() {
         lazySystems = new SystemLazyDataModel(service);
+        systems = new ArrayList<>();
     }
     
     public void deleteSystem() {
@@ -64,14 +66,19 @@ public class SystemListPresenter implements Serializable{
     }
     
     public List<System> completeSystems(String description) {
-        return service.listSystems(0, 10, null, null, description, null, null);
+        systems = service.listSystems(0, 10, null, null, description, null, null);
+        return systems;
     }
     
-    //Useful only for 'omnifaces.ListConverter' used in 'p:autoComplete'
-    public List<System> getSystems() {
-        if (systems == null || systems.isEmpty())
-            systems = service.listSystems(0, 0, null, null, null, null, null);
-        
+    /**
+     * Useful only for 'omnifaces.ListConverter' used in 'p:autoComplete'
+     * 
+     * @param defaultSystem Needed when jsf page read not null autocomplete (when, for example, open an already saved entity)
+     * @return 
+     */
+    public List<System> getSystems(System defaultSystem) {
+        if (systems.isEmpty())
+            systems.add(defaultSystem);
         return systems;
     }
 

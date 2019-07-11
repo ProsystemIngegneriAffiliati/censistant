@@ -38,7 +38,7 @@
                                                         itemValue="#{loc}"
                                                         forceSelection="true">
                                             <p:ajax event="itemSelect" listener="#{stockListPresenter.onLocationSelect}" update="warehouseStockTable" />
-                                            <oou:converter converterId="omnifaces.ListConverter" list="#{locationListPresenter.locations}"/>
+                                            <oou:converter converterId="omnifaces.ListConverter" list="#{locationListPresenter.getLocations(stockListPresenter.location)}"/>
                                         </p:autoComplete>
                                         <p:outputLabel for="locations" value="#{msg.warehouse_locations}"/>
                                         <p:message for="locations"/>

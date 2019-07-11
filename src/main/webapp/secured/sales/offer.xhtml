@@ -283,7 +283,7 @@
                                                                             itemLabel="#{item.description}"
                                                                             itemValue="#{item}"
                                                                             forceSelection="true">
-                                                                <oou:converter converterId="omnifaces.ListConverter" list="#{itemListPresenter.items}"/>
+                                                                <oou:converter converterId="omnifaces.ListConverter" list="#{itemListPresenter.getItems(device.item)}"/>
                                                                 <p:ajax event="itemSelect" update="unitMeasure" />
                                                             </p:autoComplete>
                                                         </f:facet>

@@ -350,7 +350,7 @@
                                                                             itemLabel="#{supplierItem.code} - #{supplierItem.item.description}"
                                                                             itemValue="#{supplierItem}"
                                                                             forceSelection="true">
-                                                                <oou:converter converterId="omnifaces.ListConverter" list="#{supplierItemListPresenter.supplierItems}"/>
+                                                                <oou:converter converterId="omnifaces.ListConverter" list="#{supplierItemListPresenter.getSupplierItems(area.supplierItem)}"/>
                                                             </p:autoComplete>
                                                         </f:facet>
                                                     </p:cellEditor>

@@ -46,7 +46,7 @@
                                                                 itemLabel="#{boxedItem.codeDescriptionBoxUM}"
                                                                 itemValue="#{boxedItem}"
                                                                 forceSelection="true">
-                                                    <oou:converter converterId="omnifaces.ListConverter" list="#{purchaseOrderRowPresenter.items}"/>
+                                                    <oou:converter converterId="omnifaces.ListConverter" list="#{purchaseOrderRowPresenter.getItems(purchaseOrderRowPresenter.row.boxedItem)}"/>
                                                     <p:ajax event="itemSelect" update="cost rowCost" />
                                                 </p:autoComplete>
                                                 <p:outputLabel for="boxedItem" value="#{msg.purchasing_boxedItem}"/>

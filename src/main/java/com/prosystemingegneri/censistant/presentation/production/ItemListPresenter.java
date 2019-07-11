@@ -20,6 +20,7 @@ import com.prosystemingegneri.censistant.business.production.boundary.ItemServic
 import com.prosystemingegneri.censistant.business.production.entity.Item;
 import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJBException;
@@ -47,6 +48,7 @@ public class ItemListPresenter implements Serializable{
     @PostConstruct
     public void init() {
         lazyItems = new ItemLazyDataModel(service);
+        items = new ArrayList<>();
     }
     
     public void deleteItem() {
@@ -64,14 +66,19 @@ public class ItemListPresenter implements Serializable{
     }
     
     public List<Item> completeItems(String description) {
-        return service.listItems(0, 10, null, null, description);
+        items = service.listItems(0, 10, null, null, description);
+        return items;
     }
     
-    //Useful only for 'omnifaces.ListConverter' used in 'p:autoComplete'
-    public List<Item> getItems() {
-        if (items == null || items.isEmpty())
-            items = service.listItems(0, 0, null, null, null);
-        
+    /**
+     * Useful only for 'omnifaces.ListConverter' used in 'p:autoComplete'
+     * 
+     * @param defaultItem Needed when jsf page read not null autocomplete (when, for example, open an already saved entity)
+     * @return 
+     */
+    public List<Item> getItems(Item defaultItem) {
+        if (items.isEmpty())
+            items.add(defaultItem);
         return items;
     }
 

@@ -79,7 +79,7 @@
                                                                     itemLabel="#{loc.name}"
                                                                     itemValue="#{loc}"
                                                                     forceSelection="true">
-                                                        <oou:converter converterId="omnifaces.ListConverter" list="#{locationListPresenter.locations}"/>
+                                                        <oou:converter converterId="omnifaces.ListConverter" list="#{locationListPresenter.getLocations(deliveryNoteInRowCreationPresenter.locationDestination)}"/>
                                                     </p:autoComplete>
                                                     <p:outputLabel for="locations" value="#{msg.warehouse_locations}"/>
                                                     <p:message for="locations"/>
@@ -154,7 +154,7 @@
                                                                         itemLabel="#{loc.name}"
                                                                         itemValue="#{loc}"
                                                                         forceSelection="true">
-                                                            <oou:converter converterId="omnifaces.ListConverter" list="#{locationListPresenter.locations}"/>
+                                                            <oou:converter converterId="omnifaces.ListConverter" list="#{locationListPresenter.getLocations(deliveryNoteInRowCreationPresenter.locationDestination)}"/>
                                                         </p:autoComplete>
                                                         <p:outputLabel for="locations" value="#{msg.warehouse_locations}"/>
                                                         <p:message for="locations"/>

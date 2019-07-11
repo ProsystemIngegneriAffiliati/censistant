@@ -55,6 +55,7 @@ public class PurchaseOrderRowPresenter implements Serializable {
         if (row == null)
             row = new PurchaseOrderRow();
         supplier = purchaseOrder.getPlant().getCustomerSupplier();
+        items = new ArrayList<>();
     }
     
     public String savePurchaseOrderRow() {
@@ -67,13 +68,19 @@ public class PurchaseOrderRowPresenter implements Serializable {
     }
     
     public List<BoxedItem> completeItems(String filter) {
-        return service.listSupplierBoxedItems(0, 10, supplier, filter);
+        items = service.listSupplierBoxedItems(0, 10, supplier, filter);
+        return items;
     }
 
-    public List<BoxedItem> getItems() {
-        if (items == null || items.isEmpty())
-            items = service.listSupplierBoxedItems(0, 0, supplier, null);
-        
+    /**
+     * Useful only for 'omnifaces.ListConverter' used in 'p:autoComplete'
+     * 
+     * @param defaultBoxedItem Needed when jsf page read not null autocomplete (when, for example, open an already saved entity)
+     * @return 
+     */
+    public List<BoxedItem> getItems(BoxedItem defaultBoxedItem) {
+        if (items.isEmpty())
+            items.add(defaultBoxedItem);
         return items;
     }
     

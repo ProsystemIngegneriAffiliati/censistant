@@ -20,6 +20,7 @@ import com.prosystemingegneri.censistant.business.warehouse.boundary.LocationSer
 import com.prosystemingegneri.censistant.business.warehouse.control.LocationType;
 import com.prosystemingegneri.censistant.business.warehouse.entity.Location;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -45,17 +46,23 @@ public class LocationListPresenter implements Serializable{
     @PostConstruct
     public void init() {
         lazyLocations = new LocationLazyDataModel(service);
+        locations = new ArrayList<>();
     }
     
     public List<Location> completeLocations(String name) {
-        return service.listLocations(0, 10, null, null, Arrays.asList(locationType), name);
+        locations = service.listLocations(0, 10, null, null, Arrays.asList(locationType), name);
+        return locations;
     }
     
-    //Useful only for 'omnifaces.ListConverter' used in 'p:autoComplete'
-    public List<Location> getLocations() {
-        if (locations == null || locations.isEmpty())
-            locations = service.listLocations(0, 0, null, null, null, null);
-        
+    /**
+     * Useful only for 'omnifaces.ListConverter' used in 'p:autoComplete'
+     * 
+     * @param defaultLocation Needed when jsf page read not null autocomplete (when, for example, open an already saved entity)
+     * @return 
+     */
+    public List<Location> getLocations(Location defaultLocation) {
+        if (locations.isEmpty())
+            locations.add(defaultLocation);
         return locations;
     }
 
