@@ -340,6 +340,14 @@ public class JobOrderPresenter implements Serializable{
         return null;
     }
     
+    public void clearWorkerSignature() {
+        jobOrder.setWorkerSignature(null);
+    }
+    
+    public void clearCustomerSignature() {
+        jobOrder.setCustomerSignature(null);
+    }
+    
     public JobOrder getJobOrder() {
         return jobOrder;
     }

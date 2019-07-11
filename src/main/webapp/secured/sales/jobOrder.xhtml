@@ -386,6 +386,41 @@
                                             </p:dataTable>
                                         </h:panelGroup>
                                     </p:tab>
+                                    <p:tab title="#{msg.sales_jobOrder_signatures}">
+                                        <p:panelGrid columns="2" columnClasses="ui-grid-col-11,ui-grid-col-1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                            <h:panelGroup styleClass="md-inputfield">
+                                                <p:outputLabel for="workerSignature" value="#{msg.sales_jobOrder_workerSignature}" />
+                                                <p:signature id="workerSignature"
+                                                             value="#{jobOrderPresenter.jobOrder.workerSignature}"
+                                                             guideline="true"
+                                                             style="width: 600px;height: 200px"
+                                                             readonly="#{not empty jobOrderPresenter.jobOrder.workerSignature}" />
+                                                <p:message for="workerSignature"/>
+                                            </h:panelGroup>
+                                            <p:commandButton action="#{jobOrderPresenter.clearWorkerSignature()}"
+                                                             title="#{msg.clear} #{msg.sales_jobOrder_workerSignature}"
+                                                             icon="ui-icon-clear"
+                                                             update="workerSignature">
+                                                <oou:ignoreValidationFailed />
+                                            </p:commandButton>
+                                            
+                                            <h:panelGroup styleClass="md-inputfield">
+                                                <p:outputLabel for="customerSignature" value="#{msg.sales_jobOrder_customerSignature}" />
+                                                <p:signature id="customerSignature"
+                                                             value="#{jobOrderPresenter.jobOrder.customerSignature}"
+                                                             guideline="true"
+                                                             style="width: 600px;height: 200px"
+                                                             readonly="#{not empty jobOrderPresenter.jobOrder.customerSignature}" />
+                                                <p:message for="customerSignature"/>
+                                            </h:panelGroup>
+                                            <p:commandButton action="#{jobOrderPresenter.clearCustomerSignature()}"
+                                                             title="#{msg.clear} #{msg.sales_jobOrder_customerSignature}"
+                                                             icon="ui-icon-clear"
+                                                             update="customerSignature">
+                                                <oou:ignoreValidationFailed />
+                                            </p:commandButton>
+                                        </p:panelGrid>
+                                    </p:tab>
                                     <p:tab title="#{msg.sales_jobOrder_notes}">
                                         <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                             <h:panelGroup styleClass="md-inputfield">

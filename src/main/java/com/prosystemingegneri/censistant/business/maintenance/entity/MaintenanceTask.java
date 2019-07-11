@@ -16,6 +16,7 @@
  */
 package com.prosystemingegneri.censistant.business.maintenance.entity;
 
+import com.prosystemingegneri.censistant.business.control.SignatureImageConverter;
 import com.prosystemingegneri.censistant.business.entity.BaseEntity;
 import com.prosystemingegneri.censistant.business.maintenance.control.MaintenanceType;
 import com.prosystemingegneri.censistant.business.maintenance.control.MandatoryMaintenanceWorkerForClosedMaintenanceTask;
@@ -25,21 +26,15 @@ import com.prosystemingegneri.censistant.business.maintenance.control.MandatoryP
 import com.prosystemingegneri.censistant.business.maintenance.control.MandatorySuitableForOperationForClosedMaintenanceTask;
 import com.prosystemingegneri.censistant.business.maintenance.control.MandatorySystemOrMaintenancePlan;
 import com.prosystemingegneri.censistant.business.maintenance.control.MandatoryVatForClosedMaintenanceTask;
-import com.prosystemingegneri.censistant.business.maintenance.control.SigGen;
 import com.prosystemingegneri.censistant.business.maintenance.control.SuitableForOperation;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.Worker;
 import com.prosystemingegneri.censistant.business.warehouse.entity.HandledItem;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.PipedInputStream;
-import java.io.PipedOutputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
-import javax.imageio.ImageIO;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -372,29 +367,7 @@ public class MaintenanceTask extends BaseEntity<Long> {
     }
 
     public java.awt.Image getCustomerSignatureImg() {
-        try {
-            ByteArrayOutputStream customerSignatureOut = new ByteArrayOutputStream();
-            SigGen.generateSignature(customerSignature, customerSignatureOut);
-            
-            // take the copy of the stream and re-write it to an InputStream
-            PipedInputStream customerSignatureIn = new PipedInputStream();
-            final PipedOutputStream out = new PipedOutputStream(customerSignatureIn);
-            new Thread(new Runnable() {
-                public void run () {
-                    try {
-                        // write the original OutputStream to the PipedOutputStream
-                        customerSignatureOut.writeTo(out);
-                    } catch (IOException e) {
-                        // logging and exception handling should go here
-                    }
-                }
-            }).start();
-            
-            customerSignatureImg = ImageIO.read(customerSignatureIn);
-        } catch (IOException ex) {
-            return null;
-        }
-        
+        customerSignatureImg = SignatureImageConverter.convertoToImage(customerSignature);
         return customerSignatureImg;
     }
 

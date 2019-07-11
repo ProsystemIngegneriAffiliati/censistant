@@ -26,6 +26,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
 import javax.persistence.Transient;
@@ -68,6 +69,7 @@ public class System extends Location {
     
     private String powerSource;
     
+    @Lob
     private String notes;
 
     public System() {

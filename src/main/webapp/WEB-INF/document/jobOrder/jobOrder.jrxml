@@ -25,6 +25,8 @@
 		<fieldDescription><![CDATA[_THIS]]></fieldDescription>
 	</field>
 	<field name="installation" class="java.util.Date"/>
+	<field name="workerSignatureImg" class="java.awt.Image"/>
+	<field name="customerSignatureImg" class="java.awt.Image"/>
 	<pageHeader>
 		<band height="88" splitType="Stretch">
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
@@ -563,6 +565,58 @@
 				</textElement>
 				<textFieldExpression><![CDATA["24 mesi"]]></textFieldExpression>
 			</textField>
+		</band>
+		<band height="70">
+			<printWhenExpression><![CDATA[$F{workerSignatureImg}!=null&&$F{customerSignatureImg}!=null]]></printWhenExpression>
+			<staticText>
+				<reportElement x="195" y="0" width="185" height="15" uuid="5ffd2a1e-827b-4681-8ada-5b88d0045b06">
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="2" rightIndent="2"/>
+				</textElement>
+				<text><![CDATA[Firma del tecnico]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="390" y="0" width="185" height="15" uuid="8d55e84c-5d39-431e-b935-961cc0c9daa3">
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="2" rightIndent="2"/>
+				</textElement>
+				<text><![CDATA[Firma del cliente]]></text>
+			</staticText>
+			<image hAlign="Left" vAlign="Middle">
+				<reportElement x="195" y="15" width="185" height="40" uuid="36ccecca-06bb-4c72-b448-5dfd843d5f21">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<imageExpression><![CDATA[$F{workerSignatureImg}]]></imageExpression>
+			</image>
+			<image hAlign="Left" vAlign="Middle">
+				<reportElement x="390" y="15" width="185" height="40" uuid="a6375f93-11fe-4815-8f30-768c4ae29ec3">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<imageExpression><![CDATA[$F{customerSignatureImg}]]></imageExpression>
+			</image>
 		</band>
 		<band height="65">
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>

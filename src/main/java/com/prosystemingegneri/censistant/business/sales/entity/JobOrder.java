@@ -16,8 +16,10 @@
  */
 package com.prosystemingegneri.censistant.business.sales.entity;
 
+import com.prosystemingegneri.censistant.business.control.SignatureImageConverter;
 import com.prosystemingegneri.censistant.business.entity.BaseEntity;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.Worker;
+import java.awt.Image;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -28,11 +30,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.persistence.Version;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -73,6 +77,19 @@ public class JobOrder extends BaseEntity<Long> {
     @Temporal(TemporalType.DATE)
     private Date installation;
     
+    @Lob
+    private String workerSignature;
+    
+    @Transient
+    private java.awt.Image workerSignatureImg;
+    
+    @Lob
+    private String customerSignature;
+    
+    @Transient
+    private java.awt.Image customerSignatureImg;
+    
+    @Lob
     private String notes;
     
     @Version
@@ -175,6 +192,40 @@ public class JobOrder extends BaseEntity<Long> {
 
     public void setInstallation(Date installation) {
         this.installation = installation;
+    }
+
+    public String getWorkerSignature() {
+        return workerSignature;
+    }
+
+    public void setWorkerSignature(String workerSignature) {
+        this.workerSignature = workerSignature;
+    }
+
+    public Image getWorkerSignatureImg() {
+        workerSignatureImg = SignatureImageConverter.convertoToImage(workerSignature);
+        return workerSignatureImg;
+    }
+
+    public void setWorkerSignatureImg(Image workerSignatureImg) {
+        this.workerSignatureImg = workerSignatureImg;
+    }
+
+    public String getCustomerSignature() {
+        return customerSignature;
+    }
+
+    public void setCustomerSignature(String customerSignature) {
+        this.customerSignature = customerSignature;
+    }
+
+    public Image getCustomerSignatureImg() {
+        customerSignatureImg = SignatureImageConverter.convertoToImage(customerSignature);
+        return customerSignatureImg;
+    }
+
+    public void setCustomerSignatureImg(Image customerSignatureImg) {
+        this.customerSignatureImg = customerSignatureImg;
     }
     
     public String getWorkersStr() {
