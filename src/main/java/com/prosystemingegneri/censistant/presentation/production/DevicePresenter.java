@@ -78,15 +78,15 @@ public class DevicePresenter implements Serializable {
     public List<HandledItem> getDeviceMovements() {
         List<HandledItem> result = new ArrayList<>();
         
-        if (device.getSystem() != null && device.getItem() != null)
-            result = handledItemService.listHandledItems(0, 0, null, null, null, null, null, null, null, null, null, null, device.getSystem(), device.getItem(), null, null, null, null);
+        if (device.getSystem() != null && device.getSupplierItem() != null)
+            result = handledItemService.listHandledItems(0, 0, null, null, null, null, null, null, null, null, null, null, device.getSystem(), device.getSupplierItem().getItem(), null, null, null, null);
         
         return result;
     }
     
     public Long calculateDevicePlacedQuantity() {
-        if (device != null && device.getSystem() != null && device.getItem() != null)
-            return stockService.countPlacedQuantity(device.getSystem().getId(), device.getItem().getId());
+        if (device != null && device.getSystem() != null && device.getSupplierItem() != null)
+            return stockService.countPlacedQuantity(device.getSystem().getId(), device.getSupplierItem().getItem().getId());
         else
             return 0L;
     }

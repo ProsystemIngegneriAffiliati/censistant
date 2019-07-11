@@ -17,6 +17,7 @@
 package com.prosystemingegneri.censistant.business.production.entity;
 
 import com.prosystemingegneri.censistant.business.entity.BaseEntity;
+import com.prosystemingegneri.censistant.business.purchasing.entity.SupplierItem;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -43,7 +44,7 @@ public class Device extends BaseEntity<Long> {
     
     @NotNull
     @ManyToOne(optional = false)
-    private Item item;
+    private SupplierItem supplierItem;
     
     @Min(1)
     @NotNull
@@ -64,7 +65,7 @@ public class Device extends BaseEntity<Long> {
     public Device duplicate() {
         Device newDevice = new Device();
         
-        newDevice.setItem(item);
+        newDevice.setSupplierItem(supplierItem);
         newDevice.setQuantity(quantity);
         
         return newDevice;
@@ -76,14 +77,6 @@ public class Device extends BaseEntity<Long> {
 
     public void setSystem(System system) {
         this.system = system;
-    }
-
-    public Item getItem() {
-        return item;
-    }
-
-    public void setItem(Item item) {
-        this.item = item;
     }
 
     public Integer getQuantity() {
@@ -105,6 +98,14 @@ public class Device extends BaseEntity<Long> {
 
     public void setIsImportant(Boolean isImportant) {
         this.isImportant = isImportant;
+    }
+
+    public SupplierItem getSupplierItem() {
+        return supplierItem;
+    }
+
+    public void setSupplierItem(SupplierItem supplierItem) {
+        this.supplierItem = supplierItem;
     }
     
 }

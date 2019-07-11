@@ -18,19 +18,19 @@
 
                                 <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                     <h:panelGroup styleClass="md-inputfield">
-                                        <p:autoComplete id="item"
+                                        <p:autoComplete id="supplierItem"
                                                         dropdown="true"
-                                                        value="#{devicePresenter.device.item}"
-                                                        completeMethod="#{itemListPresenter.completeItems}"
+                                                        value="#{devicePresenter.device.supplierItem}"
+                                                        completeMethod="#{supplierItemListPresenter.completeSupplierItems}"
                                                         var="item"
-                                                        itemLabel="#{item.description}"
+                                                        itemLabel="#{item.codeAndDescription}"
                                                         itemValue="#{item}"
                                                         forceSelection="true">
-                                            <oou:converter converterId="omnifaces.ListConverter" list="#{itemListPresenter.items}"/>
+                                            <oou:converter converterId="omnifaces.ListConverter" list="#{supplierItemListPresenter.supplierItems}"/>
                                             <p:ajax event="itemSelect" update="unitMeasure" />
                                         </p:autoComplete>
-                                        <p:outputLabel for="item" value="#{msg.production_item}"/>
-                                        <p:message for="item"/>
+                                        <p:outputLabel for="supplierItem" value="#{msg.production_item}"/>
+                                        <p:message for="supplierItem"/>
                                     </h:panelGroup>
                                 </p:panelGrid>
 
@@ -48,7 +48,7 @@
                                     </h:panelGroup>
 
                                     <h:panelGroup styleClass="md-inputfield">
-                                        <p:inputText id="unitMeasure" readonly="true" value="#{devicePresenter.device.item.unitMeasure.name}" />
+                                        <p:inputText id="unitMeasure" readonly="true" value="#{devicePresenter.device.supplierItem.item.unitMeasure.name}" />
                                         <p:outputLabel for="unitMeasure" value="#{msg.production_unitMeasure_symbol}"/>
                                         <p:message for="unitMeasure"/>
                                     </h:panelGroup>

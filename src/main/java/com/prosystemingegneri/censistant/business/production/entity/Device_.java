@@ -16,6 +16,7 @@
  */
 package com.prosystemingegneri.censistant.business.production.entity;
 
+import com.prosystemingegneri.censistant.business.purchasing.entity.SupplierItem;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
@@ -26,5 +27,5 @@ import javax.persistence.metamodel.StaticMetamodel;
 @StaticMetamodel(Device.class)
 public class Device_ {
     public static volatile SingularAttribute<Device, System> system;
-    public static volatile SingularAttribute<Device, Item> item;
+    public static volatile SingularAttribute<Device, SupplierItem> supplierItem;
 }

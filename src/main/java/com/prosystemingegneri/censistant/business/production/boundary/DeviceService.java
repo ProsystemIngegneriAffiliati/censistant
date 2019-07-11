@@ -18,8 +18,8 @@ package com.prosystemingegneri.censistant.business.production.boundary;
 
 import com.prosystemingegneri.censistant.business.production.entity.Device;
 import com.prosystemingegneri.censistant.business.production.entity.Device_;
-import com.prosystemingegneri.censistant.business.production.entity.Item;
 import com.prosystemingegneri.censistant.business.production.entity.System;
+import com.prosystemingegneri.censistant.business.purchasing.entity.SupplierItem;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,13 +41,13 @@ public class DeviceService implements Serializable{
     @PersistenceContext
     EntityManager em;
     
-    public Long getDevicesCount(System system, Item item) {
+    public Long getDevicesCount(System system, SupplierItem supplierItem) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Long> query = cb.createQuery(Long.class);
         Root<Device> root = query.from(Device.class);
         CriteriaQuery<Long> select = query.select(cb.count(root));
 
-        List<Predicate> conditions = calculateConditions(cb, root, system, item);
+        List<Predicate> conditions = calculateConditions(cb, root, system, supplierItem);
 
         if (!conditions.isEmpty())
             query.where(conditions.toArray(new Predicate[conditions.size()]));
@@ -59,7 +59,7 @@ public class DeviceService implements Serializable{
         }
     }
     
-    private List<Predicate> calculateConditions(CriteriaBuilder cb, Root<Device> root, System system, Item item) {
+    private List<Predicate> calculateConditions(CriteriaBuilder cb, Root<Device> root, System system, SupplierItem supplierItem) {
         List<Predicate> conditions = new ArrayList<>();
 
         //system
@@ -67,8 +67,8 @@ public class DeviceService implements Serializable{
             conditions.add(cb.equal(root.get(Device_.system), system));
         
         //item
-        if (item != null)
-            conditions.add(cb.equal(root.get(Device_.item), item));
+        if (supplierItem != null)
+            conditions.add(cb.equal(root.get(Device_.supplierItem), supplierItem));
         
         return conditions;
     }

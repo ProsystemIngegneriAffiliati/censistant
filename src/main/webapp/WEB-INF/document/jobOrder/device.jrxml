@@ -4,7 +4,7 @@
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
-	<field name="item" class="com.prosystemingegneri.censistant.business.production.entity.Item"/>
+	<field name="supplierItem" class="com.prosystemingegneri.censistant.business.purchasing.entity.SupplierItem"/>
 	<field name="quantity" class="java.lang.Integer"/>
 	<field name="isImportant" class="java.lang.Boolean"/>
 	<columnHeader>
@@ -81,7 +81,7 @@
 					<font size="9" isBold="false"/>
 					<paragraph firstLineIndent="0" leftIndent="2" rightIndent="2" spacingBefore="0" spacingAfter="0"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{item}.getDescription()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{supplierItem}.getCodeAndDescription()]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

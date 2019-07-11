@@ -288,8 +288,8 @@
                                                 <p:column headerText="#{msg.production_device_isImportant}" priority="4">
                                                     <h:outputText value="#{device.isImportant ? 'X' : ''}"/>
                                                 </p:column>
-                                                <p:column headerText="#{msg.production_device}" filterBy="#{device.item.description}" filterMatchMode="contains" priority="0">
-                                                    <h:outputText value="#{device.item.description}"/>
+                                                <p:column headerText="#{msg.production_device}" filterBy="#{device.supplierItem.codeAndDescription}" filterMatchMode="contains" priority="0">
+                                                    <h:outputText value="#{device.supplierItem.codeAndDescription}"/>
                                                 </p:column>
                                                 <p:column headerText="#{msg.production_device_quantity}" priority="2">
                                                     <h:outputText value="#{device.quantity}">
@@ -297,7 +297,7 @@
                                                     </h:outputText>
                                                 </p:column>
                                                 <p:column headerText="#{msg.production_unitMeasure_symbol}" priority="4">
-                                                    <h:outputText value="#{device.item.unitMeasure.symbol}"/>
+                                                    <h:outputText value="#{device.supplierItem.item.unitMeasure.symbol}"/>
                                                 </p:column>
                                                 <p:column headerText="#{msg.production_device_placedQuantity}" priority="2">
                                                     <h:outputText value="#{jobOrderPresenter.calculateDevicePlacedQuantity(device)}">

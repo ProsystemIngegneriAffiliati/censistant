@@ -13,7 +13,7 @@
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
-	<field name="item" class="com.prosystemingegneri.censistant.business.production.entity.Item"/>
+	<field name="supplierItem" class="com.prosystemingegneri.censistant.business.purchasing.entity.SupplierItem"/>
 	<field name="quantity" class="java.lang.Integer"/>
 	<detail>
 		<band height="15" splitType="Stretch">
@@ -40,7 +40,7 @@
 					<font size="6" isBold="false"/>
 					<paragraph firstLineIndent="0" leftIndent="2" rightIndent="2" spacingBefore="2" spacingAfter="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{quantity} + " " + $F{item}.getDescription()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{quantity} + " " + $F{supplierItem}.getCodeAndDescription()]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

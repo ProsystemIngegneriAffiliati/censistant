@@ -116,9 +116,9 @@ public class HandledItemService implements Serializable{
                         
                         if (locationArrival instanceof System) {
                             System system = (System) locationArrival;
-                            if (deviceService.getDevicesCount(system, stock.getBoxedItem().getItem().getItem()) <= 0) {
+                            if (deviceService.getDevicesCount(system, stock.getBoxedItem().getItem()) <= 0) {
                                 Device device = new Device();
-                                device.setItem(stock.getBoxedItem().getItem().getItem());
+                                device.setSupplierItem(stock.getBoxedItem().getItem());
                                 device.setQuantity(quantityMoved);
                                 system.addDevice(device);
                                 
