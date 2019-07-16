@@ -19,9 +19,11 @@ package com.prosystemingegneri.censistant.business.sales.boundary;
 import com.prosystemingegneri.censistant.business.sales.entity.JobOrder;
 import com.prosystemingegneri.censistant.business.sales.entity.TimeSpent;
 import com.prosystemingegneri.censistant.business.sales.entity.TimeSpent_;
+import com.prosystemingegneri.censistant.business.sales.entity.WorkingOperation_;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.Worker;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.Worker_;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -69,13 +71,14 @@ public class TimeSpentService implements Serializable{
             int first, int pageSize,
             String sortField, Boolean isAscending,
             JobOrder jobOrder,
-            Worker worker, String workerName) {
+            Worker worker, String workerName,
+            String workingOperationName) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<TimeSpent> query = cb.createQuery(TimeSpent.class);
         Root<TimeSpent> root = query.from(TimeSpent.class);
         CriteriaQuery<TimeSpent> select = query.select(root).distinct(true);
         
-        List<Predicate> conditions = calculateConditions(cb, root, jobOrder, worker, workerName);
+        List<Predicate> conditions = calculateConditions(cb, root, jobOrder, worker, workerName, workingOperationName);
 
         if (!conditions.isEmpty())
             query.where(conditions.toArray(new Predicate[conditions.size()]));
@@ -86,6 +89,12 @@ public class TimeSpentService implements Serializable{
             switch (sortField) {
                 case "creation":
                     path = root.get(TimeSpent_.creation);
+                    break;
+                case "workerName":
+                    path = root.get(TimeSpent_.worker).get(Worker_.name);
+                    break;
+                case "workingOperationName":
+                    path = root.get(TimeSpent_.workingOperation).get(WorkingOperation_.name);
                     break;
                 default:
                     path = root.get(sortField);
@@ -108,13 +117,14 @@ public class TimeSpentService implements Serializable{
     
     public Long getCount(
             JobOrder jobOrder,
-            Worker worker, String workerName) {
+            Worker worker, String workerName,
+            String workingOperationName) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Long> query = cb.createQuery(Long.class);
         Root<TimeSpent> root = query.from(TimeSpent.class);
         CriteriaQuery<Long> select = query.select(cb.count(root));
 
-        List<Predicate> conditions = calculateConditions(cb, root, jobOrder, worker, workerName);
+        List<Predicate> conditions = calculateConditions(cb, root, jobOrder, worker, workerName, workingOperationName);
 
         if (!conditions.isEmpty())
             query.where(conditions.toArray(new Predicate[conditions.size()]));
@@ -125,7 +135,8 @@ public class TimeSpentService implements Serializable{
     private List<Predicate> calculateConditions(
             CriteriaBuilder cb, Root<TimeSpent> root,
             JobOrder jobOrder,
-            Worker worker, String workerName) {
+            Worker worker, String workerName,
+            String workingOperationName) {
         List<Predicate> conditions = new ArrayList<>();
         
         //Job order entity
@@ -149,6 +160,37 @@ public class TimeSpentService implements Serializable{
                     )
             );
         
+        //Working operation name
+        if (workingOperationName != null && !workingOperationName.isEmpty())
+            conditions.add(
+                    cb.like(
+                            cb.lower(
+                                    root
+                                            .join(TimeSpent_.workingOperation)
+                                            .get(WorkingOperation_.name)
+                            )
+                            , "%" + workingOperationName.toLowerCase() + "%"
+                    )
+            );
+        
         return conditions;
+    }
+    
+    public BigDecimal getTotalHoursSpent(
+            JobOrder jobOrder,
+            Worker worker, String workerName,
+            String workingOperationName) {
+        
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<BigDecimal> query = cb.createQuery(BigDecimal.class);
+        Root<TimeSpent> root = query.from(TimeSpent.class);
+        CriteriaQuery<BigDecimal> select = query.select(cb.sum(root.get(TimeSpent_.hoursSpent)));
+
+        List<Predicate> conditions = calculateConditions(cb, root, jobOrder, worker, workerName, workingOperationName);
+
+        if (!conditions.isEmpty())
+            query.where(conditions.toArray(new Predicate[conditions.size()]));
+
+        return em.createQuery(select).getSingleResult();
     }
 }

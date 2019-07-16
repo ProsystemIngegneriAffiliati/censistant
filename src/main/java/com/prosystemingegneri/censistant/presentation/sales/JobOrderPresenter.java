@@ -25,6 +25,7 @@ import com.prosystemingegneri.censistant.business.production.entity.System;
 import com.prosystemingegneri.censistant.business.production.entity.SystemAttachment;
 import com.prosystemingegneri.censistant.business.sales.boundary.JobOrderService;
 import com.prosystemingegneri.censistant.business.sales.boundary.OfferService;
+import com.prosystemingegneri.censistant.business.sales.boundary.TimeSpentService;
 import com.prosystemingegneri.censistant.business.sales.entity.JobOrder;
 import com.prosystemingegneri.censistant.business.sales.entity.Offer;
 import com.prosystemingegneri.censistant.business.siteSurvey.boundary.SiteSurveyReportService;
@@ -37,6 +38,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -99,6 +101,11 @@ public class JobOrderPresenter implements Serializable{
     
     private System system;
     
+    @Inject
+    private TimeSpentService timeSpentService;
+    private TimeSpentLazyDataModel lazyTimeSpent;
+    private BigDecimal finalTotalHours;
+    
     private Integer activeIndex;    //useful for keep tab opened when reloading a page
     
     @Resource
@@ -160,6 +167,8 @@ public class JobOrderPresenter implements Serializable{
             else
                 jobOrder = service.readJobOrder(id);
         }
+        lazyTimeSpent = new TimeSpentLazyDataModel(timeSpentService, jobOrder);
+        updateFinalTotalHours();
     }
     
     public void onSiteSurveyReportSelect(SelectEvent event) {
@@ -395,5 +404,26 @@ public class JobOrderPresenter implements Serializable{
     public void setDummyReport(SiteSurveyReport dummyReport) {
         this.dummyReport = dummyReport;
     }
+
+    public TimeSpentLazyDataModel getLazyTimeSpent() {
+        return lazyTimeSpent;
+    }
+
+    public void setLazyTimeSpent(TimeSpentLazyDataModel lazyTimeSpent) {
+        this.lazyTimeSpent = lazyTimeSpent;
+    }
+
+    public BigDecimal getFinalTotalHours() {
+        return finalTotalHours;
+    }
+
+    public void setFinalTotalHours(BigDecimal finalTotalHours) {
+        this.finalTotalHours = finalTotalHours;
+    }
     
+    private void updateFinalTotalHours() {
+        finalTotalHours = timeSpentService.getTotalHoursSpent(jobOrder, null, null, null);
+        if (finalTotalHours == null)
+            finalTotalHours = BigDecimal.ZERO;
+    }
 }

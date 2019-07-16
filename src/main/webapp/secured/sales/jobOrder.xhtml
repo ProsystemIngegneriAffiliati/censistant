@@ -190,6 +190,69 @@
                                             </h:panelGroup>
                                         </p:panelGrid>
                                     </p:tab>
+                                    <p:tab title="#{msg.sales_jobOrder_expected}">
+                                        <p:panelGrid columns="3" columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                            <h:panelGroup styleClass="md-inputfield">
+                                                <p:calendar id="expectedInstallation" value="#{jobOrderPresenter.jobOrder.expectedInstallation}" locale="it" />
+                                                <p:outputLabel for="expectedInstallation" value="#{msg.sales_jobOrder_expectedInstallation}"/>
+                                                <p:message for="expectedInstallation"/>
+                                            </h:panelGroup>
+                                            <h:panelGroup styleClass="md-inputfield">
+                                                <p:inputNumber id="expectedManHours" value="#{jobOrderPresenter.jobOrder.expectedManHours}" decimalPlaces="0" />
+                                                <p:outputLabel for="expectedManHours" value="#{msg.sales_jobOrder_expectedManHours}" />
+                                                <p:message for="expectedManHours"/>
+                                            </h:panelGroup>
+                                            <h:panelGroup styleClass="md-inputfield">
+                                                <p:inputNumber id="expectedWorkers" value="#{jobOrderPresenter.jobOrder.expectedWorkers}" decimalPlaces="0" />
+                                                <p:outputLabel for="expectedWorkers" value="#{msg.sales_jobOrder_expectedWorkers}" />
+                                                <p:message for="expectedWorkers"/>
+                                            </h:panelGroup>
+                                        </p:panelGrid>
+                                    </p:tab>
+                                    <p:tab title="#{msg.sales_jobOrder_final}">
+                                        <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                            <h:panelGroup styleClass="md-inputfield">
+                                                <p:inputNumber id="expectedTotalHours" readonly="true" value="#{jobOrderPresenter.jobOrder.expectedManHours * jobOrderPresenter.jobOrder.expectedWorkers}" decimalPlaces="0" />
+                                                <p:outputLabel for="expectedTotalHours" value="#{msg.sales_jobOrder_expectedTotalHours}" />
+                                                <p:message for="expectedTotalHours"/>
+                                            </h:panelGroup>
+                                            <h:panelGroup styleClass="md-inputfield">
+                                                <p:inputNumber id="finalTotalHours" readonly="true" value="#{jobOrderPresenter.finalTotalHours}" />
+                                                <p:outputLabel for="finalTotalHours" value="#{msg.sales_jobOrder_finalTotalHours}" />
+                                                <p:message for="finalTotalHours"/>
+                                            </h:panelGroup>
+                                        </p:panelGrid>
+                                        <p:dataTable id="timeSpentTable"
+                                                     var="timeSpent"
+                                                     value="#{jobOrderPresenter.lazyTimeSpent}"
+                                                     paginator="true" rows="10" paginatorAlwaysVisible="false"
+                                                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                                     rowsPerPageTemplate="10,25,50" lazy="true">
+                                            <f:facet name="header">
+                                                <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
+                                                    #{msg.sales_jobOrder_timeSpent}
+                                                    <p:outputPanel>
+                                                    </p:outputPanel>
+                                                </p:panelGrid>
+                                            </f:facet>
+                                            <p:column headerText="#{msg.siteSurvey_worker}" field="workerName" priority="2">
+                                                <h:outputText value="#{timeSpent.worker.name}" />
+                                            </p:column>
+                                            <p:column headerText="#{msg.sales_workingOperation}" field="workingOperationName" priority="4">
+                                                <h:outputText value="#{timeSpent.workingOperation.name}" />
+                                            </p:column>
+                                            <p:column headerText="#{msg.sales_jobOrder_timeSpent_creation}" field="creation" filterable="false" priority="3">
+                                                <h:outputText value="#{timeSpent.creation}">
+                                                    <f:convertDateTime />
+                                                </h:outputText>
+                                            </p:column>
+                                            <p:column headerText="#{msg.sales_jobOrder_timeSpent_hoursSpent}" priority="0">
+                                                <h:outputText value="#{timeSpent.hoursSpent}">
+                                                    <f:convertNumber />
+                                                </h:outputText>
+                                            </p:column>
+                                        </p:dataTable>
+                                    </p:tab>
                                     <p:tab title="#{msg.sales_jobOrder_systemData}">
                                         <h:panelGroup id="systemData">
                                             <p:dialog header="#{msg.production_systemAttachment_add_tip}"
@@ -403,7 +466,7 @@
                                                              update="workerSignature">
                                                 <oou:ignoreValidationFailed />
                                             </p:commandButton>
-                                            
+
                                             <h:panelGroup styleClass="md-inputfield">
                                                 <p:outputLabel for="customerSignature" value="#{msg.sales_jobOrder_customerSignature}" />
                                                 <p:signature id="customerSignature"
