@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <f:metadata>
+        <f:viewParam name="id"
+                     value="#{workingOperationPresenter.id}"
+                     converter="javax.faces.Long"
+                     required="true"
+                     requiredMessage="Must provide an ID"/>
+        <f:viewAction action="#{workingOperationPresenter.detail()}"/>
+    </f:metadata>
+    <ui:composition template="/WEB-INF/template.xhtml">
+        <ui:define name="content">
+            <h:form id="workingOperationForm">
+                <div class="ui-fluid">
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <div class="card card-w-title">
+                                <h1>#{msg.sales_workingOperation}</h1>
+                                <p>#{msg.sales_workingOperation_tip}</p>
+                                <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="name" value="#{workingOperationPresenter.workingOperation.name}"/>
+                                        <p:outputLabel for="name" value="#{msg.sales_workingOperation_name}"/>
+                                        <p:message for="name"/>
+                                    </h:panelGroup>
+                                </p:panelGrid>
+
+                                <div class="ui-g">
+                                    <div class="ui-g-1 ui-md-2"></div>
+                                    <div class="ui-g-4 ui-md-3">
+                                        <p:button value="#{msg.cancel}" outcome="/secured/sales/workingOperations" styleClass="secondary"/>
+                                    </div>
+                                    <div class="ui-g-2 ui-md-2"></div>
+                                    <div class="ui-g-4 ui-md-3">
+                                        <p:commandButton value="#{msg.save}"
+                                                         action="#{workingOperationPresenter.save()}"
+                                                         ajax="false"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

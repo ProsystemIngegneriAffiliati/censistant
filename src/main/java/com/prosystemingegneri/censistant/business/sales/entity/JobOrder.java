@@ -77,6 +77,13 @@ public class JobOrder extends BaseEntity<Long> {
     @Temporal(TemporalType.DATE)
     private Date installation;
     
+    @Temporal(TemporalType.DATE)
+    private Date expectedInstallation;
+    
+    private Integer expectedManHours;
+    
+    private Integer expectedWorkers;
+    
     @Lob
     private String workerSignature;
     
@@ -241,4 +248,29 @@ public class JobOrder extends BaseEntity<Long> {
         
         return result.toString();
     }
+
+    public Date getExpectedInstallation() {
+        return expectedInstallation;
+    }
+
+    public void setExpectedInstallation(Date expectedInstallation) {
+        this.expectedInstallation = expectedInstallation;
+    }
+
+    public Integer getExpectedManHours() {
+        return expectedManHours;
+    }
+
+    public void setExpectedManHours(Integer expectedManHours) {
+        this.expectedManHours = expectedManHours;
+    }
+
+    public Integer getExpectedWorkers() {
+        return expectedWorkers;
+    }
+
+    public void setExpectedWorkers(Integer expectedWorkers) {
+        this.expectedWorkers = expectedWorkers;
+    }
+    
 }
