@@ -22,10 +22,13 @@ import com.prosystemingegneri.censistant.business.sales.entity.TimeSpent_;
 import com.prosystemingegneri.censistant.business.sales.entity.WorkingOperation_;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.Worker;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.Worker_;
+import com.prosystemingegneri.censistant.business.user.entity.UserApp_;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.Resource;
+import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -45,6 +48,9 @@ import javax.persistence.criteria.Root;
 public class TimeSpentService implements Serializable{
     @PersistenceContext
     EntityManager em;
+    
+    @Resource
+    SessionContext ctx;
     
     public TimeSpent create() {
         return new TimeSpent();
@@ -172,6 +178,19 @@ public class TimeSpentService implements Serializable{
                             , "%" + workingOperationName.toLowerCase() + "%"
                     )
             );
+        
+        //Results are limited for not-admin users
+        if (ctx.getCallerPrincipal() != null)
+            if (!ctx.isCallerInRole("admin"))
+                conditions.add(
+                        cb.like(
+                                root
+                                        .join(TimeSpent_.worker)
+                                        .join(Worker_.userApp)
+                                        .get(UserApp_.userName)
+                                , ctx.getCallerPrincipal().getName()
+                        )
+                );
         
         return conditions;
     }

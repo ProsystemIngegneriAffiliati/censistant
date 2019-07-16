@@ -19,9 +19,13 @@ package com.prosystemingegneri.censistant.business.siteSurvey.boundary;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.Worker;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.Worker_;
 import com.prosystemingegneri.censistant.business.user.entity.UserApp;
+import com.prosystemingegneri.censistant.business.user.entity.UserApp_;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import javax.annotation.Resource;
+import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -40,6 +44,9 @@ import javax.persistence.criteria.Root;
 public class WorkerService implements Serializable{
     @PersistenceContext
     EntityManager em;
+    
+    @Resource
+    SessionContext ctx;
     
     public Worker saveWorker(Worker worker) {
         if (worker.getId() == null)
@@ -77,6 +84,45 @@ public class WorkerService implements Serializable{
         query.orderBy(cb.asc(root.get(Worker_.name)));
 
         return em.createQuery(select).getResultList();
+    }
+    
+    public Optional<Worker> findByUserapp(String userAppUsername, UserApp userApp) {
+        if ((userAppUsername != null && !userAppUsername.isEmpty()) || userApp != null) {
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+            CriteriaQuery<Worker> query = cb.createQuery(Worker.class);
+            Root<Worker> root = query.from(Worker.class);
+
+            List<Predicate> conditions = new ArrayList<>();
+            
+            if (userAppUsername != null && !userAppUsername.isEmpty())
+                conditions.add(cb.like(root.join(Worker_.userApp).get(UserApp_.userName), userAppUsername));
+            
+            if (userApp != null)
+                conditions.add(cb.equal(root.get(Worker_.userApp), userApp));
+
+            if (!conditions.isEmpty())
+                query.where(conditions.toArray(new Predicate[conditions.size()]));
+
+            Worker result;
+            try {
+                result = em.createQuery(query).getSingleResult();
+                if (result == null)
+                    return Optional.empty();
+            } catch (NoResultException e) {
+                return Optional.empty();
+            }
+
+            return Optional.of(result);
+        }
+        
+        return Optional.empty();
+    }
+    
+    public Optional<Worker> getLoggedWorker() {
+        if (ctx.getCallerPrincipal() != null)
+            return findByUserapp(ctx.getCallerPrincipal().getName(), null);
+        else
+            return Optional.empty();
     }
     
     public Worker findWorker(String name, boolean isCaseSensitive, UserApp user) {
