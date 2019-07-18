@@ -67,6 +67,7 @@ public class TimeSpent extends BaseEntity<Long> {
     private int version;
 
     public TimeSpent() {
+        creation = new Date();
     }
 
     public Worker getWorker() {
