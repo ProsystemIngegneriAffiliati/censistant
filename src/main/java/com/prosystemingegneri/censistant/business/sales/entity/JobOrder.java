@@ -22,9 +22,9 @@ import com.prosystemingegneri.censistant.business.siteSurvey.entity.Worker;
 import java.awt.Image;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -72,7 +72,7 @@ public class JobOrder extends BaseEntity<Long> {
     private PlaceType placeType;
     
     @ManyToMany
-    private Set<Worker> workers;
+    private List<Worker> workers;
     
     @Temporal(TemporalType.DATE)
     private Date installation;
@@ -105,7 +105,7 @@ public class JobOrder extends BaseEntity<Long> {
     public JobOrder() {
         creation = new Date();
         installation = new Date();
-        workers = new TreeSet<>();
+        workers = new ArrayList<>();
     }
 
     public JobOrder(Integer number) {
@@ -185,11 +185,11 @@ public class JobOrder extends BaseEntity<Long> {
                 .toString();
     }
 
-    public Set<Worker> getWorkers() {
+    public List<Worker> getWorkers() {
         return workers;
     }
 
-    public void setWorkers(Set<Worker> workers) {
+    public void setWorkers(List<Worker> workers) {
         this.workers = workers;
     }
 

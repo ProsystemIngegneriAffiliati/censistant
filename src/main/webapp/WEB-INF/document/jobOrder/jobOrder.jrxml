@@ -280,7 +280,7 @@
 					<font isBold="true"/>
 					<paragraph leftIndent="2" rightIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{offer}.getSiteSurveyReport().getPlant().getAddress()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{offer}.getSiteSurveyReport().getPlant().getCustomerSupplier().getHeadOffice().getAddress()]]></textFieldExpression>
 			</textField>
 		</band>
 		<band height="65">
@@ -323,7 +323,7 @@
 					<font isBold="true"/>
 					<paragraph leftIndent="2" rightIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{offer}.getSiteSurveyReport().getPlant().getPhoneStr()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{offer}.getSiteSurveyReport().getPlant().getCustomerSupplier().getHeadOffice().getPhoneStr()]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="195" y="20" width="185" height="15" uuid="1a4f6df6-27aa-4fbd-be74-3d5145024ebd">
@@ -348,7 +348,7 @@
 					<font isBold="true"/>
 					<paragraph leftIndent="2" rightIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{offer}.getSiteSurveyReport().getPlant().getFaxStr()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{offer}.getSiteSurveyReport().getPlant().getCustomerSupplier().getHeadOffice().getFaxStr()]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="390" y="20" width="185" height="15" uuid="8e95ba64-502d-4b36-9232-6889e3a77d4d">
@@ -364,6 +364,125 @@
 			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement stretchType="ContainerHeight" x="390" y="35" width="185" height="15" uuid="4773e31a-723d-4d00-aea9-b52f654b4e93">
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="2" rightIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{offer}.getSiteSurveyReport().getPlant().getCustomerSupplier().getHeadOffice().getEmailStr()]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="100">
+			<printWhenExpression><![CDATA[$F{offer}.getSiteSurveyReport().getPlant().getIsHeadOffice() == false]]></printWhenExpression>
+			<staticText>
+				<reportElement x="0" y="0" width="185" height="15" uuid="445cc349-2cfd-442b-b925-66891a789410">
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+					<paragraph leftIndent="2" rightIndent="2"/>
+				</textElement>
+				<text><![CDATA[Cantiere:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="20" width="575" height="15" uuid="b48ca723-5ad4-4175-ae97-d6dea31d5271">
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="2" rightIndent="2"/>
+				</textElement>
+				<text><![CDATA[Indirizzo]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="ContainerHeight" x="0" y="35" width="575" height="15" uuid="c96bffd2-80d9-4f93-9a2a-bbf575c6e341">
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="2" rightIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{offer}.getSiteSurveyReport().getPlant().getAddress()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="55" width="185" height="15" uuid="e53689e6-be7b-418d-aad7-6c49657a8b12">
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="2" rightIndent="2"/>
+				</textElement>
+				<text><![CDATA[Telefono]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="FixRelativeToBottom" stretchType="ContainerHeight" x="0" y="70" width="185" height="15" uuid="b89cd467-8b94-4646-a056-550decc980d6">
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="2" rightIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{offer}.getSiteSurveyReport().getPlant().getPhoneStr()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="FixRelativeToBottom" x="195" y="55" width="185" height="15" uuid="1e6631dd-fd81-452b-bf48-5f567e3cca58">
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="2" rightIndent="2"/>
+				</textElement>
+				<text><![CDATA[Fax]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="FixRelativeToBottom" stretchType="ContainerHeight" x="195" y="70" width="185" height="15" uuid="de298f8b-03e9-4a3a-ba4d-860ee76497aa">
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="2" rightIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{offer}.getSiteSurveyReport().getPlant().getFaxStr()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="FixRelativeToBottom" x="390" y="55" width="185" height="15" uuid="7ed2dd9d-1b48-4734-8de8-042b8de67c9b">
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="2" rightIndent="2"/>
+				</textElement>
+				<text><![CDATA[E-mail]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="FixRelativeToBottom" stretchType="ContainerHeight" x="390" y="70" width="185" height="15" uuid="7a1acfd2-9fda-4c85-b104-860a9aadc9b9">
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
