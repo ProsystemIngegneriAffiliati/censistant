@@ -47,7 +47,7 @@ public class TimeSpentListPresenter implements Serializable {
         lazyTimeSpents = new TimeSpentLazyDataModel(service);
     }
     
-    public void deleteTimeSpent() {
+    public void delete() {
         if (selectedTimeSpents != null && !selectedTimeSpents.isEmpty())
             for (TimeSpent timeSpent : selectedTimeSpents)
                 try {

@@ -230,7 +230,7 @@
                                                      rowsPerPageTemplate="10,25,50" lazy="true">
                                             <f:facet name="header">
                                                 <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
-                                                    #{msg.sales_jobOrder_timeSpent}
+                                                    #{msg.sales_timeSpent}
                                                     <p:outputPanel>
                                                     </p:outputPanel>
                                                 </p:panelGrid>
@@ -241,12 +241,12 @@
                                             <p:column headerText="#{msg.sales_workingOperation}" field="workingOperationName" priority="4">
                                                 <h:outputText value="#{timeSpent.workingOperation.name}" />
                                             </p:column>
-                                            <p:column headerText="#{msg.sales_jobOrder_timeSpent_creation}" field="creation" filterable="false" priority="3">
+                                            <p:column headerText="#{msg.sales_timeSpent_creation}" field="creation" filterable="false" priority="3">
                                                 <h:outputText value="#{timeSpent.creation}">
                                                     <f:convertDateTime />
                                                 </h:outputText>
                                             </p:column>
-                                            <p:column headerText="#{msg.sales_jobOrder_timeSpent_hoursSpent}" priority="0">
+                                            <p:column headerText="#{msg.sales_timeSpent_hoursSpent}" priority="0">
                                                 <h:outputText value="#{timeSpent.hoursSpent}">
                                                     <f:convertNumber />
                                                 </h:outputText>

@@ -87,7 +87,7 @@ public class TimeSpentPresenter implements Serializable{
     }
     
     public List<JobOrder> completeJobOrder(String descrizione) {
-        jobOrders = jobOrderService.list(0, 0, null, null, customer, null, descrizione, Boolean.FALSE);
+        jobOrders = jobOrderService.listJobOrders(0, 25, null, null, null, null, customer, descrizione, null);
         return jobOrders;
     }
     
@@ -119,19 +119,19 @@ public class TimeSpentPresenter implements Serializable{
         this.id = id;
     }
 
-    public Cliente getCliente() {
+    public CustomerSupplier getCustomer() {
         return customer;
     }
 
-    public void setCliente(Cliente cliente) {
-        this.customer = cliente;
+    public void setCustomer(CustomerSupplier customer) {
+        this.customer = customer;
     }
 
-    public JobOrder getCommessa() {
+    public JobOrder getJobOrder() {
         return jobOrder;
     }
 
-    public void setJobOrder(Commessa jobOrder) {
+    public void setJobOrder(JobOrder jobOrder) {
         this.jobOrder = jobOrder;
     }
     
