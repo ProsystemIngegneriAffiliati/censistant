@@ -385,8 +385,9 @@
                                 <p:panel header="#{msg.sales_jobOrder_systemDevices}" style="margin-bottom: 25px">
                                     <h:panelGroup id="systemDevices">
                                         <p:dataTable id="devicesTable"
-                                                     var="device"
-                                                     value="#{jobOrderPresenter.jobOrder.offer.system.devices}">
+                                                     var="device" widgetVar="devt"
+                                                     value="#{jobOrderPresenter.jobOrder.offer.system.devices}"
+                                                     editable="true" editMode="cell">
                                             <f:facet name="header">
                                                 <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
                                                     #{msg.production_devices}
@@ -394,9 +395,7 @@
                                                         <p:commandButton title="#{msg.warehouse_itemMovement}" icon="ui-icon-card-travel" action="#{jobOrderPresenter.openItemMovement()}" ajax="false">
                                                             <oou:ignoreValidationFailed />
                                                         </p:commandButton>
-                                                        <p:commandButton title="#{msg.add}" icon="ui-icon-add" action="#{jobOrderPresenter.detailDevice(null)}" ajax="false">
-                                                            <oou:ignoreValidationFailed />
-                                                        </p:commandButton>
+                                                        <p:commandButton title="#{msg.add} #{msg.production_device}" icon="ui-icon-add" actionListener="#{jobOrderPresenter.addNewDevice()}" oncomplete="PF('devt').addRow()" process="@this"/>
                                                     </p:outputPanel>
                                                 </p:panelGrid>
                                             </f:facet>
@@ -404,15 +403,38 @@
                                                 <h:outputText value="#{device.isImportant ? 'X' : ''}"/>
                                             </p:column>
                                             <p:column headerText="#{msg.production_device}" filterBy="#{device.supplierItem.codeAndDescription}" filterMatchMode="contains" priority="0">
-                                                <h:outputText value="#{device.supplierItem.codeAndDescription}"/>
+                                                <p:cellEditor>
+                                                    <f:facet name="output">
+                                                        <h:outputText value="#{device.supplierItem.codeAndDescription}"/>
+                                                    </f:facet>
+                                                    <f:facet name="input">
+                                                        <p:autoComplete dropdown="true"
+                                                                        value="#{device.supplierItem}"
+                                                                        completeMethod="#{supplierItemListPresenter.completeSupplierItems}"
+                                                                        var="item"
+                                                                        itemLabel="#{item.codeAndDescription}"
+                                                                        itemValue="#{item}"
+                                                                        forceSelection="true">
+                                                            <oou:converter converterId="omnifaces.ListConverter" list="#{supplierItemListPresenter.getSupplierItems(device.supplierItem)}"/>
+                                                            <p:ajax event="itemSelect" update="unitMeasure" />
+                                                        </p:autoComplete>
+                                                    </f:facet>
+                                                </p:cellEditor>
                                             </p:column>
                                             <p:column headerText="#{msg.production_device_quantity}" priority="2">
-                                                <h:outputText value="#{device.quantity}">
-                                                    <f:convertNumber integerOnly="true" />
-                                                </h:outputText>
+                                                <p:cellEditor>
+                                                    <f:facet name="output">
+                                                        <h:outputText value="#{device.quantity}">
+                                                            <f:convertNumber integerOnly="true" />
+                                                        </h:outputText>
+                                                    </f:facet>
+                                                    <f:facet name="input">
+                                                        <p:inputNumber decimalPlaces="0" minValue="1" value="#{device.quantity}" />
+                                                    </f:facet>
+                                                </p:cellEditor>
                                             </p:column>
                                             <p:column headerText="#{msg.production_unitMeasure_symbol}" priority="4">
-                                                <h:outputText value="#{device.supplierItem.item.unitMeasure.symbol}"/>
+                                                <h:outputText id="unitMeasure" value="#{device.supplierItem.item.unitMeasure.symbol}"/>
                                             </p:column>
                                             <p:column headerText="#{msg.production_device_placedQuantity}" priority="2">
                                                 <h:outputText value="#{jobOrderPresenter.calculateDevicePlacedQuantity(device)}">

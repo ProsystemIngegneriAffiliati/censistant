@@ -27,21 +27,17 @@
 	<field name="installation" class="java.util.Date"/>
 	<field name="workerSignatureImg" class="java.awt.Image"/>
 	<field name="customerSignatureImg" class="java.awt.Image"/>
-	<pageHeader>
-		<band height="88" splitType="Stretch">
+	<detail>
+		<band height="88">
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<image hAlign="Center" vAlign="Middle">
-				<reportElement x="0" y="0" width="575" height="82" uuid="5db34ca9-3e1c-4604-978d-a9764eb02f2f">
-					<property name="com.jaspersoft.studio.unit.x" value="px"/>
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				<reportElement x="0" y="0" width="575" height="82" uuid="90fa98e0-2eef-40c1-9de7-927563bd8f8b">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<imageExpression><![CDATA[$P{reportImagePath} + "logoForJobOrder.png"]]></imageExpression>
 			</image>
 		</band>
-	</pageHeader>
-	<detail>
 		<band height="65">
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<staticText>
@@ -774,7 +770,7 @@
 				<subreportExpression><![CDATA[$P{subReportPath} + "device.jasper"]]></subreportExpression>
 			</subreport>
 		</band>
-		<band height="50">
+		<band height="50" splitType="Prevent">
 			<staticText>
 				<reportElement x="0" y="0" width="185" height="15" uuid="1bf4c6c0-2aac-46b3-97b5-7dbc47e972ae">
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
@@ -803,7 +799,7 @@
 				<textFieldExpression><![CDATA[$F{notes}]]></textFieldExpression>
 			</textField>
 		</band>
-		<band height="65">
+		<band height="65" splitType="Prevent">
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<staticText>
 				<reportElement x="0" y="1" width="185" height="15" uuid="0654a228-ca0f-43f2-ab81-344bda67c4ae">

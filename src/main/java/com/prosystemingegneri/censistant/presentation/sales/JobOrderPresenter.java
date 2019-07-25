@@ -308,6 +308,10 @@ public class JobOrderPresenter implements Serializable{
         return "/secured/warehouse/itemMovement?faces-redirect=true";
     }
     
+    public void addNewDevice() {
+        jobOrder.getOffer().getSystem().addDevice(new Device());
+    }
+    
     public String detailDevice(Device device) {
         if (device != null)
             FacesContext.getCurrentInstance().getExternalContext().getFlash().put("device", device);
@@ -327,7 +331,7 @@ public class JobOrderPresenter implements Serializable{
     }
     
     public Long calculateDevicePlacedQuantity(Device device) {
-        if (jobOrder != null && jobOrder.getOffer().getSystem() != null && device != null)
+        if (jobOrder != null && jobOrder.getOffer().getSystem() != null && device != null && device.getSupplierItem() != null)
             return stockService.countPlacedQuantity(jobOrder.getOffer().getSystem().getId(), device.getSupplierItem().getItem().getId());
         else
             return 0L;
