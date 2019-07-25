@@ -496,6 +496,18 @@
 				<textFieldExpression><![CDATA[$F{offer}.getSiteSurveyReport().getPlant().getEmailStr()]]></textFieldExpression>
 			</textField>
 		</band>
+		<band height="95">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<printWhenExpression><![CDATA[!$F{currentJobOrder}.getReferees().isEmpty()]]></printWhenExpression>
+			<subreport>
+				<reportElement key="" x="0" y="0" width="575" height="75" isRemoveLineWhenBlank="true" uuid="3765e90b-db57-4c8a-afbb-3b4a4a2bf086">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{currentJobOrder}.getReferees())]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{subReportPath} + "referee.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
 		<band height="55">
 			<staticText>
 				<reportElement x="0" y="0" width="185" height="15" uuid="a93f00e9-5ca7-4ba5-a72b-cf131998c5ef">
@@ -753,20 +765,6 @@
 				</textElement>
 				<text><![CDATA[Composizione impianto]]></text>
 			</staticText>
-			<textField isBlankWhenNull="true">
-				<reportElement x="210" y="0" width="137" height="15" uuid="ba12c89d-e4aa-4b0c-a2c3-1e355a96ecd6">
-					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
-					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
-					<property name="com.jaspersoft.studio.unit.x" value="px"/>
-					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
-				<textElement verticalAlignment="Middle">
-					<font isBold="true"/>
-					<paragraph leftIndent="2" rightIndent="2"/>
-				</textElement>
-				<textFieldExpression><![CDATA[Locale.getDefault().toString()]]></textFieldExpression>
-			</textField>
 			<subreport>
 				<reportElement key="" x="0" y="20" width="575" height="30" isRemoveLineWhenBlank="true" uuid="61f4e6ec-1944-4858-9d72-7cba8a765f49">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>

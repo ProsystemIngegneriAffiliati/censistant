@@ -2,6 +2,7 @@ eclipse.preferences.version=1
 encoding//src/main/webapp/WEB-INF/document/jobOrder/area.jrxml=UTF-8
 encoding//src/main/webapp/WEB-INF/document/jobOrder/device.jrxml=UTF-8
 encoding//src/main/webapp/WEB-INF/document/jobOrder/jobOrder.jrxml=UTF-8
+encoding//src/main/webapp/WEB-INF/document/jobOrder/referee.jrxml=UTF-8
 encoding//src/main/webapp/WEB-INF/document/maintenance/device.jrxml=UTF-8
 encoding//src/main/webapp/WEB-INF/document/maintenance/inspectionDone.jrxml=UTF-8
 encoding//src/main/webapp/WEB-INF/document/maintenance/maintenancePayment.jrxml=UTF-8
