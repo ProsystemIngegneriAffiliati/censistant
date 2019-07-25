@@ -128,10 +128,9 @@ public class JobOrderService implements Serializable{
         }
         
         CustomerSupplier customer = jobOrder.getOffer().getSiteSurveyReport().getPlant().getCustomerSupplier();
-        if (customer.getIsPotentialCustomer()) {
+        if (customer.getIsPotentialCustomer())
             customer.setIsPotentialCustomer(Boolean.FALSE);
-            customerSupplierService.saveCustomerSupplier(customer);
-        }
+        customerSupplierService.saveCustomerSupplier(customer);
         
         return jobOrder;
     }

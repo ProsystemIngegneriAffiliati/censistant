@@ -19,6 +19,7 @@ package com.prosystemingegneri.censistant.presentation.sales;
 import com.prosystemingegneri.censistant.business.customerSupplier.boundary.CustomerSupplierService;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
+import com.prosystemingegneri.censistant.business.customerSupplier.entity.Referee;
 import com.prosystemingegneri.censistant.business.production.entity.Area;
 import com.prosystemingegneri.censistant.business.production.entity.Device;
 import com.prosystemingegneri.censistant.business.production.entity.System;
@@ -97,6 +98,8 @@ public class JobOrderPresenter implements Serializable{
     private SiteSurveyReport dummyReport;
     
     private List<CustomerSupplier> customers;
+    
+    private Referee referee;
     
     private List<Plant> plants;
     
@@ -260,6 +263,30 @@ public class JobOrderPresenter implements Serializable{
         if (plants == null || plants.isEmpty())
             plants = customerSupplierService.listPlants(0, 0, null, null, jobOrder.getOffer().getSiteSurveyReport().getRequest().getCustomer(), null, null, null);
         return plants;
+    }
+    
+    public List<Referee> completeReferees(String value) {
+        List<Referee> result = new ArrayList<>();
+        if (jobOrder != null && jobOrder.getOffer() != null) {
+            List<Referee> avaibleReferees = new ArrayList<>(jobOrder.getOffer().getSiteSurveyReport().getPlant().getCustomerSupplier().getReferees());
+            for (Referee takenReferee : jobOrder.getReferees())
+                avaibleReferees.remove(takenReferee);
+            
+            for (Referee avaibleReferee : avaibleReferees)
+                if (value.isEmpty() || (!value.isEmpty() && value.compareToIgnoreCase(avaibleReferee.getName()) == 0))
+                    result.add(avaibleReferee);
+        }
+        return result;
+    }
+    
+    public void onRefereeSelect(SelectEvent event) {
+        jobOrder.getReferees().add(referee);
+    }
+    
+    public void addNewReferee() {
+        Referee refereeToBeAdded = new Referee();
+        jobOrder.getOffer().getSiteSurveyReport().getPlant().getCustomerSupplier().addReferee(refereeToBeAdded);
+        jobOrder.getReferees().add(refereeToBeAdded);
     }
     
     public void createNewArea() {
@@ -430,4 +457,13 @@ public class JobOrderPresenter implements Serializable{
         if (finalTotalHours == null)
             finalTotalHours = BigDecimal.ZERO;
     }
+
+    public Referee getReferee() {
+        return referee;
+    }
+
+    public void setReferee(Referee referee) {
+        this.referee = referee;
+    }
+    
 }

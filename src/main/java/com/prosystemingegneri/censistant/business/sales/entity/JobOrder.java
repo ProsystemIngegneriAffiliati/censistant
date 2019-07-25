@@ -17,6 +17,7 @@
 package com.prosystemingegneri.censistant.business.sales.entity;
 
 import com.prosystemingegneri.censistant.business.control.SignatureImageConverter;
+import com.prosystemingegneri.censistant.business.customerSupplier.entity.Referee;
 import com.prosystemingegneri.censistant.business.entity.BaseEntity;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.Worker;
 import java.awt.Image;
@@ -72,6 +73,9 @@ public class JobOrder extends BaseEntity<Long> {
     private PlaceType placeType;
     
     @ManyToMany
+    private List<Referee> referees;
+    
+    @ManyToMany
     private List<Worker> workers;
     
     @Temporal(TemporalType.DATE)
@@ -106,6 +110,7 @@ public class JobOrder extends BaseEntity<Long> {
         creation = new Date();
         installation = new Date();
         workers = new ArrayList<>();
+        referees = new ArrayList<>();
     }
 
     public JobOrder(Integer number) {
@@ -191,6 +196,14 @@ public class JobOrder extends BaseEntity<Long> {
 
     public void setWorkers(List<Worker> workers) {
         this.workers = workers;
+    }
+
+    public List<Referee> getReferees() {
+        return referees;
+    }
+
+    public void setReferees(List<Referee> referees) {
+        this.referees = referees;
     }
 
     public Date getInstallation() {

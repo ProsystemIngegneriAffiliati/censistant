@@ -57,6 +57,14 @@ public class Referee extends BaseEntity<Long>{
     public Referee() {
     }
 
+    public Referee(String name, String phone, String mobile, String email) {
+        this();
+        this.name = name;
+        this.phone = phone;
+        this.mobile = mobile;
+        this.email = email;
+    }
+
     public CustomerSupplier getCustomerSupplier() {
         return customerSupplier;
     }

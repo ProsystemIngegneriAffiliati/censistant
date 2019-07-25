@@ -167,6 +167,59 @@
                                             <p:message for="customerOrderNumber"/>
                                         </h:panelGroup>
                                     </p:panelGrid>
+                                    <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                        <p:dataTable id="refereesTable"
+                                                     var="referee"
+                                                     value="#{jobOrderPresenter.jobOrder.referees}"
+                                                     editable="true" editMode="cell">
+                                            <f:facet name="header">
+                                                <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
+                                                    #{msg.sales_jobOrder_referees}
+                                                    <p:outputPanel style="display: inline-block">
+                                                        <p:autoComplete id="referee"
+                                                                        dropdown="true"
+                                                                        value="#{jobOrderPresenter.referee}"
+                                                                        completeMethod="#{jobOrderPresenter.completeReferees}"
+                                                                        var="referee"
+                                                                        itemLabel="#{referee.name}"
+                                                                        itemValue="#{referee}"
+                                                                        forceSelection="true">
+                                                            <p:ajax event="itemSelect" listener="#{jobOrderPresenter.onRefereeSelect}" update="refereesTable" />
+                                                            <oou:converter converterId="omnifaces.ListConverter" list="#{jobOrderPresenter.jobOrder.offer.siteSurveyReport.plant.customerSupplier.referees}" />
+                                                        </p:autoComplete>
+                                                        <p:commandButton title="#{msg.new}" icon="ui-icon-create" action="#{jobOrderPresenter.addNewReferee()}" update="refereesTable" />
+                                                    </p:outputPanel>
+                                                </p:panelGrid>
+                                            </f:facet>
+                                            <p:column headerText="#{msg.customerSupplier_referee_name}" priority="0">
+                                                <p:cellEditor>
+                                                    <f:facet name="output"><h:outputText value="#{referee.name}" /></f:facet>
+                                                    <f:facet name="input"><p:inputText value="#{referee.name}" /></f:facet>
+                                                </p:cellEditor>
+                                            </p:column>
+                                            <p:column headerText="#{msg.customerSupplier_referee_email}" priority="2">
+                                                <p:cellEditor>
+                                                    <f:facet name="output"><h:outputText value="#{referee.email}" /></f:facet>
+                                                    <f:facet name="input"><p:inputText value="#{referee.email}" /></f:facet>
+                                                </p:cellEditor>
+                                            </p:column>
+                                            <p:column headerText="#{msg.customerSupplier_referee_phone}" priority="3">
+                                                <p:cellEditor>
+                                                    <f:facet name="output"><h:outputText value="#{referee.phone}" /></f:facet>
+                                                    <f:facet name="input"><p:inputText value="#{referee.phone}" /></f:facet>
+                                                </p:cellEditor>
+                                            </p:column>
+                                            <p:column headerText="#{msg.customerSupplier_referee_mobile}" priority="4">
+                                                <p:cellEditor>
+                                                    <f:facet name="output"><h:outputText value="#{referee.mobile}" /></f:facet>
+                                                    <f:facet name="input"><p:inputText value="#{referee.mobile}" /></f:facet>
+                                                </p:cellEditor>
+                                            </p:column>
+                                            <p:column headerText="#{msg.actions}" style="width:72px; text-align:center" priority="0">
+                                                <p:commandButton title="#{msg.sales_jobOrder_referees_remove}" icon="ui-icon-delete" actionListener="#{jobOrderPresenter.jobOrder.referees.remove(referee)}" update="refereesTable" />
+                                            </p:column>
+                                        </p:dataTable>
+                                    </p:panelGrid>
                                     <p:panelGrid columns="2" columnClasses="ui-grid-col-4,ui-grid-col-8" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                         <h:panelGroup>
                                             <p:outputLabel for="installation" value="#{msg.sales_jobOrder_installation}"/>
