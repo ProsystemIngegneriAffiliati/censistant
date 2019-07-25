@@ -38,462 +38,460 @@
                                     </p:commandButton>
                                 </p:panelGrid>
 
-                                <p:tabView id="jobOrderTabs" dynamic="true" activeIndex="#{jobOrderPresenter.activeIndex}">
-                                    <p:tab title="#{msg.sales_jobOrder_customerData}">
-                                        <p:panel header="#{msg.siteSurvey_siteSurveyReport}" style="margin-bottom: 25px">
-                                            <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group" rendered="#{jobOrderPresenter.jobOrder.offer.id == null}">
-                                                <h:panelGroup id="reportPanelGroup">
-                                                    <h:panelGroup styleClass="md-inputfield" rendered="#{jobOrderPresenter.dummyOffer == null}">
-                                                        <p:autoComplete id="report"
-                                                                        dropdown="true"
-                                                                        value="#{jobOrderPresenter.dummyReport}"
-                                                                        completeMethod="#{siteSurveyReportListPresenter.completeReportsNotAssociatedToOffer}"
-                                                                        var="rep"
-                                                                        itemLabel="#{rep.plant.customerSupplier.name} - #{of:formatDate(rep.expected, 'dd/MM/yyyy')} - #{rep.request.systemType.name}"
-                                                                        itemValue="#{rep}"
-                                                                        forceSelection="true"
-                                                                        >
-                                                            <oou:converter converterId="omnifaces.ListConverter" list="#{siteSurveyReportListPresenter.reportsNotAssociatedToOffer}"/>
-                                                            <p:ajax event="itemSelect" listener="#{jobOrderPresenter.onSiteSurveyReportSelect}" update="offerAndReportData" />
-                                                        </p:autoComplete>
-                                                        <p:outputLabel for="report" value="#{msg.siteSurvey_siteSurveyReports}"/>
-                                                        <p:message for="report"/>
-                                                    </h:panelGroup>
-                                                </h:panelGroup>
-                                            </p:panelGrid>
-
-                                            <p:panelGrid id="offerAndReportData" columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
-                                                <h:panelGroup styleClass="md-inputfield">
-                                                    <h:panelGroup id="newCustomer">
-                                                        <p:commandButton rendered="#{jobOrderPresenter.jobOrder.offer.siteSurveyReport.request.customer == null}"
-                                                                         action="#{jobOrderPresenter.createCustomer()}"
-                                                                         title="#{msg.new} #{msg.customerSupplier_customer}"
-                                                                         icon="ui-icon-create"
-                                                                         ajax="false">
-                                                            <oou:ignoreValidationFailed />
-                                                        </p:commandButton>
-                                                    </h:panelGroup>
-                                                    <p:autoComplete id="requestCustomer"
+                                <p:panel header="#{msg.sales_jobOrder_customerData}" style="margin-bottom: 25px">
+                                    <p:panel header="#{msg.siteSurvey_siteSurveyReport}" style="margin-bottom: 25px">
+                                        <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group" rendered="#{jobOrderPresenter.jobOrder.offer.id == null}">
+                                            <h:panelGroup id="reportPanelGroup">
+                                                <h:panelGroup styleClass="md-inputfield" rendered="#{jobOrderPresenter.dummyOffer == null}">
+                                                    <p:autoComplete id="report"
                                                                     dropdown="true"
-                                                                    value="#{jobOrderPresenter.jobOrder.offer.siteSurveyReport.request.customer}"
-                                                                    completeMethod="#{jobOrderPresenter.completeCustomer}"
-                                                                    var="cust"
-                                                                    itemLabel="#{cust.name}"
-                                                                    itemValue="#{cust}"
+                                                                    value="#{jobOrderPresenter.dummyReport}"
+                                                                    completeMethod="#{siteSurveyReportListPresenter.completeReportsNotAssociatedToOffer}"
+                                                                    var="rep"
+                                                                    itemLabel="#{rep.plant.customerSupplier.name} - #{of:formatDate(rep.expected, 'dd/MM/yyyy')} - #{rep.request.systemType.name}"
+                                                                    itemValue="#{rep}"
                                                                     forceSelection="true"
-                                                                    disabled="#{jobOrderPresenter.jobOrder.offer.siteSurveyReport.request.id != null}">
-                                                        <oou:converter converterId="omnifaces.ListConverter" list="#{jobOrderPresenter.customers}"/>
-                                                        <p:ajax event="itemSelect" listener="#{jobOrderPresenter.onRequestCustomerSelect}" update="newCustomer openCustomer plant" />
+                                                                    >
+                                                        <oou:converter converterId="omnifaces.ListConverter" list="#{siteSurveyReportListPresenter.reportsNotAssociatedToOffer}"/>
+                                                        <p:ajax event="itemSelect" listener="#{jobOrderPresenter.onSiteSurveyReportSelect}" update="offerAndReportData" />
                                                     </p:autoComplete>
-                                                    <p:outputLabel for="requestCustomer" value="#{msg.customerSupplier_customer}"/>
-                                                    <p:message for="requestCustomer"/>
+                                                    <p:outputLabel for="report" value="#{msg.siteSurvey_siteSurveyReports}"/>
+                                                    <p:message for="report"/>
                                                 </h:panelGroup>
+                                            </h:panelGroup>
+                                        </p:panelGrid>
 
-                                                <h:panelGroup styleClass="md-inputfield">
-                                                    <h:panelGroup id="openCustomer">
-                                                        <p:commandButton rendered="#{jobOrderPresenter.jobOrder.offer.siteSurveyReport.plant == null}"
-                                                                         action="#{jobOrderPresenter.openCustomer()}"
-                                                                         title="#{msg.new} #{msg.siteSurvey_siteSurveyReport_constructionSite}"
-                                                                         icon="ui-icon-create"
-                                                                         ajax="false">
-                                                            <oou:ignoreValidationFailed />
-                                                        </p:commandButton>
-                                                    </h:panelGroup>
-                                                    <p:autoComplete id="plant"
-                                                                    dropdown="true"
-                                                                    value="#{jobOrderPresenter.jobOrder.offer.siteSurveyReport.plant}"
-                                                                    completeMethod="#{jobOrderPresenter.completePlant}"
-                                                                    var="plant"
-                                                                    itemLabel="#{plant.address}"
-                                                                    itemValue="#{plant}"
-                                                                    forceSelection="true">
-                                                        <oou:converter converterId="omnifaces.ListConverter" list="#{jobOrderPresenter.plants}"/>
-                                                        <p:ajax event="itemSelect" update="openCustomer" />
-                                                    </p:autoComplete>
-                                                    <p:outputLabel for="plant" value="#{msg.siteSurvey_siteSurveyReport_constructionSite}"/>
-                                                    <p:message for="plant"/>
-                                                </h:panelGroup>
-
-                                                <h:panelGroup styleClass="md-inputfield">
-                                                    <p:autoComplete id="requestSystemType"
-                                                                    dropdown="true"
-                                                                    value="#{jobOrderPresenter.jobOrder.offer.siteSurveyReport.request.systemType}"
-                                                                    completeMethod="#{systemTypeListPresenter.completeSystemTypes}"
-                                                                    var="syst"
-                                                                    itemLabel="#{syst.name}"
-                                                                    itemValue="#{syst}"
-                                                                    forceSelection="true"
-                                                                    disabled="#{jobOrderPresenter.jobOrder.offer.siteSurveyReport.request.id != null}">
-                                                        <oou:converter converterId="omnifaces.ListConverter" list="#{systemTypeListPresenter.systemTypes}"/>
-                                                    </p:autoComplete>
-                                                    <p:outputLabel for="requestSystemType" value="#{msg.siteSurvey_systemType_name}"/>
-                                                    <p:message for="requestSystemType"/>
-                                                </h:panelGroup>
-
-                                                <h:panelGroup styleClass="md-inputfield">
-                                                    <p:autoComplete id="seller"
-                                                                    dropdown="true"
-                                                                    value="#{jobOrderPresenter.jobOrder.offer.siteSurveyReport.seller}"
-                                                                    completeMethod="#{workerListPresenter.completeWorkers}"
-                                                                    var="worker"
-                                                                    itemLabel="#{worker.initials}"
-                                                                    itemValue="#{worker}"
-                                                                    forceSelection="true">
-                                                        <oou:converter converterId="omnifaces.ListConverter" list="#{workerListPresenter.workers}"/>
-                                                    </p:autoComplete>
-                                                    <p:outputLabel for="seller" value="#{msg.siteSurvey_siteSurveyReport_seller}"/>
-                                                    <p:message for="seller"/>
-                                                </h:panelGroup>
-                                            </p:panelGrid>
-                                        </p:panel>
-                                        <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                        <p:panelGrid id="offerAndReportData" columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                             <h:panelGroup styleClass="md-inputfield">
-                                                <p:autoComplete id="placeType"
+                                                <h:panelGroup id="newCustomer">
+                                                    <p:commandButton rendered="#{jobOrderPresenter.jobOrder.offer.siteSurveyReport.request.customer == null}"
+                                                                     action="#{jobOrderPresenter.createCustomer()}"
+                                                                     title="#{msg.new} #{msg.customerSupplier_customer}"
+                                                                     icon="ui-icon-create"
+                                                                     ajax="false">
+                                                        <oou:ignoreValidationFailed />
+                                                    </p:commandButton>
+                                                </h:panelGroup>
+                                                <p:autoComplete id="requestCustomer"
                                                                 dropdown="true"
-                                                                value="#{jobOrderPresenter.jobOrder.placeType}"
-                                                                completeMethod="#{placeTypeListPresenter.completePlaceTypes}"
-                                                                var="placeType"
-                                                                itemLabel="#{placeType.name}"
-                                                                itemValue="#{placeType}"
-                                                                forceSelection="true">
-                                                    <oou:converter converterId="omnifaces.ListConverter" list="#{placeTypeListPresenter.placeTypes}"/>
+                                                                value="#{jobOrderPresenter.jobOrder.offer.siteSurveyReport.request.customer}"
+                                                                completeMethod="#{jobOrderPresenter.completeCustomer}"
+                                                                var="cust"
+                                                                itemLabel="#{cust.name}"
+                                                                itemValue="#{cust}"
+                                                                forceSelection="true"
+                                                                disabled="#{jobOrderPresenter.jobOrder.offer.siteSurveyReport.request.id != null}">
+                                                    <oou:converter converterId="omnifaces.ListConverter" list="#{jobOrderPresenter.customers}"/>
+                                                    <p:ajax event="itemSelect" listener="#{jobOrderPresenter.onRequestCustomerSelect}" update="newCustomer openCustomer plant" />
                                                 </p:autoComplete>
-                                                <p:outputLabel for="placeType" value="#{msg.sales_placeType}"/>
-                                                <p:message for="placeType"/>
+                                                <p:outputLabel for="requestCustomer" value="#{msg.customerSupplier_customer}"/>
+                                                <p:message for="requestCustomer"/>
                                             </h:panelGroup>
 
                                             <h:panelGroup styleClass="md-inputfield">
-                                                <p:inputText id="customerOrderNumber" value="#{jobOrderPresenter.jobOrder.customerOrderNumber}"/>
-                                                <p:outputLabel for="customerOrderNumber" value="#{msg.sales_jobOrder_customerOrderNumber}"/>
-                                                <p:message for="customerOrderNumber"/>
+                                                <h:panelGroup id="openCustomer">
+                                                    <p:commandButton rendered="#{jobOrderPresenter.jobOrder.offer.siteSurveyReport.plant == null}"
+                                                                     action="#{jobOrderPresenter.openCustomer()}"
+                                                                     title="#{msg.new} #{msg.siteSurvey_siteSurveyReport_constructionSite}"
+                                                                     icon="ui-icon-create"
+                                                                     ajax="false">
+                                                        <oou:ignoreValidationFailed />
+                                                    </p:commandButton>
+                                                </h:panelGroup>
+                                                <p:autoComplete id="plant"
+                                                                dropdown="true"
+                                                                value="#{jobOrderPresenter.jobOrder.offer.siteSurveyReport.plant}"
+                                                                completeMethod="#{jobOrderPresenter.completePlant}"
+                                                                var="plant"
+                                                                itemLabel="#{plant.address}"
+                                                                itemValue="#{plant}"
+                                                                forceSelection="true">
+                                                    <oou:converter converterId="omnifaces.ListConverter" list="#{jobOrderPresenter.plants}"/>
+                                                    <p:ajax event="itemSelect" update="openCustomer" />
+                                                </p:autoComplete>
+                                                <p:outputLabel for="plant" value="#{msg.siteSurvey_siteSurveyReport_constructionSite}"/>
+                                                <p:message for="plant"/>
+                                            </h:panelGroup>
+
+                                            <h:panelGroup styleClass="md-inputfield">
+                                                <p:autoComplete id="requestSystemType"
+                                                                dropdown="true"
+                                                                value="#{jobOrderPresenter.jobOrder.offer.siteSurveyReport.request.systemType}"
+                                                                completeMethod="#{systemTypeListPresenter.completeSystemTypes}"
+                                                                var="syst"
+                                                                itemLabel="#{syst.name}"
+                                                                itemValue="#{syst}"
+                                                                forceSelection="true"
+                                                                disabled="#{jobOrderPresenter.jobOrder.offer.siteSurveyReport.request.id != null}">
+                                                    <oou:converter converterId="omnifaces.ListConverter" list="#{systemTypeListPresenter.systemTypes}"/>
+                                                </p:autoComplete>
+                                                <p:outputLabel for="requestSystemType" value="#{msg.siteSurvey_systemType_name}"/>
+                                                <p:message for="requestSystemType"/>
+                                            </h:panelGroup>
+
+                                            <h:panelGroup styleClass="md-inputfield">
+                                                <p:autoComplete id="seller"
+                                                                dropdown="true"
+                                                                value="#{jobOrderPresenter.jobOrder.offer.siteSurveyReport.seller}"
+                                                                completeMethod="#{workerListPresenter.completeWorkers}"
+                                                                var="worker"
+                                                                itemLabel="#{worker.initials}"
+                                                                itemValue="#{worker}"
+                                                                forceSelection="true">
+                                                    <oou:converter converterId="omnifaces.ListConverter" list="#{workerListPresenter.workers}"/>
+                                                </p:autoComplete>
+                                                <p:outputLabel for="seller" value="#{msg.siteSurvey_siteSurveyReport_seller}"/>
+                                                <p:message for="seller"/>
                                             </h:panelGroup>
                                         </p:panelGrid>
-                                        <p:panelGrid columns="2" columnClasses="ui-grid-col-4,ui-grid-col-8" layout="grid" styleClass="ui-panelgrid-blank form-group">
-                                            <h:panelGroup>
-                                                <p:outputLabel for="installation" value="#{msg.sales_jobOrder_installation}"/>
-                                                <p:calendar id="installation" value="#{jobOrderPresenter.jobOrder.installation}" locale="it" />
-                                                <p:message for="installation"/>
-                                            </h:panelGroup>
-                                            <h:panelGroup>
-                                                <p:outputLabel for="workers" value="#{msg.sales_jobOrder_workers}"/>
-                                                <p:selectManyCheckbox id="workers"
-                                                                      value="#{jobOrderPresenter.jobOrder.workers}"
-                                                                      layout="responsive"
-                                                                      columns="3"
-                                                                      converter="omnifaces.SelectItemsConverter">
-                                                    <f:selectItems value="#{workerListPresenter.workers}"
-                                                                   var="worker"
-                                                                   itemLabel="#{worker.initials}"
-                                                                   itemValue="#{worker}" />
-                                                </p:selectManyCheckbox>
-                                                <p:message for="workers"/>
-                                            </h:panelGroup>
-                                        </p:panelGrid>
-                                    </p:tab>
-                                    <p:tab title="#{msg.sales_jobOrder_expected}">
-                                        <p:panelGrid columns="3" columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group">
-                                            <h:panelGroup styleClass="md-inputfield">
-                                                <p:calendar id="expectedInstallation" value="#{jobOrderPresenter.jobOrder.expectedInstallation}" locale="it" />
-                                                <p:outputLabel for="expectedInstallation" value="#{msg.sales_jobOrder_expectedInstallation}"/>
-                                                <p:message for="expectedInstallation"/>
-                                            </h:panelGroup>
-                                            <h:panelGroup styleClass="md-inputfield">
-                                                <p:inputNumber id="expectedManHours" value="#{jobOrderPresenter.jobOrder.expectedManHours}" decimalPlaces="0" />
-                                                <p:outputLabel for="expectedManHours" value="#{msg.sales_jobOrder_expectedManHours}" />
-                                                <p:message for="expectedManHours"/>
-                                            </h:panelGroup>
-                                            <h:panelGroup styleClass="md-inputfield">
-                                                <p:inputNumber id="expectedWorkers" value="#{jobOrderPresenter.jobOrder.expectedWorkers}" decimalPlaces="0" />
-                                                <p:outputLabel for="expectedWorkers" value="#{msg.sales_jobOrder_expectedWorkers}" />
-                                                <p:message for="expectedWorkers"/>
-                                            </h:panelGroup>
-                                        </p:panelGrid>
-                                    </p:tab>
-                                    <p:tab title="#{msg.sales_jobOrder_final}">
-                                        <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
-                                            <h:panelGroup styleClass="md-inputfield">
-                                                <p:inputNumber id="expectedTotalHours" readonly="true" value="#{jobOrderPresenter.jobOrder.expectedManHours * jobOrderPresenter.jobOrder.expectedWorkers}" decimalPlaces="0" />
-                                                <p:outputLabel for="expectedTotalHours" value="#{msg.sales_jobOrder_expectedTotalHours}" />
-                                                <p:message for="expectedTotalHours"/>
-                                            </h:panelGroup>
-                                            <h:panelGroup styleClass="md-inputfield">
-                                                <p:inputNumber id="finalTotalHours" readonly="true" value="#{jobOrderPresenter.finalTotalHours}" />
-                                                <p:outputLabel for="finalTotalHours" value="#{msg.sales_jobOrder_finalTotalHours}" />
-                                                <p:message for="finalTotalHours"/>
-                                            </h:panelGroup>
-                                        </p:panelGrid>
-                                        <p:dataTable id="timeSpentTable"
-                                                     var="timeSpent"
-                                                     value="#{jobOrderPresenter.lazyTimeSpent}"
-                                                     paginator="true" rows="10" paginatorAlwaysVisible="false"
-                                                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                                     rowsPerPageTemplate="10,25,50" lazy="true">
-                                            <f:facet name="header">
-                                                <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
-                                                    #{msg.sales_timeSpent}
-                                                    <p:outputPanel>
-                                                    </p:outputPanel>
-                                                </p:panelGrid>
-                                            </f:facet>
-                                            <p:column headerText="#{msg.siteSurvey_worker}" field="workerName" priority="2">
-                                                <h:outputText value="#{timeSpent.worker.name}" />
-                                            </p:column>
-                                            <p:column headerText="#{msg.sales_workingOperation}" field="workingOperationName" priority="4">
-                                                <h:outputText value="#{timeSpent.workingOperation.name}" />
-                                            </p:column>
-                                            <p:column headerText="#{msg.sales_timeSpent_creation}" field="creation" filterable="false" priority="3">
-                                                <h:outputText value="#{timeSpent.creation}">
-                                                    <f:convertDateTime />
-                                                </h:outputText>
-                                            </p:column>
-                                            <p:column headerText="#{msg.sales_timeSpent_hoursSpent}" priority="0">
-                                                <h:outputText value="#{timeSpent.hoursSpent}">
-                                                    <f:convertNumber />
-                                                </h:outputText>
-                                            </p:column>
-                                        </p:dataTable>
-                                    </p:tab>
-                                    <p:tab title="#{msg.sales_jobOrder_systemData}">
-                                        <h:panelGroup id="systemData">
-                                            <p:dialog header="#{msg.production_systemAttachment_add_tip}"
-                                                      widgetVar="addSystemAttachmentDialog"
-                                                      modal="true"
-                                                      responsive="true"
-                                                      closeOnEscape="true">
-                                                <p:ajax event="close" update="systemAttachmentsTable" />
-                                                <p:messages id="addSystemAttachmentMessage" showDetail="true" />
-                                                <p:fileUpload
-                                                    auto="true"
-                                                    multiple="true"
-                                                    dragDropSupport="false"
-                                                    fileUploadListener="#{jobOrderPresenter.handleSystemAttachmentUpload}"
-                                                    update="addSystemAttachmentMessage"
-                                                    label="#{msg.choose}"/>
-                                            </p:dialog>
+                                    </p:panel>
+                                    <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:autoComplete id="placeType"
+                                                            dropdown="true"
+                                                            value="#{jobOrderPresenter.jobOrder.placeType}"
+                                                            completeMethod="#{placeTypeListPresenter.completePlaceTypes}"
+                                                            var="placeType"
+                                                            itemLabel="#{placeType.name}"
+                                                            itemValue="#{placeType}"
+                                                            forceSelection="true">
+                                                <oou:converter converterId="omnifaces.ListConverter" list="#{placeTypeListPresenter.placeTypes}"/>
+                                            </p:autoComplete>
+                                            <p:outputLabel for="placeType" value="#{msg.sales_placeType}"/>
+                                            <p:message for="placeType"/>
+                                        </h:panelGroup>
 
-                                            <p:panelGrid columns="2" columnClasses="ui-grid-col-7,ui-grid-col-5" layout="grid" styleClass="ui-panelgrid-blank form-group">
-                                                <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
-                                                    <h:panelGroup styleClass="md-inputfield">
-                                                        <p:inputText id="systemUserCode" value="#{jobOrderPresenter.jobOrder.offer.system.userCode}"/>
-                                                        <p:outputLabel for="systemUserCode" value="#{msg.production_system_userCode}"/>
-                                                        <p:message for="systemUserCode"/>
-                                                    </h:panelGroup>
-
-                                                    <h:panelGroup styleClass="md-inputfield">
-                                                        <p:inputText id="systemControlPanelPhoneNumber" value="#{jobOrderPresenter.jobOrder.offer.system.controlPanelPhoneNumber}"/>
-                                                        <p:outputLabel for="systemControlPanelPhoneNumber" value="#{msg.production_system_controlPanelPhoneNumber}"/>
-                                                        <p:message for="systemControlPanelPhoneNumber"/>
-                                                    </h:panelGroup>
-
-                                                    <h:panelGroup styleClass="md-inputfield">
-                                                        <p:inputText id="systemControlPanelPosition" value="#{jobOrderPresenter.jobOrder.offer.system.controlPanelPosition}"/>
-                                                        <p:outputLabel for="systemControlPanelPosition" value="#{msg.production_system_controlPanelPosition}"/>
-                                                        <p:message for="systemControlPanelPosition"/>
-                                                    </h:panelGroup>
-
-                                                    <h:panelGroup styleClass="md-inputfield">
-                                                        <p:inputText id="systemPowerSource" value="#{jobOrderPresenter.jobOrder.offer.system.powerSource}"/>
-                                                        <p:outputLabel for="systemPowerSource" value="#{msg.production_system_powerSource}"/>
-                                                        <p:message for="systemPowerSource"/>
-                                                    </h:panelGroup>
-                                                </p:panelGrid>
-
-                                                <p:dataTable id="systemAttachmentsTable"
-                                                             var="systemAttachment"
-                                                             value="#{jobOrderPresenter.jobOrder.offer.system.systemAttachments}">
-                                                    <f:facet name="header">
-                                                        <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
-                                                            #{msg.production_systemAttachments}
-                                                            <p:commandButton title="#{msg.new}" icon="ui-icon-create" onclick="PF('addSystemAttachmentDialog').show();" />
-                                                        </p:panelGrid>
-                                                    </f:facet>
-                                                    <p:column headerText="#{msg.production_systemAttachment_name}">
-                                                        <h:outputText value="#{systemAttachment.name}" />
-                                                    </p:column>
-                                                    <p:column headerText="#{msg.actions}" style="width:72px; text-align:center">
-                                                        <p:splitButton value="" icon="ui-icon-file-download" ajax="false">
-                                                            <p:fileDownload value="#{jobOrderPresenter.downloadSystemAttachment(systemAttachment)}" />
-                                                            <p:menuitem  value="#{msg.delete}" icon="ui-icon-delete" actionListener="#{jobOrderPresenter.jobOrder.offer.system.removeSystemAttachment(systemAttachment)}" update="systemAttachmentsTable">
-                                                                <p:confirm header="#{msg.production_systemAttachments_delete}" message="#{msg.production_systemAttachments_delete_tip}" icon="ui-icon-alert"/>
-                                                            </p:menuitem>
-                                                        </p:splitButton>
-                                                    </p:column>
-                                                </p:dataTable>
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:inputText id="customerOrderNumber" value="#{jobOrderPresenter.jobOrder.customerOrderNumber}"/>
+                                            <p:outputLabel for="customerOrderNumber" value="#{msg.sales_jobOrder_customerOrderNumber}"/>
+                                            <p:message for="customerOrderNumber"/>
+                                        </h:panelGroup>
+                                    </p:panelGrid>
+                                    <p:panelGrid columns="2" columnClasses="ui-grid-col-4,ui-grid-col-8" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                        <h:panelGroup>
+                                            <p:outputLabel for="installation" value="#{msg.sales_jobOrder_installation}"/>
+                                            <p:calendar id="installation" value="#{jobOrderPresenter.jobOrder.installation}" locale="it" />
+                                            <p:message for="installation"/>
+                                        </h:panelGroup>
+                                        <h:panelGroup>
+                                            <p:outputLabel for="workers" value="#{msg.sales_jobOrder_workers}"/>
+                                            <p:selectManyCheckbox id="workers"
+                                                                  value="#{jobOrderPresenter.jobOrder.workers}"
+                                                                  layout="responsive"
+                                                                  columns="3"
+                                                                  converter="omnifaces.SelectItemsConverter">
+                                                <f:selectItems value="#{workerListPresenter.workers}"
+                                                               var="worker"
+                                                               itemLabel="#{worker.initials}"
+                                                               itemValue="#{worker}" />
+                                            </p:selectManyCheckbox>
+                                            <p:message for="workers"/>
+                                        </h:panelGroup>
+                                    </p:panelGrid>
+                                </p:panel>
+                                <p:panel header="#{msg.sales_jobOrder_expected}" style="margin-bottom: 25px">
+                                    <p:panelGrid columns="3" columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:calendar id="expectedInstallation" value="#{jobOrderPresenter.jobOrder.expectedInstallation}" locale="it" />
+                                            <p:outputLabel for="expectedInstallation" value="#{msg.sales_jobOrder_expectedInstallation}"/>
+                                            <p:message for="expectedInstallation"/>
+                                        </h:panelGroup>
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:inputNumber id="expectedManHours" value="#{jobOrderPresenter.jobOrder.expectedManHours}" decimalPlaces="0" />
+                                            <p:outputLabel for="expectedManHours" value="#{msg.sales_jobOrder_expectedManHours}" />
+                                            <p:message for="expectedManHours"/>
+                                        </h:panelGroup>
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:inputNumber id="expectedWorkers" value="#{jobOrderPresenter.jobOrder.expectedWorkers}" decimalPlaces="0" />
+                                            <p:outputLabel for="expectedWorkers" value="#{msg.sales_jobOrder_expectedWorkers}" />
+                                            <p:message for="expectedWorkers"/>
+                                        </h:panelGroup>
+                                    </p:panelGrid>
+                                </p:panel>
+                                <p:panel header="#{msg.sales_jobOrder_final}" style="margin-bottom: 25px">
+                                    <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:inputNumber id="expectedTotalHours" readonly="true" value="#{jobOrderPresenter.jobOrder.expectedManHours * jobOrderPresenter.jobOrder.expectedWorkers}" decimalPlaces="0" />
+                                            <p:outputLabel for="expectedTotalHours" value="#{msg.sales_jobOrder_expectedTotalHours}" />
+                                            <p:message for="expectedTotalHours"/>
+                                        </h:panelGroup>
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:inputNumber id="finalTotalHours" readonly="true" value="#{jobOrderPresenter.finalTotalHours}" />
+                                            <p:outputLabel for="finalTotalHours" value="#{msg.sales_jobOrder_finalTotalHours}" />
+                                            <p:message for="finalTotalHours"/>
+                                        </h:panelGroup>
+                                    </p:panelGrid>
+                                    <p:dataTable id="timeSpentTable"
+                                                 var="timeSpent"
+                                                 value="#{jobOrderPresenter.lazyTimeSpent}"
+                                                 paginator="true" rows="10" paginatorAlwaysVisible="false"
+                                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                                 rowsPerPageTemplate="10,25,50" lazy="true">
+                                        <f:facet name="header">
+                                            <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
+                                                #{msg.sales_timeSpent}
+                                                <p:outputPanel>
+                                                </p:outputPanel>
                                             </p:panelGrid>
+                                        </f:facet>
+                                        <p:column headerText="#{msg.siteSurvey_worker}" field="workerName" priority="2">
+                                            <h:outputText value="#{timeSpent.worker.name}" />
+                                        </p:column>
+                                        <p:column headerText="#{msg.sales_workingOperation}" field="workingOperationName" priority="4">
+                                            <h:outputText value="#{timeSpent.workingOperation.name}" />
+                                        </p:column>
+                                        <p:column headerText="#{msg.sales_timeSpent_creation}" field="creation" filterable="false" priority="3">
+                                            <h:outputText value="#{timeSpent.creation}">
+                                                <f:convertDateTime />
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column headerText="#{msg.sales_timeSpent_hoursSpent}" priority="0">
+                                            <h:outputText value="#{timeSpent.hoursSpent}">
+                                                <f:convertNumber />
+                                            </h:outputText>
+                                        </p:column>
+                                    </p:dataTable>
+                                </p:panel>
+                                <p:panel header="#{msg.sales_jobOrder_systemData}" style="margin-bottom: 25px">
+                                    <h:panelGroup id="systemData">
+                                        <p:dialog header="#{msg.production_systemAttachment_add_tip}"
+                                                  widgetVar="addSystemAttachmentDialog"
+                                                  modal="true"
+                                                  responsive="true"
+                                                  closeOnEscape="true">
+                                            <p:ajax event="close" update="systemAttachmentsTable" />
+                                            <p:messages id="addSystemAttachmentMessage" showDetail="true" />
+                                            <p:fileUpload
+                                                auto="true"
+                                                multiple="true"
+                                                dragDropSupport="false"
+                                                fileUploadListener="#{jobOrderPresenter.handleSystemAttachmentUpload}"
+                                                update="addSystemAttachmentMessage"
+                                                label="#{msg.choose}"/>
+                                        </p:dialog>
 
+                                        <p:panelGrid columns="2" columnClasses="ui-grid-col-7,ui-grid-col-5" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                             <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                                 <h:panelGroup styleClass="md-inputfield">
-                                                    <p:inputTextarea id="systemNotes" value="#{jobOrderPresenter.jobOrder.offer.system.notes}"/>
-                                                    <p:outputLabel for="systemNotes" value="#{msg.production_system_notes}"/>
-                                                    <p:message for="systemNotes"/>
+                                                    <p:inputText id="systemUserCode" value="#{jobOrderPresenter.jobOrder.offer.system.userCode}"/>
+                                                    <p:outputLabel for="systemUserCode" value="#{msg.production_system_userCode}"/>
+                                                    <p:message for="systemUserCode"/>
+                                                </h:panelGroup>
+
+                                                <h:panelGroup styleClass="md-inputfield">
+                                                    <p:inputText id="systemControlPanelPhoneNumber" value="#{jobOrderPresenter.jobOrder.offer.system.controlPanelPhoneNumber}"/>
+                                                    <p:outputLabel for="systemControlPanelPhoneNumber" value="#{msg.production_system_controlPanelPhoneNumber}"/>
+                                                    <p:message for="systemControlPanelPhoneNumber"/>
+                                                </h:panelGroup>
+
+                                                <h:panelGroup styleClass="md-inputfield">
+                                                    <p:inputText id="systemControlPanelPosition" value="#{jobOrderPresenter.jobOrder.offer.system.controlPanelPosition}"/>
+                                                    <p:outputLabel for="systemControlPanelPosition" value="#{msg.production_system_controlPanelPosition}"/>
+                                                    <p:message for="systemControlPanelPosition"/>
+                                                </h:panelGroup>
+
+                                                <h:panelGroup styleClass="md-inputfield">
+                                                    <p:inputText id="systemPowerSource" value="#{jobOrderPresenter.jobOrder.offer.system.powerSource}"/>
+                                                    <p:outputLabel for="systemPowerSource" value="#{msg.production_system_powerSource}"/>
+                                                    <p:message for="systemPowerSource"/>
                                                 </h:panelGroup>
                                             </p:panelGrid>
-                                        </h:panelGroup>
-                                    </p:tab>
-                                    <p:tab title="#{msg.sales_jobOrder_systemDevices}">
-                                        <h:panelGroup id="systemDevices">
-                                            <p:dataTable id="devicesTable"
-                                                         var="device"
-                                                         value="#{jobOrderPresenter.jobOrder.offer.system.devices}">
+
+                                            <p:dataTable id="systemAttachmentsTable"
+                                                         var="systemAttachment"
+                                                         value="#{jobOrderPresenter.jobOrder.offer.system.systemAttachments}">
                                                 <f:facet name="header">
                                                     <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
-                                                        #{msg.production_devices}
-                                                        <p:outputPanel style="display: inline-block">
-                                                            <p:commandButton title="#{msg.warehouse_itemMovement}" icon="ui-icon-card-travel" action="#{jobOrderPresenter.openItemMovement()}" ajax="false">
-                                                                <oou:ignoreValidationFailed />
-                                                            </p:commandButton>
-                                                            <p:commandButton title="#{msg.add}" icon="ui-icon-add" action="#{jobOrderPresenter.detailDevice(null)}" ajax="false">
-                                                                <oou:ignoreValidationFailed />
-                                                            </p:commandButton>
-                                                        </p:outputPanel>
+                                                        #{msg.production_systemAttachments}
+                                                        <p:commandButton title="#{msg.new}" icon="ui-icon-create" onclick="PF('addSystemAttachmentDialog').show();" />
                                                     </p:panelGrid>
                                                 </f:facet>
-                                                <p:column headerText="#{msg.production_device_isImportant}" priority="4">
-                                                    <h:outputText value="#{device.isImportant ? 'X' : ''}"/>
+                                                <p:column headerText="#{msg.production_systemAttachment_name}">
+                                                    <h:outputText value="#{systemAttachment.name}" />
                                                 </p:column>
-                                                <p:column headerText="#{msg.production_device}" filterBy="#{device.supplierItem.codeAndDescription}" filterMatchMode="contains" priority="0">
-                                                    <h:outputText value="#{device.supplierItem.codeAndDescription}"/>
-                                                </p:column>
-                                                <p:column headerText="#{msg.production_device_quantity}" priority="2">
-                                                    <h:outputText value="#{device.quantity}">
-                                                        <f:convertNumber integerOnly="true" />
-                                                    </h:outputText>
-                                                </p:column>
-                                                <p:column headerText="#{msg.production_unitMeasure_symbol}" priority="4">
-                                                    <h:outputText value="#{device.supplierItem.item.unitMeasure.symbol}"/>
-                                                </p:column>
-                                                <p:column headerText="#{msg.production_device_placedQuantity}" priority="2">
-                                                    <h:outputText value="#{jobOrderPresenter.calculateDevicePlacedQuantity(device)}">
-                                                        <f:convertNumber integerOnly="true" />
-                                                    </h:outputText>
-                                                </p:column>
-                                                <p:column headerText="#{msg.actions}" style="width:72px; text-align:center" priority="0">
-                                                    <p:splitButton value="" icon="ui-icon-edit" action="#{jobOrderPresenter.detailDevice(device)}" ajax="false">
-                                                        <p:menuitem disabled="#{jobOrderPresenter.calculateDevicePlacedQuantity(device) > 0}"  value="#{msg.delete}" icon="ui-icon-delete" actionListener="#{jobOrderPresenter.deleteDevice(device)}" update="devicesTable">
-                                                            <p:confirm header="#{msg.production_devices_delete}" message="#{msg.production_devices_delete_tip}" icon="ui-icon-alert"/>
+                                                <p:column headerText="#{msg.actions}" style="width:72px; text-align:center">
+                                                    <p:splitButton value="" icon="ui-icon-file-download" ajax="false">
+                                                        <p:fileDownload value="#{jobOrderPresenter.downloadSystemAttachment(systemAttachment)}" />
+                                                        <p:menuitem  value="#{msg.delete}" icon="ui-icon-delete" actionListener="#{jobOrderPresenter.jobOrder.offer.system.removeSystemAttachment(systemAttachment)}" update="systemAttachmentsTable">
+                                                            <p:confirm header="#{msg.production_systemAttachments_delete}" message="#{msg.production_systemAttachments_delete_tip}" icon="ui-icon-alert"/>
                                                         </p:menuitem>
                                                     </p:splitButton>
                                                 </p:column>
                                             </p:dataTable>
-                                        </h:panelGroup>
-                                    </p:tab>
-                                    <p:tab title="#{msg.sales_jobOrder_areaList}">
-                                        <h:panelGroup id="areaList">
-                                            <p:dataTable id="areasTable"
-                                                         var="area"
-                                                         value="#{jobOrderPresenter.jobOrder.offer.system.areas}"
-                                                         editable="true" editMode="cell">
-                                                <f:facet name="header">
-                                                    <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
-                                                        #{msg.production_areas}
-                                                        <p:commandButton title="#{msg.new}" icon="ui-icon-create" action="#{jobOrderPresenter.createNewArea()}" update="areasTable" />
-                                                    </p:panelGrid>
-                                                </f:facet>
-                                                <p:column headerText="#{msg.production_area_number}" filterBy="#{area.number}" filterMatchMode="contains" priority="0">
-                                                    <p:cellEditor>
-                                                        <f:facet name="output"><h:outputText value="#{area.number}" /></f:facet>
-                                                        <f:facet name="input"><p:inputText value="#{area.number}" /></f:facet>
-                                                    </p:cellEditor>
-                                                </p:column>
-                                                <p:column headerText="#{msg.production_area_name}" filterBy="#{area.name}" filterMatchMode="contains" priority="2">
-                                                    <p:cellEditor>
-                                                        <f:facet name="output"><h:outputText value="#{area.name}" /></f:facet>
-                                                        <f:facet name="input"><p:inputText value="#{area.name}" /></f:facet>
-                                                    </p:cellEditor>
-                                                </p:column>
-                                                <p:column headerText="#{msg.purchasing_supplierItem}" filterBy="#{area.supplierItem.code} - #{area.supplierItem.item.description}" filterMatchMode="contains" priority="4">
-                                                    <p:cellEditor>
-                                                        <f:facet name="output"><h:outputText value="#{area.supplierItem.code} - #{area.supplierItem.item.description}" /></f:facet>
-                                                        <f:facet name="input">
-                                                            <p:autoComplete id="supplierItem"
-                                                                            dropdown="true"
-                                                                            value="#{area.supplierItem}"
-                                                                            completeMethod="#{supplierItemListPresenter.completeSupplierItems}"
-                                                                            var="supplierItem"
-                                                                            itemLabel="#{supplierItem.code} - #{supplierItem.item.description}"
-                                                                            itemValue="#{supplierItem}"
-                                                                            forceSelection="true">
-                                                                <oou:converter converterId="omnifaces.ListConverter" list="#{supplierItemListPresenter.getSupplierItems(area.supplierItem)}"/>
-                                                            </p:autoComplete>
-                                                        </f:facet>
-                                                    </p:cellEditor>
-                                                </p:column>
-                                                <p:column headerText="#{msg.production_deviceProgrammingType_name}" filterBy="#{area.deviceProgrammingType.name}" filterMatchMode="contains" priority="6">
-                                                    <p:cellEditor>
-                                                        <f:facet name="output"><h:outputText value="#{area.deviceProgrammingTypeStr}" /></f:facet>
-                                                        <f:facet name="input">
-                                                            <p:autoComplete id="deviceProgrammingType"
-                                                                            value="#{area.deviceProgrammingTypeStr}"
-                                                                            completeMethod="#{deviceProgrammingTypeListPresenter.completeDeviceProgrammingTypesStr}">
-                                                            </p:autoComplete>
-                                                        </f:facet>
-                                                    </p:cellEditor>
-                                                </p:column>
-                                                <p:column headerText="#{msg.production_area_field}" filterBy="#{area.field}" filterMatchMode="contains" priority="6">
-                                                    <p:cellEditor>
-                                                        <f:facet name="output"><h:outputText value="#{area.field}" /></f:facet>
-                                                        <f:facet name="input"><p:inputText value="#{area.field}" /></f:facet>
-                                                    </p:cellEditor>
-                                                </p:column>
-                                                <p:column headerText="#{msg.production_area_notes}" filterBy="#{area.notes}" filterMatchMode="contains" priority="7">
-                                                    <p:cellEditor>
-                                                        <f:facet name="output"><h:outputText value="#{area.notes}" /></f:facet>
-                                                        <f:facet name="input"><p:inputText value="#{area.notes}" /></f:facet>
-                                                    </p:cellEditor>
-                                                </p:column>
-                                                <p:column headerText="#{msg.actions}" style="width:72px; text-align:center" priority="0">
-                                                    <p:splitButton value="#{msg.duplicate}" icon="ui-icon-control-point-duplicate" action="#{jobOrderPresenter.duplicateArea(area)}" update="areasTable">
-                                                        <p:menuitem  value="#{msg.delete}" icon="ui-icon-delete" actionListener="#{jobOrderPresenter.deleteArea(area)}" update="areasTable" />
-                                                    </p:splitButton>
-                                                </p:column>
-                                            </p:dataTable>
-                                        </h:panelGroup>
-                                    </p:tab>
-                                    <p:tab title="#{msg.sales_jobOrder_signatures}">
-                                        <p:panelGrid columns="2" columnClasses="ui-grid-col-11,ui-grid-col-1" layout="grid" styleClass="ui-panelgrid-blank form-group">
-                                            <h:panelGroup styleClass="md-inputfield">
-                                                <p:outputLabel for="workerSignature" value="#{msg.sales_jobOrder_workerSignature}" />
-                                                <p:signature id="workerSignature"
-                                                             value="#{jobOrderPresenter.jobOrder.workerSignature}"
-                                                             guideline="true"
-                                                             style="width: 600px;height: 200px"
-                                                             readonly="#{not empty jobOrderPresenter.jobOrder.workerSignature}" />
-                                                <p:message for="workerSignature"/>
-                                            </h:panelGroup>
-                                            <p:commandButton action="#{jobOrderPresenter.clearWorkerSignature()}"
-                                                             title="#{msg.clear} #{msg.sales_jobOrder_workerSignature}"
-                                                             icon="ui-icon-clear"
-                                                             update="workerSignature">
-                                                <oou:ignoreValidationFailed />
-                                            </p:commandButton>
-
-                                            <h:panelGroup styleClass="md-inputfield">
-                                                <p:outputLabel for="customerSignature" value="#{msg.sales_jobOrder_customerSignature}" />
-                                                <p:signature id="customerSignature"
-                                                             value="#{jobOrderPresenter.jobOrder.customerSignature}"
-                                                             guideline="true"
-                                                             style="width: 600px;height: 200px"
-                                                             readonly="#{not empty jobOrderPresenter.jobOrder.customerSignature}" />
-                                                <p:message for="customerSignature"/>
-                                            </h:panelGroup>
-                                            <p:commandButton action="#{jobOrderPresenter.clearCustomerSignature()}"
-                                                             title="#{msg.clear} #{msg.sales_jobOrder_customerSignature}"
-                                                             icon="ui-icon-clear"
-                                                             update="customerSignature">
-                                                <oou:ignoreValidationFailed />
-                                            </p:commandButton>
                                         </p:panelGrid>
-                                    </p:tab>
-                                    <p:tab title="#{msg.sales_jobOrder_notes}">
+
                                         <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                             <h:panelGroup styleClass="md-inputfield">
-                                                <p:inputTextarea id="notes" value="#{jobOrderPresenter.jobOrder.notes}"/>
-                                                <p:outputLabel for="notes" value="#{msg.sales_jobOrder_notes}"/>
-                                                <p:message for="notes"/>
+                                                <p:inputTextarea id="systemNotes" value="#{jobOrderPresenter.jobOrder.offer.system.notes}"/>
+                                                <p:outputLabel for="systemNotes" value="#{msg.production_system_notes}"/>
+                                                <p:message for="systemNotes"/>
                                             </h:panelGroup>
                                         </p:panelGrid>
-                                    </p:tab>
-                                </p:tabView>
+                                    </h:panelGroup>
+                                </p:panel>
+                                <p:panel header="#{msg.sales_jobOrder_systemDevices}" style="margin-bottom: 25px">
+                                    <h:panelGroup id="systemDevices">
+                                        <p:dataTable id="devicesTable"
+                                                     var="device"
+                                                     value="#{jobOrderPresenter.jobOrder.offer.system.devices}">
+                                            <f:facet name="header">
+                                                <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
+                                                    #{msg.production_devices}
+                                                    <p:outputPanel style="display: inline-block">
+                                                        <p:commandButton title="#{msg.warehouse_itemMovement}" icon="ui-icon-card-travel" action="#{jobOrderPresenter.openItemMovement()}" ajax="false">
+                                                            <oou:ignoreValidationFailed />
+                                                        </p:commandButton>
+                                                        <p:commandButton title="#{msg.add}" icon="ui-icon-add" action="#{jobOrderPresenter.detailDevice(null)}" ajax="false">
+                                                            <oou:ignoreValidationFailed />
+                                                        </p:commandButton>
+                                                    </p:outputPanel>
+                                                </p:panelGrid>
+                                            </f:facet>
+                                            <p:column headerText="#{msg.production_device_isImportant}" priority="4">
+                                                <h:outputText value="#{device.isImportant ? 'X' : ''}"/>
+                                            </p:column>
+                                            <p:column headerText="#{msg.production_device}" filterBy="#{device.supplierItem.codeAndDescription}" filterMatchMode="contains" priority="0">
+                                                <h:outputText value="#{device.supplierItem.codeAndDescription}"/>
+                                            </p:column>
+                                            <p:column headerText="#{msg.production_device_quantity}" priority="2">
+                                                <h:outputText value="#{device.quantity}">
+                                                    <f:convertNumber integerOnly="true" />
+                                                </h:outputText>
+                                            </p:column>
+                                            <p:column headerText="#{msg.production_unitMeasure_symbol}" priority="4">
+                                                <h:outputText value="#{device.supplierItem.item.unitMeasure.symbol}"/>
+                                            </p:column>
+                                            <p:column headerText="#{msg.production_device_placedQuantity}" priority="2">
+                                                <h:outputText value="#{jobOrderPresenter.calculateDevicePlacedQuantity(device)}">
+                                                    <f:convertNumber integerOnly="true" />
+                                                </h:outputText>
+                                            </p:column>
+                                            <p:column headerText="#{msg.actions}" style="width:72px; text-align:center" priority="0">
+                                                <p:splitButton value="" icon="ui-icon-edit" action="#{jobOrderPresenter.detailDevice(device)}" ajax="false">
+                                                    <p:menuitem disabled="#{jobOrderPresenter.calculateDevicePlacedQuantity(device) > 0}"  value="#{msg.delete}" icon="ui-icon-delete" actionListener="#{jobOrderPresenter.deleteDevice(device)}" update="devicesTable">
+                                                        <p:confirm header="#{msg.production_devices_delete}" message="#{msg.production_devices_delete_tip}" icon="ui-icon-alert"/>
+                                                    </p:menuitem>
+                                                </p:splitButton>
+                                            </p:column>
+                                        </p:dataTable>
+                                    </h:panelGroup>
+                                </p:panel>
+                                <p:panel header="#{msg.sales_jobOrder_areaList}" style="margin-bottom: 25px">
+                                    <h:panelGroup id="areaList">
+                                        <p:dataTable id="areasTable"
+                                                     var="area"
+                                                     value="#{jobOrderPresenter.jobOrder.offer.system.areas}"
+                                                     editable="true" editMode="cell">
+                                            <f:facet name="header">
+                                                <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
+                                                    #{msg.production_areas}
+                                                    <p:commandButton title="#{msg.new}" icon="ui-icon-create" action="#{jobOrderPresenter.createNewArea()}" update="areasTable" />
+                                                </p:panelGrid>
+                                            </f:facet>
+                                            <p:column headerText="#{msg.production_area_number}" filterBy="#{area.number}" filterMatchMode="contains" priority="0">
+                                                <p:cellEditor>
+                                                    <f:facet name="output"><h:outputText value="#{area.number}" /></f:facet>
+                                                    <f:facet name="input"><p:inputText value="#{area.number}" /></f:facet>
+                                                </p:cellEditor>
+                                            </p:column>
+                                            <p:column headerText="#{msg.production_area_name}" filterBy="#{area.name}" filterMatchMode="contains" priority="2">
+                                                <p:cellEditor>
+                                                    <f:facet name="output"><h:outputText value="#{area.name}" /></f:facet>
+                                                    <f:facet name="input"><p:inputText value="#{area.name}" /></f:facet>
+                                                </p:cellEditor>
+                                            </p:column>
+                                            <p:column headerText="#{msg.purchasing_supplierItem}" filterBy="#{area.supplierItem.code} - #{area.supplierItem.item.description}" filterMatchMode="contains" priority="4">
+                                                <p:cellEditor>
+                                                    <f:facet name="output"><h:outputText value="#{area.supplierItem.code} - #{area.supplierItem.item.description}" /></f:facet>
+                                                    <f:facet name="input">
+                                                        <p:autoComplete id="supplierItem"
+                                                                        dropdown="true"
+                                                                        value="#{area.supplierItem}"
+                                                                        completeMethod="#{supplierItemListPresenter.completeSupplierItems}"
+                                                                        var="supplierItem"
+                                                                        itemLabel="#{supplierItem.code} - #{supplierItem.item.description}"
+                                                                        itemValue="#{supplierItem}"
+                                                                        forceSelection="true">
+                                                            <oou:converter converterId="omnifaces.ListConverter" list="#{supplierItemListPresenter.getSupplierItems(area.supplierItem)}"/>
+                                                        </p:autoComplete>
+                                                    </f:facet>
+                                                </p:cellEditor>
+                                            </p:column>
+                                            <p:column headerText="#{msg.production_deviceProgrammingType_name}" filterBy="#{area.deviceProgrammingType.name}" filterMatchMode="contains" priority="6">
+                                                <p:cellEditor>
+                                                    <f:facet name="output"><h:outputText value="#{area.deviceProgrammingTypeStr}" /></f:facet>
+                                                    <f:facet name="input">
+                                                        <p:autoComplete id="deviceProgrammingType"
+                                                                        value="#{area.deviceProgrammingTypeStr}"
+                                                                        completeMethod="#{deviceProgrammingTypeListPresenter.completeDeviceProgrammingTypesStr}">
+                                                        </p:autoComplete>
+                                                    </f:facet>
+                                                </p:cellEditor>
+                                            </p:column>
+                                            <p:column headerText="#{msg.production_area_field}" filterBy="#{area.field}" filterMatchMode="contains" priority="6">
+                                                <p:cellEditor>
+                                                    <f:facet name="output"><h:outputText value="#{area.field}" /></f:facet>
+                                                    <f:facet name="input"><p:inputText value="#{area.field}" /></f:facet>
+                                                </p:cellEditor>
+                                            </p:column>
+                                            <p:column headerText="#{msg.production_area_notes}" filterBy="#{area.notes}" filterMatchMode="contains" priority="7">
+                                                <p:cellEditor>
+                                                    <f:facet name="output"><h:outputText value="#{area.notes}" /></f:facet>
+                                                    <f:facet name="input"><p:inputText value="#{area.notes}" /></f:facet>
+                                                </p:cellEditor>
+                                            </p:column>
+                                            <p:column headerText="#{msg.actions}" style="width:72px; text-align:center" priority="0">
+                                                <p:splitButton value="#{msg.duplicate}" icon="ui-icon-control-point-duplicate" action="#{jobOrderPresenter.duplicateArea(area)}" update="areasTable">
+                                                    <p:menuitem  value="#{msg.delete}" icon="ui-icon-delete" actionListener="#{jobOrderPresenter.deleteArea(area)}" update="areasTable" />
+                                                </p:splitButton>
+                                            </p:column>
+                                        </p:dataTable>
+                                    </h:panelGroup>
+                                </p:panel>
+                                <p:panel header="#{msg.sales_jobOrder_signatures}" style="margin-bottom: 25px">
+                                    <p:panelGrid columns="2" columnClasses="ui-grid-col-11,ui-grid-col-1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:outputLabel for="workerSignature" value="#{msg.sales_jobOrder_workerSignature}" />
+                                            <p:signature id="workerSignature"
+                                                         value="#{jobOrderPresenter.jobOrder.workerSignature}"
+                                                         guideline="true"
+                                                         style="width: 600px;height: 200px"
+                                                         readonly="#{not empty jobOrderPresenter.jobOrder.workerSignature}" />
+                                            <p:message for="workerSignature"/>
+                                        </h:panelGroup>
+                                        <p:commandButton action="#{jobOrderPresenter.clearWorkerSignature()}"
+                                                         title="#{msg.clear} #{msg.sales_jobOrder_workerSignature}"
+                                                         icon="ui-icon-clear"
+                                                         update="workerSignature">
+                                            <oou:ignoreValidationFailed />
+                                        </p:commandButton>
+
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:outputLabel for="customerSignature" value="#{msg.sales_jobOrder_customerSignature}" />
+                                            <p:signature id="customerSignature"
+                                                         value="#{jobOrderPresenter.jobOrder.customerSignature}"
+                                                         guideline="true"
+                                                         style="width: 600px;height: 200px"
+                                                         readonly="#{not empty jobOrderPresenter.jobOrder.customerSignature}" />
+                                            <p:message for="customerSignature"/>
+                                        </h:panelGroup>
+                                        <p:commandButton action="#{jobOrderPresenter.clearCustomerSignature()}"
+                                                         title="#{msg.clear} #{msg.sales_jobOrder_customerSignature}"
+                                                         icon="ui-icon-clear"
+                                                         update="customerSignature">
+                                            <oou:ignoreValidationFailed />
+                                        </p:commandButton>
+                                    </p:panelGrid>
+                                </p:panel>
+                                <p:panel header="#{msg.sales_jobOrder_notes}" style="margin-bottom: 25px">
+                                    <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:inputTextarea id="notes" value="#{jobOrderPresenter.jobOrder.notes}"/>
+                                            <p:outputLabel for="notes" value="#{msg.sales_jobOrder_notes}"/>
+                                            <p:message for="notes"/>
+                                        </h:panelGroup>
+                                    </p:panelGrid>
+                                </p:panel>
 
                                 <div class="ui-g">
                                     <div class="ui-g-1 ui-md-2"></div>

@@ -62,6 +62,7 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.omnifaces.cdi.ViewScoped;
+import org.omnifaces.util.Messages;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.ToggleEvent;
 import org.primefaces.model.ByteArrayContent;
@@ -140,7 +141,11 @@ public class MaintenanceTaskPresenter implements Serializable{
             return null;
         }
         
-        return "/secured/maintenance/maintenanceTasks?faces-redirect=true";
+        Messages.create("success").detail("saved").flash().add();
+        if (id == 0L)
+            id = maintenanceTask.getId();
+        
+        return FacesContext.getCurrentInstance().getViewRoot().getViewId() + "?faces-redirect=true&includeViewParams=true";
     }
     
     public void detailMaintenanceTask() {

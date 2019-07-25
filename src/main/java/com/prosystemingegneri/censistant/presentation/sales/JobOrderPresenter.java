@@ -64,6 +64,7 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.apache.commons.io.FilenameUtils;
 import org.omnifaces.cdi.ViewScoped;
+import org.omnifaces.util.Messages;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.ByteArrayContent;
@@ -156,8 +157,11 @@ public class JobOrderPresenter implements Serializable{
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", ExceptionUtility.unwrap(e.getCausedByException()).getLocalizedMessage()));
             return null;
         }
+        Messages.create("success").detail("saved").flash().add();
+        if (id == 0L)
+            id = jobOrder.getId();
         
-        return "/secured/sales/jobOrders?faces-redirect=true";
+        return FacesContext.getCurrentInstance().getViewRoot().getViewId() + "?faces-redirect=true&includeViewParams=true";
     }
     
     public void detailJobOrder() {
