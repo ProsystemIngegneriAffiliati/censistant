@@ -8,30 +8,31 @@
 	<field name="quantity" class="java.lang.Integer"/>
 	<field name="isImportant" class="java.lang.Boolean"/>
 	<columnHeader>
-		<band height="15">
+		<band height="12">
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<staticText>
-				<reportElement x="0" y="0" width="50" height="15" uuid="e4d35ef0-7593-450c-81d0-834b77f1084c">
+				<reportElement x="0" y="0" width="40" height="12" uuid="e4d35ef0-7593-450c-81d0-834b77f1084c">
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="9" isBold="true"/>
+					<font size="8" isBold="true"/>
 					<paragraph leftIndent="2" rightIndent="2"/>
 				</textElement>
 				<text><![CDATA[Q.tà]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="50" y="0" width="227" height="15" uuid="645c50d8-f765-40ab-9cdf-56c97cb96669">
+				<reportElement x="40" y="0" width="237" height="12" uuid="645c50d8-f765-40ab-9cdf-56c97cb96669">
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font size="9" isBold="true"/>
+					<font size="8" isBold="true"/>
 					<paragraph leftIndent="2" rightIndent="2"/>
 				</textElement>
 				<text><![CDATA[Codice e descrizione]]></text>
@@ -39,32 +40,12 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="15" splitType="Stretch">
+		<band height="12" splitType="Stretch">
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="ContainerHeight" x="0" y="0" width="50" height="15" uuid="8d32b167-76da-4d5b-b5e4-08a2461aa53a">
+				<reportElement stretchType="ContainerHeight" x="0" y="0" width="40" height="12" uuid="8d32b167-76da-4d5b-b5e4-08a2461aa53a">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
-					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
-					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-				</reportElement>
-				<box>
-					<pen lineColor="#B4B4B4"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="9" isBold="false"/>
-					<paragraph firstLineIndent="0" leftIndent="2" rightIndent="2" spacingBefore="0" spacingAfter="0"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{quantity}]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="ContainerHeight" x="50" y="0" width="227" height="15" uuid="46449555-6e5a-4aa2-90e3-2f7e7dd8aa94">
-					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
@@ -77,8 +58,27 @@
 					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
 				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="false"/>
+					<paragraph firstLineIndent="0" leftIndent="2" rightIndent="2" spacingBefore="0" spacingAfter="0"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{quantity}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="ContainerHeight" x="40" y="0" width="237" height="12" uuid="46449555-6e5a-4aa2-90e3-2f7e7dd8aa94">
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box>
+					<pen lineColor="#B4B4B4"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
+				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font size="9" isBold="false"/>
+					<font size="8" isBold="false"/>
 					<paragraph firstLineIndent="0" leftIndent="2" rightIndent="2" spacingBefore="0" spacingAfter="0"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{supplierItem}.getCodeAndDescription()]]></textFieldExpression>
