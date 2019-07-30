@@ -2,7 +2,7 @@
 readonly IDE_WORKSPACE=$HOME/NetBeansProjects
 readonly AS_LIBFOLDER=$HOME/payara41/glassfish/domains/domain1/lib
 readonly APP_NAME=censistant
-readonly IP_ADDRESS=192.168.2.153
+readonly IP_ADDRESS=192.168.2.154
 readonly POSTGRESQL_JDBC_DRIVER_VERSION=42.2.5
 readonly DB_NAME="${APP_NAME}"
 readonly DB_USER_NAME="${APP_NAME}"

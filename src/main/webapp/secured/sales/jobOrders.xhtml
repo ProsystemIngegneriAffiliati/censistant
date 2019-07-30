@@ -37,7 +37,7 @@
                                 </h:outputText>
                             </p:column>
                             <p:column headerText="#{msg.sales_jobOrder_number}" field="number" priority="0">
-                                <h:outputText value="#{jobOrder.number}"/>
+                                <h:outputText value="#{jobOrder.numberStr}"/>
                             </p:column>
                             <p:column headerText="#{msg.customerSupplier_customer}" field="customerName" priority="4">
                                 <h:outputText value="#{jobOrder.offer.siteSurveyReport.plant.customerSupplier.name}"/>

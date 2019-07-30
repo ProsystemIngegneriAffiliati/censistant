@@ -228,10 +228,13 @@ public class SiteSurveyReportService implements Serializable{
             conditions.add(cb.like(cb.lower(systemTypeRoot.get(SystemType_.name)), "%" + systemType.toLowerCase() + "%"));
         }
         
-        //seller
+        //seller's initials
         if (seller != null && !seller.isEmpty()) {
             Join<SiteSurveyReport, Worker> workerRoot = root.join(SiteSurveyReport_.seller);
-            conditions.add(cb.like(cb.lower(workerRoot.get(Worker_.name)), "%" + seller.toLowerCase() + "%"));
+            conditions.add(cb.or(
+                    cb.like(cb.lower(workerRoot.get(Worker_.name)), "%" + seller.toLowerCase() + "%"),
+                    cb.like(cb.lower(workerRoot.get(Worker_.initials)), "%" + seller.toLowerCase() + "%")
+            ));
         }
         
         //plant's address and name
