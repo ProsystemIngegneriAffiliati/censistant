@@ -19,6 +19,7 @@ package com.prosystemingegneri.censistant.business.siteSurvey.entity;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
 import com.prosystemingegneri.censistant.business.entity.BaseEntity;
 import com.prosystemingegneri.censistant.business.sales.entity.Offer;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -178,4 +179,13 @@ public class SiteSurveyReport extends BaseEntity<Long>{
         this.isOfferAccepted = isOfferAccepted;
     }
     
+    public String getCustomerNameDataSystemType() {
+        return new StringBuilder()
+                .append(plant.getCustomerSupplier().getName())
+                .append(" - ")
+                .append(new SimpleDateFormat("dd/MM/yyyy").format(expected))
+                .append(" - ")
+                .append(request.getSystemType().getName())
+                .toString();
+    }
 }

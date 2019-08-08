@@ -5,8 +5,7 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:oou="http://omnifaces.org/ui"
-      xmlns:of="http://omnifaces.org/functions">
+      xmlns:oou="http://omnifaces.org/ui">
     <f:metadata>
         <f:viewParam name="id"
                      value="#{jobOrderPresenter.id}"
@@ -48,7 +47,7 @@
                                                                     value="#{jobOrderPresenter.dummyReport}"
                                                                     completeMethod="#{siteSurveyReportListPresenter.completeReportsNotAssociatedToOffer}"
                                                                     var="rep"
-                                                                    itemLabel="#{rep.plant.customerSupplier.name} - #{of:formatDate(rep.expected, 'dd/MM/yyyy')} - #{rep.request.systemType.name}"
+                                                                    itemLabel="#{rep.customerNameDataSystemType}"
                                                                     itemValue="#{rep}"
                                                                     forceSelection="true"
                                                                     >
@@ -62,7 +61,7 @@
                                         </p:panelGrid>
 
                                         <p:panelGrid id="offerAndReportData" columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
-                                            <h:panelGroup styleClass="md-inputfield">
+                                            <h:panelGroup>
                                                 <h:panelGroup id="newCustomer">
                                                     <p:commandButton rendered="#{jobOrderPresenter.jobOrder.offer.siteSurveyReport.request.customer == null}"
                                                                      action="#{jobOrderPresenter.createCustomer()}"
@@ -72,6 +71,7 @@
                                                         <oou:ignoreValidationFailed />
                                                     </p:commandButton>
                                                 </h:panelGroup>
+                                                <p:outputLabel for="requestCustomer" value="#{msg.customerSupplier_customer}"/>
                                                 <p:autoComplete id="requestCustomer"
                                                                 dropdown="true"
                                                                 value="#{jobOrderPresenter.jobOrder.offer.siteSurveyReport.request.customer}"
@@ -84,11 +84,10 @@
                                                     <oou:converter converterId="omnifaces.ListConverter" list="#{jobOrderPresenter.customers}"/>
                                                     <p:ajax event="itemSelect" listener="#{jobOrderPresenter.onRequestCustomerSelect}" update="newCustomer openCustomer plant" />
                                                 </p:autoComplete>
-                                                <p:outputLabel for="requestCustomer" value="#{msg.customerSupplier_customer}"/>
                                                 <p:message for="requestCustomer"/>
                                             </h:panelGroup>
 
-                                            <h:panelGroup styleClass="md-inputfield">
+                                            <h:panelGroup>
                                                 <h:panelGroup id="openCustomer">
                                                     <p:commandButton rendered="#{jobOrderPresenter.jobOrder.offer.siteSurveyReport.plant == null}"
                                                                      action="#{jobOrderPresenter.openCustomer()}"
@@ -98,6 +97,7 @@
                                                         <oou:ignoreValidationFailed />
                                                     </p:commandButton>
                                                 </h:panelGroup>
+                                                <p:outputLabel for="plant" value="#{msg.siteSurvey_siteSurveyReport_constructionSite}"/>
                                                 <p:autoComplete id="plant"
                                                                 dropdown="true"
                                                                 value="#{jobOrderPresenter.jobOrder.offer.siteSurveyReport.plant}"
@@ -109,7 +109,6 @@
                                                     <oou:converter converterId="omnifaces.ListConverter" list="#{jobOrderPresenter.plants}"/>
                                                     <p:ajax event="itemSelect" update="openCustomer" />
                                                 </p:autoComplete>
-                                                <p:outputLabel for="plant" value="#{msg.siteSurvey_siteSurveyReport_constructionSite}"/>
                                                 <p:message for="plant"/>
                                             </h:panelGroup>
 
@@ -463,28 +462,28 @@
                                                     <p:commandButton title="#{msg.new}" icon="ui-icon-create" action="#{jobOrderPresenter.createNewArea()}" update="areasTable" />
                                                 </p:panelGrid>
                                             </f:facet>
-                                            <p:column headerText="#{msg.production_area_number}" filterBy="#{area.number}" filterMatchMode="contains" priority="0">
+                                            <p:column headerText="#{msg.production_area_number}" priority="0">
                                                 <p:cellEditor>
                                                     <f:facet name="output"><h:outputText value="#{area.number}" /></f:facet>
                                                     <f:facet name="input"><p:inputText value="#{area.number}" /></f:facet>
                                                 </p:cellEditor>
                                             </p:column>
-                                            <p:column headerText="#{msg.production_area_name}" filterBy="#{area.name}" filterMatchMode="contains" priority="2">
+                                            <p:column headerText="#{msg.production_area_name}" priority="2">
                                                 <p:cellEditor>
                                                     <f:facet name="output"><h:outputText value="#{area.name}" /></f:facet>
                                                     <f:facet name="input"><p:inputText value="#{area.name}" /></f:facet>
                                                 </p:cellEditor>
                                             </p:column>
-                                            <p:column headerText="#{msg.purchasing_supplierItem}" filterBy="#{area.supplierItem.code} - #{area.supplierItem.item.description}" filterMatchMode="contains" priority="4">
+                                            <p:column headerText="#{msg.purchasing_supplierItem}" priority="4">
                                                 <p:cellEditor>
-                                                    <f:facet name="output"><h:outputText value="#{area.supplierItem.code} - #{area.supplierItem.item.description}" /></f:facet>
+                                                    <f:facet name="output"><h:outputText value="#{area.supplierItem.codeAndDescription}" /></f:facet>
                                                     <f:facet name="input">
                                                         <p:autoComplete id="supplierItem"
                                                                         dropdown="true"
                                                                         value="#{area.supplierItem}"
                                                                         completeMethod="#{supplierItemListPresenter.completeSupplierItems}"
                                                                         var="supplierItem"
-                                                                        itemLabel="#{supplierItem.code} - #{supplierItem.item.description}"
+                                                                        itemLabel="#{supplierItem.codeAndDescription}"
                                                                         itemValue="#{supplierItem}"
                                                                         forceSelection="true">
                                                             <oou:converter converterId="omnifaces.ListConverter" list="#{supplierItemListPresenter.getSupplierItems(area.supplierItem)}"/>
@@ -492,7 +491,7 @@
                                                     </f:facet>
                                                 </p:cellEditor>
                                             </p:column>
-                                            <p:column headerText="#{msg.production_deviceProgrammingType_name}" filterBy="#{area.deviceProgrammingType.name}" filterMatchMode="contains" priority="6">
+                                            <p:column headerText="#{msg.production_deviceProgrammingType_name}" priority="6">
                                                 <p:cellEditor>
                                                     <f:facet name="output"><h:outputText value="#{area.deviceProgrammingTypeStr}" /></f:facet>
                                                     <f:facet name="input">
@@ -503,13 +502,13 @@
                                                     </f:facet>
                                                 </p:cellEditor>
                                             </p:column>
-                                            <p:column headerText="#{msg.production_area_field}" filterBy="#{area.field}" filterMatchMode="contains" priority="6">
+                                            <p:column headerText="#{msg.production_area_field}" priority="6">
                                                 <p:cellEditor>
                                                     <f:facet name="output"><h:outputText value="#{area.field}" /></f:facet>
                                                     <f:facet name="input"><p:inputText value="#{area.field}" /></f:facet>
                                                 </p:cellEditor>
                                             </p:column>
-                                            <p:column headerText="#{msg.production_area_notes}" filterBy="#{area.notes}" filterMatchMode="contains" priority="7">
+                                            <p:column headerText="#{msg.production_area_notes}" priority="7">
                                                 <p:cellEditor>
                                                     <f:facet name="output"><h:outputText value="#{area.notes}" /></f:facet>
                                                     <f:facet name="input"><p:inputText value="#{area.notes}" /></f:facet>
