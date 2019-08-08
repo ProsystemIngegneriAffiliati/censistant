@@ -398,7 +398,7 @@
                                                     </p:outputPanel>
                                                 </p:panelGrid>
                                             </f:facet>
-                                            <p:column headerText="#{msg.production_device_isImportant}" priority="4">
+                                            <p:column headerText="#{msg.production_device_isImportant}" width="100" priority="4">
                                                 <h:outputText value="#{device.isImportant ? 'X' : ''}"/>
                                             </p:column>
                                             <p:column headerText="#{msg.production_device}" filterBy="#{device.supplierItem.codeAndDescription}" filterMatchMode="contains" priority="0">
@@ -420,7 +420,7 @@
                                                     </f:facet>
                                                 </p:cellEditor>
                                             </p:column>
-                                            <p:column headerText="#{msg.production_device_quantity}" priority="2">
+                                            <p:column headerText="#{msg.production_device_quantity}" width="72" priority="2">
                                                 <p:cellEditor>
                                                     <f:facet name="output">
                                                         <h:outputText value="#{device.quantity}">
@@ -432,10 +432,10 @@
                                                     </f:facet>
                                                 </p:cellEditor>
                                             </p:column>
-                                            <p:column headerText="#{msg.production_unitMeasure_symbol}" priority="4">
+                                            <p:column headerText="#{msg.production_unitMeasure_symbol}" width="72" priority="4">
                                                 <h:outputText id="unitMeasure" value="#{device.supplierItem.item.unitMeasure.symbol}"/>
                                             </p:column>
-                                            <p:column headerText="#{msg.production_device_placedQuantity}" priority="2">
+                                            <p:column headerText="#{msg.production_device_placedQuantity}" width="72" priority="2">
                                                 <h:outputText value="#{jobOrderPresenter.calculateDevicePlacedQuantity(device)}">
                                                     <f:convertNumber integerOnly="true" />
                                                 </h:outputText>
@@ -462,7 +462,7 @@
                                                     <p:commandButton title="#{msg.new}" icon="ui-icon-create" action="#{jobOrderPresenter.createNewArea()}" update="areasTable" />
                                                 </p:panelGrid>
                                             </f:facet>
-                                            <p:column headerText="#{msg.production_area_number}" priority="0">
+                                            <p:column headerText="#{msg.production_area_number}" width="72" priority="0">
                                                 <p:cellEditor>
                                                     <f:facet name="output"><h:outputText value="#{area.number}" /></f:facet>
                                                     <f:facet name="input"><p:inputText value="#{area.number}" /></f:facet>
@@ -491,7 +491,7 @@
                                                     </f:facet>
                                                 </p:cellEditor>
                                             </p:column>
-                                            <p:column headerText="#{msg.production_deviceProgrammingType_name}" priority="6">
+                                            <p:column headerText="#{msg.production_deviceProgrammingType_name}" width="72" priority="6">
                                                 <p:cellEditor>
                                                     <f:facet name="output"><h:outputText value="#{area.deviceProgrammingTypeStr}" /></f:facet>
                                                     <f:facet name="input">
@@ -502,13 +502,13 @@
                                                     </f:facet>
                                                 </p:cellEditor>
                                             </p:column>
-                                            <p:column headerText="#{msg.production_area_field}" priority="6">
+                                            <p:column headerText="#{msg.production_area_field}" width="72" priority="6">
                                                 <p:cellEditor>
                                                     <f:facet name="output"><h:outputText value="#{area.field}" /></f:facet>
                                                     <f:facet name="input"><p:inputText value="#{area.field}" /></f:facet>
                                                 </p:cellEditor>
                                             </p:column>
-                                            <p:column headerText="#{msg.production_area_notes}" priority="7">
+                                            <p:column headerText="#{msg.production_area_notes}" width="100" priority="7">
                                                 <p:cellEditor>
                                                     <f:facet name="output"><h:outputText value="#{area.notes}" /></f:facet>
                                                     <f:facet name="input"><p:inputText value="#{area.notes}" /></f:facet>
@@ -523,6 +523,25 @@
                                     </h:panelGroup>
                                 </p:panel>
                                 <p:panel header="#{msg.sales_jobOrder_signatures}" style="margin-bottom: 25px">
+                                    <p:fieldset legend="#{msg.privacy}" toggleable="true" collapsed="true">
+                                        La presente per informarLa che presso la ns. azienda viene effettuato il trattamento dei Suoi dati personali, nel pieno rispetto del Regolamento UE 679/2016 (GDPR). Tali dati sono appartenenti alle categorie: dati identificativi e dati di contatto. In base a tale normativa, il trattamento sarà improntato ai principi di correttezza, liceità e trasparenza, a tutela della Sua riservatezza e dei Suoi diritti.<br/>
+                                        Ai sensi dell’art. 13 La informiamo che:<br/>
+                                        I dati sono raccolti al fine di adempiere obblighi di legge, contrattuali, contabili, bancari, finanziari e di tutela del credito, ed il trattamento avviene in forma manuale e informatizzata.<br/>
+                                        a) Nel caso di rifiuto al conferimento dei dati ci sarà impossibile dar corso ulteriore ad eventuale contratto.<br/>
+                                        b) I dati presso di Lei acquisiti in forma orale o scritta potranno essere comunicati, per esigenze fondamentali ai fini dello svolgimento delle operazioni della società:<br/>
+                                        • A banche ed istituti di credito nell’ambito della gestione finanziaria dell’impresa.<br/>
+                                        • Ai ns. dipendenti in qualità di responsabili o incaricati di servizi tecnici o finanziari.<br/>
+                                        • A società esterne di fiducia di cui la ns. società si avvale per lo svolgimento di attività tecniche, spedizioni, contabilità.<br/>
+                                        • A società, enti o studi professionali incaricati della gestione contabile o della gestione e del recupero dei crediti.<br/>
+                                        • Nei casi previsti dalla legge ad enti pubblici e privati.<br/>
+                                        c) Lei potrà, in qualsiasi momento, rivolgersi al ns. responsabile del trattamento dei dati, per far valere i Suoi diritti così come previsti dagli articoli n. 15, 16, 17 18, 19 e 20 del regolamento UE 679/2016 e cioè la conferma dell’esistenza o meno dei dati che la riguardano, la rettifica ovvero l’integrazione dei dati, la trasformazione, l’aggiornamento, l’integrazione dei dati, la cancellazione, la limitazione od opposizione al trattamento, la portabilità dei dati.<br/>
+                                        d) Nel caso in cui il suo contratto preveda la tele-assistenza, la firma in calce alla presente vale anche quale autorizzazione alla gestione a distanza del guasto (su Vostra autorizzazione specifica di volta in volta) e alla memorizzazione degli eventi segnalatici dall’impianto. Tale memoria resterà registrata nella nostra banca dati per il periodo di validità del contratto e sarà immediatamente e completamente cancellata in caso di recesso o di mancato rinnovo. Si esclude qualsiasi comunicazione, divulgazione degli stessi a terzi o enti esterni, se non per ragioni di manutenzione o riparazione dell’impianto stesso.<br/>
+                                        e) I Suoi dati non saranno comunque oggetto di diffusione se non chiedendovene ulteriore, espresso consenso.<br/>
+                                        f) Il titolare tratterà i dati personali per il tempo necessario per adempiere alle finalità di cui sopra e di regola per non oltre 10 anni dalla cessazione del rapporto, salvo diversa prescrizione stabilita dal diritto nazionale o dal diritto dell’UE.<br/>
+                                        g) Non è prevista, al momento, l’eventualità di trasferimento dei dati in paesi extra UE. Qualora tale necessità dovesse insorgere sarà cura del titolare dei dati verificare l’adeguatezza degli standard di sicurezza presenti in tali paesi, così come stabilito dal capo V del Regolamento.<br/>
+                                        h) Non vengono adottati processi decisionali automatizzati, compresa la proliferazione, nei Suoi confronti.<br/>
+                                        i) Il titolare del trattamento dei dati è il Centro Sistemi Antifurto Srl Unipersonale, corrente in Torino, c.so Siracusa 155 A, nella persona del suo Amministratore Unico. Potrà essere contattato tramite raccomandata con ricevuta di ritorno all’indirizzo sopra indicato, oppure tramite e-mail al seguente indirizzo: privacy@antifurto.com
+                                    </p:fieldset>
                                     <p:panelGrid columns="2" columnClasses="ui-grid-col-11,ui-grid-col-1" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:outputLabel for="workerSignature" value="#{msg.sales_jobOrder_workerSignature}" />

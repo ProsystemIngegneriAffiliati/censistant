@@ -28,20 +28,30 @@
 	<field name="workerSignatureImg" class="java.awt.Image"/>
 	<field name="customerSignatureImg" class="java.awt.Image"/>
 	<detail>
-		<band height="78">
+		<band height="74">
 			<image hAlign="Center" vAlign="Middle">
-				<reportElement x="0" y="0" width="575" height="72" uuid="90fa98e0-2eef-40c1-9de7-927563bd8f8b">
+				<reportElement x="0" y="0" width="575" height="69" uuid="90fa98e0-2eef-40c1-9de7-927563bd8f8b">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<imageExpression><![CDATA[$P{reportImagePath} + "logoForJobOrder.png"]]></imageExpression>
 			</image>
 		</band>
-		<band height="58">
+		<band height="70">
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
-			<staticText>
-				<reportElement x="0" y="0" width="575" height="14" uuid="46935a3a-e22d-48f7-835c-4165947daa9c">
+			<rectangle>
+				<reportElement x="0" y="0" width="575" height="38" forecolor="#B4B4B4" uuid="6118f4d7-c744-4e17-82aa-14dcc2489d0b">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="0" y="5" width="575" height="14" uuid="46935a3a-e22d-48f7-835c-4165947daa9c">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="11" isBold="true"/>
@@ -50,7 +60,7 @@
 				<text><![CDATA[SISTEMI DI RIVELAZIONE INTRUSIONE PER INTERNO ED ESTERNO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="38" width="575" height="14" uuid="9930150d-2c11-42ed-b71d-231c7327c99a">
+				<reportElement x="0" y="48" width="575" height="14" uuid="9930150d-2c11-42ed-b71d-231c7327c99a">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
@@ -62,11 +72,10 @@
 				<text><![CDATA[SCHEDA DATI INSTALLAZIONE]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="14" width="575" height="14" uuid="7c8925b3-c631-4e27-bbca-0f69c699d9a0">
+				<reportElement x="0" y="19" width="575" height="14" uuid="7c8925b3-c631-4e27-bbca-0f69c699d9a0">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="11" isBold="true"/>

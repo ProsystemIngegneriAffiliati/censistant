@@ -74,7 +74,7 @@ public class WorkingOperationService implements Serializable{
         if (!conditions.isEmpty())
             query.where(conditions.toArray(new Predicate[conditions.size()]));
         
-        query.orderBy(cb.asc(root.get(WorkingOperation_.name)));
+        query.orderBy(cb.asc(root.get("id")));
 
         return em.createQuery(select).getResultList();
     }
