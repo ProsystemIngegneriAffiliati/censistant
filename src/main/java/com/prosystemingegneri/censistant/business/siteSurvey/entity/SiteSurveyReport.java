@@ -21,6 +21,7 @@ import com.prosystemingegneri.censistant.business.entity.BaseEntity;
 import com.prosystemingegneri.censistant.business.sales.entity.Offer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -58,7 +59,7 @@ public class SiteSurveyReport extends BaseEntity<Long>{
     private Date actual;
     
     @NotNull
-    @OneToOne(optional = false, orphanRemoval = true)
+    @OneToOne(optional = false, orphanRemoval = true, cascade = CascadeType.MERGE)
     private SiteSurveyRequest request;
     
     @Temporal(TemporalType.DATE)

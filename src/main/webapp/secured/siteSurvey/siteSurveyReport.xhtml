@@ -130,8 +130,7 @@
                                                         var="syst"
                                                         itemLabel="#{syst.name}"
                                                         itemValue="#{syst}"
-                                                        forceSelection="true"
-                                                        disabled="#{siteSurveyReportPresenter.siteSurveyReport.request.id != null}">
+                                                        forceSelection="true">
                                             <oou:converter converterId="omnifaces.ListConverter" list="#{systemTypeListPresenter.systemTypes}"/>
                                         </p:autoComplete>
                                         <p:outputLabel for="requestSystemType" value="#{msg.siteSurvey_systemType_name}"/>
