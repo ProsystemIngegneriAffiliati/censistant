@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.8.0.final utlizzo versione della libreria JasperReports6.8.0-2ed8dfabb690ff337a5797129f2cd92902b0c87b  -->
+<!-- Created with Jaspersoft Studio version 6.9.0.final utlizzo versione della libreria JasperReports6.9.0-cb8f9004be492ccc537180b49c026951f4220bf3  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="taskPrice" pageWidth="230" pageHeight="842" columnWidth="230" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="4a9099ff-53a9-4af0-9214-919f71ea0b26">
 	<parameter name="subReportPath" class="java.lang.String"/>
 	<queryString>
@@ -161,9 +161,9 @@
 			</subreport>
 		</band>
 		<band height="15">
-			<textField>
+			<textField isStretchWithOverflow="true">
 				<reportElement stretchType="ContainerHeight" x="0" y="0" width="165" height="15" uuid="98250a1a-c0ed-45f5-8626-cdf2169c8ba3"/>
-				<box>
+				<box topPadding="2" bottomPadding="2">
 					<pen lineWidth="1.0" lineStyle="Dotted" lineColor="#B4B4B4"/>
 					<topPen lineWidth="1.0" lineStyle="Dotted" lineColor="#B4B4B4"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#B4B4B4"/>
@@ -174,7 +174,7 @@
 					<font size="8"/>
 					<paragraph leftIndent="4" rightIndent="4"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Costo al km " + $F{pricePerKilometer} + " € x km tot. " + $F{kilometersTravelled}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Costo al km oltre la prima cintura " + $F{pricePerKilometer} + " € x km tot. " + $F{kilometersTravelled}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00 ¤;#,##0.00- ¤">
 				<reportElement stretchType="ContainerHeight" x="165" y="0" width="65" height="15" uuid="606e8fc7-0415-43be-a1a1-aa95519e9f9c">

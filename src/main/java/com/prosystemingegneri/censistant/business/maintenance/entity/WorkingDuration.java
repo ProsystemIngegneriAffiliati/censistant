@@ -71,7 +71,7 @@ public class WorkingDuration extends BaseEntity<Long> {
         started = new Date();
         ended = new Date();
         workersNumber = 1;
-        hourlyPrices = BigDecimal.ZERO;
+        hourlyPrices = new BigDecimal(40);
     }
 
     public Date getStarted() {

@@ -83,9 +83,9 @@ public class TaskPrice extends BaseEntity<Long> {
     private int version;
 
     public TaskPrice() {
-        fixedCallAmount = BigDecimal.ZERO;
+        fixedCallAmount = new BigDecimal(40);
         kilometersTravelled = 0;
-        pricePerKilometer = BigDecimal.ZERO;
+        pricePerKilometer = new BigDecimal(0.65);
         travelExpenses = BigDecimal.ZERO;
     }
 

@@ -585,7 +585,7 @@
                                             <p:inputNumber id="pricePerKilometer" decimalPlaces="#{TaskPrice.SCALE_PRICE}" symbol="€ " value="#{maintenanceTaskPresenter.maintenanceTask.taskPrice.pricePerKilometer}">
                                                 <p:ajax update="priceTravelled price priceWithVat" />
                                             </p:inputNumber>
-                                            <p:outputLabel for="pricePerKilometer" value="#{msg.maintenance_maintenanceTask_taskPrice_pricePerKilometer}" />
+                                            <p:outputLabel for="pricePerKilometer" value="#{msg.maintenance_maintenanceTask_taskPrice_pricePerKilometer_tip}" />
                                             <p:message for="pricePerKilometer"/>
                                         </h:panelGroup>
                                         <h:panelGroup styleClass="md-inputfield">
@@ -639,7 +639,7 @@
                                                 <h:panelGroup />
                                             </p:panelGrid>
                                         </f:facet>
-                                        <p:column headerText="#{msg.maintenance_maintenancePayment_name}">
+                                        <p:column>
                                             <h:outputText value="#{payment.name}" />
                                         </p:column>
                                         <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
