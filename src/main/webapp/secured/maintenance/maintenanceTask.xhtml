@@ -6,7 +6,8 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:oou="http://omnifaces.org/ui"
-      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <f:metadata>
         <f:viewParam name="id"
                      value="#{maintenanceTaskPresenter.id}"
@@ -25,7 +26,12 @@
                     <div class="ui-g">
                         <div class="ui-g-12">
                             <div class="card card-w-title">
-                                <h1>#{msg.maintenance_maintenanceTask}</h1>
+                                <c:if test="#{not empty maintenanceTaskPresenter.maintenanceTask.maintenancePlan}">
+                                    <h1>#{msg.maintenance_maintenanceTask}</h1>
+                                </c:if>
+                                <c:if test="#{empty maintenanceTaskPresenter.maintenanceTask.maintenancePlan}">
+                                    <h1>#{msg.maintenance_maintenanceTask_request}</h1>
+                                </c:if>
                                 <p>#{msg.maintenance_maintenanceTask_tip}</p>
 
                                 <p:panelGrid columns="2" columnClasses="ui-grid-col-4,ui-grid-col-8" layout="grid" styleClass="ui-panelgrid-blank form-group">
