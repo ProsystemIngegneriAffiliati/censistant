@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.8.0.final utlizzo versione della libreria JasperReports6.8.0-2ed8dfabb690ff337a5797129f2cd92902b0c87b  -->
+<!-- Created with Jaspersoft Studio version 6.9.0.final utlizzo versione della libreria JasperReports6.9.0-cb8f9004be492ccc537180b49c026951f4220bf3  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="maintenanceTask" pageWidth="595" pageHeight="842" columnWidth="575" leftMargin="10" rightMargin="10" topMargin="10" bottomMargin="10" resourceBundle="i18n.messages" uuid="469dbe3b-ec1f-4869-b6a8-99d14aca6d98">
 	<property name="com.jaspersoft.studio.unit." value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
@@ -42,13 +42,14 @@
 	<variable name="system" class="com.prosystemingegneri.censistant.business.production.entity.System">
 		<variableExpression><![CDATA[($F{system} != null ? $F{system} :  $F{maintenancePlan}.getContractedSystem().getSystem())]]></variableExpression>
 	</variable>
-	<detail>
-		<band height="55" splitType="Stretch">
+	<pageHeader>
+		<band height="60">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<rectangle>
-				<reportElement x="359" y="0" width="216" height="55" forecolor="#B4B4B4" uuid="accf497f-bdca-4e26-aff4-6a3d8323ce6f"/>
+				<reportElement x="359" y="0" width="216" height="55" forecolor="#B4B4B4" uuid="e323691d-f360-416d-a51e-4a130fb2bc98"/>
 			</rectangle>
 			<textField>
-				<reportElement x="359" y="0" width="216" height="15" uuid="9c6fe173-7859-4728-8c86-8aedd191db01"/>
+				<reportElement x="359" y="0" width="216" height="15" uuid="0ef60683-f61e-437e-b144-4faf6ab928c4"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 					<paragraph firstLineIndent="0" leftIndent="1" rightIndent="1" spacingBefore="1" spacingAfter="1"/>
@@ -56,7 +57,7 @@
 				<textFieldExpression><![CDATA["RAPPORTO DI INTERVENTO"]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="359" y="15" width="45" height="10" uuid="ea179118-9cb1-4ae2-abef-efc5f01d66b9"/>
+				<reportElement x="359" y="15" width="45" height="10" uuid="eb617784-6b93-40eb-b8b0-66f50cc0aa6d"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="6" isBold="false"/>
 					<paragraph firstLineIndent="0" leftIndent="1" rightIndent="1" spacingBefore="1" spacingAfter="1"/>
@@ -64,7 +65,7 @@
 				<text><![CDATA[RICHIESTO IL:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="477" y="15" width="98" height="10" uuid="ef1de604-fc34-40fa-9867-cc7fa665ac01"/>
+				<reportElement x="477" y="15" width="98" height="10" uuid="a1edc4de-5d0f-4b28-a63e-bf2b5c2583f0"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="6" isBold="true"/>
 					<paragraph firstLineIndent="0" leftIndent="1" rightIndent="1" spacingBefore="1" spacingAfter="1"/>
@@ -72,7 +73,7 @@
 				<textFieldExpression><![CDATA[$F{inChargeWorker}.getInitials()]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="502" y="25" width="73" height="10" uuid="5d6890bb-2dbb-4104-86ff-ad39ee109d2a"/>
+				<reportElement x="502" y="25" width="73" height="10" uuid="eb1e144a-6abf-4ba9-a099-f25c2634f53c"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="6" isBold="true"/>
 					<paragraph firstLineIndent="0" leftIndent="1" rightIndent="1" spacingBefore="1" spacingAfter="1"/>
@@ -80,7 +81,7 @@
 				<textFieldExpression><![CDATA[(!$F{maintenanceWorkers}.isEmpty()?$F{currentMaintenanceTask}.getMaintenanceWorkersStr():"")]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="414" y="25" width="53" height="10" uuid="e96af905-038f-4a48-91bb-e25179c7703b"/>
+				<reportElement x="414" y="25" width="53" height="10" uuid="bc1083c3-b782-458f-b9bb-3d10ddbaff8b"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="6" isBold="true"/>
 					<paragraph firstLineIndent="0" leftIndent="1" rightIndent="1" spacingBefore="1" spacingAfter="1"/>
@@ -88,7 +89,7 @@
 				<textFieldExpression><![CDATA[($F{closed}!=null?new SimpleDateFormat("dd/MM/yyyy").format($F{closed}):"")]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="399" y="35" width="68" height="10" uuid="b7e7e751-fd9f-4766-a145-7bf4d13809b0"/>
+				<reportElement x="399" y="35" width="68" height="10" uuid="cc2ca831-522c-4d21-8291-3207d5fea0f6"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="6" isBold="true"/>
 					<paragraph firstLineIndent="0" leftIndent="1" rightIndent="1" spacingBefore="1" spacingAfter="1"/>
@@ -96,7 +97,7 @@
 				<textFieldExpression><![CDATA[($F{isGuaranteeValid}?"SÌ":"NO")]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="544" y="35" width="31" height="10" uuid="47ae50ba-e57b-40aa-91a9-0fd1883808ed"/>
+				<reportElement x="544" y="35" width="31" height="10" uuid="e6458c5e-c254-4acc-9f02-9bcd62451e50"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="6" isBold="true"/>
 					<paragraph firstLineIndent="0" leftIndent="1" rightIndent="1" spacingBefore="1" spacingAfter="1"/>
@@ -104,7 +105,7 @@
 				<textFieldExpression><![CDATA[($F{currentMaintenanceTask}.isFullService()?"SÌ":"NO")]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="454" y="45" width="13" height="10" uuid="3681afe9-3e87-4367-9bd4-1d295e36cbb0"/>
+				<reportElement x="454" y="45" width="13" height="10" uuid="ba50c61a-adec-4761-b836-bb2fa2158323"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="6" isBold="true"/>
 					<paragraph firstLineIndent="0" leftIndent="1" rightIndent="1" spacingBefore="1" spacingAfter="1"/>
@@ -112,7 +113,7 @@
 				<textFieldExpression><![CDATA[($F{maintenancePlan}!=null?"SÌ":"NO")]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="530" y="45" width="45" height="10" uuid="87c3a50e-7e41-4812-a4a2-e9704c120255"/>
+				<reportElement x="530" y="45" width="45" height="10" uuid="ef31dab1-9ffe-4b4e-8350-40c45216cdcc"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="6" isBold="true"/>
 					<paragraph firstLineIndent="0" leftIndent="1" rightIndent="1" spacingBefore="1" spacingAfter="1"/>
@@ -120,13 +121,13 @@
 				<textFieldExpression><![CDATA[($F{expiry}!=null?new SimpleDateFormat("MMMM yy", Locale.ITALY).format($F{expiry}):"")]]></textFieldExpression>
 			</textField>
 			<image hAlign="Center" vAlign="Middle">
-				<reportElement x="0" y="0" width="359" height="50" uuid="72ec7343-4bde-49d5-be9b-d7771e1ced2a">
+				<reportElement x="0" y="0" width="359" height="50" uuid="38e97240-11d9-42a1-8bb4-6851abba849b">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<imageExpression><![CDATA[$P{reportImagePath} + "logoForMaintenanceTask.png"]]></imageExpression>
 			</image>
 			<textField>
-				<reportElement x="404" y="15" width="63" height="10" uuid="753f106f-a516-4a59-ac7d-b386c4751754"/>
+				<reportElement x="404" y="15" width="63" height="10" uuid="5c3c39b9-9d30-40b0-878a-4493c59ff2a3"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="6" isBold="true"/>
 					<paragraph firstLineIndent="0" leftIndent="1" rightIndent="1" spacingBefore="1" spacingAfter="1"/>
@@ -134,7 +135,7 @@
 				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format($F{creation})]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="359" y="25" width="55" height="10" uuid="19a02fc1-f646-4f01-bf9e-951e01983ff7">
+				<reportElement x="359" y="25" width="55" height="10" uuid="09e4aea6-3423-4444-8949-841435fb590b">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
@@ -144,7 +145,7 @@
 				<text><![CDATA[INTERVENUTI IL:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="359" y="35" width="40" height="10" uuid="d5eedde6-0193-4f32-88f8-92843a0c60fe">
+				<reportElement x="359" y="35" width="40" height="10" uuid="05e01662-dc4a-49cc-bad0-ac05e2cbd659">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
@@ -155,7 +156,7 @@
 				<text><![CDATA[GARANZIA:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="359" y="45" width="95" height="10" uuid="fc0d6050-cf5f-41d0-a484-96ccdcf7d9a9">
+				<reportElement x="359" y="45" width="95" height="10" uuid="c9aa9657-ecb8-4c3c-aaab-5f5aab2f5311">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
@@ -166,7 +167,7 @@
 				<text><![CDATA[CONTRATTO MANUTENZIONE:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="467" y="15" width="10" height="10" uuid="063f04f8-9d53-40a3-98d0-399b3e780367">
+				<reportElement x="467" y="15" width="10" height="10" uuid="ae7fd508-819a-4d54-a233-b3c2fb1cdf77">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
@@ -176,7 +177,7 @@
 				<text><![CDATA[A:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="467" y="25" width="35" height="10" uuid="0aab7bda-41e4-4ebb-a86b-c3d7ed16c33d">
+				<reportElement x="467" y="25" width="35" height="10" uuid="162b6f72-315b-42df-8f50-4418d2997820">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
@@ -186,7 +187,7 @@
 				<text><![CDATA[TECNICO:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="467" y="35" width="77" height="10" uuid="b27010e7-bea6-4def-acfe-f24af41bc244"/>
+				<reportElement x="467" y="35" width="77" height="10" uuid="ff3501c8-46a3-4bce-9761-bb32030aab0d"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="6" isBold="false"/>
 					<paragraph firstLineIndent="0" leftIndent="1" rightIndent="1" spacingBefore="1" spacingAfter="1"/>
@@ -194,7 +195,7 @@
 				<text><![CDATA[CONTRATTO GARANZIA:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="467" y="45" width="63" height="10" uuid="b635b3f9-1da9-4634-aac9-3f78c30c8c6d"/>
+				<reportElement x="467" y="45" width="63" height="10" uuid="659c1d7a-dd3f-4d7f-8fa3-bebc051fdaa0"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="6" isBold="false"/>
 					<paragraph firstLineIndent="0" leftIndent="1" rightIndent="1" spacingBefore="1" spacingAfter="1"/>
@@ -202,6 +203,8 @@
 				<text><![CDATA[INTERVENTO MESE:]]></text>
 			</staticText>
 		</band>
+	</pageHeader>
+	<detail>
 		<band height="35">
 			<textField isBlankWhenNull="true">
 				<reportElement x="70" y="20" width="289" height="15" uuid="2e076132-100f-4f11-8574-a55ac7504b2e">
