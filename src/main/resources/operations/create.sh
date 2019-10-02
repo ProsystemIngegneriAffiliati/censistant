@@ -52,13 +52,13 @@ charset=UTF-8 \
 ./asadmin --passwordfile $PASSWORD_ALIAS_DIR/mailPassword create-password-alias $AS_MAILPASSWORD_ALIAS_NAME
 \
 ./asadmin create-javamail-resource \
---mailhost smtps.aruba.it \
---mailuser gestionale@antifurto.com \
---fromaddress gestionale@antifurto.com \
+--mailhost smtp-mail.outlook.com \
+--mailuser ingmainardi@live.com \
+--fromaddress ingmainardi@live.com \
 --password \$\{ALIAS=$AS_MAILPASSWORD_ALIAS_NAME\} \
 --auth true \
---property mail.smtp.ssl.enable=true:\
-mail.smtp.host=smtps.aruba.it \
+--property mail.smtp.starttls.enable=true:\
+mail.smtp.port=587 \
 --debug true \
 mail/"${APP_NAME}"Mail
 \

@@ -16,6 +16,7 @@
  */
 package com.prosystemingegneri.censistant.presentation;
 
+import com.prosystemingegneri.censistant.business.audit.boundary.LoginAuditService;
 import com.prosystemingegneri.censistant.business.user.boundary.UserService;
 import com.prosystemingegneri.censistant.business.user.entity.GroupApp;
 import com.prosystemingegneri.censistant.business.user.entity.UserApp;
@@ -41,6 +42,8 @@ import javax.inject.Named;
 public class Authenticator implements Serializable {
     @Inject
     UserService userService;
+    @Inject
+    private LoginAuditService loginAuditService;
     
     private UserApp loggedUser;
     private String userName;
@@ -48,10 +51,7 @@ public class Authenticator implements Serializable {
     private String newPassword1;
     private String newPassword2;
     
-    @PreDestroy
-    public void destroy() {
-        System.out.println("USCITO DAL PROGRAMMA");
-    }
+    private boolean isEntered = false;
     
     public UserApp getLoggedUser() {
         /*if (loggedUser == null) {*/
@@ -59,6 +59,12 @@ public class Authenticator implements Serializable {
             if (principal != null)
                 loggedUser = userService.readUserApp(principal.getName());
         /*}*/
+        
+        if (!isEntered && loggedUser != null) {
+            loginAuditService.sendEventForLogin(loggedUser.getUserName());
+            isEntered = true;
+        }
+        
         return loggedUser;
     }
     
@@ -90,6 +96,8 @@ public class Authenticator implements Serializable {
     }
     
     public String logout() {
+        loginAuditService.sendEventForLogout(loggedUser.getUserName());
+        isEntered = false;
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
         return "/index?faces-redirect=true";
     }
