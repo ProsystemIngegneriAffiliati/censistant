@@ -25,6 +25,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
 import java.util.Base64;
+import javax.annotation.PreDestroy;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -46,6 +47,11 @@ public class Authenticator implements Serializable {
     private String oldPassword;
     private String newPassword1;
     private String newPassword2;
+    
+    @PreDestroy
+    public void destroy() {
+        System.out.println("USCITO DAL PROGRAMMA");
+    }
     
     public UserApp getLoggedUser() {
         /*if (loggedUser == null) {*/

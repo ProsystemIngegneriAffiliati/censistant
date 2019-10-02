@@ -2,11 +2,13 @@
 readonly IDE_WORKSPACE=$HOME/NetBeansProjects
 readonly AS_LIBFOLDER=$HOME/payara41/glassfish/domains/domain1/lib
 readonly APP_NAME=censistant
-readonly IP_ADDRESS=192.168.2.154
+readonly IP_ADDRESS=192.168.2.152
 readonly POSTGRESQL_JDBC_DRIVER_VERSION=42.2.5
 readonly DB_NAME="${APP_NAME}"
 readonly DB_USER_NAME="${APP_NAME}"
 readonly DB_USER_PASSWORD=PNpKjM19byxa6JBIKxFU
+readonly AS_MAILPASSWORD_ALIAS_NAME="${APP_NAME}"-mailuser-alias
+readonly PASSWORD_ALIAS_DIR=$HOME/NetBeansProjects/"${APP_NAME}"/src/main/resources/operations
 
 mkdir $HOME/"${APP_NAME}"
 mkdir $HOME/"${APP_NAME}"/documents
@@ -46,4 +48,18 @@ digestrealm-password-enc-algorithm=AES:\
 encoding=base64:\
 charset=UTF-8 \
 "${APP_NAME}"Realm
+\
+./asadmin --passwordfile $PASSWORD_ALIAS_DIR/mailPassword create-password-alias $AS_MAILPASSWORD_ALIAS_NAME
+\
+./asadmin create-javamail-resource \
+--mailhost smtps.aruba.it \
+--mailuser gestionale@antifurto.com \
+--fromaddress gestionale@antifurto.com \
+--password \$\{ALIAS=$AS_MAILPASSWORD_ALIAS_NAME\} \
+--auth true \
+--property mail.smtp.ssl.enable=true:\
+mail.smtp.host=smtps.aruba.it \
+--debug true \
+mail/"${APP_NAME}"Mail
+\
 ./asadmin stop-domain
