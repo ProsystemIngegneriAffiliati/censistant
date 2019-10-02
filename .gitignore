@@ -5,3 +5,4 @@
 /bin/
 /src/main/resources/operations/production/initial.gz
 /src/main/resources/operations/mailPassword
+/src/main/resources/operations/production/mailPassword

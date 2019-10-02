@@ -97,4 +97,14 @@ encoding=base64:\
 charset=UTF-8 \
 '"$(config_get APP_NAME)"'Realm; \
 \
+sh '"$(config_get AS_BIN)"'/asadmin create-javamail-resource \
+--mailhost smtp-mail.outlook.com \
+--mailuser ingmainardi@live.com \
+--fromaddress ingmainardi@live.com \
+--password \$\{ALIAS='"$(config_get AS_MAILPASSWORD_ALIAS_NAME)"'\} \
+--auth true \
+--property mail.smtp.starttls.enable=true:\
+mail.smtp.port=587 \
+mail/'"$(config_get APP_NAME)"'Mail; \
+\
 sh '"$(config_get AS_BIN)"'/asadmin restart-domain '"$(config_get AS_DOMAIN_NAME)"''
