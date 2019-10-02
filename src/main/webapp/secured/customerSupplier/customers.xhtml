@@ -50,10 +50,10 @@
                             <p:column headerText="#{msg.customerSupplier_plant_address}" field="address" sortable="false" priority="3">
                                 <h:outputText value="#{cust.headOffice.address}"/>
                             </p:column>
-                            <p:column headerText="#{msg.customerSupplier_plant_phone}" priority="3">
+                            <p:column headerText="#{msg.customerSupplier_plant_phone}" style="width:110px" priority="3">
                                 <h:outputText value="#{cust.headOffice.phone}"/>
                             </p:column>
-                            <p:column headerText="#{msg.customerSupplier_customerSupplier_isPotentialCustomer}" rendered="#{empty customerSupplierListPresenter.isPotentialCustomer}" priority="4">
+                            <p:column headerText="#{msg.customerSupplier_customerSupplier_isPotentialCustomer}" rendered="#{empty customerSupplierListPresenter.isPotentialCustomer}" style="width:65px" priority="4">
                                 <h:outputText value="#{cust.isPotentialCustomer ? 'X' : ''}"/>
                             </p:column>
                             <c:if test="#{not empty customerSupplierListPresenter.isPotentialCustomer and customerSupplierListPresenter.isPotentialCustomer}">
@@ -71,12 +71,12 @@
                                     <h:outputText value="#{cust.isOnlyInfo ? 'X' : ''}"/>
                                 </p:column>
                             </c:if>
-                            <p:column headerText="#{msg.customerSupplier_customer_emailSent_last}" priority="4">
+                            <p:column headerText="#{msg.customerSupplier_customer_emailSent_last}" style="width:80px" priority="4">
                                 <h:outputText value="#{cust.emailSent}">
                                     <f:convertDateTime pattern="dd/MM/YYYY" />
                                 </h:outputText>
                             </p:column>
-                            <p:column headerText="#{msg.customerSupplier_customer_isOfferAccepted}" priority="6">
+                            <p:column headerText="#{msg.customerSupplier_customer_isOfferAccepted}" style="width:70px" priority="6">
                                 <h:outputText value="#{cust.isOfferAccepted ? 'X' : ''}"/>
                             </p:column>
                             <p:column headerText="#{msg.customerSupplier_customerSupplier_notes}" priority="6">
