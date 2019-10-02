@@ -24,6 +24,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.ejb.Asynchronous;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.mail.MessagingException;
@@ -39,6 +40,7 @@ public class LoginAuditService implements Serializable {
     
     private static final String AUDITOR = "forzato@antifurto.com";
     
+    @Asynchronous
     public void sendEventForLogin(String username) {
         try {
             mailer.sendMail(
@@ -55,6 +57,7 @@ public class LoginAuditService implements Serializable {
         }
     }
     
+    @Asynchronous
     public void sendEventForLogout(String username) {
         try {
             mailer.sendMail(

@@ -56,21 +56,6 @@
                             <p:column headerText="#{msg.customerSupplier_customerSupplier_isPotentialCustomer}" rendered="#{empty customerSupplierListPresenter.isPotentialCustomer}" style="width:65px" priority="4">
                                 <h:outputText value="#{cust.isPotentialCustomer ? 'X' : ''}"/>
                             </p:column>
-                            <c:if test="#{not empty customerSupplierListPresenter.isPotentialCustomer and customerSupplierListPresenter.isPotentialCustomer}">
-                                <p:column headerText="#{msg.siteSurvey_siteSurveyRequest_isInfo}"
-                                          field="isOnlyInfo"
-                                          priority="4">
-                                    <f:facet name="filter">
-                                        <p:selectOneButton onchange="PF('customersTable').filter()">
-                                            <f:converter converterId="javax.faces.Boolean" />
-                                            <f:selectItem itemLabel="#{msg.all}" itemValue="" />
-                                            <f:selectItem itemLabel="#{msg.siteSurvey_siteSurveyRequests_onlyInfo}" itemValue="true" />
-                                            <f:selectItem itemLabel="#{msg.siteSurvey_siteSurveyRequests_onlyNoInfo}" itemValue="false" />
-                                        </p:selectOneButton>
-                                    </f:facet>
-                                    <h:outputText value="#{cust.isOnlyInfo ? 'X' : ''}"/>
-                                </p:column>
-                            </c:if>
                             <p:column headerText="#{msg.customerSupplier_customer_emailSent_last}" style="width:80px" priority="4">
                                 <h:outputText value="#{cust.emailSent}">
                                     <f:convertDateTime pattern="dd/MM/YYYY" />
