@@ -17,6 +17,7 @@
 package com.prosystemingegneri.censistant.business.audit.boundary;
 
 import com.prosystemingegneri.censistant.business.mail.control.Mailer;
+import com.prosystemingegneri.censistant.business.user.entity.UserApp;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -51,6 +52,28 @@ public class LoginAuditService implements Serializable {
                             .append(username)
                             .append(" ha effettuato l'accesso.")
                             .toString(),
+                    Arrays.asList(AUDITOR));
+        } catch (MessagingException ex) {
+            Logger.getLogger(LoginAuditService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    @Asynchronous
+    public void sendEventForFailedLogin(UserApp loggedUser) {
+        String testoUtente = "è stato";
+        if (loggedUser != null)
+            testoUtente = "l'utente " + loggedUser.getUserName() + " ha";
+        try {
+            mailer.sendMail(
+                    "Tentativo di accesso",
+                    (new StringBuilder("Il giorno ")
+                            .append(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
+                            .append(" all'ora odierna ")
+                            .append(testoUtente)
+                            .append(" tentato un accesso a zone riservate del programma.")
+                            .append(System.lineSeparator())
+                            .append("I privilegi insufficienti non hanno consentito di continuare.")
+                            .toString()),
                     Arrays.asList(AUDITOR));
         } catch (MessagingException ex) {
             Logger.getLogger(LoginAuditService.class.getName()).log(Level.SEVERE, null, ex);

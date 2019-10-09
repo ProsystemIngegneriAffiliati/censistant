@@ -16,8 +16,13 @@
  */
 package com.prosystemingegneri.censistant.presentation.audit;
 
+import com.prosystemingegneri.censistant.business.audit.boundary.LoginAuditService;
+import com.prosystemingegneri.censistant.presentation.Authenticator;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.application.ProjectStage;
+import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import javax.inject.Named;
 
 /**
@@ -30,9 +35,15 @@ public class FailedLoginAuditPresenter {
     
     private String dummy;
     
+    @Inject
+    private LoginAuditService loginAuditService;
+    @Inject
+    private Authenticator authenticator;
+    
     @PostConstruct
     public void init() {
-        System.out.println("LOGIN FALLITO");
+        if (FacesContext.getCurrentInstance().isProjectStage(ProjectStage.Production))
+            loginAuditService.sendEventForFailedLogin(authenticator.getLoggedUser());
     }
 
     public String getDummy() {
