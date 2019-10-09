@@ -1,6 +1,7 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
-                template="/WEB-INF/template.xhtml">
+                template="/WEB-INF/template.xhtml"
+                xmlns:p="http://primefaces.org/ui">
     <ui:define name="content">
         <div class="ui-g">
             <div class="ui-g-12">
@@ -13,6 +14,7 @@
                         </ul>
                         In questo momento un admin può abilitare i nuovi utenti.
                     </p>
+                    <p:button outcome="securedBasic/welcome" value="#{msg.start_tip}" style="display:inline-block;margin-top:5px"/>
                 </div>
             </div>
         </div>
