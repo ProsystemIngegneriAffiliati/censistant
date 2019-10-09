@@ -26,9 +26,9 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
 import java.util.Base64;
-import javax.annotation.PreDestroy;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
+import javax.faces.application.ProjectStage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -61,7 +61,8 @@ public class Authenticator implements Serializable {
         /*}*/
         
         if (!isEntered && loggedUser != null) {
-            loginAuditService.sendEventForLogin(loggedUser.getUserName());
+            if (FacesContext.getCurrentInstance().isProjectStage(ProjectStage.Production))
+                loginAuditService.sendEventForLogin(loggedUser.getUserName());
             isEntered = true;
         }
         
@@ -96,7 +97,8 @@ public class Authenticator implements Serializable {
     }
     
     public String logout() {
-        loginAuditService.sendEventForLogout(loggedUser.getUserName());
+        if (FacesContext.getCurrentInstance().isProjectStage(ProjectStage.Production))
+            loginAuditService.sendEventForLogout(loggedUser.getUserName());
         isEntered = false;
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
         return "/index?faces-redirect=true";
