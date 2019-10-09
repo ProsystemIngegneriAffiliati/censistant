@@ -24,7 +24,7 @@
                                     #{msg.maintenance_maintenanceTasks_tip}
                                     <p:outputPanel>
                                         <p:outputPanel style="display: inline-block">
-                                            <p:button title="#{msg.new}" icon="ui-icon-create" styleClass="AquaButton" outcome="/secured/maintenance/maintenanceTask">
+                                            <p:button title="#{msg.new}" icon="ui-icon-create" styleClass="AquaButton" outcome="/securedBasic/maintenance/maintenanceTask">
                                                 <f:param name="id" value="0" />
                                             </p:button>
                                             <p:commandButton title="#{msg.delete}" icon="ui-icon-delete" actionListener="#{maintenanceTaskListPresenter.deleteMaintenanceTask()}" update="maintenanceTasksTable">
@@ -86,7 +86,7 @@
                                 <h:outputText rendered="#{maintenanceTask.seeNotes}" value="#{msg.maintenance_maintenanceTask_seeNotes}" />
                             </p:column>
                             <p:column headerText="#{msg.actions}" style="width:64px; text-align:center" priority="0" exportable="false">
-                                <p:button title="#{msg.edit}" icon="ui-icon-edit" styleClass="AquaButton" outcome="/secured/maintenance/maintenanceTask">
+                                <p:button title="#{msg.edit}" icon="ui-icon-edit" styleClass="AquaButton" outcome="/securedBasic/maintenance/maintenanceTask">
                                     <f:param name="id" value="#{maintenanceTask.id}" />
                                 </p:button>
                             </p:column>

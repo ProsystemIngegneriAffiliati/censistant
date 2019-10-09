@@ -83,7 +83,7 @@ public class SiteSurveyRequestPresenter implements Serializable{
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("siteSurveyRequest", siteSurveyRequest);
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("customerSupplier", customerSupplierService.createPotentialCustomer());
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("isCustomerView", Boolean.TRUE);
-        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("returnPage", "siteSurvey/siteSurveyRequest");
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("returnPage", "secured/siteSurvey/siteSurveyRequest");
         
         return "/secured/customerSupplier/customer?faces-redirect=true";
     }

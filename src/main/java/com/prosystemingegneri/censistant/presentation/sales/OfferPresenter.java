@@ -181,7 +181,7 @@ public class OfferPresenter implements Serializable{
         setExternalContext();
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("customerSupplier", customer);
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("isCustomerView", Boolean.TRUE);
-        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("returnPage", "sales/offer");
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("returnPage", "secured/sales/offer");
         
         return "/secured/customerSupplier/customer?faces-redirect=true";
     }
@@ -231,7 +231,7 @@ public class OfferPresenter implements Serializable{
 
                 FacesContext.getCurrentInstance().getExternalContext().getFlash().put("jobOrder", newJobOrder);
 
-                return "/secured/sales/jobOrder?faces-redirect=true";
+                return "/securedBasic/sales/jobOrder?faces-redirect=true";
             }
         }
         

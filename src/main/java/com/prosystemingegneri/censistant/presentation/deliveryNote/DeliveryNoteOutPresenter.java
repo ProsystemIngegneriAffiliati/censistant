@@ -148,7 +148,7 @@ public class DeliveryNoteOutPresenter implements Serializable{
     }
     
     private void putExternalContext() {
-        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("returnPage", "deliveryNote/deliveryNoteOut");
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("returnPage", "secured/deliveryNote/deliveryNoteOut");
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("deliveryNote", deliveryNoteOut);
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("activeIndex", activeIndex);
     }

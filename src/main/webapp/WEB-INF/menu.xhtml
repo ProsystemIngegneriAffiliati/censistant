@@ -4,79 +4,84 @@
     xmlns:h="http://java.sun.com/jsf/html"
     xmlns:ui="http://java.sun.com/jsf/facelets"
     xmlns:p="http://primefaces.org/ui"
-    xmlns:pu="http://primefaces.org/ultima">
+    xmlns:pu="http://primefaces.org/ultima"
+    xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
     <h:form id="menuform"> 
         <div class="layout-menu">
             <div class="nano">
                 <div class="nano-content menu-scroll-content">
                     <pu:menu widgetVar="me">
-                        <p:submenu id="customerMenu" label="#{msg.customerSupplier_customers}" icon="&#xE7FC;">
-                            <p:menuitem id="potentialCustomersMenu" value="#{msg.customerSupplier_customers_onlyPotentialCustomer}" icon="&#xE8A3;" outcome="/secured/customerSupplier/customers">
-                                <f:param name="isPotentialCustomer" value="true" />
-                            </p:menuitem>
-                            <p:menuitem id="noPotentialCustomersMenu" value="#{msg.customerSupplier_customers_onlyNoPotentialCustomer}" icon="&#xE8A3;" outcome="/secured/customerSupplier/customers">
-                                <f:param name="isPotentialCustomer" value="false" />
-                            </p:menuitem>
-                            <p:menuitem id="siteSurveyReportsMenu" value="#{msg.siteSurvey_siteSurveyReports}" icon="&#xE616;" outcome="/secured/siteSurvey/siteSurveyReports"/>
-                            <p:submenu id="customersUtils" label="#{msg.utils}" icon="&#xE149;">
-                                <p:menuitem id="provenancesMenu" value="#{msg.customerSupplier_provenances}" icon="&#xE41C;" outcome="/secured/customerSupplier/provenances"/>
+                        <c:if test="#{request.isUserInRole('admin')}">
+                            <p:submenu id="customerMenu" label="#{msg.customerSupplier_customers}" icon="&#xE7FC;">
+                                <p:menuitem id="potentialCustomersMenu" value="#{msg.customerSupplier_customers_onlyPotentialCustomer}" icon="&#xE8A3;" outcome="/secured/customerSupplier/customers">
+                                    <f:param name="isPotentialCustomer" value="true" />
+                                </p:menuitem>
+                                <p:menuitem id="noPotentialCustomersMenu" value="#{msg.customerSupplier_customers_onlyNoPotentialCustomer}" icon="&#xE8A3;" outcome="/secured/customerSupplier/customers">
+                                    <f:param name="isPotentialCustomer" value="false" />
+                                </p:menuitem>
+                                <p:menuitem id="siteSurveyReportsMenu" value="#{msg.siteSurvey_siteSurveyReports}" icon="&#xE616;" outcome="/secured/siteSurvey/siteSurveyReports"/>
+                                <p:submenu id="customersUtils" label="#{msg.utils}" icon="&#xE149;">
+                                    <p:menuitem id="provenancesMenu" value="#{msg.customerSupplier_provenances}" icon="&#xE41C;" outcome="/secured/customerSupplier/provenances"/>
+                                </p:submenu>
                             </p:submenu>
-                        </p:submenu>
-                        <p:submenu id="productionMenu" label="#{msg.production}" icon="&#xE7EE;">
-                            <p:menuitem id="itemsMenu" value="#{msg.production_items}" icon="&#xE3EC;" outcome="/secured/production/items"/>
-                            <p:submenu id="productionsUtils" label="#{msg.utils}" icon="&#xE149;">
-                                <p:menuitem id="deviceProgrammingTypesMenu" value="#{msg.production_deviceProgrammingTypes}" icon="&#xE8F8;" outcome="/secured/production/deviceProgrammingTypes"/>
+                            <p:submenu id="productionMenu" label="#{msg.production}" icon="&#xE7EE;">
+                                <p:menuitem id="itemsMenu" value="#{msg.production_items}" icon="&#xE3EC;" outcome="/secured/production/items"/>
+                                <p:submenu id="productionsUtils" label="#{msg.utils}" icon="&#xE149;">
+                                    <p:menuitem id="deviceProgrammingTypesMenu" value="#{msg.production_deviceProgrammingTypes}" icon="&#xE8F8;" outcome="/secured/production/deviceProgrammingTypes"/>
+                                </p:submenu>
                             </p:submenu>
-                        </p:submenu>
-                        <p:submenu id="salesMenu" label="#{msg.sales}" icon="&#xE227;">
-                            <p:menuitem id="jobOrdersMenu" value="#{msg.sales_jobOrders}" icon="&#xE8F8;" outcome="/secured/sales/jobOrders"/>
-                            <p:menuitem id="timeSpentsMenu" value="#{msg.sales_timeSpents}" icon="&#xE8F8;" outcome="/secured/sales/timeSpents"/>
-                            <p:submenu id="salesUtils" label="#{msg.utils}" icon="&#xE149;">
-                                <p:menuitem id="placeTypesMenu" value="#{msg.sales_placeTypes}" icon="&#xE3EC;" outcome="/secured/sales/placeTypes"/>
-                                <p:menuitem id="workingOperationsMenu" value="#{msg.sales_workingOperations}" icon="&#xE3EC;" outcome="/secured/sales/workingOperations"/>
+                            <p:submenu id="salesMenu" label="#{msg.sales}" icon="&#xE227;">
+                                <p:menuitem id="jobOrdersMenu" value="#{msg.sales_jobOrders}" icon="&#xE8F8;" outcome="/secured/sales/jobOrders"/>
+                                <p:submenu id="salesUtils" label="#{msg.utils}" icon="&#xE149;">
+                                    <p:menuitem id="placeTypesMenu" value="#{msg.sales_placeTypes}" icon="&#xE3EC;" outcome="/secured/sales/placeTypes"/>
+                                    <p:menuitem id="workingOperationsMenu" value="#{msg.sales_workingOperations}" icon="&#xE3EC;" outcome="/secured/sales/workingOperations"/>
+                                </p:submenu>
                             </p:submenu>
-                        </p:submenu>
-                        <p:submenu id="maintenanceMenu" label="#{msg.maintenance}" icon="&#xE869;">
-                            <p:menuitem id="maintenanceTasksMenu" value="#{msg.maintenance_maintenanceTasks}" icon="&#xE869;" outcome="/secured/maintenance/maintenanceTasks"/>
-                            <p:menuitem id="maintenanceContractsMenu" value="#{msg.maintenance_maintenanceContracts_abbr}" icon="&#xE85D;" outcome="/secured/maintenance/maintenanceContracts"/>
-                            <p:submenu id="maintenanceUtils" label="#{msg.utils}" icon="&#xE149;">
-                                <p:menuitem id="maintenancePaymentsMenu" value="#{msg.maintenance_maintenancePayments}" icon="&#xE3EC;" outcome="/secured/maintenance/maintenancePayments"/>
-                                <p:menuitem id="vatsMenu" value="#{msg.maintenance_vats}" icon="&#xE3EC;" outcome="/secured/maintenance/vats"/>
+                            <p:submenu id="maintenanceMenu" label="#{msg.maintenance}" icon="&#xE869;">
+                                <p:menuitem id="maintenanceTasksMenu" value="#{msg.maintenance_maintenanceTasks}" icon="&#xE869;" outcome="/secured/maintenance/maintenanceTasks"/>
+                                <p:menuitem id="maintenanceContractsMenu" value="#{msg.maintenance_maintenanceContracts_abbr}" icon="&#xE85D;" outcome="/secured/maintenance/maintenanceContracts"/>
+                                <p:submenu id="maintenanceUtils" label="#{msg.utils}" icon="&#xE149;">
+                                    <p:menuitem id="maintenancePaymentsMenu" value="#{msg.maintenance_maintenancePayments}" icon="&#xE3EC;" outcome="/secured/maintenance/maintenancePayments"/>
+                                    <p:menuitem id="vatsMenu" value="#{msg.maintenance_vats}" icon="&#xE3EC;" outcome="/secured/maintenance/vats"/>
+                                </p:submenu>
                             </p:submenu>
-                        </p:submenu>
-                        <p:submenu id="purchasingMenu" label="#{msg.purchasing}" icon="&#xE558;">
-                            <p:menuitem id="suppliersMenu" value="#{msg.customerSupplier_suppliers}" icon="&#xE8A3;" outcome="/secured/customerSupplier/suppliers"/>
-                            <p:menuitem id="supplierItemsMenu" value="#{msg.purchasing_supplierItems}" icon="&#xE3EC;" outcome="/secured/purchasing/supplierItems"/>
-                            <p:menuitem id="purchaseOrdersMenu" value="#{msg.purchasing_purchaseOrders}" icon="&#xE8CC;" outcome="/secured/purchasing/purchaseOrders"/>
-                            <p:submenu id="purchasingUtils" label="#{msg.utils}" icon="&#xE149;">
-                                <p:menuitem id="boxesMenu" value="#{msg.purchasing_boxes}" icon="&#xE8F8;" outcome="/secured/purchasing/boxes"/>
+                            <p:submenu id="purchasingMenu" label="#{msg.purchasing}" icon="&#xE558;">
+                                <p:menuitem id="suppliersMenu" value="#{msg.customerSupplier_suppliers}" icon="&#xE8A3;" outcome="/secured/customerSupplier/suppliers"/>
+                                <p:menuitem id="supplierItemsMenu" value="#{msg.purchasing_supplierItems}" icon="&#xE3EC;" outcome="/secured/purchasing/supplierItems"/>
+                                <p:menuitem id="purchaseOrdersMenu" value="#{msg.purchasing_purchaseOrders}" icon="&#xE8CC;" outcome="/secured/purchasing/purchaseOrders"/>
+                                <p:submenu id="purchasingUtils" label="#{msg.utils}" icon="&#xE149;">
+                                    <p:menuitem id="boxesMenu" value="#{msg.purchasing_boxes}" icon="&#xE8F8;" outcome="/secured/purchasing/boxes"/>
+                                </p:submenu>
                             </p:submenu>
-                        </p:submenu>
-                        <p:submenu id="deliveryNoteMenu" label="#{msg.deliveryNote}" icon="&#xE85D;">
-                            <p:menuitem id="deliveryNoteInsMenu" value="#{msg.deliveryNote_deliveryNoteIns}" icon="&#xE0B5;" outcome="/secured/deliveryNote/deliveryNoteIns"/>
-                            <p:menuitem id="deliveryNoteOutsMenu" value="#{msg.deliveryNote_deliveryNoteOuts}" icon="&#xE0B2;" outcome="/secured/deliveryNote/deliveryNoteOuts"/>
-                            <p:submenu id="deliveryNoteUtils" label="#{msg.utils}" icon="&#xE149;">
-                                <p:menuitem id="carriersMenu" value="#{msg.deliveryNote_carriers}" icon="&#xE8F8;" outcome="/secured/deliveryNote/carriers"/>
-                                <p:menuitem id="goodsDescriptionsMenu" value="#{msg.deliveryNote_goodsDescriptions}" icon="&#xE8F8;" outcome="/secured/deliveryNote/goodsDescriptions"/>
-                                <p:menuitem id="shipmentReasonsMenu" value="#{msg.deliveryNote_shipmentReasons}" icon="&#xE8F8;" outcome="/secured/deliveryNote/shipmentReasons"/>
-                                <p:menuitem id="shippingPaymentsMenu" value="#{msg.deliveryNote_shippingPayments}" icon="&#xE8F8;" outcome="/secured/deliveryNote/shippingPayments"/>
+                            <p:submenu id="deliveryNoteMenu" label="#{msg.deliveryNote}" icon="&#xE85D;">
+                                <p:menuitem id="deliveryNoteInsMenu" value="#{msg.deliveryNote_deliveryNoteIns}" icon="&#xE0B5;" outcome="/secured/deliveryNote/deliveryNoteIns"/>
+                                <p:menuitem id="deliveryNoteOutsMenu" value="#{msg.deliveryNote_deliveryNoteOuts}" icon="&#xE0B2;" outcome="/secured/deliveryNote/deliveryNoteOuts"/>
+                                <p:submenu id="deliveryNoteUtils" label="#{msg.utils}" icon="&#xE149;">
+                                    <p:menuitem id="carriersMenu" value="#{msg.deliveryNote_carriers}" icon="&#xE8F8;" outcome="/secured/deliveryNote/carriers"/>
+                                    <p:menuitem id="goodsDescriptionsMenu" value="#{msg.deliveryNote_goodsDescriptions}" icon="&#xE8F8;" outcome="/secured/deliveryNote/goodsDescriptions"/>
+                                    <p:menuitem id="shipmentReasonsMenu" value="#{msg.deliveryNote_shipmentReasons}" icon="&#xE8F8;" outcome="/secured/deliveryNote/shipmentReasons"/>
+                                    <p:menuitem id="shippingPaymentsMenu" value="#{msg.deliveryNote_shippingPayments}" icon="&#xE8F8;" outcome="/secured/deliveryNote/shippingPayments"/>
+                                </p:submenu>
                             </p:submenu>
-                        </p:submenu>
-                        <p:submenu id="warehouseMenu" label="#{msg.warehouse}" icon="&#xE8D1;">
-                            <p:menuitem id="itemMovementsMenu" value="#{msg.warehouse_itemMovement}" icon="&#xE8F8;" outcome="/secured/warehouse/itemMovement"/>
-                            <p:menuitem id="warehousesStockMenu" value="#{msg.warehouse_warehousesStock}" icon="&#xE8F8;" outcome="/secured/warehouse/warehousesStock"/>
-                            <p:menuitem id="handledItemsMenu" value="#{msg.warehouse_handledItems}" icon="&#xE8F8;" outcome="/secured/warehouse/handledItems"/>
-                            <p:submenu id="warehouseUtils" label="#{msg.utils}" icon="&#xE149;">
-                                <p:menuitem id="warehousesMenu" value="#{msg.warehouse_warehouses}" icon="&#xE8F8;" outcome="/secured/warehouse/warehouses"/>
-                                <p:menuitem id="shelfsMenu" value="#{msg.warehouse_shelfs}" icon="&#xE8F8;" outcome="/secured/warehouse/shelfs"/>
+                            <p:submenu id="warehouseMenu" label="#{msg.warehouse}" icon="&#xE8D1;">
+                                <p:menuitem id="warehousesStockMenu" value="#{msg.warehouse_warehousesStock}" icon="&#xE8F8;" outcome="/secured/warehouse/warehousesStock"/>
+                                <p:menuitem id="handledItemsMenu" value="#{msg.warehouse_handledItems}" icon="&#xE8F8;" outcome="/secured/warehouse/handledItems"/>
+                                <p:submenu id="warehouseUtils" label="#{msg.utils}" icon="&#xE149;">
+                                    <p:menuitem id="warehousesMenu" value="#{msg.warehouse_warehouses}" icon="&#xE8F8;" outcome="/secured/warehouse/warehouses"/>
+                                    <p:menuitem id="shelfsMenu" value="#{msg.warehouse_shelfs}" icon="&#xE8F8;" outcome="/secured/warehouse/shelfs"/>
+                                </p:submenu>
                             </p:submenu>
-                        </p:submenu>
-                        <p:submenu id="utilsMenu" label="#{msg.utils}" icon="&#xE896;">
-                            <p:menuitem id="workersMenu" value="#{msg.siteSurvey_workers}" icon="&#xE7FC;" outcome="/secured/siteSurvey/workers"/>
-                            <p:menuitem id="systemTypesMenu" value="#{msg.siteSurvey_systemTypes}" icon="&#xE2BC;" outcome="/secured/siteSurvey/systemTypes"/>
-                            <p:menuitem id="unitMeasuresMenu" value="#{msg.production_unitMeasures}" icon="&#xE41C;" outcome="/secured/production/unitMeasures"/>
-                        </p:submenu>
+                            <p:submenu id="utilsMenu" label="#{msg.utils}" icon="&#xE896;">
+                                <p:menuitem id="workersMenu" value="#{msg.siteSurvey_workers}" icon="&#xE7FC;" outcome="/secured/siteSurvey/workers"/>
+                                <p:menuitem id="systemTypesMenu" value="#{msg.siteSurvey_systemTypes}" icon="&#xE2BC;" outcome="/secured/siteSurvey/systemTypes"/>
+                                <p:menuitem id="unitMeasuresMenu" value="#{msg.production_unitMeasures}" icon="&#xE41C;" outcome="/secured/production/unitMeasures"/>
+                            </p:submenu>
+                        </c:if>
+                        <c:if test="#{request.isUserInRole('user')}">
+                            <p:menuitem id="itemMovementsMenu" value="#{msg.warehouse_itemMovement}" icon="&#xE8F8;" outcome="/securedBasic/warehouse/itemMovement"/>
+                            <p:menuitem id="timeSpentsMenu" value="#{msg.sales_timeSpents}" icon="&#xE8F8;" outcome="/securedBasic/sales/timeSpents"/>
+                        </c:if>
                     </pu:menu>
                 </div>
             </div>

@@ -153,7 +153,7 @@ public class StockListPresenter implements Serializable{
                         if (jobOrder != null)
                             jobOrder.getOffer().setSystem((System) locationArrival);
                         putExternalContext();
-                        return "/secured/" + returnPage + "?faces-redirect=true";
+                        return "/" + returnPage + "?faces-redirect=true";
                     }
                     initStockAfterSuccessfulMovement();
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success", "Successfully moved " + moved + " " + itemStr ));
@@ -173,7 +173,7 @@ public class StockListPresenter implements Serializable{
     public String cancel() {
         putExternalContext();
         
-        return "/secured/" + returnPage + "?faces-redirect=true";
+        return "/" + returnPage + "?faces-redirect=true";
     }
 
     public void onLocationSelect(SelectEvent event) {

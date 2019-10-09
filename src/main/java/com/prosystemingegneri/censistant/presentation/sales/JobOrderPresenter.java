@@ -212,7 +212,7 @@ public class JobOrderPresenter implements Serializable{
         putExternalContext();
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("customerSupplier", customer);
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("isCustomerView", Boolean.TRUE);
-        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("returnPage", "sales/jobOrder");
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("returnPage", "securedBasic/sales/jobOrder");
         
         return "/secured/customerSupplier/customer?faces-redirect=true";
     }
@@ -304,8 +304,8 @@ public class JobOrderPresenter implements Serializable{
     
     public String openItemMovement() {
         putExternalContext();
-        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("returnPage", "sales/jobOrder");
-        return "/secured/warehouse/itemMovement?faces-redirect=true";
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("returnPage", "securedBasic/sales/jobOrder");
+        return "/securedBasic/warehouse/itemMovement?faces-redirect=true";
     }
     
     public void addNewDevice() {

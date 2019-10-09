@@ -60,7 +60,7 @@ public class ProfilePresenter implements Serializable {
 
     public String saveProfile() {
         profile = userService.saveUserApp(profile);
-        return "/secured/welcome?faces-redirect=true";
+        return "/securedBasic/welcome?faces-redirect=true";
     }
 
     public void handleFileUpload(FileUploadEvent event) {

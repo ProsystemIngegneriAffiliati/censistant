@@ -61,13 +61,13 @@ public class DevicePresenter implements Serializable {
         
         putExternalContext();
         
-        return "/secured/sales/jobOrder?faces-redirect=true";
+        return "/securedBasic/sales/jobOrder?faces-redirect=true";
     }
     
     public String cancel() {
         putExternalContext();
         
-        return "/secured/sales/jobOrder?faces-redirect=true";
+        return "/securedBasic/sales/jobOrder?faces-redirect=true";
     }
     
     private void putExternalContext() {

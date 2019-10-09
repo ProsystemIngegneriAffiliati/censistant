@@ -495,8 +495,8 @@ public class MaintenanceTaskPresenter implements Serializable{
     
     public String openItemMovement() {
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("maintenanceTask", maintenanceTask);
-        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("returnPage", "maintenance/maintenanceTask");
-        return "/secured/warehouse/itemMovement?faces-redirect=true";
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("returnPage", "securedBasic/maintenance/maintenanceTask");
+        return "/securedBasic/warehouse/itemMovement?faces-redirect=true";
     }
 
     public List<Device> getImportantDevices() {

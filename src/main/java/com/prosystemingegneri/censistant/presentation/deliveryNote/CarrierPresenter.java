@@ -50,7 +50,7 @@ public class CarrierPresenter implements Serializable{
     public void init() {
         returnPage = (String) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("returnPage");
         if (returnPage == null || returnPage.isEmpty())
-            returnPage = "deliveryNote/carriers";
+            returnPage = "secured/deliveryNote/carriers";
         
         deliveryNote = (DeliveryNoteCommon) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("deliveryNote");
         activeIndex = (Integer) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("activeIndex");
@@ -74,7 +74,7 @@ public class CarrierPresenter implements Serializable{
     private String exit() {
         putExternalContext();
         
-        return "/secured/" + returnPage + "?faces-redirect=true";
+        return "/" + returnPage + "?faces-redirect=true";
     }
     
     public void detailCarrier() {

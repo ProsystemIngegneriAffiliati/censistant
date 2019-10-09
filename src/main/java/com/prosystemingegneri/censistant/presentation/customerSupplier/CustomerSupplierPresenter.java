@@ -118,7 +118,7 @@ public class CustomerSupplierPresenter implements Serializable{
         putMinimalExternalContext();
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("idCustomer", customerSupplier.getId());
         
-        return "/secured/" + returnPage + "?faces-redirect=true";
+        return "/" + returnPage + "?faces-redirect=true";
     }
     
     public void detailCustomerSupplier() {
@@ -195,7 +195,7 @@ public class CustomerSupplierPresenter implements Serializable{
     public String cancel() {
         putMinimalExternalContext();
         
-        return "/secured/" + returnPage + "?faces-redirect=true";
+        return "/" + returnPage + "?faces-redirect=true";
     }
     
     private void putExternalContext() {

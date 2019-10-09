@@ -123,7 +123,7 @@ public class DeliveryNoteInPresenter implements Serializable{
         putExternalContext();
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("customerSupplier", supplier);
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("isCustomerView", Boolean.FALSE);
-        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("returnPage", "deliveryNote/deliveryNoteIn");
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("returnPage", "secured/deliveryNote/deliveryNoteIn");
         
         return "/secured/customerSupplier/supplier?faces-redirect=true";
     }
