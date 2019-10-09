@@ -2,8 +2,8 @@
 readonly IDE_WORKSPACE=$HOME/NetBeansProjects
 readonly AS_LIBFOLDER=$HOME/payara41/glassfish/domains/domain1/lib
 readonly APP_NAME=censistant
-readonly IP_ADDRESS=192.168.2.152
-readonly POSTGRESQL_JDBC_DRIVER_VERSION=42.2.5
+readonly IP_ADDRESS=192.168.2.157
+readonly POSTGRESQL_JDBC_DRIVER_VERSION=42.2.6
 readonly DB_NAME="${APP_NAME}"
 readonly DB_USER_NAME="${APP_NAME}"
 readonly DB_USER_PASSWORD=PNpKjM19byxa6JBIKxFU
@@ -52,13 +52,14 @@ charset=UTF-8 \
 ./asadmin --passwordfile $PASSWORD_ALIAS_DIR/mailPassword create-password-alias $AS_MAILPASSWORD_ALIAS_NAME
 \
 ./asadmin create-javamail-resource \
---mailhost smtp-mail.outlook.com \
---mailuser ingmainardi@live.com \
---fromaddress ingmainardi@live.com \
+--mailhost smtps.aruba.it \
+--mailuser gestionale@antifurto.com \
+--fromaddress gestionale@antifurto.com \
 --password \$\{ALIAS=$AS_MAILPASSWORD_ALIAS_NAME\} \
 --auth true \
---property mail.smtp.starttls.enable=true:\
-mail.smtp.port=587 \
+--property mail.smtp.ssl.enable=true:\
+mail.smtp.ssl.trust=smtps.aruba.it:\
+mail.smtp.host=smtps.aruba.it \
 --debug true \
 mail/"${APP_NAME}"Mail
 \
