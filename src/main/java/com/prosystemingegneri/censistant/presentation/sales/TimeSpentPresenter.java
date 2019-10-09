@@ -78,8 +78,10 @@ public class TimeSpentPresenter implements Serializable{
         if (id != null) {
             if (id == 0)
                 timeSpent = service.create();
-            else
+            else {
                 timeSpent = service.find(id);
+                customer = timeSpent.getJobOrder().getOffer().getSiteSurveyReport().getPlant().getCustomerSupplier();
+            }
             
             if (!FacesContext.getCurrentInstance().getExternalContext().isUserInRole("admin") && workerService.getLoggedWorker().isPresent())
                 timeSpent.setWorker(workerService.getLoggedWorker().get());

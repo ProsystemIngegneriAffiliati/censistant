@@ -26,6 +26,7 @@ import com.prosystemingegneri.censistant.business.user.entity.UserApp_;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.Resource;
 import javax.ejb.SessionContext;
@@ -183,12 +184,15 @@ public class TimeSpentService implements Serializable{
         if (ctx.getCallerPrincipal() != null)
             if (!ctx.isCallerInRole("admin"))
                 conditions.add(
-                        cb.like(
-                                root
-                                        .join(TimeSpent_.worker)
-                                        .join(Worker_.userApp)
-                                        .get(UserApp_.userName)
-                                , ctx.getCallerPrincipal().getName()
+                        cb.and(
+                                cb.like(
+                                        root
+                                                .join(TimeSpent_.worker)
+                                                .join(Worker_.userApp)
+                                                .get(UserApp_.userName),
+                                        ctx.getCallerPrincipal().getName()
+                                ),
+                                cb.greaterThanOrEqualTo(root.<Date>get(TimeSpent_.creation), new Date())
                         )
                 );
         

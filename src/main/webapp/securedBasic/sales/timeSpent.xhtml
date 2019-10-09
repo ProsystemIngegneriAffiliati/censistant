@@ -85,7 +85,7 @@
                                         <p:message for="worker"/>
                                     </h:panelGroup>
                                     <h:panelGroup styleClass="md-inputfield">
-                                        <p:calendar id="creation" value="#{timeSpentPresenter.timeSpent.creation}" locale="it" />
+                                        <p:calendar id="creation" disabled="#{not request.isUserInRole('admin')}" value="#{timeSpentPresenter.timeSpent.creation}" locale="it" />
                                         <p:outputLabel for="creation" value="#{msg.sales_timeSpent_creation}"/>
                                         <p:message for="creation"/>
                                     </h:panelGroup>
