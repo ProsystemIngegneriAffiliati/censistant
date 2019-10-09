@@ -62,7 +62,8 @@ mkdir ${HOME}/'"$(config_get APP_NAME)"'/documents; \
 sh '"$(config_get AS_BIN)"'/asadmin start-domain '"$(config_get AS_DOMAIN_NAME)"'; \
 \
 sh '"$(config_get AS_BIN)"'/asadmin --passwordfile ${HOME}/dbUserPassword create-password-alias '"$(config_get AS_PASSWORD_ALIAS_NAME)"'; \
-rm ${HOME}/dbUserPassword; \
+sh '"$(config_get AS_BIN)"'/asadmin --passwordfile ${HOME}/mailPassword create-password-alias '"$(config_get AS_MAILPASSWORD_ALIAS_NAME)"'; \
+rm ${HOME}/*Password; \
 \
 sh '"$(config_get AS_BIN)"'/asadmin create-jdbc-connection-pool \
 --datasourceclassname=org.postgresql.ds.PGSimpleDataSource \
