@@ -681,22 +681,28 @@
                                                          update="customerSignature">
                                             <oou:ignoreValidationFailed />
                                         </p:commandButton>
-                                        <p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank form-group">
-                                            <h:panelGroup>
-                                                <p:outputLabel for="isSuitableForOperation" value="#{msg.maintenance_maintenanceTask_isSuitableForOperation}" />
-                                                <p:selectOneMenu id="isSuitableForOperation" value="#{maintenanceTaskPresenter.maintenanceTask.suitableForOperation}">
-                                                    <f:selectItem itemLabel="" itemValue="" />
-                                                    <f:selectItems
-                                                        value="#{SuitableForOperation}"
-                                                        var="suitable"
-                                                        itemLabel="#{msg['maintenance_suitableForOperation_' += suitable]}"
-                                                        itemValue="#{suitable}" />
-                                                </p:selectOneMenu>
-                                            </h:panelGroup>
-                                            <p:commandButton value="#{msg.print}" icon="ui-icon-print" ajax="false">
-                                                <p:fileDownload value="#{maintenanceTaskPresenter.print()}" />
-                                            </p:commandButton>
-                                        </p:panelGrid>
+                                    </p:panelGrid>
+                                    <p:panelGrid columns="3" columnClasses="ui-grid-col-4,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                        <h:panelGroup>
+                                            <p:outputLabel for="isSuitableForOperation" value="#{msg.maintenance_maintenanceTask_isSuitableForOperation}" />
+                                            <p:selectOneMenu id="isSuitableForOperation" value="#{maintenanceTaskPresenter.maintenanceTask.suitableForOperation}">
+                                                <f:selectItem itemLabel="" itemValue="" />
+                                                <f:selectItems
+                                                    value="#{SuitableForOperation}"
+                                                    var="suitable"
+                                                    itemLabel="#{msg['maintenance_suitableForOperation_' += suitable]}"
+                                                    itemValue="#{suitable}" />
+                                            </p:selectOneMenu>
+                                        </h:panelGroup>
+                                        <p:commandButton value="#{msg.print}" icon="ui-icon-print" ajax="false">
+                                            <p:fileDownload value="#{maintenanceTaskPresenter.print()}" />
+                                        </p:commandButton>
+                                        <p:commandButton disabled="#{not request.isUserInRole('admin') or empty maintenanceTaskPresenter.maintenanceTask.maintenanceWorkers}"
+                                                         action="#{maintenanceTaskPresenter.sendToWorkers()}"
+                                                         value="#{msg.sendToWorker}"
+                                                         title="#{msg.sendToWorker_tip}"
+                                                         icon="ui-icon-mail"
+                                                         ajax="false" />
                                     </p:panelGrid>
                                 </h:panelGroup>
 

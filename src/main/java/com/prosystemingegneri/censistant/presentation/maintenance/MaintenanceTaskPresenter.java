@@ -37,6 +37,7 @@ import com.prosystemingegneri.censistant.business.siteSurvey.entity.SystemType;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.Worker;
 import com.prosystemingegneri.censistant.business.warehouse.boundary.HandledItemService;
 import com.prosystemingegneri.censistant.business.warehouse.entity.HandledItem;
+import com.prosystemingegneri.censistant.presentation.ApplicationUrl;
 import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -52,6 +53,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.mail.MessagingException;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import javax.validation.groups.Default;
@@ -79,6 +81,8 @@ import org.primefaces.model.Visibility;
 public class MaintenanceTaskPresenter implements Serializable{
     @Inject
     MaintenanceTaskService service;
+    @Inject
+    private ApplicationUrl applicationUrl;
     
     private MaintenanceTask maintenanceTask;
     private Long id;
@@ -253,6 +257,19 @@ public class MaintenanceTaskPresenter implements Serializable{
         HandledItem handledItem = (HandledItem) event.getObject();
         if (!maintenanceTask.isHandledItemPresent(handledItem))
             maintenanceTask.addReplacement(new Replacement(handledItem));
+    }
+    
+    public void sendToWorkers() {
+        if (isValid()) {
+            try {
+                maintenanceTask = service.sendToWorker(maintenanceTask, applicationUrl.getApplicationUrl());
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success", "E-mail sent"));
+            } catch (EJBException e) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", ExceptionUtility.unwrap(e.getCausedByException()).getLocalizedMessage()));
+            } catch (MessagingException ex) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", ExceptionUtility.unwrap(ex.getCause()).getLocalizedMessage()));
+            }
+        }
     }
     
     public StreamedContent print() {

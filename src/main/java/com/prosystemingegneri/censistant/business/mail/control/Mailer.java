@@ -36,11 +36,13 @@ public class Mailer implements Serializable {
     @Resource(lookup = "mail/censistantMail")
     private Session session;
     
-    public void sendMail(String subject, String body, List<String> listTo) throws MessagingException {
+    public void sendMail(String subject, String body, List<String> listTo, List<String> listToCcn) throws MessagingException {
         MimeMessage msg = new MimeMessage(session);
 
         msg.setFrom();
         msg.addRecipients(RecipientType.TO, InternetAddress.parse(String.join(",", listTo)));
+        if (listToCcn != null && !listToCcn.isEmpty())
+            msg.addRecipients(RecipientType.BCC, InternetAddress.parse(String.join(",", listToCcn)));
         msg.setSubject(subject, "UTF-8");
         msg.setText(body, "UTF-8");
         msg.setHeader("Content-Type", "text/plain; charset=UTF-8");

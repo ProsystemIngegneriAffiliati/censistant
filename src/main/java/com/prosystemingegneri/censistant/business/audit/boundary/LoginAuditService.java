@@ -39,20 +39,21 @@ public class LoginAuditService implements Serializable {
     @Inject
     private Mailer mailer;
     
-    private static final String AUDITOR = "forzato@antifurto.com";
+    public static final String AUDITOR = "forzato@antifurto.com";
     
     @Asynchronous
     public void sendEventForLogin(String username) {
         try {
             mailer.sendMail(
                     username + ": nuovo login",
-                    (new StringBuilder("Il giorno ")
+                    new StringBuilder("Il giorno ")
                             .append(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
-                            .append(" all'ora odierna l'utente "))
+                            .append(" all'ora odierna l'utente ")
                             .append(username)
                             .append(" ha effettuato l'accesso.")
                             .toString(),
-                    Arrays.asList(AUDITOR));
+                    Arrays.asList(AUDITOR),
+                    null);
         } catch (MessagingException ex) {
             Logger.getLogger(LoginAuditService.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -66,15 +67,16 @@ public class LoginAuditService implements Serializable {
         try {
             mailer.sendMail(
                     "Tentativo di accesso",
-                    (new StringBuilder("Il giorno ")
+                    new StringBuilder("Il giorno ")
                             .append(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
                             .append(" all'ora odierna ")
                             .append(testoUtente)
                             .append(" tentato un accesso a zone riservate del programma.")
                             .append(System.lineSeparator())
                             .append("I privilegi insufficienti non hanno consentito di continuare.")
-                            .toString()),
-                    Arrays.asList(AUDITOR));
+                            .toString(),
+                    Arrays.asList(AUDITOR),
+                    null);
         } catch (MessagingException ex) {
             Logger.getLogger(LoginAuditService.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -85,13 +87,14 @@ public class LoginAuditService implements Serializable {
         try {
             mailer.sendMail(
                     username + ": uscita dal programma",
-                    (new StringBuilder("Il giorno ")
+                    new StringBuilder("Il giorno ")
                             .append(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
-                            .append(" all'ora odierna l'utente "))
+                            .append(" all'ora odierna l'utente ")
                             .append(username)
                             .append(" è uscito dal programma.")
                             .toString(),
-                    Arrays.asList(AUDITOR));
+                    Arrays.asList(AUDITOR),
+                    null);
         } catch (MessagingException ex) {
             Logger.getLogger(LoginAuditService.class.getName()).log(Level.SEVERE, null, ex);
         }

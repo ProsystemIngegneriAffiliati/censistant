@@ -16,10 +16,12 @@
  */
 package com.prosystemingegneri.censistant.business.maintenance.boundary;
 
+import com.prosystemingegneri.censistant.business.audit.boundary.LoginAuditService;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier_;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant_;
+import com.prosystemingegneri.censistant.business.mail.control.Mailer;
 import com.prosystemingegneri.censistant.business.maintenance.control.Inspection;
 import com.prosystemingegneri.censistant.business.maintenance.control.MaintenanceType;
 import com.prosystemingegneri.censistant.business.maintenance.control.SuitableForOperation;
@@ -47,11 +49,13 @@ import com.prosystemingegneri.censistant.business.siteSurvey.entity.SystemType;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.Worker;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.mail.MessagingException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -78,6 +82,8 @@ public class MaintenanceTaskService implements Serializable{
     private OfferService offerService;
     @Inject
     private JobOrderService jobOrderService;
+    @Inject
+    private Mailer mailer;
     
     public MaintenanceTask create() {
         MaintenanceTask maintenanceTask = new MaintenanceTask();
@@ -118,6 +124,31 @@ public class MaintenanceTaskService implements Serializable{
             em.persist(maintenanceTask);
         else
             maintenanceTask = em.merge(maintenanceTask);
+        
+        return maintenanceTask;
+    }
+    
+    public MaintenanceTask sendToWorker(MaintenanceTask maintenanceTask, @NotNull String applicationUrl) throws MessagingException {
+        maintenanceTask = saveMaintenanceTask(maintenanceTask);
+        List<String> indirizzi = new ArrayList<>();
+        for (Worker maintenanceWorker : maintenanceTask.getMaintenanceWorkers())
+            indirizzi.add(maintenanceWorker.getEmail());
+        
+        String subject = "Intervento a richiesta";
+        if (maintenanceTask.getMaintenancePlan() != null)
+            subject = "Intevento manutenzione programmata";
+        
+        mailer.sendMail(
+                subject,
+                new StringBuilder("Clicca sul link sottostante per prendere in carico il lavoro.")
+                        .append(java.lang.System.lineSeparator())
+                        .append(applicationUrl)
+                        .append("faces/securedBasic/maintenance/maintenanceTask.xhtml?id=")
+                        .append(maintenanceTask.getId())
+                        .toString(),
+                indirizzi,
+                Arrays.asList(LoginAuditService.AUDITOR)
+        );
         
         return maintenanceTask;
     }
