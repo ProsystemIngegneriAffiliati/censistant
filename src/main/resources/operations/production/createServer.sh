@@ -98,13 +98,14 @@ charset=UTF-8 \
 '"$(config_get APP_NAME)"'Realm; \
 \
 sh '"$(config_get AS_BIN)"'/asadmin create-javamail-resource \
---mailhost smtp-mail.outlook.com \
---mailuser ingmainardi@live.com \
---fromaddress ingmainardi@live.com \
+--mailhost smtps.aruba.it \
+--mailuser gestionale@antifurto.com \
+--fromaddress gestionale@antifurto.com \
 --password \$\{ALIAS='"$(config_get AS_MAILPASSWORD_ALIAS_NAME)"'\} \
 --auth true \
---property mail.smtp.starttls.enable=true:\
-mail.smtp.port=587 \
+--property mail.smtp.ssl.enable=true:\
+mail.smtp.ssl.trust=smtps.aruba.it:\
+mail.smtp.host=smtps.aruba.it \
 mail/'"$(config_get APP_NAME)"'Mail; \
 \
 sh '"$(config_get AS_BIN)"'/asadmin restart-domain '"$(config_get AS_DOMAIN_NAME)"''
