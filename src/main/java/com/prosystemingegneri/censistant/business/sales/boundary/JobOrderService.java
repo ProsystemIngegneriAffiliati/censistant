@@ -16,11 +16,13 @@
  */
 package com.prosystemingegneri.censistant.business.sales.boundary;
 
+import com.prosystemingegneri.censistant.business.audit.boundary.LoginAuditService;
 import com.prosystemingegneri.censistant.business.customerSupplier.boundary.CustomerSupplierService;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.CustomerSupplier_;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant;
 import com.prosystemingegneri.censistant.business.customerSupplier.entity.Plant_;
+import com.prosystemingegneri.censistant.business.mail.control.Mailer;
 import com.prosystemingegneri.censistant.business.production.boundary.SystemService;
 import com.prosystemingegneri.censistant.business.sales.entity.JobOrder;
 import com.prosystemingegneri.censistant.business.sales.entity.JobOrder_;
@@ -32,14 +34,17 @@ import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyRe
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyRequest_;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SystemType;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SystemType_;
+import com.prosystemingegneri.censistant.business.siteSurvey.entity.Worker;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.mail.MessagingException;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -51,6 +56,7 @@ import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -69,6 +75,9 @@ public class JobOrderService implements Serializable{
     
     @Inject
     SystemService systemService;
+    
+    @Inject
+    private Mailer mailer;
     
     public JobOrder createNewJobOrder(Offer offer) {
         JobOrder jobOrder = new JobOrder(getNextNumber());
@@ -133,6 +142,29 @@ public class JobOrderService implements Serializable{
         customerSupplierService.saveCustomerSupplier(customer);
         
         return jobOrder;
+    }
+    
+    public JobOrder sendToWorker(JobOrder maintenanceTask, @NotNull String applicationUrl) throws MessagingException {
+        maintenanceTask = saveJobOrder(maintenanceTask);
+        List<String> indirizzi = new ArrayList<>();
+        for (Worker maintenanceWorker : maintenanceTask.getWorkers())
+            indirizzi.add(maintenanceWorker.getEmail());
+        
+        String subject = "Nuova installazione";
+        
+        mailer.sendMail(
+                subject,
+                new StringBuilder("Clicca sul link sottostante per prendere in carico il lavoro.")
+                        .append(java.lang.System.lineSeparator())
+                        .append(applicationUrl)
+                        .append("faces/securedBasic/sales/jobOrder.xhtml?id=")
+                        .append(maintenanceTask.getId())
+                        .toString(),
+                indirizzi,
+                Arrays.asList(LoginAuditService.AUDITOR)
+        );
+        
+        return maintenanceTask;
     }
     
     public JobOrder readJobOrder(Long id) {

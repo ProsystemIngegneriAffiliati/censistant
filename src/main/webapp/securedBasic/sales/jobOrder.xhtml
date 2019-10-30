@@ -22,7 +22,7 @@
                             <div class="card card-w-title">
                                 <h1>#{msg.sales_jobOrder}</h1>
                                 <p>#{msg.sales_jobOrder_tip}</p>
-                                <p:panelGrid columns="3" columnClasses="ui-grid-col-5,ui-grid-col-5,ui-grid-col-2" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                <p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-3,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group">
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputNumber id="number" value="#{jobOrderPresenter.jobOrder.number}" decimalPlaces="0" />
                                         <p:outputLabel for="number" value="#{msg.sales_jobOrder_number}" />
@@ -36,6 +36,12 @@
                                     <p:commandButton value="#{msg.print}" icon="ui-icon-print" ajax="false">
                                         <p:fileDownload value="#{jobOrderPresenter.print()}" />
                                     </p:commandButton>
+                                    <p:commandButton disabled="#{not request.isUserInRole('admin') or empty jobOrderPresenter.jobOrder.workers}"
+                                                     action="#{jobOrderPresenter.sendToWorkers()}"
+                                                     value="#{msg.sendToWorker}"
+                                                     title="#{msg.sendToWorker_tip}"
+                                                     icon="ui-icon-mail"
+                                                     ajax="false" />
                                 </p:panelGrid>
 
                                 <c:if test="#{request.isUserInRole('admin')}">

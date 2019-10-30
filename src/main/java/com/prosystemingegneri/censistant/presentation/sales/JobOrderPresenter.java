@@ -32,6 +32,7 @@ import com.prosystemingegneri.censistant.business.sales.entity.Offer;
 import com.prosystemingegneri.censistant.business.siteSurvey.boundary.SiteSurveyReportService;
 import com.prosystemingegneri.censistant.business.siteSurvey.entity.SiteSurveyReport;
 import com.prosystemingegneri.censistant.business.warehouse.boundary.StockService;
+import com.prosystemingegneri.censistant.presentation.ApplicationUrl;
 import com.prosystemingegneri.censistant.presentation.DocumentAndImageUtils;
 import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
 import java.io.FileInputStream;
@@ -55,6 +56,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.mail.MessagingException;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import javax.validation.groups.Default;
@@ -82,6 +84,8 @@ import org.primefaces.model.UploadedFile;
 public class JobOrderPresenter implements Serializable{
     @Inject
     JobOrderService service;
+    @Inject
+    private ApplicationUrl applicationUrl;
     @Inject
     CustomerSupplierService customerSupplierService;
     @Inject
@@ -382,6 +386,19 @@ public class JobOrderPresenter implements Serializable{
             id = jobOrder.getId();
         
         return null;
+    }
+    
+    public void sendToWorkers() {
+        if (isValid()) {
+            try {
+                jobOrder = service.sendToWorker(jobOrder, applicationUrl.getApplicationUrl());
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success", "E-mail sent"));
+            } catch (EJBException e) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", ExceptionUtility.unwrap(e.getCausedByException()).getLocalizedMessage()));
+            } catch (MessagingException ex) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", ExceptionUtility.unwrap(ex.getCause()).getLocalizedMessage()));
+            }
+        }
     }
     
     public void clearWorkerSignature() {
