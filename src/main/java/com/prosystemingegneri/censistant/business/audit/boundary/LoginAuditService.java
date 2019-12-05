@@ -40,7 +40,7 @@ public class LoginAuditService implements Serializable {
     @Inject
     private Mailer mailer;
     
-    public static final String AUDITOR = "mainardi@prosystemingegneri.com";
+    public static final String AUDITOR = "forzato@antifurto.com";
     
     @Asynchronous
     public void sendEventForLogin(String username) {
