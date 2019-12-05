@@ -42,8 +42,12 @@ public class FailedLoginAuditPresenter {
     
     @PostConstruct
     public void init() {
-        if (FacesContext.getCurrentInstance().isProjectStage(ProjectStage.Production))
-            loginAuditService.sendEventForFailedLogin(authenticator.getLoggedUser());
+        if (FacesContext.getCurrentInstance().isProjectStage(ProjectStage.Production)) {
+            if (authenticator.getLoggedUser() != null)
+                loginAuditService.sendEventForAccessDenied(authenticator.getLoggedUser().getUserName());
+            else
+                loginAuditService.sendEventForAccessDenied(null);
+        }
     }
 
     public String getDummy() {

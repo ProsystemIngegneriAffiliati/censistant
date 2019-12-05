@@ -17,7 +17,6 @@
 package com.prosystemingegneri.censistant.business.audit.boundary;
 
 import com.prosystemingegneri.censistant.business.mail.control.Mailer;
-import com.prosystemingegneri.censistant.business.user.entity.UserApp;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -60,10 +59,33 @@ public class LoginAuditService implements Serializable {
     }
     
     @Asynchronous
-    public void sendEventForFailedLogin(UserApp loggedUser) {
+    public void sendEventForFailedLogin(String username) {
         String testoUtente = "è stato";
-        if (loggedUser != null)
-            testoUtente = "l'utente " + loggedUser.getUserName() + " ha";
+        if (username != null && !username.isEmpty())
+            testoUtente = "l'utente " + username + " ha";
+        try {
+            mailer.sendMail(
+                    "Tentativo di accesso",
+                    new StringBuilder("Il giorno ")
+                            .append(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
+                            .append(" all'ora odierna ")
+                            .append(testoUtente)
+                            .append(" tentato un accesso al programma.")
+                            .append(System.lineSeparator())
+                            .append("Lo username o la password sono risultati errati ed è stato impedito l'accesso.")
+                            .toString(),
+                    Arrays.asList(AUDITOR),
+                    null);
+        } catch (MessagingException ex) {
+            Logger.getLogger(LoginAuditService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    @Asynchronous
+    public void sendEventForAccessDenied(String username) {
+        String testoUtente = "è stato";
+        if (username != null && !username.isEmpty())
+            testoUtente = "l'utente " + username + " ha";
         try {
             mailer.sendMail(
                     "Tentativo di accesso",
