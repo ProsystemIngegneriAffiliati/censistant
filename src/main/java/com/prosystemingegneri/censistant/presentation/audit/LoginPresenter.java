@@ -17,7 +17,6 @@
 package com.prosystemingegneri.censistant.presentation.audit;
 
 import com.prosystemingegneri.censistant.business.audit.boundary.LoginAuditService;
-import com.prosystemingegneri.censistant.presentation.ExceptionUtility;
 import javax.enterprise.inject.Model;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;

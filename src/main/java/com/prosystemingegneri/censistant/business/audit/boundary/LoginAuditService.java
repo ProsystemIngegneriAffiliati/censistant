@@ -20,6 +20,8 @@ import com.prosystemingegneri.censistant.business.mail.control.Mailer;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.logging.Level;
@@ -38,7 +40,7 @@ public class LoginAuditService implements Serializable {
     @Inject
     private Mailer mailer;
     
-    public static final String AUDITOR = "forzato@antifurto.com";
+    public static final String AUDITOR = "mainardi@prosystemingegneri.com";
     
     @Asynchronous
     public void sendEventForLogin(String username) {
@@ -47,7 +49,9 @@ public class LoginAuditService implements Serializable {
                     username + ": nuovo login",
                     new StringBuilder("Il giorno ")
                             .append(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
-                            .append(" all'ora odierna l'utente ")
+                            .append(" alle ore ")
+                            .append(LocalTime.now(ZoneId.of("Europe/Paris")).format(DateTimeFormatter.ofPattern("HH:mm")))
+                            .append(" l'utente ")
                             .append(username)
                             .append(" ha effettuato l'accesso.")
                             .toString(),
@@ -68,7 +72,9 @@ public class LoginAuditService implements Serializable {
                     "Tentativo di accesso",
                     new StringBuilder("Il giorno ")
                             .append(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
-                            .append(" all'ora odierna ")
+                            .append(" alle ore ")
+                            .append(LocalTime.now(ZoneId.of("Europe/Paris")).format(DateTimeFormatter.ofPattern("HH:mm")))
+                            .append(" ")
                             .append(testoUtente)
                             .append(" tentato un accesso al programma.")
                             .append(System.lineSeparator())
@@ -91,7 +97,9 @@ public class LoginAuditService implements Serializable {
                     "Tentativo di accesso",
                     new StringBuilder("Il giorno ")
                             .append(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
-                            .append(" all'ora odierna ")
+                            .append(" alle ore ")
+                            .append(LocalTime.now(ZoneId.of("Europe/Paris")).format(DateTimeFormatter.ofPattern("HH:mm")))
+                            .append(" ")
                             .append(testoUtente)
                             .append(" tentato un accesso a zone riservate del programma.")
                             .append(System.lineSeparator())
@@ -111,7 +119,9 @@ public class LoginAuditService implements Serializable {
                     username + ": uscita dal programma",
                     new StringBuilder("Il giorno ")
                             .append(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
-                            .append(" all'ora odierna l'utente ")
+                            .append(" alle ore ")
+                            .append(LocalTime.now(ZoneId.of("Europe/Paris")).format(DateTimeFormatter.ofPattern("HH:mm")))
+                            .append(" l'utente ")
                             .append(username)
                             .append(" è uscito dal programma.")
                             .toString(),
