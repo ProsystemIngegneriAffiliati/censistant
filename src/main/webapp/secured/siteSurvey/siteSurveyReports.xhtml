@@ -77,6 +77,9 @@
                                     <p:panelGrid columns="2" columnClasses="lefted, righted" styleClass="ui-panelgrid-blank">
                                         #{msg.siteSurvey_siteSurveyReports_tip}
                                         <p:outputPanel>
+                                            <p:commandButton title="#{msg.siteSurvey_siteSurveyReports_export}" icon="ui-icon-file-download" ajax="false">
+                                                <p:dataExporter type="xlsx" target="siteSurveyReportsTable" fileName="#{msg.siteSurvey_siteSurveyReports}" />
+                                            </p:commandButton>
                                             <p:outputPanel style="display: inline-block">
                                                 <p:button title="#{msg.new}" icon="ui-icon-create" styleClass="AquaButton" outcome="/secured/siteSurvey/siteSurveyReport">
                                                     <f:param name="id" value="0" />
